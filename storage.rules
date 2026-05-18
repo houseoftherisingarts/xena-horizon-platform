@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2'];
+    }
+
+    // Public-readable assets (gallery, social outputs, document PDFs)
+    match /gallery/{file=**}   { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024; }
+    match /social/{file=**}    { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024; }
+    match /documents/{file=**} { allow read: if isAdmin(); allow write: if isAdmin() && request.resource.size < 20 * 1024 * 1024; }
+
+    match /{path=**} { allow read, write: if false; }
+  }
+}

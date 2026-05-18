@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // UID whitelist must match lib/admins.ts
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2'];
+    }
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Public-write submission endpoints (anti-spam: enforce shape only)
+    match /leads/{leadId} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() < 200
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() < 5000;
+      allow update, delete: if isAdmin();
+    }
+
+    match /subscribers/{subId} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() < 200;
+      allow update, delete: if isAdmin();
+    }
+
+    // Public-readable site content
+    match /homeBlocks/{blockId} { allow read: if true; allow write: if isAdmin(); }
+    match /landingPages/{slug} { allow read: if true; allow write: if isAdmin(); }
+    match /landingPages/{slug}/blocks/{blockId} { allow read: if true; allow write: if isAdmin(); }
+    match /products/{productId} {
+      allow read: if resource.data.isPublic == true || isAdmin();
+      allow write: if isAdmin();
+    }
+    match /settings/{key} { allow read: if true; allow write: if isAdmin(); }
+
+    // Admin-only collections
+    match /clients/{clientId}     { allow read, write: if isAdmin(); }
+    match /documents/{docId}       { allow read, write: if isAdmin(); }
+    match /gallery/{imageId}       { allow read, write: if isAdmin(); }
+    match /newsletters/{nlId}      { allow read, write: if isAdmin(); }
+
+    // Conversations: admin can read all; participants can read+write their own thread
+    match /conversations/{convId} {
+      allow read, write: if isAdmin() || isOwner(convId);
+      match /messages/{msgId} {
+        allow read, write: if isAdmin() || isOwner(convId);
+      }
+    }
+
+    // User profiles (members)
+    match /members/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isOwner(uid) || isAdmin();
+    }
+
+    // Default deny
+    match /{document=**} { allow read, write: if false; }
+  }
+}
