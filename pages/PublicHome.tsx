@@ -476,7 +476,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
           return (
              <section key={b.id} className="w-full">
                 <img src={b.url} alt="Section" className="w-full h-[400px] lg:h-[500px] object-cover" />
-                {b.caption && <p className="text-center text-slate-500 mt-4 italic">{b.caption}</p>}
+                {b.caption && <p className="text-center text-slate-500 mt-4">{b.caption}</p>}
              </section>
           );
         }

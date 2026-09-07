@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Search, FileText, Check, Download, Trash2, ArrowLeft, PenTool, CreditCard, Eye, Edit2 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
-import { MOCK_CLIENTS, ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
-import { Document, DocumentType, DocumentStatus, InvoiceItem, Language } from '../types';
+import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
+import { Client, Document, DocumentType, DocumentStatus, InvoiceItem, Language } from '../types';
 import { useCollection, createDoc, patchDoc, removeDoc } from '../lib/firestore';
 
 interface AdminInvoicesProps {
