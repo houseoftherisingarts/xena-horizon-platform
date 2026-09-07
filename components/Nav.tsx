@@ -75,11 +75,16 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
           {/* Logo & Lang */}
           <div className="flex items-center gap-6">
             <div
-              className="text-xl font-serif font-bold tracking-wider text-white cursor-pointer flex items-center gap-3"
+              className="cursor-pointer flex items-center gap-3"
               onClick={() => onChangeView('HOME')}
             >
               <span className="text-iridescent text-2xl leading-none">✦</span>
-              XENA HORIZON
+              <div className="flex flex-col leading-tight">
+                <span className="text-xl font-serif font-bold tracking-wider text-white">XENA HORIZON</span>
+                <span className="hidden md:block text-[11px] tracking-widest uppercase text-slate-400">
+                  par Laurie Belhumeur
+                </span>
+              </div>
             </div>
             
             {/* Language Toggle */}
