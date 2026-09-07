@@ -64,5 +64,9 @@
   },
   "storage": {
     "rules": "storage.rules"
+  },
+  "emulators": {
+    "firestore": { "port": 8180 },
+    "storage": { "port": 9299 }
   }
 }
