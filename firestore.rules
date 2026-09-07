@@ -55,17 +55,13 @@ service cloud.firestore {
       }
     }
 
-    // User profiles (members)
-    match /members/{uid} {
-      allow read: if isOwner(uid) || isAdmin();
-      allow write: if isOwner(uid) || isAdmin();
-    }
-
     // Catalogue des pièces et des étapes du dossier (settings/dossier) : couvert par /settings ci-dessus.
 
     // Dossier client : un document par personne accompagnée, identifié par son uid.
     match /dossiers/{uid} {
-      allow read: if isOwner(uid) || isAdmin();
+      // La personne lit son propre dossier; seule Laurie peut lister la collection.
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
       allow create: if isOwner(uid)
                     && request.resource.data.uid == uid
                     && request.resource.data.courriel is string
