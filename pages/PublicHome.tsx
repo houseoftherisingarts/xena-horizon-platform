@@ -29,7 +29,16 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
       help: 'Comment puis-je vous aider ?',
       successTitle: 'Message envoyé !',
       successText: 'Merci. Je vous reviens sous peu.',
-      errorText: "Désolée, l'envoi a échoué. Réessayez ou écrivez-moi directement."
+      errorText: "Désolée, l'envoi a échoué. Réessayez ou écrivez-moi directement.",
+      aboutEyebrow: 'Laurie Belhumeur, fondatrice',
+      aboutTitle: 'Brève histoire\nd\'un tout',
+      aboutMission: 'Faire ressortir la créativité partout où elle existe est ma mission.',
+      testimonialLabel: 'Un témoignage',
+      trustLabel: 'Ils lui ont fait confiance',
+      projectsLabel: 'Les projets',
+      projectsTitle: 'En dehors de\nl\'accompagnement',
+      seeProject: 'Découvrir',
+      seeAllProjects: 'Voir tous les projets',
     },
     EN: {
       learnMore: 'Learn More',
