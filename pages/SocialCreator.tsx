@@ -72,6 +72,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
       hint: 'Glissez les textes avec la souris',
       selectImg: 'Sélectionner une image',
       use: 'Utiliser',
+      emptyGallery: 'Aucune image. Ajoutez-en depuis la Galerie de l\'admin.',
       uploadRef: 'Ajouter une image de référence (optionnel)',
       remove: 'Retirer'
     },
