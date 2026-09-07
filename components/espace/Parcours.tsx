@@ -56,8 +56,8 @@ const Parcours: React.FC<ParcoursProps> = ({ dossier, config, lang }) => {
               >
                 {faite ? <Check className="w-4 h-4" /> : i + 1}
               </span>
-              <p className={`font-semibold ${ici ? 'text-white text-lg' : faite ? 'text-slate-200' : 'text-slate-400'}`}>{etape.titre}</p>
-              <p className={`text-sm mt-1 ${ici ? 'text-slate-300' : 'text-slate-500'}`}>{etape.sous}</p>
+              <p className={`font-semibold ${ici ? 'text-white text-lg' : faite ? 'text-slate-200' : 'text-slate-400'}`}>{titreEtape(etape, lang)}</p>
+              <p className={`text-sm mt-1 ${ici ? 'text-slate-300' : 'text-slate-500'}`}>{sousEtape(etape, lang)}</p>
             </li>
           );
         })}
