@@ -81,6 +81,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
       forgotSent: 'Courriel envoyé. Vérifie ta boîte de réception.',
       forgotNeedsEmail: "Écris d'abord ton courriel dans le champ ci-dessus.",
       errInconnue: "La connexion n'a pas fonctionné. Réessaie.",
+      confidentialite: 'Ce que tu déposes ici vit dans un dossier privé : Laurie Belhumeur, seule, peut le lire.',
     },
     EN: {
       hLeft: 'Your file\nis waiting.',
