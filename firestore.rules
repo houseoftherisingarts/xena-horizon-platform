@@ -59,6 +59,59 @@ service cloud.firestore {
       allow write: if isOwner(uid) || isAdmin();
     }
 
+    // Catalogue des pièces et des étapes du dossier (settings/dossier) : couvert par /settings ci-dessus.
+
+    // Dossier client : un document par personne accompagnée, identifié par son uid.
+    match /dossiers/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid)
+                    && request.resource.data.uid == uid
+                    && request.resource.data.courriel is string
+                    && request.resource.data.courriel.size() < 200
+                    && request.resource.data.nom is string
+                    && request.resource.data.nom.size() < 120
+                    && request.resource.data.etape is string
+                    && request.resource.data.pieces is map
+                    && request.resource.data.keys().hasOnly(['uid','courriel','nom','telephone','ville','photoURL','profil','discipline','projet','etape','pieces','createdAt','updatedAt','derniereActiviteClient','derniereActiviteAdmin','nonLusAdmin','nonLusClient','archive','tags']);
+      // La personne modifie son profil, son projet et ses pièces; l'étape, les notes et l'archivage restent à Laurie.
+      allow update: if isAdmin()
+                    || (isOwner(uid)
+                        && request.resource.data.uid == uid
+                        && request.resource.data.diff(resource.data).affectedKeys()
+                             .hasOnly(['nom','telephone','ville','photoURL','profil','discipline','projet','pieces','updatedAt','derniereActiviteClient','nonLusAdmin','nonLusClient'])
+                        && request.resource.data.pieces is map
+                        && request.resource.data.nom is string
+                        && request.resource.data.nom.size() < 120);
+      allow delete: if isAdmin();
+
+      match /messages/{msgId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if request.resource.data.texte is string
+                      && request.resource.data.texte.size() > 0
+                      && request.resource.data.texte.size() < 5000
+                      && request.resource.data.deUid == request.auth.uid
+                      && (
+                        (isAdmin() && request.resource.data.de == 'admin')
+                        || (isOwner(uid) && request.resource.data.de == 'client')
+                      );
+        // Chacun ne marque que ses propres lectures.
+        allow update: if isAdmin()
+                      || (isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['luParClient']));
+        allow delete: if isAdmin();
+      }
+
+      // Notes privées de Laurie : jamais lisibles par la personne accompagnée.
+      match /notes/{noteId} {
+        allow read, write: if isAdmin();
+      }
+    }
+
+    // Ressources partagées avec les personnes accompagnées (guides, gabarits).
+    match /ressources/{resId} {
+      allow read: if request.auth != null && (resource.data.visibleClients == true || isAdmin());
+      allow write: if isAdmin();
+    }
+
     // Default deny
     match /{document=**} { allow read, write: if false; }
   }

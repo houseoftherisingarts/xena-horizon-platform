@@ -12,6 +12,45 @@ service firebase.storage {
     match /social/{file=**}    { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024; }
     match /documents/{file=**} { allow read: if isAdmin(); allow write: if isAdmin() && request.resource.size < 20 * 1024 * 1024; }
 
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function typeAccepte() {
+      return request.resource.contentType.matches('application/pdf')
+          || request.resource.contentType.matches('image/.*')
+          || request.resource.contentType.matches('application/msword')
+          || request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*')
+          || request.resource.contentType.matches('application/vnd.ms-excel')
+          || request.resource.contentType.matches('text/plain');
+    }
+
+    // Pièces du dossier : chaque personne écrit seulement dans son propre dossier, Laurie lit tout.
+    match /dossiers/{uid}/{allPaths=**} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if (isOwner(uid) || isAdmin())
+                   && request.resource.size < 25 * 1024 * 1024
+                   && typeAccepte();
+      allow delete: if isOwner(uid) || isAdmin();
+    }
+
+    // Photo de profil de la personne accompagnée.
+    match /profils/{uid}/{file} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isOwner(uid) && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+    }
+
+    // Ressources partagées : lisibles par toute personne connectée, déposées par Laurie.
+    match /ressources/{file=**} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin() && request.resource.size < 50 * 1024 * 1024;
+    }
+
+    // Images du site (hero, galerie de l'accueil) : publiques, déposées par Laurie.
+    match /site/{file=**} {
+      allow read: if true;
+      allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024;
+    }
+
     match /{path=**} { allow read, write: if false; }
   }
 }
