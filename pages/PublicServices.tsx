@@ -83,8 +83,12 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   const selectedMeta = selected ? CLIENT_ARCHETYPES.find((a) => a.id === selected) : null;
 
   const goToContact = () => {
-    if (onChangeView) onChangeView('HOME');
-    setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), onChangeView ? 100 : 0);
+    if (onChangeView) {
+      onChangeView('HOME');
+      setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    } else {
+      window.location.href = '/#contact';
+    }
   };
 
   return (
