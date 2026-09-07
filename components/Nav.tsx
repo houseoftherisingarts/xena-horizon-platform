@@ -84,7 +84,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
               <div className="flex flex-col leading-tight">
                 <span className="text-xl font-serif font-bold tracking-wider text-white">XENA HORIZON</span>
                 <span className="hidden md:block text-[11px] tracking-widest uppercase text-slate-400">
-                  par Laurie Belhumeur
+                  {t.byline}
                 </span>
               </div>
             </div>
