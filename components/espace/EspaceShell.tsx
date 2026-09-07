@@ -28,6 +28,9 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const config = useDossierConfig();
   const [onglet, setOnglet] = useState<Onglet>('dossier');
   const creationEnCours = useRef(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLButtonElement>(null);
+  const [ongletsDebordent, setOngletsDebordent] = useState(false);
 
   // Au premier passage, le dossier n'existe pas encore : on le crée une seule fois.
   useEffect(() => {
