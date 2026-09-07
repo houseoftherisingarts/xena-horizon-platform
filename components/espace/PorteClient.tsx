@@ -8,9 +8,19 @@ import {
 } from 'firebase/auth';
 import { AlertCircle, ArrowRight, CheckCircle, Lock, Mail } from 'lucide-react';
 import { auth, googleProvider } from '../../firebase';
-import { useDossierConfig } from '../../lib/dossier';
+import { useDossierConfig, EtapeDefEn } from '../../lib/dossier';
 import { GLASS_INPUT_CLASSES } from '../../constants';
-import { Language } from '../../types';
+import { EtapeDef, Language } from '../../types';
+
+/** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
+const titreEtape = (etape: EtapeDef, lang: Language): string => {
+  const e = etape as EtapeDefEn;
+  return lang === 'EN' && e.titreEn ? e.titreEn : etape.titre;
+};
+const sousEtape = (etape: EtapeDef, lang: Language): string => {
+  const e = etape as EtapeDefEn;
+  return lang === 'EN' && e.sousEn ? e.sousEn : etape.sous;
+};
 
 interface PorteClientProps {
   lang: Language;
