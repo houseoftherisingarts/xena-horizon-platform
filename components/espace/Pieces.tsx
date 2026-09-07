@@ -40,6 +40,7 @@ interface TexteCarte {
   deposeLe: string;
   aRefaire: string;
   validee: string;
+  nouveauDepot: string;
   glisser: string;
   erreurType: string;
   erreurTaille: string;
