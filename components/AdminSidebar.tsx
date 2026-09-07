@@ -30,9 +30,13 @@ interface AdminSidebarProps {
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang }) => {
   
+  const { data: dossiers } = useCollection<Dossier>('dossiers');
+  const nonLusDossiers = dossiers.reduce((n, d) => n + (d.nonLusAdmin || 0), 0);
+
   const t = {
     FR: {
       dashboard: 'Tableau de bord',
+      dossiers: 'Dossiers',
       agenda: 'Agenda',
       email: 'Courriels',
       messenger: 'Messagerie',
