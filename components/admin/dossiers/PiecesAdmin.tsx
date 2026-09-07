@@ -4,7 +4,7 @@ import { ref as storageRef, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../firebase';
 import { GLASS_INPUT_CLASSES } from '../../../constants';
 import { Dossier, Language, PieceDef } from '../../../types';
-import { piecesParCategorie } from '../../../lib/dossier';
+import { EtatPiece, etatPiece, piecesParCategorie } from '../../../lib/dossier';
 import { dateCourte, formatTaille } from './util';
 
 interface PiecesAdminProps {
