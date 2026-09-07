@@ -60,7 +60,7 @@ const FilAdmin: React.FC<FilAdminProps> = ({ messages, dossierNom, lang, onSend 
       </h3>
 
       <div className="flex-1 overflow-y-auto space-y-3 pr-1 mb-4 custom-scrollbar min-h-[160px] max-h-96">
-        {messages.length === 0 && <p className="text-sm text-slate-500 italic text-center py-4">{tr.empty}</p>}
+        {messages.length === 0 && <p className="text-sm text-slate-500 text-center py-4">{tr.empty}</p>}
         {messages.map((m) => (
           <div key={m.id} className={`flex ${m.de === 'admin' ? 'justify-end' : 'justify-start'}`}>
             <div
