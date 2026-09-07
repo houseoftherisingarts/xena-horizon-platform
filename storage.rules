@@ -38,7 +38,7 @@ service firebase.storage {
     // Photo de profil de la personne accompagnée.
     match /profils/{uid}/{file} {
       allow read: if isOwner(uid) || isAdmin();
-      allow write: if isOwner(uid) && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow write: if (isOwner(uid) || isAdmin()) && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
     }
 
     // Ressources partagées : lisibles par toute personne connectée, déposées par Laurie.
