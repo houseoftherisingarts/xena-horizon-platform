@@ -23,6 +23,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
       admin: 'Espace Admin',
       talk: 'Me parler',
       mySpace: 'Mon espace',
+      byline: 'par Laurie Belhumeur',
     },
     EN: {
       home: 'Home',
@@ -33,6 +34,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
       admin: 'Admin Area',
       talk: 'Let\'s Talk',
       mySpace: 'My Space',
+      byline: 'by Laurie Belhumeur',
     }
   }[lang];
 
