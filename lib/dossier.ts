@@ -213,8 +213,10 @@ export function dossierMarkdown(
     lignes.push(`### ${cat}`);
     list.forEach((p) => {
       const d = dossier.pieces?.[p.id];
-      const statut = d ? `${etiquetteEtat(d.etat)} le ${dateCourte(d.deposeLe)} (${d.nom})` : p.option ? 'non fournie (optionnelle)' : 'MANQUANTE';
-      lignes.push(`- ${p.nom} : ${statut}${d?.note ? ` — remarque : ${d.note}` : ''}`);
+      const etat = etatPiece(dossier, p.id);
+      const note = etat === 'a_refaire' ? dossier.revue?.[p.id]?.note : undefined;
+      const statut = d ? `${etiquetteEtat(etat)} le ${dateCourte(d.deposeLe)} (${d.nom})` : p.option ? 'non fournie (optionnelle)' : 'MANQUANTE';
+      lignes.push(`- ${p.nom} : ${statut}${note ? ` — remarque : ${note}` : ''}`);
     });
     lignes.push('');
   });
