@@ -17,24 +17,29 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
     FR: {
       home: 'Accueil',
       services: 'Services',
+      projets: 'Projets',
       about: 'À propos',
       contact: 'Contact',
       admin: 'Espace Admin',
-      talk: 'Me parler'
+      talk: 'Me parler',
+      mySpace: 'Mon espace',
     },
     EN: {
       home: 'Home',
       services: 'Services',
+      projets: 'Projects',
       about: 'About',
       contact: 'Contact',
       admin: 'Admin Area',
-      talk: 'Let\'s Talk'
+      talk: 'Let\'s Talk',
+      mySpace: 'My Space',
     }
   }[lang];
 
   const navLinks = [
     { label: t.home, view: 'HOME' as ViewState },
     { label: t.services, view: 'SERVICES' as ViewState },
+    { label: t.projets, view: 'PROJETS' as ViewState },
     { label: t.about, sectionId: 'about' },
     { label: t.contact, sectionId: 'contact' },
   ];
