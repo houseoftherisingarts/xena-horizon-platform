@@ -181,13 +181,13 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
               </div>
               <div className="flex-1">
                 <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">
-                  {lang === 'FR' ? selectedMeta.taglineFR : selectedMeta.taglineEN}
+                  {lang === 'FR' ? selectedProfil?.taglineFR : selectedProfil?.taglineEN}
                 </p>
                 <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">
-                  {lang === 'FR' ? selectedMeta.titleFR : selectedMeta.titleEN}
+                  {lang === 'FR' ? selectedProfil?.titleFR : selectedProfil?.titleEN}
                 </h2>
                 <p className="text-lg text-slate-300 leading-relaxed mb-6">
-                  {lang === 'FR' ? selectedMeta.detailsFR : selectedMeta.detailsEN}
+                  {lang === 'FR' ? selectedProfil?.detailsFR : selectedProfil?.detailsEN}
                 </p>
                 <ul className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {t.benefits.map((benefit) => (
