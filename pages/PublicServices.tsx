@@ -31,14 +31,15 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
 
   const t = {
     FR: {
-      title: 'Trouvez votre chemin.',
-      subtitle: "Xena Horizon vous accompagne selon votre réalité, pas selon une grille de services rigide.",
+      title: 'Trouve ton chemin.',
+      subtitle: "Xena Horizon t'accompagne selon ta réalité, pas selon une grille de services rigide.",
       pillars: 'Choisissez votre profil',
+      pricesLabel: 'Prix de départ',
       learnMore: 'Voir les services',
       available: 'Services adaptés',
       forWho: 'Pour les artistes, les entrepreneurs créatifs et les organismes',
       book: 'Prendre rendez-vous',
-      cantFind: "Vous ne trouvez pas exactement ce qu'il vous faut ?",
+      cantFind: "Tu ne trouves pas exactement ce qu'il te faut ?",
       customText: "Chaque projet est unique. Discutons d'une offre sur mesure.",
       contactMe: 'Me contacter',
       back: 'Retour aux profils',

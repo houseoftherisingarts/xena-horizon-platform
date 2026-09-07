@@ -52,7 +52,8 @@ const t = {
 
 const etatClasses: Record<string, string> = {
   valide: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-  depose: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+  deposee: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+  redeposee: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
   a_refaire: 'bg-red-500/15 text-red-300 border-red-500/30',
 };
 
