@@ -264,12 +264,12 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                    className={GLASS_INPUT_CLASSES}
                    value={currentDoc.clientId}
                    onChange={(e) => {
-                     const client = MOCK_CLIENTS.find(c => c.id === e.target.value);
+                     const client = clients.find(c => c.id === e.target.value);
                      if(client) setCurrentDoc({...currentDoc, clientId: client.id, clientName: client.name, clientEmail: client.email});
                    }}
                  >
                    <option value="">{t.selectClient}</option>
-                   {MOCK_CLIENTS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                   {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                  </select>
                </div>
 
