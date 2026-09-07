@@ -202,8 +202,8 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
               <div className="max-w-[1400px] mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                   <div className="max-w-2xl">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6 whitespace-pre-line">{b.title}</h2>
-                    <p className="text-slate-400 text-lg">{b.subtitle}</p>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6 whitespace-pre-line">{tr(b.id, 'title', b.title)}</h2>
+                    <p className="text-slate-400 text-lg">{tr(b.id, 'subtitle', b.subtitle)}</p>
                   </div>
                 </div>
       
