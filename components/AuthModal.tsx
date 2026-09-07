@@ -58,7 +58,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onAdminSignIn, lan
   }[lang];
 
   const handleResult = async (user: User) => {
-    if (isAdmin(user.uid)) {
+    if (isAdmin(user)) {
       onAdminSignIn(user);
       onClose();
       return;

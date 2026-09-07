@@ -117,7 +117,7 @@ const App: React.FC = () => {
     return () => unsub();
   }, []);
 
-  const userIsAdmin = isAdmin(user?.uid);
+  const userIsAdmin = isAdmin(user);
   const isAdminView = currentView.startsWith('ADMIN');
 
   // Guard: if user navigates to an admin view but isn't an admin, bounce to HOME and prompt sign-in

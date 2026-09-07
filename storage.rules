@@ -4,7 +4,9 @@ service firebase.storage {
   match /b/{bucket}/o {
     function isAdmin() {
       return request.auth != null
-        && request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2'];
+        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2', 'vJ6bnH7XiOg5VO7XVnTJ9Hg5wuw2']
+            || (request.auth.token.email_verified == true
+                && request.auth.token.email in ['houseoftherisingarts@gmail.com', 'laurie.belhumeur@gmail.com']));
     }
 
     // Public-readable assets (gallery, social outputs, document PDFs)
