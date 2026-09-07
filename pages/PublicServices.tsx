@@ -82,6 +82,10 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   }, [catalogue, selected]);
 
   const selectedMeta = selected ? CLIENT_ARCHETYPES.find((a) => a.id === selected) : null;
+  const selectedProfil = selected ? PROFILS_REELS.find((p) => p.id === selected) : null;
+  const prixVedettes = SERVICES_REELS.filter((s) =>
+    ['strategie-communication', 'redaction', 'abonnement-mensuel'].includes(s.id)
+  );
 
   const goToContact = () => {
     if (onChangeView) {
