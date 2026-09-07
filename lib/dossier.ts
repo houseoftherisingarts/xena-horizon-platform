@@ -39,18 +39,21 @@ export const PIECES_PAR_DEFAUT: PieceDef[] = [
   { id: 'entente', cat: 'Ta marque', nom: 'L\'entente de service signée', aide: 'Laurie te la fait parvenir après le premier appel. Dépose-la ici une fois signée.', option: true },
 ];
 
-export const ETAPES_PAR_DEFAUT: EtapeDef[] = [
-  { id: 'contact', titre: 'Premier contact', sous: 'Tu me racontes ton projet et nous voyons si nous sommes faits pour travailler ensemble.' },
-  { id: 'diagnostic', titre: 'Diagnostic', sous: 'Laurie lit ton dossier et pose les bonnes questions.' },
-  { id: 'plan', titre: 'Plan d\'action', sous: 'Une ligne directrice claire, écrite noir sur blanc.' },
-  { id: 'action', titre: 'Mise en œuvre', sous: 'Les textes, les outils et les gestes qui font avancer ton projet.' },
-  { id: 'suivi', titre: 'Suivi', sous: 'Nous mesurons ce qui a bougé et nous ajustons le tir.' },
+/** EtapeDef + son pendant anglais (titreEn, sousEn), lu par PorteClient.tsx et Parcours.tsx. */
+export type EtapeDefEn = EtapeDef & { titreEn?: string; sousEn?: string };
+
+export const ETAPES_PAR_DEFAUT: EtapeDefEn[] = [
+  { id: 'contact', titre: 'Premier contact', sous: 'Tu me racontes ton projet et nous voyons si nous sommes faits pour travailler ensemble.', titreEn: 'First contact', sousEn: 'You tell me about your project and we see if we are a good fit to work together.' },
+  { id: 'diagnostic', titre: 'Diagnostic', sous: 'Laurie lit ton dossier et pose les bonnes questions.', titreEn: 'Diagnostic', sousEn: 'Laurie reads your file and asks the right questions.' },
+  { id: 'plan', titre: 'Plan d\'action', sous: 'Une ligne directrice claire, écrite noir sur blanc.', titreEn: 'Action plan', sousEn: 'A clear guideline, written in black and white.' },
+  { id: 'action', titre: 'Mise en œuvre', sous: 'Les textes, les outils et les gestes qui font avancer ton projet.', titreEn: 'Implementation', sousEn: 'The texts, tools and actions that move your project forward.' },
+  { id: 'suivi', titre: 'Suivi', sous: 'Nous mesurons ce qui a bougé et nous ajustons le tir.', titreEn: 'Follow-up', sousEn: 'We measure what has changed and adjust our approach.' },
 ];
 
-export const PROFILS: { id: ProfilClient; nom: string; aide: string }[] = [
-  { id: 'artiste', nom: 'Artiste', aide: 'Danse, écriture, théâtre, musique, chant, peinture, photo, cirque et toutes les autres disciplines.' },
-  { id: 'entrepreneur', nom: 'Entrepreneur créatif', aide: 'Tu diriges un projet, un studio ou une entreprise à l\'esprit créatif.' },
-  { id: 'organisme', nom: 'Organisme ou entreprise', aide: 'Un OBNL, un centre, un festival ou une entreprise qui a besoin de stratégie et de visibilité.' },
+export const PROFILS: { id: ProfilClient; nom: string; nomEn: string; aide: string; aideEn: string }[] = [
+  { id: 'artiste', nom: 'Artiste', nomEn: 'Artist', aide: 'Danse, écriture, théâtre, musique, chant, peinture, photo, cirque et toutes les autres disciplines.', aideEn: 'Dance, writing, theatre, music, singing, painting, photography, circus and all other disciplines.' },
+  { id: 'entrepreneur', nom: 'Entrepreneur créatif', nomEn: 'Creative entrepreneur', aide: 'Tu diriges un projet, un studio ou une entreprise à l\'esprit créatif.', aideEn: 'You run a project, a studio or a business with a creative spirit.' },
+  { id: 'organisme', nom: 'Organisme ou entreprise', nomEn: 'Organization or business', aide: 'Un OBNL, un centre, un festival ou une entreprise qui a besoin de stratégie et de visibilité.', aideEn: 'A non-profit, a center, a festival or a business that needs strategy and visibility.' },
 ];
 
 export const CONFIG_PAR_DEFAUT: DossierConfig = { pieces: PIECES_PAR_DEFAUT, etapes: ETAPES_PAR_DEFAUT };
