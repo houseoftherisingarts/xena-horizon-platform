@@ -123,7 +123,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">{t.pricesLabel}</p>
           {prixVedettes.map((s) => (
             <div key={s.id} className="flex items-center justify-between gap-4 border-b border-white/5 last:border-0 pb-4 last:pb-0">
-              <span className="text-white font-medium text-sm">{s.name}</span>
+              <span className="text-white font-medium text-sm">{nomOffre(s, lang)}</span>
               <span className="text-iridescent font-bold text-sm whitespace-nowrap">{prixAffiche(s, lang)}</span>
             </div>
           ))}
