@@ -101,11 +101,22 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       <div className="absolute inset-x-0 top-0 h-[600px] bg-iridescent-radial opacity-60 pointer-events-none -z-0" />
 
       {/* Header */}
-      <div className="max-w-[1400px] mx-auto mb-16 text-center relative">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-[1.05]">
-          <span className="text-iridescent">{t.title}</span>
-        </h1>
-        <p className="text-xl text-slate-300 max-w-2xl mx-auto">{t.subtitle}</p>
+      <div className="max-w-[1400px] mx-auto mb-20 relative grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-end">
+        <div>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-6 leading-[1.05]">
+            <span className="text-iridescent">{t.title}</span>
+          </h1>
+          <p className="text-xl text-slate-300 max-w-xl">{t.subtitle}</p>
+        </div>
+        <div className="hidden lg:flex flex-col gap-5 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] p-8">
+          <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">{t.pricesLabel}</p>
+          {prixVedettes.map((s) => (
+            <div key={s.id} className="flex items-center justify-between gap-4 border-b border-white/5 last:border-0 pb-4 last:pb-0">
+              <span className="text-white font-medium text-sm">{s.name}</span>
+              <span className="text-iridescent font-bold text-sm whitespace-nowrap">{prixAffiche(s, lang)}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ARCHETYPE CHOOSER */}
