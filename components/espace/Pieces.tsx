@@ -273,6 +273,7 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
       deposeLe: 'reçue le',
       aRefaire: 'à refaire',
       validee: 'validée',
+      nouveauDepot: 'nouveau dépôt, en attente',
       glisser: '',
       erreurType: 'Format non accepté. Utilise un PDF, une image, un Word, un Excel ou un texte.',
       erreurTaille: 'Fichier trop lourd. La limite est de 25 Mo.',
