@@ -147,7 +147,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
               <p className="text-xs text-slate-400">{t.pct}</p>
             </div>
             <div className="hidden sm:block">
-              <p className="text-sm font-semibold text-white">{etapeCourante?.titre ?? ''}</p>
+              <p className="text-sm font-semibold text-white">{(lang === 'EN' ? (etapeCourante as { titreEn?: string } | undefined)?.titreEn : undefined) ?? etapeCourante?.titre ?? ''}</p>
               <p className="text-xs text-slate-400">{t.etape}</p>
             </div>
           </div>

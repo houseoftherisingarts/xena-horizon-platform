@@ -215,7 +215,7 @@ const App: React.FC = () => {
         lang={lang}
         setLang={setLang}
       />
-      <main className="min-h-screen">
+      <main className="min-h-[70vh]">
         <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
       </main>
       <Footer onAdminLogin={requestAdmin} lang={lang} />
