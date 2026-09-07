@@ -86,6 +86,16 @@ async function connecter(page, email, pw) {
       await mesurer(page, v.nom, largeur);
       await capturer(page, v.nom, largeur, v.scrolls);
     }
+    // Pages publiques en anglais : bascule FR/EN puis mêmes captures
+    for (const v of VUES.slice(0, 3)) {
+      await page.goto(BASE + v.path, { waitUntil: 'load', timeout: 60000 });
+      await page.waitForTimeout(1500);
+      const bascule = page.locator('button').filter({ hasText: /^\s*FR\s*\/\s*EN\s*$/ }).first();
+      if (await bascule.count()) { await bascule.click(); await page.waitForTimeout(800); }
+      await mesurer(page, `${v.nom}-en`, largeur);
+      await capturer(page, `${v.nom}-en`, largeur, [0, 0.5, 1]);
+    }
+
     // Espace client connecté
     await page.goto(BASE + '/espace', { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(2000);
@@ -94,7 +104,8 @@ async function connecter(page, email, pw) {
       await mesurer(page, 'espace-connecte', largeur);
       await capturer(page, 'espace-connecte', largeur, [0, 0.5, 1]);
       // onglets de l'espace, si présents
-      const onglets = page.locator('[role="tab"], nav button, .onglet');
+      // Seulement les onglets de l'espace (jamais les boutons de la barre de navigation, ni la bascule FR/EN).
+      const onglets = page.locator('[role="tab"]');
       const n = Math.min(await onglets.count(), 6);
       for (let i = 0; i < n; i++) {
         const t = onglets.nth(i);
