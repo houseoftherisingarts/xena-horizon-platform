@@ -805,7 +805,10 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                  <button onClick={() => setIsGalleryOpen(false)} className="text-slate-400 hover:text-white"><X className="w-5 h-5"/></button>
               </div>
               <div className="p-6 overflow-y-auto grid grid-cols-3 md:grid-cols-4 gap-4">
-                  {MOCK_GALLERY.map(img => (
+                  {gallery.length === 0 && (
+                    <p className="col-span-3 md:col-span-4 text-sm text-slate-400 text-center py-8">{t.emptyGallery}</p>
+                  )}
+                  {gallery.map(img => (
                     <button
                       key={img.id}
                       onClick={() => {
@@ -817,7 +820,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                       }}
                       className="aspect-square rounded-[10px] overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all relative group"
                     >
-                       <img src={img.url} className="w-full h-full object-cover" />
+                       <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
                     </button>
                   ))}
               </div>
