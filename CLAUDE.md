@@ -1,6 +1,6 @@
 # Vexel — Vexel Webstudio
 # Project: Xena Horizon Platform
-# Client:  Xena Horizon
+# Client:  Xena Horizon (Laurie Belhumeur, consultante en carrière artistique et communication)
 # Stack:   React · Firebase · Recharts · Lucide
 
 ## You are Vexel
@@ -103,4 +103,29 @@ npm run build && npm test
 
 ## Project Notes
 
-Dashboard / platform app.
+Site vitrine plus outil de travail de Laurie Belhumeur (marque Xena Horizon, xenahorizon.com). Projet Firebase `xena-70977`, hébergement `xena-70977.web.app`, dépôt GitHub `houseoftherisingarts/xena-horizon-platform`, une seule branche `main`.
+
+### Canon du client (lire avant tout pixel)
+`~/Documents/Onyx/30_library/xena-horizon-design-system.md` : verre sombre sur slate 900, un seul accent iridescent cyan → émeraude → bleu, Playfair Display pour les titres, Inter pour le corps, coins 24 px, jamais d'italique, jamais de tiret long, titres sur deux lignes au plus, pleine largeur à 1440. Photos réelles seulement (`public/images/`, crédits Stéphanie Boisvert et @adramatk), jamais d'image générée.
+
+### Architecture
+- Pas de routeur : `ViewState` dans `App.tsx`, une adresse par vue dans `lib/routes.ts` (`/`, `/services`, `/projets`, `/espace`, `/admin/...`). Le back-office se charge en différé.
+- Firebase : config dans `.env` (`VITE_FIREBASE_*`), `firebase.ts`, helpers `lib/firestore.ts` (`useCollection`, `useDocument`, `writeDoc`, `createDoc`, `patchDoc`, `removeDoc`).
+- Admin : `lib/admins.ts` (UID ou courriel vérifié; la même liste vit dans `firestore.rules` et `storage.rules`, à tenir à jour ensemble).
+- Dossier client : contrat dans `types.ts` et `lib/dossier.ts` (catalogue `PIECES_PAR_DEFAUT` / `ETAPES_PAR_DEFAUT`, éditable dans `settings/dossier`), données dans `dossiers/{uid}` avec sous-collections `messages` et `notes`, fichiers dans Storage `dossiers/{uid}/{pieceId}/...`. Espace client dans `pages/EspaceClient.tsx`, back-office dans `pages/AdminDossiers.tsx`.
+- Copie et contenu réel : `lib/contenu.ts` (source de vérité), tiré du site actuel de Laurie (`~/Documents/Onyx/10_projects/xena-horizon/site-actuel-lauriebelhumeur-2026-09-07.txt`). Rien ne s'invente : ni chiffre, ni promesse, ni client.
+- Tailwind 3 compilé (`tailwind.config.js`, `index.css`), fontes par Google Fonts dans `index.html`.
+
+### Commandes
+```bash
+npm run build                                   # vite build + prérendu des balises, sitemap, robots
+firebase deploy --only hosting --project xena-70977
+firebase deploy --only firestore:rules,storage --project xena-70977
+node /private/tmp/claude-501/-Users-lesalondesinconnus/*/scratchpad/qa-xena.cjs http://localhost:4173 captures   # boucle verdict (comptes témoins dans ~/.config/xena/compte-temoin.txt)
+```
+
+### Ce qui attend une décision d'Alex ou de Laurie
+La liste des pièces du dossier est déduite de ses services et doit être confirmée avec elle. Les notifications par courriel, le paiement Stripe et l'assistant IA branché sur Claude demandent des clés et des fonctions serveur (projet sur Blaze, aucune fonction déployée). Le compte admin témoin (`admin.temoin.xena@...`) se retire après le lancement.
+
+### Dossier vault
+`~/Documents/Onyx/10_projects/xena-horizon/` : plan d'intégration, inventaire portable (114 entrées), scrape du site actuel.
