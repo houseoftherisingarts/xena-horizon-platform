@@ -64,6 +64,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
       nanoTitle: 'Génération IA (Nano Banana)',
       nanoPlaceholder: 'Décrivez l\'image de fond idéale...',
       generate: 'Générer',
+      soon: 'La génération par IA arrive bientôt : elle passera par le serveur pour protéger la clé.',
       download: 'Télécharger l\'image',
       hint: 'Glissez les textes avec la souris',
       selectImg: 'Sélectionner une image',
