@@ -33,7 +33,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
     FR: {
       title: 'Trouve ton chemin.',
       subtitle: "Xena Horizon t'accompagne selon ta réalité, pas selon une grille de services rigide.",
-      pillars: 'Choisissez votre profil',
+      pillars: 'Choisis ton profil',
       pricesLabel: 'Prix de départ',
       learnMore: 'Voir les services',
       available: 'Services adaptés',
