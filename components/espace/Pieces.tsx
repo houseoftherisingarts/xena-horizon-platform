@@ -340,9 +340,13 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
         <div key={cat} className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-8">
           <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">{cat}</h3>
           <ul className="space-y-3">
-            {pieces.map((p) => (
-              <PieceCard key={p.id} piece={p} deposee={dossier.pieces?.[p.id]} uid={uid} t={t} />
-            ))}
+            {pieces.map((p) => {
+              const etat = etatPiece(dossier, p.id);
+              const note = etat === 'a_refaire' ? dossier.revue?.[p.id]?.note : undefined;
+              return (
+                <PieceCard key={p.id} piece={p} deposee={dossier.pieces?.[p.id]} etat={etat} note={note} uid={uid} t={t} />
+              );
+            })}
           </ul>
         </div>
       ))}
