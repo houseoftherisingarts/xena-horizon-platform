@@ -291,13 +291,15 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       </div>
 
       {/* CTA */}
-      <div className="max-w-4xl mx-auto mt-32 text-center bg-gradient-to-br from-slate-900 to-slate-900 rounded-[30px] p-12 border border-white/10 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-iridescent rounded-full blur-[100px] opacity-30 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-iridescent rounded-full blur-[100px] opacity-20 pointer-events-none" />
-        <div className="relative z-10">
-          <h2 className="text-3xl font-serif font-bold text-white mb-4">{t.cantFind}</h2>
-          <p className="text-slate-300 mb-8">{t.customText}</p>
-          <button onClick={goToContact} className={`${ACTION_BUTTON_CLASSES} mx-auto`}>
+      <div className="max-w-[1400px] mx-auto mt-32">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-900 rounded-[30px] p-10 md:p-14 border border-white/10 relative overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-iridescent rounded-full blur-[100px] opacity-30 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-iridescent rounded-full blur-[100px] opacity-20 pointer-events-none" />
+          <div className="relative z-10 max-w-xl">
+            <h2 className="text-3xl font-serif font-bold text-white mb-4">{t.cantFind}</h2>
+            <p className="text-slate-300">{t.customText}</p>
+          </div>
+          <button onClick={goToContact} className={`${ACTION_BUTTON_CLASSES} relative z-10 flex-shrink-0`}>
             {t.contactMe}
           </button>
         </div>
