@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Search, Download, FolderOpen, FileWarning, MessageCircle, Archive } from 'lucide-react';
 import GlassCard from '../../GlassCard';
 import { GLASS_INPUT_CLASSES } from '../../../constants';
-import { Dossier, DossierConfig, Language } from '../../../types';
+import { Dossier, DossierConfig, Language, PieceDeposee } from '../../../types';
 import { PROFILS, avancement, dossiersCsv, telecharger } from '../../../lib/dossier';
 import { dateCourte } from './util';
 
