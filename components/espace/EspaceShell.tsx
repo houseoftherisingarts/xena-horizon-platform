@@ -44,6 +44,25 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
     }
   }, [loading, dossier, uid, user.email, user.displayName]);
 
+  // Fondu de défilement : visible tant qu'il reste des onglets cachés à droite.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const verifier = () => setOngletsDebordent(el.scrollWidth - el.scrollLeft - el.clientWidth > 4);
+    verifier();
+    el.addEventListener('scroll', verifier, { passive: true });
+    window.addEventListener('resize', verifier);
+    return () => {
+      el.removeEventListener('scroll', verifier);
+      window.removeEventListener('resize', verifier);
+    };
+  }, [dossier]);
+
+  // L'onglet actif défile en vue à chaque changement.
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+  }, [onglet]);
+
   const t = {
     FR: {
       bonjour: 'Bonjour',
