@@ -191,7 +191,11 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
           {etatEtiquette && (
             <span
               className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${
-                deposee?.etat === 'valide' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-amber-400/15 text-amber-300'
+                etat === 'valide'
+                  ? 'bg-emerald-400/15 text-emerald-300'
+                  : etat === 'a_refaire'
+                  ? 'bg-amber-400/15 text-amber-300'
+                  : 'bg-cyan-400/15 text-cyan-300'
               }`}
             >
               {etatEtiquette}
