@@ -149,7 +149,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
         </div>
       )}
 
-      {/* SELECTED ARCHETYPE — branded services + offer ladder */}
+      {/* SELECTED ARCHETYPE: branded services + offer ladder */}
       {selectedMeta && (
         <div className="max-w-[1400px] mx-auto relative">
           <button
