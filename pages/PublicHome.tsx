@@ -20,7 +20,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
   const t = {
     FR: {
       learnMore: 'En savoir plus',
-      explore: 'Explorer',
+      explore: 'Voir les services',
       sendMessage: 'Envoyer le message',
       sending: 'Envoi en cours…',
       name: 'Nom complet',
