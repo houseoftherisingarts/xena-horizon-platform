@@ -23,6 +23,7 @@ const AdminAgenda = lazy(() => import('./pages/AdminAgenda'));
 const AdminEmail = lazy(() => import('./pages/AdminEmail'));
 const AdminMessenger = lazy(() => import('./pages/AdminMessenger'));
 const SocialCreator = lazy(() => import('./pages/SocialCreator'));
+const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
