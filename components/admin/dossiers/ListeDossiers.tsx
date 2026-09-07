@@ -62,8 +62,8 @@ const ListeDossiers: React.FC<ListeDossiersProps> = ({ dossiers, config, lang, l
   const piecesAValider = useMemo(
     () =>
       actifs.reduce((n, d) => {
-        const liste: PieceDeposee[] = d.pieces ? Object.values(d.pieces) : [];
-        return n + liste.filter((p) => p.etat === 'depose').length;
+        const ids = d.pieces ? Object.keys(d.pieces) : [];
+        return n + ids.filter((id) => ['deposee', 'redeposee'].includes(etatPiece(d, id))).length;
       }, 0),
     [actifs]
   );
