@@ -123,6 +123,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
                 <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-white'}`} />
                 <span className="font-medium text-sm">{item.label}</span>
               </div>
+              {!!item.badge && (
+                <span className={`w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center ${isActive ? 'bg-white/25 text-white' : 'bg-cyan-400 text-slate-950'}`}>
+                  {item.badge}
+                </span>
+              )}
               {isActive && <ChevronRight className="w-4 h-4 text-white/90" />}
             </button>
           );
