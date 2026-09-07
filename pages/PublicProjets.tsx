@@ -67,7 +67,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
                 <img
                   src={projet.image}
                   alt={projet.titre}
-                  className="relative w-full h-[340px] md:h-[440px] object-cover rounded-[24px] border border-white/10 shadow-2xl"
+                  className={`relative w-full h-[340px] md:h-[440px] object-cover ${POSITION_IMAGE[projet.id] ?? 'object-center'} rounded-[24px] border border-white/10 shadow-2xl`}
                 />
               </div>
 
