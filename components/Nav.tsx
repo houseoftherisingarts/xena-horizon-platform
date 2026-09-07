@@ -117,8 +117,9 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
           <div className="hidden md:flex items-center gap-4">
             <button
               onClick={onRequestAdmin}
-              className="w-10 h-10 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-full text-slate-400 opacity-40 hover:opacity-100 hover:text-white hover:bg-white/10 transition-all"
               title={t.admin}
+              aria-label={t.admin}
             >
               <Lock className="w-4 h-4" />
             </button>
