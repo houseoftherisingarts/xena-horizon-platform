@@ -55,6 +55,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
     },
     EN: {
       dashboard: 'Dashboard',
+      dossiers: 'Client files',
       agenda: 'Calendar',
       email: 'Emails',
       messenger: 'Messenger',
