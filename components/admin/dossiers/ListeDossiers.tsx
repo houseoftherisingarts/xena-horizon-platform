@@ -201,7 +201,7 @@ const ListeDossiers: React.FC<ListeDossiersProps> = ({ dossiers, config, lang, l
                     </div>
                     <div>
                       <span className="block text-xs text-slate-500 uppercase tracking-wider">{tr.activite}</span>
-                      {dateCourte(d.derniereActiviteClient) || '—'}
+                      {dateCourte(d.derniereActiviteClient) || '-'}
                     </div>
                   </div>
                 </div>
