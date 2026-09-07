@@ -227,7 +227,7 @@ export const PROJETS: Projet[] = [
     description: [
       "Je ne suis pas un robot est un voyage littéraire au cœur du duel incessant entre raison et émotion. À travers un recueil de nouvelles et des textes introspectifs, j'explore ce combat qui a longtemps façonné mon existence.",
       "Au fil des pages, je dévoile mon processus créatif, un cheminement qui m'a permis d'apprivoiser ces deux forces opposées et de les faire cohabiter en harmonie. De la création au ressenti, puis à la transformation, chaque texte est une étape de cette quête intérieure où l'art devient un langage, une thérapie, une révélation.",
-      "126 pages, format 5 x 9 pouces. Accompagnement littéraire de Jérémy Parent, révision de Charles DuBois, graphisme de Sonia Lapointe, mise en page d'Alejandro Nathan. Photo de l'auteure : Stéphanie Boisvert. Photo de la page couverture : Jean-Michel Naud.",
+      "Le livre compte 126 pages en format 5 x 9 pouces. Il doit son accompagnement littéraire à Jérémy Parent, sa révision à Charles DuBois, son graphisme à Sonia Lapointe et sa mise en page à Alejandro Nathan. La photo de l'auteure est signée Stéphanie Boisvert, celle de la page couverture Jean-Michel Naud.",
     ],
     image: '/images/livre-couverture.jpg',
     liens: [{ label: 'Acheter le livre', url: 'https://www.laruchequebec.com/lauriebelhumeur' }],

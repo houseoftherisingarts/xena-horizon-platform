@@ -41,11 +41,11 @@ export const PIECES_PAR_DEFAUT: PieceDef[] = [
 ];
 
 export const ETAPES_PAR_DEFAUT: EtapeDef[] = [
-  { id: 'contact', titre: 'Premier contact', sous: 'On se parle et on regarde si on est faits pour travailler ensemble.' },
+  { id: 'contact', titre: 'Premier contact', sous: 'Tu me racontes ton projet et nous voyons si nous sommes faits pour travailler ensemble.' },
   { id: 'diagnostic', titre: 'Diagnostic', sous: 'Laurie lit ton dossier et pose les bonnes questions.' },
   { id: 'plan', titre: 'Plan d\'action', sous: 'Une ligne directrice claire, écrite noir sur blanc.' },
   { id: 'action', titre: 'Mise en œuvre', sous: 'Les textes, les outils et les gestes qui font avancer ton projet.' },
-  { id: 'suivi', titre: 'Suivi', sous: 'On mesure ce qui a bougé et on ajuste.' },
+  { id: 'suivi', titre: 'Suivi', sous: 'Nous mesurons ce qui a bougé et nous ajustons le tir.' },
 ];
 
 export const PROFILS: { id: ProfilClient; nom: string; aide: string }[] = [
