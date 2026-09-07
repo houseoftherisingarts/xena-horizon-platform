@@ -127,11 +127,13 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
             >
               {PROFILS.map((p) => (
                 <option key={p.id} value={p.id} className="bg-slate-900">
-                  {p.nom}
+                  {lang === 'EN' ? p.nomEn : p.nom}
                 </option>
               ))}
             </select>
-            <p className="text-xs text-slate-500 mt-2">{PROFILS.find((p) => p.id === profil)?.aide}</p>
+            <p className="text-xs text-slate-500 mt-2">
+              {lang === 'EN' ? PROFILS.find((p) => p.id === profil)?.aideEn : PROFILS.find((p) => p.id === profil)?.aide}
+            </p>
           </div>
           <div>
             <label htmlFor="pf-discipline" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
