@@ -14,6 +14,15 @@ const ICONES: Record<string, React.ReactNode> = {
   modele: <Camera className="w-6 h-6" />,
 };
 
+// modele.jpg est un portrait en pied (le visage occupe le haut du cadre) : object-top
+// pour garder le visage visible au lieu du recadrage buste-aux-pieds par défaut.
+// balado.jpg et livre-couverture.jpg sont des visuels carrés déjà centrés, vérifiés à l'œil.
+const POSITION_IMAGE: Record<string, string> = {
+  balado: 'object-center',
+  livre: 'object-center',
+  modele: 'object-top',
+};
+
 const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
   const t = {
     FR: {
