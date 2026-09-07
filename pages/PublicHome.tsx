@@ -246,16 +246,16 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                <div className="absolute inset-0 bg-iridescent-soft opacity-40 pointer-events-none border-y border-white/5"></div>
                <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10">
                   <div className="space-y-2">
-                     <h4 className="text-4xl md:text-5xl font-bold font-serif text-iridescent">{b.stat1Value}</h4>
-                     <p className="text-cyan-200 uppercase tracking-widest text-sm">{b.stat1Label}</p>
+                     <h4 className="text-4xl md:text-5xl font-bold font-serif text-iridescent">{tr(b.id, 'stat1Value', b.stat1Value)}</h4>
+                     <p className="text-cyan-200 uppercase tracking-widest text-sm">{tr(b.id, 'stat1Label', b.stat1Label)}</p>
                   </div>
                   <div className="space-y-2">
-                     <h4 className="text-4xl md:text-5xl font-bold font-serif text-iridescent">{b.stat2Value}</h4>
-                     <p className="text-cyan-200 uppercase tracking-widest text-sm">{b.stat2Label}</p>
+                     <h4 className="text-4xl md:text-5xl font-bold font-serif text-iridescent">{tr(b.id, 'stat2Value', b.stat2Value)}</h4>
+                     <p className="text-cyan-200 uppercase tracking-widest text-sm">{tr(b.id, 'stat2Label', b.stat2Label)}</p>
                   </div>
                   <div className="space-y-2">
                      <h4 className="text-4xl md:text-5xl font-bold font-serif text-iridescent">{b.stat3Value}</h4>
-                     <p className="text-cyan-200 uppercase tracking-widest text-sm">{b.stat3Label}</p>
+                     <p className="text-cyan-200 uppercase tracking-widest text-sm">{tr(b.id, 'stat3Label', b.stat3Label)}</p>
                   </div>
                </div>
             </section>
