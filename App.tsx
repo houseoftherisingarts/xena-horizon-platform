@@ -1,27 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { auth } from './firebase';
 import { isAdmin } from './lib/admins';
 import { useDocument, writeDoc } from './lib/firestore';
+import { viewFromPath, pathFromView } from './lib/routes';
 import Nav from './components/Nav';
 import AdminSidebar from './components/AdminSidebar';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import PublicHome from './pages/PublicHome';
 import PublicServices from './pages/PublicServices';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminCRM from './pages/AdminCRM';
-import AdminProducts from './pages/AdminProducts';
-import AdminInvoices from './pages/AdminInvoices';
-import AdminGallery from './pages/AdminGallery';
-import AdminFinance from './pages/AdminFinance';
-import AdminLanding from './pages/AdminLanding';
-import AdminNewsletter from './pages/AdminNewsletter';
-import AdminWebsiteEditor from './pages/AdminWebsiteEditor';
-import AdminAgenda from './pages/AdminAgenda';
-import AdminEmail from './pages/AdminEmail';
-import AdminMessenger from './pages/AdminMessenger';
-import SocialCreator from './pages/SocialCreator';
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminCRM = lazy(() => import('./pages/AdminCRM'));
+const AdminProducts = lazy(() => import('./pages/AdminProducts'));
+const AdminInvoices = lazy(() => import('./pages/AdminInvoices'));
+const AdminGallery = lazy(() => import('./pages/AdminGallery'));
+const AdminFinance = lazy(() => import('./pages/AdminFinance'));
+const AdminLanding = lazy(() => import('./pages/AdminLanding'));
+const AdminNewsletter = lazy(() => import('./pages/AdminNewsletter'));
+const AdminWebsiteEditor = lazy(() => import('./pages/AdminWebsiteEditor'));
+const AdminAgenda = lazy(() => import('./pages/AdminAgenda'));
+const AdminEmail = lazy(() => import('./pages/AdminEmail'));
+const AdminMessenger = lazy(() => import('./pages/AdminMessenger'));
+const SocialCreator = lazy(() => import('./pages/SocialCreator'));
+
+const PageLoader: React.FC = () => (
+  <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
+    <span className="w-10 h-10 rounded-full border-2 border-white/10 border-t-cyan-400 animate-spin" />
+  </div>
+);
 import { ViewState, HomeBlock, Language } from './types';
 
 const INITIAL_HOME_BLOCKS: HomeBlock[] = [
@@ -57,7 +64,25 @@ const INITIAL_HOME_BLOCKS: HomeBlock[] = [
 ];
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewState>('HOME');
+  const [currentView, setCurrentViewState] = useState<ViewState>(() =>
+    typeof window === 'undefined' ? 'HOME' : viewFromPath(window.location.pathname)
+  );
+
+  // La vue et l'adresse restent synchronisées : lien direct, bouton Précédent, partage.
+  const setCurrentView = (view: ViewState) => {
+    setCurrentViewState(view);
+    const path = pathFromView(view);
+    if (window.location.pathname !== path) {
+      window.history.pushState({ view }, '', path);
+    }
+    window.scrollTo({ top: 0 });
+  };
+
+  useEffect(() => {
+    const onPop = () => setCurrentViewState(viewFromPath(window.location.pathname));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
   const [lang, setLang] = useState<Language>('FR');
 
   const { data: homeDoc } = useDocument<{ blocks: HomeBlock[] }>('settings/homeBlocks');
@@ -162,8 +187,8 @@ const App: React.FC = () => {
           onSignOut={handleSignOut}
           lang={lang}
         />
-        <main className="flex-1 ml-64 min-h-screen overflow-x-hidden">
-          {renderView()}
+        <main className="flex-1 ml-64 min-h-screen overflow-x-clip">
+          <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
         </main>
       </div>
     );
@@ -178,7 +203,9 @@ const App: React.FC = () => {
         lang={lang}
         setLang={setLang}
       />
-      <main className="min-h-screen">{renderView()}</main>
+      <main className="min-h-screen">
+        <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
+      </main>
       <Footer onAdminLogin={requestAdmin} lang={lang} />
       <AuthModal
         open={authModalOpen}

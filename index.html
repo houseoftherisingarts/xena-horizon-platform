@@ -3,118 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xena Horizon | Consultant</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'system-ui', 'sans-serif'],
-              serif: ['Playfair Display', 'serif'],
-            },
-            colors: {
-              xena: {
-                dark: '#0f172a',         // Slate 900
-                deep: '#020617',          // Slate 950
-                cyan: '#22d3ee',          // primary accent (cyan-400)
-                emerald: '#34d399',       // emerald-400
-                blueAccent: '#3b82f6',    // blue-500 (legacy "accent" alias kept below)
-                accent: '#22d3ee',        // shifted: primary single-stop accent is now cyan
-                glass: 'rgba(255, 255, 255, 0.08)',
-                glassBorder: 'rgba(255, 255, 255, 0.18)',
-              }
-            },
-            backgroundImage: {
-              'iridescent': 'linear-gradient(135deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%)',
-              'iridescent-soft': 'linear-gradient(135deg, rgba(34,211,238,0.18) 0%, rgba(52,211,153,0.18) 50%, rgba(59,130,246,0.18) 100%)',
-              'iridescent-radial': 'radial-gradient(ellipse at top right, rgba(52,211,153,0.25), transparent 60%), radial-gradient(ellipse at bottom left, rgba(34,211,238,0.25), transparent 60%), radial-gradient(ellipse at center, rgba(59,130,246,0.20), transparent 70%)',
-            },
-            animation: {
-              'float': 'float 6s ease-in-out infinite',
-              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'iridescent-shift': 'iridescent-shift 12s ease-in-out infinite',
-              'iridescent-fast': 'iridescent-shift 6s ease-in-out infinite',
-            },
-            keyframes: {
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
-              },
-              'iridescent-shift': {
-                '0%, 100%': { 'background-position': '0% 50%' },
-                '50%': { 'background-position': '100% 50%' },
-              },
-            },
-            boxShadow: {
-              'iridescent': '0 10px 40px -10px rgba(34,211,238,0.45), 0 6px 20px -6px rgba(52,211,153,0.35)',
-              'iridescent-sm': '0 4px 18px -6px rgba(34,211,238,0.4)',
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        background-color: #0f172a;
-        color: #e2e8f0;
-        overflow-x: hidden;
-      }
-      
-      /* RESPONSIVE SCALING FOR LAPTOPS */
-      /* This simulates a ~87.5% zoom on screens between 1024px and 1536px (typical 13-15" laptops) */
-      @media (min-width: 1024px) and (max-width: 1536px) {
-        html {
-          font-size: 14px; 
-        }
-      }
+    <title>Xena Horizon | Laurie Belhumeur, consultante en carrière artistique et communication</title>
+    <meta name="description" content="Xena Horizon accompagne les artistes, les créateurs et les organismes culturels : stratégie de communication, identité artistique, événements et rédaction, avec Laurie Belhumeur." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0f172a; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%);
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(180deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%);
-        opacity: 0.85;
-      }
-
-      /* Iridescent text gradient helper (works on any heading) */
-      .text-iridescent {
-        background: linear-gradient(135deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%);
-        background-size: 200% 200%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      @media (prefers-reduced-motion: no-preference) {
-        .text-iridescent { animation: iridescent-shift 12s ease-in-out infinite; }
-      }
-      @keyframes iridescent-shift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
-    "recharts": "https://esm.sh/recharts@^3.7.0",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
-    "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>

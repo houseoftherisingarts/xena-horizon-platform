@@ -4,15 +4,17 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported as analyticsSupported } from 'firebase/analytics';
 
+const env = import.meta.env;
 const firebaseConfig = {
-  apiKey: 'AIzaSyBGL4SBR3jTBZ25gyDdQQebRnRihU44FxQ',
-  authDomain: 'xena-70977.firebaseapp.com',
-  projectId: 'xena-70977',
-  storageBucket: 'xena-70977.firebasestorage.app',
-  messagingSenderId: '26573351102',
-  appId: '1:26573351102:web:9c32bc58d4e387232a96ef',
-  measurementId: 'G-ZBXZLK36QV',
+  apiKey: env.VITE_FIREBASE_API_KEY,
+  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: env.VITE_FIREBASE_APP_ID,
+  measurementId: env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+if (!firebaseConfig.projectId) throw new Error('Configuration Firebase absente : vérifier le fichier .env');
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

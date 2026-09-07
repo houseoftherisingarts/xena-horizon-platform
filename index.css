@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+  overflow-x: clip;
+}
+
+/* Laptops 13-15 pouces : l'échelle descend d'un cran, comme un zoom à 87,5 % */
+@media (min-width: 1024px) and (max-width: 1536px) {
+  html { font-size: 14px; }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%); border-radius: 4px; }
+
+.text-iridescent {
+  background: linear-gradient(135deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .text-iridescent { animation: iridescent-shift 12s ease-in-out infinite; }
+}
+@keyframes iridescent-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
