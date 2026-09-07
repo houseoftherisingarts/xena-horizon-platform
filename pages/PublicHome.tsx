@@ -10,6 +10,35 @@ interface PublicHomeProps {
   lang: Language;
 }
 
+/**
+ * Traductions anglaises des blocs par défaut de BLOCS_ACCUEIL (lib/contenu.ts), par id de bloc.
+ * HomeBlock (types.ts) ne porte que le français : si Laurie personnalise un bloc depuis l'admin,
+ * l'id ne change pas mais le champ manquant ici retombe simplement sur son propre texte (repli sûr).
+ */
+const HOME_EN: Record<string, Record<string, string>> = {
+  'hero-1': {
+    headline: 'Live from your art\nwithout losing your voice',
+    subheadline:
+      'Fifteen years supporting artists of every discipline and creative people, so the business world understands them and they can finally live from their art.',
+    ctaText: 'Book an appointment',
+  },
+  'services-1': {
+    title: 'How we can\nwork together',
+    subtitle: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
+  },
+  'stats-1': {
+    stat1Value: '15 years',
+    stat1Label: 'Of experience',
+    stat2Value: 'Every discipline',
+    stat2Label: 'Dance, writing, theatre, music, singing, painting, photography, circus',
+    stat3Label: 'Areas served',
+  },
+  'contact-1': {
+    title: "Let's talk about\nyour next step",
+    text: "Write to me and I'll get back to you quickly. Let's see together if we're a good fit to work together.",
+  },
+};
+
 const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
