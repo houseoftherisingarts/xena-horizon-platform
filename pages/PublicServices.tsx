@@ -64,6 +64,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       title: 'Find your path.',
       subtitle: 'Xena Horizon meets you where you are, not in a rigid service menu.',
       pillars: 'Choose your profile',
+      pricesLabel: 'Starting price',
       learnMore: 'View services',
       available: 'Tailored services',
       forWho: 'For artists, creative entrepreneurs and organizations',
