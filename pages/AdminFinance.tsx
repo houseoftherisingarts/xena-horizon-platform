@@ -149,7 +149,7 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
 
   // --- REVENUE BY SOURCE (by client serviceType) ---
   const REVENUE_BY_SOURCE = useMemo(() => {
-    const clientMap = new Map(clients.map(c => [c.id, c]));
+    const clientMap = new Map<string, Client>(clients.map(c => [c.id, c]));
     const totals: Record<string, number> = { Artist: 0, Organism: 0, Entrepreneur: 0 };
 
     filteredDocuments.forEach(d => {
