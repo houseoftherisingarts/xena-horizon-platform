@@ -88,24 +88,6 @@ service cloud.firestore {
 
     // Dossier client : un document par personne accompagnée, identifié par son uid.
     match /dossiers/{uid} {
-      // Bornes de taille des champs texte du dossier, tolérantes à leur absence.
-      // `revue` n'apparaît jamais ici : c'est le jugement de Laurie, jamais un champ que le client peut fixer.
-      function projetValide(data) {
-        return !('projet' in data)
-               || (data.projet is map
-                   && texteBorne(data.projet, 'titre', 200)
-                   && texteBorne(data.projet, 'description', 5000)
-                   && texteBorne(data.projet, 'objectif', 2000)
-                   && texteBorne(data.projet, 'echeance', 20));
-      }
-      function dossierBornesOK(data) {
-        return texteBorne(data, 'telephone', 40)
-               && texteBorne(data, 'ville', 80)
-               && texteBorne(data, 'discipline', 80)
-               && texteBorne(data, 'photoURL', 500)
-               && projetValide(data);
-      }
-
       // La personne lit son propre dossier; seule Laurie peut lister la collection.
       allow get: if isOwner(uid) || isAdmin();
       allow list: if isAdmin();
