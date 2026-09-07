@@ -173,8 +173,8 @@ const dateCourte = (ts: any): string => {
   }
 };
 
-const etiquetteEtat = (etat: PieceDeposee['etat']): string =>
-  etat === 'valide' ? 'validée' : etat === 'a_refaire' ? 'à refaire' : 'déposée';
+const etiquetteEtat = (etat: EtatPiece): string =>
+  etat === 'valide' ? 'validée' : etat === 'a_refaire' ? 'à refaire' : etat === 'redeposee' ? 'nouveau dépôt, en attente de Laurie' : 'déposée';
 
 /**
  * Fiche complète en Markdown, taillée pour être collée dans un assistant IA
