@@ -8,7 +8,6 @@ import type {
   DossierNote,
   EtapeDef,
   PieceDef,
-  PieceDeposee,
   ProfilClient,
 } from '../types';
 
