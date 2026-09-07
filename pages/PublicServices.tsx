@@ -47,7 +47,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       howTitle: 'Comment ça\nse passe',
       howSubtitle: 'Le même parcours pour chaque personne accompagnée, du premier appel au suivi.',
       spaceTitle: 'Un dossier déjà commencé ?',
-      spaceText: "Retrouvez votre parcours, vos pièces et vos échanges avec Laurie dans votre espace client.",
+      spaceText: "Retrouve ton parcours, tes pièces et tes échanges avec Laurie dans ton espace client.",
       spaceCta: 'Ouvrir mon espace',
     },
     EN: {

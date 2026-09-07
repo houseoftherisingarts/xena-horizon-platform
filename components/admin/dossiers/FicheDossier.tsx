@@ -126,7 +126,7 @@ const FicheDossier: React.FC<FicheDossierProps> = ({ dossier, config, lang, onBa
     setErreur(null);
     try {
       await patchDoc('dossiers', uid, {
-        [`pieces.${pieceId}.etat`]: 'valide',
+        [`revue.${pieceId}`]: { etat: 'valide', revueLe: serverTimestamp() },
         derniereActiviteAdmin: serverTimestamp(),
       });
     } catch {
@@ -138,8 +138,7 @@ const FicheDossier: React.FC<FicheDossierProps> = ({ dossier, config, lang, onBa
     setErreur(null);
     try {
       await patchDoc('dossiers', uid, {
-        [`pieces.${pieceId}.etat`]: 'a_refaire',
-        [`pieces.${pieceId}.note`]: remarque,
+        [`revue.${pieceId}`]: { etat: 'a_refaire', note: remarque, revueLe: serverTimestamp() },
         derniereActiviteAdmin: serverTimestamp(),
         nonLusClient: increment(1),
       });
