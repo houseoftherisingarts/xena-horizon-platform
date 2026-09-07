@@ -174,6 +174,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
       cancel: 'Cancel',
       generate: 'Generate',
       selectImg: 'Select Image',
+      emptyGallery: 'No images yet. Add some from the admin Gallery.',
       composer: 'Composer',
       subscribers: 'Subscribers',
       campaigns: 'Campaigns',
