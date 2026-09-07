@@ -136,96 +136,16 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
     setLayers(layers.map(l => l.id === id ? { ...l, ...updates } : l));
   };
 
-  // --- GEMINI GENERATION ---
-  
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        // Remove data:image/png;base64, prefix
-        const base64 = result.split(',')[1];
-        resolve(base64);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
+  // --- GÉNÉRATION IA ---
+  // La génération par IA (Nano Banana / Gemini) demande une clé qui ne peut pas vivre dans le
+  // navigateur : elle passera par une fonction serveur. En attendant, le bouton reste désactivé
+  // (voir la modale plus bas) et aucune clé n'est exposée côté client.
 
   const handleNanoImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setNanoRefImage(file);
       setNanoRefPreview(URL.createObjectURL(file));
-    }
-  };
-
-  const handleNanoGenerate = async () => {
-    if (!nanoPrompt && !nanoRefImage) return; // Allow prompt-less if image exists? Usually need prompt.
-    setIsGenerating(true);
-
-    try {
-      // Initialize Gemini Client
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
-      const parts: any[] = [];
-      
-      // Add Image Part if exists
-      if (nanoRefImage) {
-        const base64Data = await fileToBase64(nanoRefImage);
-        parts.push({
-          inlineData: {
-            mimeType: nanoRefImage.type,
-            data: base64Data
-          }
-        });
-      }
-
-      // Add Text Part
-      if (nanoPrompt) {
-        parts.push({ text: nanoPrompt });
-      }
-
-      // Use the specified model for image generation
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash-image',
-        contents: { parts },
-        config: {
-           imageConfig: {
-             aspectRatio: "1:1" // Defaulting to square for social
-           }
-        }
-      });
-
-      let foundImage = false;
-      // Iterate through parts to find the image
-      if (response.candidates && response.candidates[0].content.parts) {
-        for (const part of response.candidates[0].content.parts) {
-          if (part.inlineData) {
-            const base64String = part.inlineData.data;
-            const imageUrl = `data:image/png;base64,${base64String}`;
-            setBgImage(imageUrl);
-            foundImage = true;
-            break;
-          }
-        }
-      }
-
-      if (!foundImage) {
-         // Fallback/Mock if API key not present in this env
-         setBgImage(`https://picsum.photos/1080/1080?random=${Date.now()}`);
-      }
-
-      setIsNanoOpen(false);
-      setNanoRefImage(null);
-      setNanoRefPreview(null);
-      setNanoPrompt('');
-    } catch (error) {
-      console.error("Gemini Generation Error", error);
-      // Fallback
-      setBgImage(`https://picsum.photos/1080/1080?random=${Date.now()}`);
-    } finally {
-      setIsGenerating(false);
     }
   };
 
