@@ -430,7 +430,7 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
                   </tr>
                </thead>
                <tbody className="text-sm text-slate-300">
-                  {RECENT_TRANSACTIONS.map((tx) => (
+                  {LEDGER_ROWS.map((tx) => (
                      <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                         <td className="py-4 font-mono text-slate-500">{tx.date}</td>
                         <td className="py-4 font-medium text-white">{tx.desc}</td>
