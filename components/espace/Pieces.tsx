@@ -4,7 +4,7 @@ import { deleteObject, getDownloadURL, ref as storageRef, uploadBytesResumable }
 import { AlertCircle, Check, FileText, Upload, X } from 'lucide-react';
 import { storage } from '../../firebase';
 import { patchDoc } from '../../lib/firestore';
-import { cheminPiece, piecesManquantes, piecesParCategorie, TAILLE_MAX, TYPES_ACCEPTES } from '../../lib/dossier';
+import { cheminPiece, etatPiece, EtatPiece, piecesManquantes, piecesParCategorie, TAILLE_MAX, TYPES_ACCEPTES } from '../../lib/dossier';
 import { Dossier, DossierConfig, Language, PieceDef, PieceDeposee } from '../../types';
 
 interface PiecesProps {
