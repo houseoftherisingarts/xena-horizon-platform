@@ -137,7 +137,7 @@ const RessourcesAdmin: React.FC<RessourcesAdminProps> = ({ lang }) => {
       )}
 
       <div className="space-y-2">
-        {ressources.length === 0 && <p className="text-sm text-slate-500 italic">{tr.aucune}</p>}
+        {ressources.length === 0 && <p className="text-sm text-slate-500">{tr.aucune}</p>}
         {ressources.map((r, i) => (
           <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-[15px] p-3">
             <div className="flex-1 min-w-0">
