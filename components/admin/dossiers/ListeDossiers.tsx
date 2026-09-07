@@ -60,7 +60,11 @@ const ListeDossiers: React.FC<ListeDossiersProps> = ({ dossiers, config, lang, l
 
   const actifs = useMemo(() => dossiers.filter((d) => !d.archive), [dossiers]);
   const piecesAValider = useMemo(
-    () => actifs.reduce((n, d) => n + (d.pieces ? Object.values(d.pieces).filter((p) => p.etat === 'depose').length : 0), 0),
+    () =>
+      actifs.reduce((n, d) => {
+        const liste: PieceDeposee[] = d.pieces ? Object.values(d.pieces) : [];
+        return n + liste.filter((p) => p.etat === 'depose').length;
+      }, 0),
     [actifs]
   );
   const messagesNonLus = useMemo(() => actifs.reduce((n, d) => n + (d.nonLusAdmin || 0), 0), [actifs]);
