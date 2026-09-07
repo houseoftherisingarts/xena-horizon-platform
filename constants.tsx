@@ -2,123 +2,17 @@ import React from 'react';
 import { Client, ClientStatus, BlogPost, Product, GalleryImage, ClientArchetype } from './types';
 import { Palette, Users, Zap, Sparkles } from 'lucide-react';
 
-export const MOCK_CLIENTS: Client[] = [
-  {
-    id: '1',
-    name: 'Sophie Martineau',
-    organization: 'Théâtre de la Lune',
-    email: 'sophie@theatrelune.ca',
-    status: ClientStatus.ACTIVE,
-    paymentStatus: 'Paid',
-    paymentType: 'Recurring',
-    paymentDate: '2024-06-01',
-    notes: 'Working on strategic grant application.',
-    serviceType: 'Artist',
-    lastContact: '2024-05-10',
-    tasks: [
-      { id: 't1', text: 'Finaliser le budget prévisionnel', completed: false },
-      { id: 't2', text: 'Relire la lettre d\'intention', completed: true },
-    ]
-  },
-  {
-    id: '2',
-    name: 'Centre Communautaire Espoir',
-    organization: 'CC Espoir',
-    email: 'contact@ccespoir.org',
-    status: ClientStatus.ACTIVE,
-    paymentStatus: 'Pending',
-    paymentType: 'Once',
-    paymentDate: '2024-05-20',
-    notes: 'Revising organizational structure.',
-    serviceType: 'Organism',
-    lastContact: '2024-05-12',
-    tasks: [
-      { id: 't3', text: 'Envoyer le contrat signé', completed: false },
-    ]
-  },
-  {
-    id: '3',
-    name: 'Marc Tremblay',
-    organization: 'Indie Studio',
-    email: 'marc@indiestudio.com',
-    status: ClientStatus.LEAD,
-    paymentStatus: 'Pending',
-    paymentType: 'Once',
-    paymentDate: '',
-    notes: 'Initial consultation scheduled.',
-    serviceType: 'Entrepreneur',
-    lastContact: '2024-05-08',
-    tasks: []
-  },
-];
+// Le contenu réel de Xena Horizon vit dans lib/contenu.ts (SERVICES_REELS, PROJETS, TEMOIGNAGES...).
+// Les tableaux ci-dessous restent exportés vides, avec leurs noms d'origine, pour ne pas casser les
+// pages admin qui les importent encore (AdminInvoices, AdminLanding, AdminNewsletter, SocialCreator).
+// Le chantier D les rebranche sur Firestore (`clients`, `gallery`).
+export const MOCK_CLIENTS: Client[] = [];
 
-export const MOCK_BLOG_POSTS: BlogPost[] = [
-  {
-    id: '1',
-    title: 'De l’Invisible à l’Iconique',
-    excerpt: 'Comment structurer son image de marque pour un impact durable dans le milieu culturel.',
-    date: '15 Mai 2024',
-    imageUrl: 'https://picsum.photos/800/600?random=1',
-    published: true,
-  },
-  {
-    id: '2',
-    title: 'Gérer le Chaos Créatif',
-    excerpt: 'Des méthodes concrètes pour passer de l’idée à l’exécution sans perdre son âme.',
-    date: '28 Avril 2024',
-    imageUrl: 'https://picsum.photos/800/600?random=2',
-    published: true,
-  },
-];
+export const MOCK_BLOG_POSTS: BlogPost[] = [];
 
-// Products. `clientTypes` filters which archetype sees the product on the public site.
-// `variants` lets a single offering carry archetype-specific name/price/description.
-export const MOCK_PRODUCTS: Product[] = [
-  { id: '1', name: 'Checklist "Départ Canon"', price: 0, description: 'PDF gratuit pour structurer son CA.', type: 'Digital', category: 'Product', status: 'Active', isPublic: true, clientTypes: ['Artist', 'Entrepreneur', 'NPO'] },
-  { id: '2', name: 'Template Budget Simple', price: 9, description: 'Tableau Excel pré-rempli.', type: 'Digital', category: 'Product', status: 'Active', isPublic: false, clientTypes: ['Artist', 'Entrepreneur'] },
-  { id: '3', name: 'Ebook: Chaos à l\'Ordre', price: 27, description: 'Le guide complet (150 pages).', type: 'Digital', category: 'Product', status: 'Active', isPublic: true, clientTypes: ['Artist', 'Entrepreneur', 'NPO'] },
-  {
-    id: '4', name: 'Audit Express', price: 150,
-    description: 'Analyse de dossier de subvention (1h).',
-    type: 'Service', category: 'Service', status: 'Active', isPublic: true,
-    clientTypes: ['Artist', 'Entrepreneur', 'NPO'],
-    variants: {
-      Artist: { name: 'Audit Express — Artiste', description: 'Relecture stratégique de votre dossier (CALQ, CAC, SODEC).', price: 120 },
-      Entrepreneur: { name: 'Audit Express — Out of the box', description: 'Audit éclair de votre pitch / plan d\'affaires créatif.', price: 180 },
-      NPO: { name: 'Audit Express — OBNL', description: 'Diagnostic rapide de gouvernance ou de demande de subvention.', price: 150 },
-    },
-  },
-  { id: '5', name: 'Atelier Stratégie', price: 450, description: 'Demi-journée en groupe.', type: 'Service', category: 'Service', status: 'Planned', isPublic: false, clientTypes: ['Artist', 'Entrepreneur', 'NPO'] },
-  {
-    id: '6', name: 'Mentorat "Guerrière"', price: 1500,
-    description: 'Accompagnement sur 3 mois.',
-    type: 'Consulting', category: 'Service', status: 'Active', isPublic: true,
-    clientTypes: ['Artist', 'Entrepreneur'],
-    variants: {
-      Artist: { name: 'Mentorat Guerrière — Artiste', description: 'Trois mois pour structurer votre démarche, vos finances et votre voix.', price: 1500 },
-      Entrepreneur: { name: 'Mentorat Out of the box', description: 'Trois mois pour bâtir un modèle d\'affaires aligné avec votre vision.', price: 1800 },
-    },
-  },
-  {
-    id: '7', name: 'Refonte Organisationnelle', price: 5000,
-    description: 'Mandat complet de restructuration.',
-    type: 'Consulting', category: 'Service', status: 'Concept', isPublic: false,
-    clientTypes: ['NPO', 'Entrepreneur'],
-    variants: {
-      NPO: { name: 'Refonte OBNL', description: 'Restructuration complète : gouvernance, processus, financement.', price: 5000 },
-      Entrepreneur: { name: 'Refonte Studio Créatif', description: 'Restructuration complète d\'un studio ou collectif créatif.', price: 6500 },
-    },
-  },
-  { id: '8', name: 'Partenaire Stratégique', price: 12000, description: 'Suivi annuel illimité pour OBNL.', type: 'Consulting', category: 'Service', status: 'Inactive', isPublic: false, clientTypes: ['NPO'] },
-];
+export const MOCK_PRODUCTS: Product[] = [];
 
-export const MOCK_GALLERY: GalleryImage[] = [
-  { id: '1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80', name: 'Portrait Studio', date: '2023-10-01' },
-  { id: '2', url: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80', name: 'Bureau Minimal', date: '2023-09-15' },
-  { id: '3', url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80', name: 'Meeting Team', date: '2023-09-10' },
-  { id: '4', url: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80', name: 'Planning Whiteboard', date: '2023-08-22' },
-  { id: '5', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80', name: 'Handshake', date: '2023-08-20' },
-];
+export const MOCK_GALLERY: GalleryImage[] = [];
 
 export const PRICE_RANGES = [
   { label: 'Freemium', min: 0, max: 0, color: 'text-slate-400' },
