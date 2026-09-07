@@ -248,7 +248,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
 
     switch (type) {
       case 'HERO':
-        newBlock = { type: 'HERO', id, headline: 'Votre Titre Accrocheur', subheadline: 'La promesse irrésistible qui change tout.', ctaText: 'Je m\'inscris maintenant', ctaLink: '#', bgImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80' };
+        newBlock = { type: 'HERO', id, headline: 'Votre Titre Accrocheur', subheadline: 'La promesse irrésistible qui change tout.', ctaText: 'Je m\'inscris maintenant', ctaLink: '#', bgImage: '/images/laurie-scene.jpg' };
         break;
       case 'PROBLEM_SOLUTION':
         newBlock = { type: 'PROBLEM_SOLUTION', id, problemTitle: 'Vous en avez assez de...', problemText: 'Décrivez la douleur actuelle de votre client.', solutionTitle: 'La Solution', solutionText: 'Comment votre offre résout ce problème définitivement.' };
@@ -287,10 +287,10 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
         };
         break;
       case 'BIO':
-        newBlock = { type: 'BIO', id, title: 'Qui suis-je ?', content: 'Votre bio courte et impactante.', imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80' };
+        newBlock = { type: 'BIO', id, title: 'Qui suis-je ?', content: 'Votre bio courte et impactante.', imageUrl: '/images/laurie-apropos.jpg' };
         break;
       case 'IMAGE':
-        newBlock = { type: 'IMAGE', id, imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1600&q=80', caption: '', isSeparator: false };
+        newBlock = { type: 'IMAGE', id, imageUrl: '/images/laurie-portrait-1.jpg', caption: '', isSeparator: false };
         break;
       default:
         return;
@@ -372,7 +372,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
         subheadline: `La méthode exacte pour les ${targetAudience} qui veulent arrêter de ${painPoint}.`,
         ctaText: `Oui, je veux ${dreamOutcome}`,
         ctaLink: '#',
-        bgImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1600&q=80'
+        bgImage: '/images/laurie-portrait-1.jpg'
       },
       {
         type: 'PROBLEM_SOLUTION', id: `prob-${id}`,
@@ -383,7 +383,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
       },
       {
          type: 'IMAGE', id: `img-${id}`,
-         imageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1600&q=80',
+         imageUrl: '/images/laurie-portrait-2.jpg',
          caption: 'Une approche unique.',
          isSeparator: true
       },
@@ -400,7 +400,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
         type: 'BIO', id: `bio-${id}`,
         title: 'À propos de Xena',
         content: `J'ai aidé des centaines de ${targetAudience} à atteindre leurs objectifs. Ma mission est de vous donner les outils pour réussir.`,
-        imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80'
+        imageUrl: '/images/laurie-apropos.jpg'
       },
       {
         type: 'PRICING', id: `price-${id}`,
