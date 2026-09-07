@@ -317,6 +317,8 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
           </button>
         </div>
       </div>
+
+      <p className="max-w-[1400px] mx-auto relative z-10 mt-16 text-center text-xs text-slate-500">{t.confidentialite}</p>
     </div>
   );
 };
