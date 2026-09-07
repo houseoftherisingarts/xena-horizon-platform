@@ -1,5 +1,5 @@
 import React from 'react';
-import { Client, ClientStatus, BlogPost, Product, GalleryImage, ClientArchetype } from './types';
+import { Client, BlogPost, Product, GalleryImage, ClientArchetype } from './types';
 import { Palette, Users, Zap, Sparkles } from 'lucide-react';
 
 // Le contenu réel de Xena Horizon vit dans lib/contenu.ts (SERVICES_REELS, PROJETS, TEMOIGNAGES...).
