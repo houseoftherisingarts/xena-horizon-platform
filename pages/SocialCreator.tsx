@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Download, Image as ImageIcon, Type, RefreshCw, Grid, X, Plus, Move, Trash2, Square, Smartphone, Monitor, Sparkles, Upload } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
-import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES, MOCK_GALLERY } from '../constants';
-import { Language } from '../types';
+import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
+import { GalleryImage, Language } from '../types';
+import { useCollection } from '../lib/firestore';
 
 interface SocialCreatorProps {
   lang: Language;

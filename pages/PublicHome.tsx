@@ -456,6 +456,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                 </div>
               </div>
             </section>
+            </React.Fragment>
           );
         }
 
