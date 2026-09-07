@@ -26,6 +26,7 @@ const computeItemsTotal = (items: { quantity: number; price: number }[] = []) =>
 
 const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
   const [dateRange, setDateRange] = useState<DateRange>('YTD');
+  const [ledgerFilter, setLedgerFilter] = useState('');
 
   const { data: documents, loading: loadingDocs } = useCollection<Document>('documents');
   const { data: clients, loading: loadingClients } = useCollection<Client>('clients');
