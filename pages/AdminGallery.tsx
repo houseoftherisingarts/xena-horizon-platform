@@ -58,7 +58,7 @@ const AdminGallery: React.FC<AdminGalleryProps> = ({ currentProfileImage, onUpda
     if (!files || files.length === 0) return;
     setBusy(true);
     try {
-      for (const file of Array.from(files)) {
+      for (const file of Array.from(files) as File[]) {
         const path = makeStoragePath('gallery', file.name);
         const { url } = await uploadFile(path, file);
         await createDoc('gallery', {
