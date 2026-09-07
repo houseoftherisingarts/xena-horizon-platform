@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  ShoppingBag, 
-  PenTool, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  Users,
+  ShoppingBag,
+  PenTool,
+  LogOut,
   Settings,
   ChevronRight,
   FileText,
@@ -15,9 +15,11 @@ import {
   Globe,
   Calendar,
   MessageCircle,
-  Inbox
+  Inbox,
+  FolderOpen
 } from 'lucide-react';
-import { ViewState, Language } from '../types';
+import { Dossier, ViewState, Language } from '../types';
+import { useCollection } from '../lib/firestore';
 
 interface AdminSidebarProps {
   currentView: ViewState;
