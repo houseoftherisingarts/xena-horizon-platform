@@ -332,13 +332,16 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
 
               {/* --- CITATION --- */}
               <section className="px-6">
-                <div className="max-w-[1400px] mx-auto text-center py-4">
-                  <p className="text-2xl md:text-3xl lg:text-4xl font-serif text-white leading-snug max-w-4xl mx-auto">
-                    « {lang === 'FR' ? CITATION.texteFR : CITATION.texteEN} »
-                  </p>
-                  <p className="mt-6 text-slate-400 text-sm uppercase tracking-widest">
-                    {lang === 'FR' ? CITATION.source : CITATION.sourceEN}
-                  </p>
+                <div className="max-w-[1400px] mx-auto">
+                  <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] p-8 md:p-14 grid grid-cols-1 lg:grid-cols-[2fr_1px_1fr] gap-8 lg:gap-10 items-center">
+                    <p className="text-2xl md:text-3xl lg:text-4xl font-serif text-white leading-snug">
+                      « {lang === 'FR' ? CITATION.texteFR : CITATION.texteEN} »
+                    </p>
+                    <div className="hidden lg:block h-full w-px bg-iridescent opacity-40" />
+                    <p className="text-slate-400 text-sm uppercase tracking-widest lg:text-right">
+                      {lang === 'FR' ? CITATION.source : CITATION.sourceEN}
+                    </p>
+                  </div>
                 </div>
               </section>
 
