@@ -19,6 +19,26 @@ service cloud.firestore {
       return !(champ in data) || (data[champ] is string && data[champ].size() < max);
     }
 
+    // Bornes du sous-objet `projet` du dossier client, tolérantes à son absence.
+    function projetValide(data) {
+      return !('projet' in data)
+             || (data.projet is map
+                 && texteBorne(data.projet, 'titre', 200)
+                 && texteBorne(data.projet, 'description', 5000)
+                 && texteBorne(data.projet, 'objectif', 2000)
+                 && texteBorne(data.projet, 'echeance', 20));
+    }
+
+    // Bornes de taille des champs texte du dossier client, tolérantes à leur absence.
+    // `revue` n'y figure jamais : c'est le jugement de Laurie, jamais un champ que le client peut fixer.
+    function dossierBornesOK(data) {
+      return texteBorne(data, 'telephone', 40)
+             && texteBorne(data, 'ville', 80)
+             && texteBorne(data, 'discipline', 80)
+             && texteBorne(data, 'photoURL', 500)
+             && projetValide(data);
+    }
+
     // Public-write submission endpoints (anti-spam: enforce shape only)
     match /leads/{leadId} {
       allow read: if isAdmin();
