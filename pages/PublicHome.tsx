@@ -66,6 +66,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
       aboutEyebrow: 'Laurie Belhumeur, fondatrice',
       aboutTitle: 'Brève histoire\nd\'un tout',
       aboutMission: 'Faire ressortir la créativité partout où elle existe est ma mission.',
+      heroCardText: 'Tu vois la vie comme un artiste ?',
       testimonialLabel: 'Un témoignage',
       trustLabel: 'Ils lui ont fait confiance',
       projectsLabel: 'Les projets',
