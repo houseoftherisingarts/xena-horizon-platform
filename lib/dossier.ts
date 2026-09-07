@@ -132,6 +132,30 @@ export const piecesParCategorie = (pieces: PieceDef[]): { cat: string; pieces: P
   return Object.entries(cats).map(([cat, list]) => ({ cat, pieces: list }));
 };
 
+export type EtatPiece = 'manquante' | 'deposee' | 'valide' | 'a_refaire' | 'redeposee';
+
+const versLeMillis = (ts: any): number => {
+  if (!ts) return Date.now(); // écriture en cours (serverTimestamp pas encore résolu côté client) : compte comme « maintenant »
+  if (typeof ts.toMillis === 'function') return ts.toMillis();
+  if (typeof ts.toDate === 'function') return ts.toDate().getTime();
+  if (ts instanceof Date) return ts.getTime();
+  return 0;
+};
+
+/**
+ * L'état affiché d'une pièce : croise le dépôt de la personne (pieces) avec le jugement de Laurie
+ * (revue), jamais l'inverse — le client n'a pas le droit d'écrire `revue` (firestore.rules). Un
+ * fichier redéposé après une revue « à refaire » repart en attente : Laurie doit rejuger, la
+ * personne ne peut jamais s'auto-valider.
+ */
+export const etatPiece = (dossier: Pick<Dossier, 'pieces' | 'revue'>, pieceId: string): EtatPiece => {
+  const deposee = dossier.pieces?.[pieceId];
+  if (!deposee) return 'manquante';
+  const revue = dossier.revue?.[pieceId];
+  if (!revue) return 'deposee';
+  return versLeMillis(deposee.deposeLe) > versLeMillis(revue.revueLe) ? 'redeposee' : revue.etat;
+};
+
 export const indexEtape = (etapes: EtapeDef[], etapeId: string): number =>
   Math.max(0, etapes.findIndex((e) => e.id === etapeId));
 
