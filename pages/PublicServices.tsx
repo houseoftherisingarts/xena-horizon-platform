@@ -1,68 +1,91 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowRight, CheckCircle, Sparkles, ChevronLeft } from 'lucide-react';
+import { ArrowRight, CheckCircle, Sparkles, ChevronLeft, Compass } from 'lucide-react';
 import {
   CLIENT_ARCHETYPES,
-  MOCK_PRODUCTS,
   ACTION_BUTTON_CLASSES,
   GHOST_BUTTON_CLASSES,
-  resolveProductForArchetype,
 } from '../constants';
+import { useCollection } from '../lib/firestore';
+import { SERVICES_REELS } from '../lib/contenu';
+import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
 import GlassCard from '../components/GlassCard';
-import { ClientArchetype, Language } from '../types';
+import { ClientArchetype, Language, Product, ViewState } from '../types';
 
 interface PublicServicesProps {
   lang: Language;
+  onChangeView?: (view: ViewState) => void;
 }
 
-const PublicServices: React.FC<PublicServicesProps> = ({ lang }) => {
+/** Dès X $ + taxes, Dès X $ / mois pour l'abonnement, ou Sur demande quand le prix n'est pas public. */
+const prixAffiche = (offer: Product, lang: Language): string => {
+  if (offer.price <= 0) return lang === 'FR' ? 'Sur demande' : 'On request';
+  if (offer.id === 'abonnement-mensuel') {
+    return lang === 'FR' ? `Dès ${offer.price} $ / mois` : `From $${offer.price} / month`;
+  }
+  return lang === 'FR' ? `Dès ${offer.price} $ + taxes` : `From $${offer.price} + taxes`;
+};
+
+const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) => {
   const [selected, setSelected] = useState<ClientArchetype | null>(null);
+  const { data: produitsFirestore, loading } = useCollection<Product>('products');
 
   const t = {
     FR: {
       title: 'Trouvez votre chemin.',
-      subtitle: "Xena Horizon vous accompagne selon votre réalité — pas selon une grille de services rigide.",
+      subtitle: "Xena Horizon vous accompagne selon votre réalité, pas selon une grille de services rigide.",
       pillars: 'Choisissez votre profil',
       learnMore: 'Voir les services',
       available: 'Services adaptés',
-      free: 'Gratuit',
-      offered: 'Offert',
-      service: 'Service',
-      product: 'Produit',
+      forWho: 'Pour les artistes, les entrepreneurs créatifs et les organismes',
+      book: 'Prendre rendez-vous',
       cantFind: "Vous ne trouvez pas exactement ce qu'il vous faut ?",
       customText: "Chaque projet est unique. Discutons d'une offre sur mesure.",
       contactMe: 'Me contacter',
       back: 'Retour aux profils',
       benefits: ['Analyse des besoins', 'Stratégie personnalisée', 'Suivi rigoureux'],
+      howTitle: 'Comment ça\nse passe',
+      howSubtitle: 'Le même parcours pour chaque personne accompagnée, du premier appel au suivi.',
+      spaceTitle: 'Un dossier déjà commencé ?',
+      spaceText: "Retrouvez votre parcours, vos pièces et vos échanges avec Laurie dans votre espace client.",
+      spaceCta: 'Ouvrir mon espace',
     },
     EN: {
       title: 'Find your path.',
-      subtitle: 'Xena Horizon meets you where you are — not in a rigid service menu.',
+      subtitle: 'Xena Horizon meets you where you are, not in a rigid service menu.',
       pillars: 'Choose your profile',
       learnMore: 'View services',
       available: 'Tailored services',
-      free: 'Free',
-      offered: 'Offered',
-      service: 'Service',
-      product: 'Product',
+      forWho: 'For artists, creative entrepreneurs and organizations',
+      book: 'Book an appointment',
       cantFind: "Don't see exactly what you need?",
       customText: "Every project is unique. Let's talk about a custom offer.",
       contactMe: 'Contact me',
       back: 'Back to profiles',
       benefits: ['Needs analysis', 'Personalized strategy', 'Rigorous follow-through'],
+      howTitle: 'How it\nworks',
+      howSubtitle: 'The same path for every person, from the first call to the follow-up.',
+      spaceTitle: 'Already have a file open?',
+      spaceText: 'Find your path, your documents and your exchanges with Laurie in your client space.',
+      spaceCta: 'Open my space',
     },
   }[lang];
 
+  const catalogue: Product[] = useMemo(() => {
+    const publics = (produitsFirestore ?? []).filter((p) => p.isPublic && p.status === 'Active');
+    return publics.length > 0 ? publics : SERVICES_REELS;
+  }, [produitsFirestore]);
+
   const visibleOffers = useMemo(() => {
-    return MOCK_PRODUCTS.filter((p) => {
-      if (!p.isPublic) return false;
-      if (!selected) return true;
-      // If clientTypes is unset, treat as visible to all
-      if (!p.clientTypes || p.clientTypes.length === 0) return true;
-      return p.clientTypes.includes(selected);
-    });
-  }, [selected]);
+    if (!selected) return catalogue;
+    return catalogue.filter((p) => !p.clientTypes || p.clientTypes.length === 0 || p.clientTypes.includes(selected));
+  }, [catalogue, selected]);
 
   const selectedMeta = selected ? CLIENT_ARCHETYPES.find((a) => a.id === selected) : null;
+
+  const goToContact = () => {
+    if (onChangeView) onChangeView('HOME');
+    setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), onChangeView ? 100 : 0);
+  };
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 relative">
@@ -107,7 +130,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang }) => {
                     <div>
                       <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{tagline}</p>
                       <h2 className="text-3xl font-serif font-bold text-white leading-tight">{title}</h2>
-                      {subtitle && <p className="text-sm italic text-emerald-300 mt-1">{subtitle}</p>}
+                      {subtitle && <p className="text-xs font-bold tracking-wide text-emerald-300 mt-1">{subtitle}</p>}
                     </div>
                     <p className="text-slate-300 leading-relaxed">{description}</p>
                     <p className="text-slate-400 text-sm leading-relaxed flex-1">{details}</p>
@@ -159,7 +182,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang }) => {
             </div>
           </GlassCard>
 
-          {visibleOffers.length > 0 && (
+          {!loading && visibleOffers.length > 0 && (
             <>
               <div className="flex items-center gap-4 mb-10">
                 <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1" />
@@ -169,53 +192,84 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang }) => {
                 <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1" />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {visibleOffers.map((offer) => {
-                  const resolved = resolveProductForArchetype(offer, selected);
-                  return (
-                    <div
-                      key={offer.id}
-                      className="bg-slate-900/80 backdrop-blur border border-white/10 rounded-[20px] p-6 hover:border-cyan-400/40 hover:shadow-iridescent-sm transition-all group flex flex-col"
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <span
-                          className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                            offer.category === 'Service'
-                              ? 'bg-emerald-500/10 text-emerald-300'
-                              : 'bg-cyan-500/10 text-cyan-300'
-                          }`}
-                        >
-                          {offer.category === 'Service' ? t.service : t.product}
-                        </span>
-                        {resolved.price === 0 && (
-                          <span className="text-emerald-300 text-xs font-bold">{t.free}</span>
-                        )}
-                      </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {visibleOffers.map((offer) => (
+                  <div
+                    key={offer.id}
+                    className="bg-slate-900/80 backdrop-blur border border-white/10 rounded-[20px] p-6 hover:border-cyan-400/40 hover:shadow-iridescent-sm transition-all group flex flex-col"
+                  >
+                    <span className="self-start px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-300 mb-4">
+                      {t.forWho}
+                    </span>
 
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-                        {resolved.name}
-                      </h3>
-                      <p className="text-slate-400 text-sm mb-6 flex-1">{resolved.description}</p>
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                      {offer.name}
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-6 flex-1">{offer.description}</p>
 
-                      <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-lg font-bold text-white">
-                          {resolved.price > 0 ? `${resolved.price} $` : t.offered}
-                        </span>
-                        <button
-                          aria-label="Open"
-                          className="w-9 h-9 rounded-full bg-iridescent flex items-center justify-center text-white shadow-iridescent-sm transition-transform group-hover:scale-110"
-                        >
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-                      </div>
+                    <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between gap-3">
+                      <span className="text-lg font-bold text-white">{prixAffiche(offer, lang)}</span>
+                      <button
+                        onClick={goToContact}
+                        className="px-4 py-2 rounded-full bg-iridescent flex items-center gap-2 text-white text-xs font-bold shadow-iridescent-sm transition-transform hover:scale-105 min-h-[44px]"
+                      >
+                        {t.book} <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             </>
           )}
         </div>
       )}
+
+      {/* COMMENT ÇA SE PASSE */}
+      <div className="max-w-[1400px] mx-auto mt-32">
+        <div className="flex items-center gap-4 mb-12">
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1" />
+          <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t.howSubtitle}</span>
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1" />
+        </div>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-12 whitespace-pre-line">
+          {t.howTitle}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          {ETAPES_PAR_DEFAUT.map((etape, i) => (
+            <div key={etape.id} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[20px] p-6">
+              <div className="w-10 h-10 rounded-full bg-iridescent flex items-center justify-center text-white font-bold text-sm shadow-iridescent-sm mb-4">
+                {i + 1}
+              </div>
+              <h3 className="text-white font-bold mb-2">{etape.titre}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{etape.sous}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* MON ESPACE */}
+      <div className="max-w-[1400px] mx-auto mt-16">
+        <GlassCard className="p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 justify-between">
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-iridescent flex items-center justify-center text-white shadow-iridescent-sm flex-shrink-0">
+              <Compass className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-white mb-1">{t.spaceTitle}</h3>
+              <p className="text-slate-400 text-sm">{t.spaceText}</p>
+            </div>
+          </div>
+          {onChangeView ? (
+            <button onClick={() => onChangeView('ESPACE_CLIENT')} className={`${ACTION_BUTTON_CLASSES} flex-shrink-0`}>
+              {t.spaceCta} <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <a href="/espace" className={`${ACTION_BUTTON_CLASSES} flex-shrink-0`}>
+              {t.spaceCta} <ArrowRight className="w-4 h-4" />
+            </a>
+          )}
+        </GlassCard>
+      </div>
 
       {/* CTA */}
       <div className="max-w-4xl mx-auto mt-32 text-center bg-gradient-to-br from-slate-900 to-slate-900 rounded-[30px] p-12 border border-white/10 relative overflow-hidden">
@@ -224,10 +278,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang }) => {
         <div className="relative z-10">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">{t.cantFind}</h2>
           <p className="text-slate-300 mb-8">{t.customText}</p>
-          <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className={`${ACTION_BUTTON_CLASSES} mx-auto`}
-          >
+          <button onClick={goToContact} className={`${ACTION_BUTTON_CLASSES} mx-auto`}>
             {t.contactMe}
           </button>
         </div>
