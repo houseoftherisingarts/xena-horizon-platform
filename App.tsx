@@ -23,7 +23,6 @@ const AdminAgenda = lazy(() => import('./pages/AdminAgenda'));
 const AdminEmail = lazy(() => import('./pages/AdminEmail'));
 const AdminMessenger = lazy(() => import('./pages/AdminMessenger'));
 const SocialCreator = lazy(() => import('./pages/SocialCreator'));
-const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
@@ -174,8 +173,6 @@ const App: React.FC = () => {
         return <AdminEmail lang={lang} />;
       case 'ADMIN_MESSENGER':
         return <AdminMessenger lang={lang} />;
-      case 'ESPACE_CLIENT':
-        return <EspaceClient user={user} lang={lang} />;
       default:
         return <PublicHome blocks={homeBlocks} lang={lang} />;
     }
