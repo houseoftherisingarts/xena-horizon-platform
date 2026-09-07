@@ -66,7 +66,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
                 <div className="absolute -inset-3 bg-iridescent rounded-[32px] opacity-20 blur-2xl pointer-events-none" />
                 <img
                   src={projet.image}
-                  alt={projet.titre}
+                  alt={lang === 'EN' ? projet.titreEn : projet.titre}
                   className={`relative w-full h-[340px] md:h-[440px] object-cover ${POSITION_IMAGE[projet.id] ?? 'object-center'} rounded-[24px] border border-white/10 shadow-2xl`}
                 />
               </div>
@@ -76,16 +76,20 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
                   {ICONES[projet.id]}
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{projet.sousTitre}</p>
-                  <h2 className="text-3xl md:text-4xl font-serif font-bold text-white leading-tight">{projet.titre}</h2>
+                  <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">
+                    {lang === 'EN' ? projet.sousTitreEn : projet.sousTitre}
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-serif font-bold text-white leading-tight">
+                    {lang === 'EN' ? projet.titreEn : projet.titre}
+                  </h2>
                 </div>
                 <div className="space-y-4 text-slate-300 leading-relaxed">
-                  {projet.description.map((p, idx) => (
+                  {(lang === 'EN' ? projet.descriptionEn : projet.description).map((p, idx) => (
                     <p key={idx}>{p}</p>
                   ))}
                 </div>
                 {projet.extra && (
-                  <p className="text-lg font-bold text-white">{projet.extra}</p>
+                  <p className="text-lg font-bold text-white">{lang === 'EN' ? projet.extraEn ?? projet.extra : projet.extra}</p>
                 )}
                 {projet.liens.length > 0 && (
                   <div className="flex flex-wrap gap-3 pt-2">
@@ -97,7 +101,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
                         rel="noopener noreferrer"
                         className={`${ACTION_BUTTON_CLASSES} text-sm py-2.5 px-5`}
                       >
-                        {lien.label} <ArrowUpRight className="w-4 h-4" />
+                        {lang === 'EN' ? lien.labelEn ?? lien.label : lien.label} <ArrowUpRight className="w-4 h-4" />
                       </a>
                     ))}
                   </div>
