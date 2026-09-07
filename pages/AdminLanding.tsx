@@ -5,9 +5,9 @@ import {
   Sparkles, Zap, Star, ShieldCheck, DollarSign, Bot, Minus, Crown, Copy, Save
 } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
-import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES, MOCK_GALLERY } from '../constants';
-import { Language } from '../types';
-import { useDocument, writeDoc } from '../lib/firestore';
+import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
+import { GalleryImage, Language } from '../types';
+import { useCollection, useDocument, writeDoc } from '../lib/firestore';
 
 interface AdminLandingProps {
   lang: Language;
