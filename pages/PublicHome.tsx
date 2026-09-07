@@ -348,13 +348,13 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                       >
                         <img
                           src={p.image}
-                          alt={p.titre}
+                          alt={lang === 'EN' ? p.titreEn : p.titre}
                           className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                         <div className="relative z-10 h-full p-7 flex flex-col justify-end">
-                          <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{p.sousTitre}</p>
-                          <h3 className="text-2xl font-serif font-bold text-white mb-3">{p.titre}</h3>
+                          <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{lang === 'EN' ? p.sousTitreEn : p.sousTitre}</p>
+                          <h3 className="text-2xl font-serif font-bold text-white mb-3">{lang === 'EN' ? p.titreEn : p.titre}</h3>
                           <span className="inline-flex items-center gap-2 text-sm font-bold text-white">
                             {t.seeProject} <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                           </span>
