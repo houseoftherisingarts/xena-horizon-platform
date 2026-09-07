@@ -166,7 +166,7 @@ const ListeDossiers: React.FC<ListeDossiersProps> = ({ dossiers, config, lang, l
       {loading ? (
         <p className="text-slate-400 text-center py-12">{tr.chargement}</p>
       ) : filtres.length === 0 ? (
-        <p className="text-slate-500 text-center py-12 italic">{tr.aucun}</p>
+        <p className="text-slate-500 text-center py-12">{tr.aucun}</p>
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {filtres.map((d) => {
