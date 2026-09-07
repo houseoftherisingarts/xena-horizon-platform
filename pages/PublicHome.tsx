@@ -160,16 +160,16 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                    </div>
 
                    <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold leading-[1.05] whitespace-pre-line">
-                     <span className="text-iridescent">{b.headline}</span>
+                     <span className="text-iridescent">{tr(b.id, 'headline', b.headline)}</span>
                    </h1>
 
                    <p className="text-base md:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                     {b.subheadline}
+                     {tr(b.id, 'subheadline', b.subheadline)}
                    </p>
 
                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                      <button className={ACTION_BUTTON_CLASSES} onClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})}>
-                       {b.ctaText}
+                       {tr(b.id, 'ctaText', b.ctaText)}
                      </button>
                      <button className={GHOST_BUTTON_CLASSES}>
                        {t.learnMore}
