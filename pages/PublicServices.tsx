@@ -6,10 +6,20 @@ import {
   GHOST_BUTTON_CLASSES,
 } from '../constants';
 import { useCollection } from '../lib/firestore';
-import { PROFILS_REELS, SERVICES_REELS } from '../lib/contenu';
+import { PROFILS_REELS, SERVICES_REELS, ServiceReel } from '../lib/contenu';
 import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
 import GlassCard from '../components/GlassCard';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
+
+/** Nom/description d'une offre selon la langue, avec repli sur le français (produits Firestore sans champs anglais). */
+const nomOffre = (offer: Product, lang: Language): string => {
+  const svc = offer as Partial<ServiceReel>;
+  return lang === 'EN' && svc.nameEn ? svc.nameEn : offer.name;
+};
+const descriptionOffre = (offer: Product, lang: Language): string => {
+  const svc = offer as Partial<ServiceReel>;
+  return lang === 'EN' && svc.descriptionEn ? svc.descriptionEn : offer.description;
+};
 
 interface PublicServicesProps {
   lang: Language;
