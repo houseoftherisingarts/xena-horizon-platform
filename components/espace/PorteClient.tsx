@@ -153,11 +153,11 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
       <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Colonne gauche : accueil de Laurie + les cinq étapes */}
         <div>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white leading-[1.15] mb-6 whitespace-pre-line">
-            {t.hLeft.split('\n').map((ligne, i) => (
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white leading-[1.15] mb-6">
+            {t.hLeft.split('\n').map((ligne, i, arr) => (
               <span key={i} className={i === 1 ? 'text-iridescent' : ''}>
                 {ligne}
-                <br />
+                {i < arr.length - 1 && <br />}
               </span>
             ))}
           </h1>
