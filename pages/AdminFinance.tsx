@@ -407,7 +407,14 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
             <h3 className="text-xl font-bold text-white">{t.ledger}</h3>
             <div className="relative">
                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-               <input type="text" placeholder={t.filter} className={`${GLASS_INPUT_CLASSES} pl-10 py-1.5 h-auto text-sm w-48`} />
+               <input
+                  type="text"
+                  value={ledgerFilter}
+                  onChange={(e) => setLedgerFilter(e.target.value)}
+                  placeholder={t.filter}
+                  aria-label={t.filter}
+                  className={`${GLASS_INPUT_CLASSES} pl-10 py-1.5 h-auto text-sm w-48`}
+               />
             </div>
          </div>
 
