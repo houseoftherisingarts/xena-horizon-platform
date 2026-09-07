@@ -162,24 +162,35 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         </div>
 
         {/* Onglets */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-4 px-4 md:mx-0 md:px-0" role="tablist">
-          {onglets.map((o) => (
-            <button
-              key={o.id}
-              type="button"
-              role="tab"
-              aria-selected={onglet === o.id}
-              onClick={() => setOnglet(o.id)}
-              className={`flex items-center gap-2 min-h-[44px] px-5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${FOCUS_RING} ${
-                onglet === o.id
-                  ? 'bg-iridescent text-white shadow-iridescent-sm'
-                  : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              {o.icon}
-              {o.label}
-            </button>
-          ))}
+        <div className="relative mb-6 -mx-4 px-4 md:mx-0 md:px-0">
+          <div ref={scrollRef} className="flex gap-2 overflow-x-auto pb-2" role="tablist">
+            {onglets.map((o) => (
+              <button
+                key={o.id}
+                ref={onglet === o.id ? activeTabRef : undefined}
+                type="button"
+                role="tab"
+                aria-selected={onglet === o.id}
+                aria-label={o.label}
+                onClick={() => setOnglet(o.id)}
+                className={`flex items-center gap-2 min-h-[44px] px-5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${FOCUS_RING} ${
+                  onglet === o.id
+                    ? 'bg-iridescent text-white shadow-iridescent-sm'
+                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {o.icon}
+                <span className="hidden sm:inline">{o.label}</span>
+                <span className="sm:hidden">{o.labelCourt}</span>
+              </button>
+            ))}
+          </div>
+          {ongletsDebordent && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute right-0 top-0 bottom-2 w-12 bg-gradient-to-l from-slate-950 to-transparent"
+            />
+          )}
         </div>
 
         {/* Contenu de l'onglet */}
