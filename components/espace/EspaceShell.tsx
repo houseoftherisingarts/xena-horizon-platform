@@ -103,12 +103,12 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const etapeCourante = config.etapes[idxEtape];
   const prenom = (dossier.nom || '').trim().split(' ')[0] || (dossier.courriel || '').split('@')[0];
 
-  const onglets: { id: Onglet; label: string; icon: React.ReactNode }[] = [
-    { id: 'dossier', label: t.onglets.dossier, icon: <UserIcon className="w-4 h-4" /> },
-    { id: 'pieces', label: t.onglets.pieces, icon: <FolderOpen className="w-4 h-4" /> },
-    { id: 'parcours', label: t.onglets.parcours, icon: <RouteIcon className="w-4 h-4" /> },
-    { id: 'messages', label: t.onglets.messages, icon: <MessageSquare className="w-4 h-4" /> },
-    { id: 'ressources', label: t.onglets.ressources, icon: <FileText className="w-4 h-4" /> },
+  const onglets: { id: Onglet; label: string; labelCourt: string; icon: React.ReactNode }[] = [
+    { id: 'dossier', label: t.onglets.dossier, labelCourt: t.ongletsCourts.dossier, icon: <UserIcon className="w-4 h-4" /> },
+    { id: 'pieces', label: t.onglets.pieces, labelCourt: t.ongletsCourts.pieces, icon: <FolderOpen className="w-4 h-4" /> },
+    { id: 'parcours', label: t.onglets.parcours, labelCourt: t.ongletsCourts.parcours, icon: <RouteIcon className="w-4 h-4" /> },
+    { id: 'messages', label: t.onglets.messages, labelCourt: t.ongletsCourts.messages, icon: <MessageSquare className="w-4 h-4" /> },
+    { id: 'ressources', label: t.onglets.ressources, labelCourt: t.ongletsCourts.ressources, icon: <FileText className="w-4 h-4" /> },
   ];
 
   return (
