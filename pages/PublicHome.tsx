@@ -186,7 +186,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                     className="absolute inset-0 w-full h-full object-cover rounded-[40px] shadow-2xl border border-white/10 grayscale hover:grayscale-0 transition-all duration-700"
                   />
                   <div className="absolute bottom-8 left-8 right-8 p-6 bg-slate-900/80 backdrop-blur-md rounded-[20px] border border-white/10 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                     <p className="text-white font-serif text-lg">Tu vois la vie comme un artiste ?</p>
+                     <p className="text-white font-serif text-lg">{t.heroCardText}</p>
                   </div>
                 </div>
               </div>
