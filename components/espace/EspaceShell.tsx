@@ -78,6 +78,13 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         messages: 'Messages',
         ressources: 'Resources',
       },
+      ongletsCourts: {
+        dossier: 'File',
+        pieces: 'Docs',
+        parcours: 'Journey',
+        messages: 'Messages',
+        ressources: 'Resources',
+      },
       chargement: 'Opening your file…',
     },
   }[lang];
