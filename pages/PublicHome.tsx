@@ -46,6 +46,10 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
   const [contactBusy, setContactBusy] = useState(false);
   const [contactStatus, setContactStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  /** Texte d'un champ de bloc selon la langue, avec repli sur le français du bloc lui-même. */
+  const tr = (blockId: string, field: string, fallback: string): string =>
+    lang === 'EN' ? HOME_EN[blockId]?.[field] ?? fallback : fallback;
+
   const t = {
     FR: {
       learnMore: 'En savoir plus',
