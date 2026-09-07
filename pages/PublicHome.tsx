@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, ArrowUpRight, Mail, Instagram, Linkedin, CheckCircle, AlertCircle, Quote as QuoteIcon } from 'lucide-react';
 import { CLIENT_ARCHETYPES, ACTION_BUTTON_CLASSES, GHOST_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
 import { createDoc } from '../lib/firestore';
-import { CITATION, CLIENTS_CONFIANCE, PROJETS, TEMOIGNAGES } from '../lib/contenu';
+import { CITATION, CLIENTS_CONFIANCE, PROFILS_REELS, PROJETS, TEMOIGNAGES } from '../lib/contenu';
 import { HomeBlock, HomeHeroBlock, HomeServicesBlock, HomeStatsBlock, HomeContactBlock, HomeTextBlock, HomeImageBlock, Language } from '../types';
 
 interface PublicHomeProps {
