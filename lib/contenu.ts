@@ -112,13 +112,22 @@ export const PROFILS_REELS: ProfilMeta[] = [
 // --- SERVICES : les neuf offres réelles, prix de départ tels qu'écrits sur le site ---
 const ARCHETYPES_TOUS: Product['clientTypes'] = ['Artist', 'Entrepreneur', 'NPO'];
 
-export const SERVICES_REELS: Product[] = [
+/** Product + son pendant anglais, pour le panneau « Prix de départ » et les cartes d'offres. */
+export interface ServiceReel extends Product {
+  nameEn: string;
+  descriptionEn: string;
+}
+
+export const SERVICES_REELS: ServiceReel[] = [
   {
     id: 'strategie-communication',
     name: 'Stratégie de communication',
+    nameEn: 'Communication strategy',
     price: 3500,
     description:
       "Améliorer ton marketing, augmenter ta visibilité, tes ventes et le rayonnement de ta carrière ou de ton entreprise. Dès 3 500 $ + taxes.",
+    descriptionEn:
+      'Improve your marketing, increase your visibility, your sales and the reach of your career or your business. From $3,500 + taxes.',
     type: 'Consulting',
     category: 'Service',
     status: 'Active',
@@ -128,9 +137,12 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'redaction',
     name: 'Rédaction',
+    nameEn: 'Writing',
     price: 1000,
     description:
       "Ta biographie, ton scénario, ton identité artistique, une demande de subvention, un dossier de presse, tes textes de vente ou tes publications, écrits avec toi. Dès 1 000 $ + taxes.",
+    descriptionEn:
+      'Your biography, your script, your artistic identity, a grant application, a press kit, your sales texts or your publications, written with you. From $1,000 + taxes.',
     type: 'Service',
     category: 'Service',
     status: 'Active',
@@ -140,9 +152,12 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'tu-sens-perdu',
     name: 'Tu te sens perdu',
+    nameEn: 'You feel lost',
     price: 3500,
     description:
       "Ta tête déborde de projets et tu ne sais plus par où commencer. Nous mettons de l'ordre dans tout ça et nous en sortons une ligne directrice claire. Dès 3 500 $ + taxes.",
+    descriptionEn:
+      "Your head is overflowing with projects and you no longer know where to start. We bring order to it all and come out with a clear guideline. From $3,500 + taxes.",
     type: 'Consulting',
     category: 'Service',
     status: 'Active',
@@ -152,9 +167,12 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'abonnement-mensuel',
     name: 'Abonnement mensuel',
+    nameEn: 'Monthly subscription',
     price: 99,
     description:
       "Trois questions par mois pour les besoins spontanés qui n'ont pas besoin d'une consultation complète. Dès 99 $ par mois, engagement minimum de trois mois.",
+    descriptionEn:
+      "Three questions a month for the spontaneous needs that don't require a full consultation. From $99 a month, three-month minimum commitment.",
     type: 'Service',
     category: 'Service',
     status: 'Active',
@@ -164,9 +182,11 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'formation-groupe',
     name: 'Formation de groupe',
+    nameEn: 'Group training',
     price: 0,
     description:
       "Une journée pour comprendre l'identité artistique et le monde des affaires, et la mettre en pratique tout de suite. Sur demande.",
+    descriptionEn: 'A day to understand artistic identity and the business world, and to put it into practice right away. On request.',
     type: 'Service',
     category: 'Service',
     status: 'Active',
@@ -176,8 +196,10 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'conferences-animation',
     name: 'Conférences et animation',
+    nameEn: 'Conferences and activities',
     price: 0,
     description: "Des conférences et de l'animation d'événements, sur plusieurs sujets. Sur demande.",
+    descriptionEn: 'Conferences and event hosting, on a range of topics. On request.',
     type: 'Service',
     category: 'Service',
     status: 'Active',
@@ -187,9 +209,12 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'coaching-evenementiel',
     name: 'Coaching en stratégie événementielle',
+    nameEn: 'Event strategy coaching',
     price: 0,
     description:
       "Lancements, réseautage, performances, ateliers et conférences, festivals et tournées, activations de marque, spectacles : nous bâtissons ensemble un événement cohérent avec qui tu es. Sur demande.",
+    descriptionEn:
+      'Launches, networking, performances, workshops and conferences, festivals and tours, brand activations, shows: we build an event together that is coherent with who you are. On request.',
     type: 'Consulting',
     category: 'Service',
     status: 'Active',
@@ -199,9 +224,12 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'visibilite-rp',
     name: 'Stratégie de visibilité et relations publiques',
+    nameEn: 'Visibility strategy and public relations',
     price: 0,
     description:
       "Être vue et entendue du bon public : une stratégie de visibilité et de relations publiques adaptée à ton projet et à ton entreprise. Sur demande.",
+    descriptionEn:
+      'Being seen and heard by the right audience: a visibility and public relations strategy tailored to your project and your business. On request.',
     type: 'Consulting',
     category: 'Service',
     status: 'Active',
@@ -211,9 +239,11 @@ export const SERVICES_REELS: Product[] = [
   {
     id: 'identite-marque',
     name: 'Identité artistique et de marque',
+    nameEn: 'Artistic and brand identity',
     price: 0,
     description:
       "Ton identité artistique ou celle de ta marque, et la gestion de ta réputation, bâties pour tenir dans le temps. Sur demande.",
+    descriptionEn: 'Your artistic identity or your brand identity, and your reputation management, built to last. On request.',
     type: 'Consulting',
     category: 'Service',
     status: 'Active',
