@@ -36,7 +36,7 @@ const AdminWebsiteEditor: React.FC<AdminWebsiteEditorProps> = ({ initialBlocks, 
 
     switch (type) {
       case 'HERO':
-        newBlock = { type: 'HERO', id, tagline: 'Xena Horizon', headline: 'Nouveau Titre', subheadline: 'Sous-titre accrocheur', ctaText: 'Action', imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa' } as HomeHeroBlock;
+        newBlock = { type: 'HERO', id, tagline: 'Xena Horizon', headline: 'Nouveau Titre', subheadline: 'Sous-titre accrocheur', ctaText: 'Action', imageUrl: '/images/laurie-portrait-nb.jpg' } as HomeHeroBlock;
         break;
       case 'SERVICES_PREVIEW':
         newBlock = { type: 'SERVICES_PREVIEW', id, title: 'Nos Services', subtitle: 'Ce que nous offrons' } as HomeServicesBlock;
@@ -51,7 +51,7 @@ const AdminWebsiteEditor: React.FC<AdminWebsiteEditorProps> = ({ initialBlocks, 
         newBlock = { type: 'TEXT', id, content: 'Votre texte ici...' } as HomeTextBlock;
         break;
       case 'IMAGE':
-        newBlock = { type: 'IMAGE', id, url: 'https://picsum.photos/1200/600', caption: '' } as HomeImageBlock;
+        newBlock = { type: 'IMAGE', id, url: '/images/laurie-scene.jpg', caption: '' } as HomeImageBlock;
         break;
       default: return;
     }

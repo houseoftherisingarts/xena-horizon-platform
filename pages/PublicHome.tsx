@@ -113,7 +113,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
           const b = block as HomeHeroBlock;
           return (
             <section key={b.id} className="relative min-h-[90vh] flex items-center px-6 pt-20 overflow-hidden">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-15 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-[url('/images/laurie-scene.webp')] bg-cover bg-center opacity-15 pointer-events-none"></div>
               <div className="absolute inset-0 bg-iridescent-radial opacity-70 pointer-events-none"></div>
               <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-slate-950/20 to-slate-950 pointer-events-none"></div>
 

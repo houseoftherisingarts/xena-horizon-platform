@@ -39,7 +39,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
 
   // State
   const [selectedFormat, setSelectedFormat] = useState<Format>(FORMATS[0]);
-  const [bgImage, setBgImage] = useState("https://picsum.photos/1080/1080");
+  const [bgImage, setBgImage] = useState("/images/laurie-portrait-nb.jpg");
   const [isGrayscale, setIsGrayscale] = useState(true);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   
@@ -425,7 +425,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
 
             <div className="grid grid-cols-2 gap-2">
                 <button 
-                    onClick={() => setBgImage(`https://picsum.photos/1080/1080?random=${Math.random()}`)}
+                    onClick={() => setBgImage(`/images/laurie-portrait-1.jpg`)}
                     className="w-full py-2 bg-white/5 hover:bg-white/10 text-slate-300 rounded-[10px] text-xs font-medium"
                 >
                     {t.random}

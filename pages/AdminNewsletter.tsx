@@ -213,7 +213,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
         newBlock = { type: 'TEXT', id, content: 'Bonjour {Prénom},<br><br>Voici les nouvelles de la semaine.', align: 'left' };
         break;
       case 'IMAGE':
-        newBlock = { type: 'IMAGE', id, imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80', link: '#', alt: 'Image' };
+        newBlock = { type: 'IMAGE', id, imageUrl: '/images/laurie-scene.jpg', link: '#', alt: 'Image' };
         break;
       case 'BUTTON':
         newBlock = { type: 'BUTTON', id, label: 'Lire la suite', link: '#', color: '#3b82f6', textColor: '#ffffff' };
@@ -258,7 +258,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
 
     setBlocks([
        { type: 'HEADER', id: `h-${id}`, logoUrl: 'https://via.placeholder.com/150x50?text=XENA', title: topic, viewOnlineText: 'Voir en ligne' },
-       { type: 'IMAGE', id: `i-${id}`, imageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80', link: '#', alt: 'Hero' },
+       { type: 'IMAGE', id: `i-${id}`, imageUrl: '/images/laurie-portrait-2.jpg', link: '#', alt: 'Hero' },
        { type: 'TEXT', id: `t-${id}`, align: 'left', content: `Bonjour à tous,<br><br>Aujourd'hui, nous parlons de <strong>${topic}</strong>. C'est un sujet crucial pour atteindre ${goal}.<br><br>Voici pourquoi c'est important...` },
        { type: 'BUTTON', id: `b-${id}`, label: 'Découvrir la méthode', link: '#', color: '#3b82f6', textColor: '#ffffff' },
        { type: 'FOOTER', id: `f-${id}`, companyName: 'Xena Horizon', address: 'Montréal, QC', unsubscribeText: 'Me désinscrire' }
