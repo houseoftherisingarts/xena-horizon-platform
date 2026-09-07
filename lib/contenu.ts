@@ -88,9 +88,9 @@ export const PROFILS_REELS: ProfilMeta[] = [
     descriptionEN:
       'Getting the business world to understand you, with a clear guideline for your business.',
     detailsFR:
-      "Storytelling, copywriting et accompagnement pour tes événements : lancements, réseautage, festivals, activations de marque.",
+      "Je peaufine ton storytelling et ton copywriting, et je t'accompagne dans tes événements : lancements, réseautage, festivals, activations de marque.",
     detailsEN:
-      'Storytelling, copywriting and event support: launches, networking, festivals, brand activations.',
+      'I refine your storytelling and copywriting, and I support your events: launches, networking, festivals, brand activations.',
   },
   {
     id: 'NPO',
