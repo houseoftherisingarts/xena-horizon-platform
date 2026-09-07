@@ -51,9 +51,32 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
       help: 'How can I help you?',
       successTitle: 'Message sent!',
       successText: "Thanks. I'll get back to you shortly.",
-      errorText: 'Sorry, the send failed. Try again or email me directly.'
+      errorText: 'Sorry, the send failed. Try again or email me directly.',
+      aboutEyebrow: 'Laurie Belhumeur, Founder',
+      aboutTitle: 'Brief story\nof a whole',
+      aboutMission: 'Bringing out creativity wherever it exists is my mission.',
+      testimonialLabel: 'A testimonial',
+      trustLabel: 'They trusted her',
+      projectsLabel: 'Projects',
+      projectsTitle: 'Beyond the\nconsulting work',
+      seeProject: 'Discover',
+      seeAllProjects: 'See all projects',
     }
   }[lang];
+
+  const aboutBodyFR = [
+    "J'ai toujours été habitée par un désir profond d'accompagner les artistes de toutes disciplines confondues (danse, écriture, théâtre, musique, chant, peinture, photo, cirque, etc.) ainsi que les créatifs à comprendre et être compris par le monde des affaires.",
+    "Je vise à apporter du changement dans le milieu artistique et culturel afin que les artistes puissent vivre de leur art.",
+    "Mon approche se veut personnalisée et adaptée à chaque artiste que j'accompagne, fondée sur mon expérience, mes analyses et mes compétences acquises au cours des quinze dernières années.",
+  ];
+  const aboutBodyEN = [
+    'I have always been driven by a deep desire to support artists from all disciplines (dance, writing, theater, music, singing, painting, photography, circus, and more) as well as creative people, to understand and be understood by the business world.',
+    'I aim to bring change to the artistic and cultural environment so that artists can make a living from their art.',
+    'My approach is personalized and tailored to each artist I work with, drawing on my experience, insights, and skills acquired over the past fifteen years.',
+  ];
+  const aboutBody = lang === 'FR' ? aboutBodyFR : aboutBodyEN;
+  const temoignage = TEMOIGNAGES[0];
+  const temoignageTexte = lang === 'FR' ? temoignage?.texteFR : temoignage?.texteEN;
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
