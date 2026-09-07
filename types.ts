@@ -274,6 +274,7 @@ export interface Dossier {
   projet: ProjetClient;
   etape: string;       // id d'une EtapeDef
   pieces: Record<string, PieceDeposee>;
+  revue?: Record<string, PieceRevue>;  // jugement de Laurie par pieceId; le client ne peut jamais l'écrire (firestore.rules)
   createdAt?: any;
   updatedAt?: any;
   derniereActiviteClient?: any;
