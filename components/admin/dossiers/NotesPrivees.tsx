@@ -76,7 +76,7 @@ const NotesPrivees: React.FC<NotesPriveesProps> = ({ notes, lang, onAdd, onDelet
       </form>
 
       <div className="space-y-2 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-        {notes.length === 0 && <p className="text-sm text-slate-500 italic">{tr.empty}</p>}
+        {notes.length === 0 && <p className="text-sm text-slate-500">{tr.empty}</p>}
         {notes.map((n) => (
           <div key={n.id} className="group flex items-start gap-2 bg-white/5 rounded-[12px] p-3 border border-white/5">
             <div className="flex-1 min-w-0">
