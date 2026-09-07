@@ -1,13 +1,23 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-import { indexEtape } from '../../lib/dossier';
-import { Dossier, DossierConfig, Language } from '../../types';
+import { indexEtape, EtapeDefEn } from '../../lib/dossier';
+import { Dossier, DossierConfig, EtapeDef, Language } from '../../types';
 
 interface ParcoursProps {
   dossier: Dossier;
   config: DossierConfig;
   lang: Language;
 }
+
+/** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
+const titreEtape = (etape: EtapeDef, lang: Language): string => {
+  const e = etape as EtapeDefEn;
+  return lang === 'EN' && e.titreEn ? e.titreEn : etape.titre;
+};
+const sousEtape = (etape: EtapeDef, lang: Language): string => {
+  const e = etape as EtapeDefEn;
+  return lang === 'EN' && e.sousEn ? e.sousEn : etape.sous;
+};
 
 const Parcours: React.FC<ParcoursProps> = ({ dossier, config, lang }) => {
   const idx = indexEtape(config.etapes, dossier.etape);
