@@ -227,6 +227,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
       genPage: 'Generate Page',
       choose: 'Choose',
       selectImage: 'Select Image',
+      emptyGallery: 'No images yet. Add some from the admin Gallery.',
       recommended: 'RECOMMENDED',
       popular: 'POPULAR',
       addBenefit: '+ Add Benefit',
