@@ -160,6 +160,12 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => { onChangeView('ESPACE_CLIENT'); setIsOpen(false); }}
+              className="flex items-center gap-2 text-left text-lg font-medium text-slate-200 hover:text-white py-3 border-b border-white/5"
+            >
+              <User className="w-4 h-4" /> {t.mySpace}
+            </button>
             <div className="pt-4 flex items-center justify-between">
                <button
                   onClick={() => { onRequestAdmin(); setIsOpen(false); }}
