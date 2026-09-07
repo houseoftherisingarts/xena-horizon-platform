@@ -258,43 +258,37 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                 </div>
               </section>
 
-              {/* --- TÉMOIGNAGE --- */}
+              {/* --- TÉMOIGNAGE + ILS LUI ONT FAIT CONFIANCE (deux colonnes à 1440) --- */}
               {temoignage && temoignageTexte && (
                 <section className="px-6">
                   <div className="max-w-[1400px] mx-auto">
-                    <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] p-8 md:p-14 relative overflow-hidden">
+                    <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] overflow-hidden relative grid grid-cols-1 lg:grid-cols-[1.4fr_1fr]">
                       <div className="absolute top-0 right-0 w-72 h-72 bg-iridescent rounded-full blur-[110px] opacity-20 pointer-events-none" />
-                      <div className="relative z-10 max-w-3xl">
+                      <div className="relative z-10 p-8 md:p-14">
                         <div className="w-12 h-12 rounded-2xl bg-iridescent flex items-center justify-center text-white shadow-iridescent-sm mb-6">
                           <QuoteIcon className="w-5 h-5" />
                         </div>
                         <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-4">{t.testimonialLabel}</p>
-                        <p className="text-xl md:text-2xl font-serif text-white leading-relaxed mb-6">{temoignageTexte}</p>
-                        <p className="text-slate-400">
-                          <span className="text-white font-bold">{temoignage.nom}</span> · {temoignage.role}
-                        </p>
+                        <p className="text-xl md:text-2xl font-serif text-white leading-relaxed">{temoignageTexte}</p>
+                      </div>
+                      <div className="relative z-10 bg-white/5 border-t lg:border-t-0 lg:border-l border-white/10 p-8 md:p-14 flex flex-col justify-between gap-10">
+                        <div>
+                          <p className="text-white font-serif text-xl font-bold mb-1">{temoignage.nom}</p>
+                          <p className="text-slate-400">{temoignage.role}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">{t.trustLabel}</p>
+                          <ul className="space-y-2">
+                            {CLIENTS_CONFIANCE.map((nom) => (
+                              <li key={nom} className="text-slate-300 font-serif">{nom}</li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </section>
               )}
-
-              {/* --- ILS LUI ONT FAIT CONFIANCE --- */}
-              <section className="px-6">
-                <div className="max-w-[1400px] mx-auto">
-                  <div className="flex items-center gap-4 mb-10">
-                    <span className="text-sm font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">{t.trustLabel}</span>
-                    <div className="h-px bg-gradient-to-r from-white/10 to-transparent flex-1" />
-                  </div>
-                  <div className="flex flex-wrap gap-x-10 gap-y-5">
-                    {CLIENTS_CONFIANCE.map((nom) => (
-                      <span key={nom} className="text-lg md:text-xl font-serif text-slate-300 hover:text-white transition-colors">
-                        {nom}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </section>
 
               {/* --- APERÇU DES PROJETS --- */}
               <section className="px-6">
