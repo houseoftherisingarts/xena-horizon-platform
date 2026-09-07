@@ -6,7 +6,6 @@ import type { User } from 'firebase/auth';
  */
 export const ADMIN_UIDS = new Set<string>([
   'O5qf5A3WdfV7daxkBKOIt0RnBUD2', // houseoftherisingarts@gmail.com (Vexel)
-  'vJ6bnH7XiOg5VO7XVnTJ9Hg5wuw2', // compte témoin de vérification (Vexel), à retirer après le lancement
 ]);
 
 export const ADMIN_EMAILS = new Set<string>([
