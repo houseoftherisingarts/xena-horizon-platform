@@ -40,7 +40,7 @@ export const BLOCS_ACCUEIL: HomeBlock[] = [
     id: 'contact-1',
     type: 'CONTACT',
     title: 'Discutons de\nta prochaine étape',
-    text: "Écris-moi et je te reviens rapidement. On regarde ensemble si on est faites pour travailler ensemble.",
+    text: "Écris-moi et je te reviens rapidement. Regardons ensemble si nous sommes faites pour travailler ensemble.",
     email: 'laurie.belhumeur@gmail.com',
   },
 ];
