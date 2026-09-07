@@ -13,6 +13,7 @@ const DEFAULT_TERMS = "1. Paiement: Un acompte de 50% est requis à la signature
 
 const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
   const { data: documents, loading } = useCollection<Document>('documents');
+  const { data: clients } = useCollection<Client>('clients');
   const [view, setView] = useState<'list' | 'edit' | 'preview'>('list');
   const [currentDoc, setCurrentDoc] = useState<Document | null>(null);
 
