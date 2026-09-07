@@ -180,6 +180,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
       genPage: 'Générer la Page',
       choose: 'Choisir',
       selectImage: 'Sélectionner une image',
+      emptyGallery: 'Aucune image. Ajoutez-en depuis la Galerie de l\'admin.',
       recommended: 'RECOMMANDÉ',
       popular: 'POPULAIRE',
       addBenefit: '+ Ajouter un bénéfice',
