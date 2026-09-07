@@ -237,9 +237,7 @@ export interface EtapeDef {
   sous: string;
 }
 
-export type PieceEtat = 'depose' | 'valide' | 'a_refaire';
-
-/** Un fichier déposé par la personne accompagnée pour une pièce donnée. */
+/** Un fichier déposé par la personne accompagnée pour une pièce donnée. Ce que la personne contrôle : jamais un jugement. */
 export interface PieceDeposee {
   nom: string;
   chemin: string;      // chemin Storage : dossiers/{uid}/{pieceId}/{horodatage}-{nom}
@@ -247,8 +245,13 @@ export interface PieceDeposee {
   taille: number;
   type: string;
   deposeLe: any;       // Timestamp
-  etat: PieceEtat;
+}
+
+/** Le jugement de Laurie sur une pièce, séparé de ce que la personne dépose : seule Laurie écrit ce champ. */
+export interface PieceRevue {
+  etat: 'valide' | 'a_refaire';
   note?: string;       // remarque de Laurie quand la pièce est à refaire
+  revueLe: any;         // Timestamp
 }
 
 export interface ProjetClient {
