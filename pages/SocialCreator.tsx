@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Download, Image as ImageIcon, Type, RefreshCw, Grid, X, Plus, Move, Trash2, Square, Smartphone, Monitor, Sparkles, Loader2, Upload } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
 import GlassCard from '../components/GlassCard';
 import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES, MOCK_GALLERY } from '../constants';
 import { Language } from '../types';
