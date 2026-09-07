@@ -43,7 +43,6 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
   // Nano Banana State
   const [isNanoOpen, setIsNanoOpen] = useState(false);
   const [nanoPrompt, setNanoPrompt] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
   const [nanoRefImage, setNanoRefImage] = useState<File | null>(null);
   const [nanoRefPreview, setNanoRefPreview] = useState<string | null>(null);
   const nanoFileInputRef = useRef<HTMLInputElement>(null);
