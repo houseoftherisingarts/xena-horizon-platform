@@ -390,9 +390,9 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                     <div className="space-y-8">
                       <div>
                          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6">
-                           <span className="text-iridescent">{b.title}</span>
+                           <span className="text-iridescent">{tr(b.id, 'title', b.title)}</span>
                          </h2>
-                         <p className="text-lg md:text-xl text-slate-300">{b.text}</p>
+                         <p className="text-lg md:text-xl text-slate-300">{tr(b.id, 'text', b.text)}</p>
                       </div>
 
                       <div className="space-y-6">
