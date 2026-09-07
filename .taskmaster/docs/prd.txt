@@ -1,0 +1,18 @@
+# Xena Horizon (Laurie Belhumeur) — brief d'Alex du 7 septembre 2026
+
+## Contexte
+Le site de Laurie Belhumeur (marque Xena Horizon, xenahorizon.com) est en ligne depuis aujourd'hui sur Firebase (projet xena-70977) mais son contenu vient d'un export Google AI Studio et Alex le juge très brouillon. Laurie est consultante en carrière artistique et en communication pour les artistes, les créateurs, les entrepreneurs créatifs et les organismes. Son site actuel vit sur Wix (lauriebelhumeur.com), sans valeur graphique, mais certains textes peuvent encore servir.
+
+## Objectif en une phrase
+Transformer le site brouillon en un vrai outil de travail pour Laurie, en réutilisant les textes utiles de son site actuel et tout ce qui a déjà été bâti pour Krystine St-Laurent, Philippe Dufresne et le Festival médiéval.
+
+## Exigences (mots d'Alex)
+1. Regarder le site actuel de Laurie Belhumeur en ligne et en tirer les textes qui peuvent encore servir; s'en inspirer pour bonifier notre site.
+2. Regarder tout ce qui a été fait pour Krystine St-Laurent, Philippe Dufresne et le Festival médiéval et identifier ce qui serait utile pour Laurie.
+3. En priorité, sans s'y limiter : la création d'un compte client, le dépôt de documents dans ce compte, la gestion des comptes clients par Laurie dans son espace admin, la vue du dossier de chaque personne qu'elle accompagne. Étant donné le genre de service qu'elle offre, c'est l'un des ajouts les plus importants.
+4. Produire une liste exhaustive de tout ce qui pourrait être intéressant pour elle parmi ce qui a été fait pour Krystine, Philippe ou le festival.
+5. Créer un plan d'intégration et l'exécuter au complet, en boucles, sans s'arrêter, jusqu'à ce que ce soit terminé.
+6. Une fois arrêté, revérifier que le prompt est respecté; sinon recommencer ou continuer.
+
+## Hors périmètre
+Rien n'est envoyé à Laurie. Aucun texte ne part vers un tiers sans le OK nominatif d'Alex. Pas de génération d'images payante sans prix annoncé. Le code d'un autre client ne garde jamais son nom dans le code livré.

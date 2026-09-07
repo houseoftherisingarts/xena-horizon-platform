@@ -4,6 +4,9 @@ import { ViewState } from '../types';
 export const VIEW_PATHS: Record<ViewState, string> = {
   HOME: '/',
   SERVICES: '/services',
+  PROJETS: '/projets',
+  ESPACE_CLIENT: '/espace',
+  ADMIN_DOSSIERS: '/admin/dossiers',
   ADMIN_DASHBOARD: '/admin',
   ADMIN_AGENDA: '/admin/agenda',
   ADMIN_EMAIL: '/admin/courriel',

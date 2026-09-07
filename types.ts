@@ -164,7 +164,7 @@ export interface HomeImageBlock extends HomeBaseBlock {
 
 export type HomeBlock = HomeHeroBlock | HomeServicesBlock | HomeStatsBlock | HomeContactBlock | HomeTextBlock | HomeImageBlock;
 
-export type ViewState = 'HOME' | 'SERVICES' | 'ADMIN_DASHBOARD' | 'ADMIN_CRM' | 'ADMIN_SOCIAL' | 'ADMIN_PRODUCTS' | 'ADMIN_INVOICES' | 'ADMIN_GALLERY' | 'ADMIN_FINANCE' | 'ADMIN_LANDING' | 'ADMIN_NEWSLETTER' | 'ADMIN_WEBSITE' | 'ADMIN_AGENDA' | 'ADMIN_EMAIL' | 'ADMIN_MESSENGER';
+export type ViewState = 'HOME' | 'SERVICES' | 'PROJETS' | 'ESPACE_CLIENT' | 'ADMIN_DOSSIERS' | 'ADMIN_DASHBOARD' | 'ADMIN_CRM' | 'ADMIN_SOCIAL' | 'ADMIN_PRODUCTS' | 'ADMIN_INVOICES' | 'ADMIN_GALLERY' | 'ADMIN_FINANCE' | 'ADMIN_LANDING' | 'ADMIN_NEWSLETTER' | 'ADMIN_WEBSITE' | 'ADMIN_AGENDA' | 'ADMIN_EMAIL' | 'ADMIN_MESSENGER';
 
 export interface Lead {
   id: string;
@@ -215,4 +215,102 @@ export interface Subscriber {
   source?: string;
   unsubscribeToken?: string;
   createdAt?: any;
+}
+
+
+// --- DOSSIER CLIENT (espace client et back-office) ---
+export type ProfilClient = 'artiste' | 'entrepreneur' | 'organisme';
+
+/** Une pièce demandée par Laurie, décrite dans le catalogue (settings/dossier, avec repli dans lib/dossier.ts). */
+export interface PieceDef {
+  id: string;
+  cat: string;
+  nom: string;
+  aide?: string;
+  option?: boolean;
+}
+
+/** Un temps du parcours d'accompagnement. */
+export interface EtapeDef {
+  id: string;
+  titre: string;
+  sous: string;
+}
+
+export type PieceEtat = 'depose' | 'valide' | 'a_refaire';
+
+/** Un fichier déposé par la personne accompagnée pour une pièce donnée. */
+export interface PieceDeposee {
+  nom: string;
+  chemin: string;      // chemin Storage : dossiers/{uid}/{pieceId}/{horodatage}-{nom}
+  url?: string;        // URL de téléchargement obtenue au dépôt
+  taille: number;
+  type: string;
+  deposeLe: any;       // Timestamp
+  etat: PieceEtat;
+  note?: string;       // remarque de Laurie quand la pièce est à refaire
+}
+
+export interface ProjetClient {
+  titre: string;
+  description: string;
+  objectif: string;
+  echeance?: string;   // date ISO (AAAA-MM-JJ), lue sur la chaîne, jamais par new Date(iso)
+}
+
+export interface Dossier {
+  id: string;          // = uid Firebase Auth
+  uid: string;
+  courriel: string;
+  nom: string;
+  telephone?: string;
+  ville?: string;
+  photoURL?: string;
+  profil: ProfilClient;
+  discipline?: string;
+  projet: ProjetClient;
+  etape: string;       // id d'une EtapeDef
+  pieces: Record<string, PieceDeposee>;
+  createdAt?: any;
+  updatedAt?: any;
+  derniereActiviteClient?: any;
+  derniereActiviteAdmin?: any;
+  nonLusAdmin?: number;   // messages ou pièces que Laurie n'a pas encore vus
+  nonLusClient?: number;  // messages de Laurie que la personne n'a pas encore vus
+  archive?: boolean;
+  tags?: string[];
+}
+
+export interface DossierMessage {
+  id: string;
+  texte: string;
+  de: 'client' | 'admin';
+  deUid: string;
+  createdAt?: any;
+  luParAdmin?: boolean;
+  luParClient?: boolean;
+}
+
+/** Note privée de Laurie, jamais visible par la personne accompagnée. */
+export interface DossierNote {
+  id: string;
+  texte: string;
+  createdAt?: any;
+}
+
+/** Ressource partagée avec toutes les personnes accompagnées (guide, aide-mémoire, gabarit). */
+export interface Ressource {
+  id: string;
+  titre: string;
+  description?: string;
+  url: string;
+  chemin?: string;
+  visibleClients: boolean;
+  ordre: number;
+  createdAt?: any;
+}
+
+export interface DossierConfig {
+  pieces: PieceDef[];
+  etapes: EtapeDef[];
 }
