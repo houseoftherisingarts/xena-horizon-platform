@@ -181,8 +181,8 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
                   {i + 1}
                 </span>
                 <div>
-                  <p className="text-white font-semibold text-sm">{etape.titre}</p>
-                  <p className="text-slate-400 text-sm">{etape.sous}</p>
+                  <p className="text-white font-semibold text-sm">{titreEtape(etape, lang)}</p>
+                  <p className="text-slate-400 text-sm">{sousEtape(etape, lang)}</p>
                 </div>
               </li>
             ))}
