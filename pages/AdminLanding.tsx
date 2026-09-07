@@ -108,6 +108,7 @@ const QUESTIONS = [
 const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
   // State
   const { data: serverDoc, loading } = useDocument<{ blocks: LandingBlock[]; title?: string }>('landingPages/main');
+  const { data: gallery } = useCollection<GalleryImage>('gallery');
   const [blocks, setBlocks] = useState<LandingBlock[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
