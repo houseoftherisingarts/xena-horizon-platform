@@ -74,7 +74,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
     }
   }[lang];
 
-  const menuItems = [
+  const menuItems: { id: ViewState; label: string; icon: typeof LayoutDashboard; badge?: number }[] = [
     { id: 'ADMIN_DASHBOARD', label: t.dashboard, icon: LayoutDashboard },
     { id: 'ADMIN_DOSSIERS', label: t.dossiers, icon: FolderOpen, badge: nonLusDossiers },
     { id: 'ADMIN_AGENDA', label: t.agenda, icon: Calendar },
