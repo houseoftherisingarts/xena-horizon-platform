@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, X, Lock, ArrowRight, Globe } from 'lucide-react';
+import { Menu, X, Lock, ArrowRight, User } from 'lucide-react';
 import { ViewState, Language } from '../types';
 
 interface NavProps {
