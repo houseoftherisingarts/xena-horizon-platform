@@ -174,6 +174,8 @@ const App: React.FC = () => {
         return <AdminEmail lang={lang} />;
       case 'ADMIN_MESSENGER':
         return <AdminMessenger lang={lang} />;
+      case 'ESPACE_CLIENT':
+        return <EspaceClient user={user} lang={lang} />;
       default:
         return <PublicHome blocks={homeBlocks} lang={lang} />;
     }
