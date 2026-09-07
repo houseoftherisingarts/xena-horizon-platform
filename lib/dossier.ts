@@ -14,7 +14,7 @@ import type {
 
 /**
  * Le contrat du dossier client, partagé par l'espace client (/espace) et le back-office (/admin/dossiers).
- * Patron porté du module client de Vexel (courtier-dufresne/app, construction-bdt/app) : les constantes
+ * Patron porté du module client de Vexel : les constantes
  * PIECES et ETAPES pilotent tout, ici sauvegardées dans Firestore (settings/dossier) pour que Laurie
  * puisse les modifier depuis son admin. Les valeurs ci-dessous sont le repli tant qu'elle n'a rien changé.
  *
@@ -155,7 +155,7 @@ const etiquetteEtat = (etat: PieceDeposee['etat']): string =>
 
 /**
  * Fiche complète en Markdown, taillée pour être collée dans un assistant IA
- * (porté de PD.markdown du module Dufresne).
+ * (porté du module client de Vexel).
  */
 export function dossierMarkdown(
   dossier: Dossier,
@@ -228,7 +228,7 @@ export function telecharger(nom: string, contenu: string, type = 'text/markdown;
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/** Export CSV de la liste des dossiers (BOM UTF-8 pour Excel), porté du back-office Dufresne. */
+/** Export CSV de la liste des dossiers (BOM UTF-8 pour Excel), porté du back-office du module client de Vexel. */
 export function dossiersCsv(dossiers: Dossier[], config: DossierConfig): string {
   const entete = ['Nom', 'Courriel', 'Téléphone', 'Profil', 'Projet', 'Étape', 'Avancement', 'Ouvert le'];
   const lignes = dossiers.map((d) => [

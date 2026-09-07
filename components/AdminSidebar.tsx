@@ -26,9 +26,12 @@ interface AdminSidebarProps {
   onChangeView: (view: ViewState) => void;
   onSignOut: () => void;
   lang: Language;
+  /** Sur téléphone, la barre devient un tiroir : ouvert ou fermé. */
+  open?: boolean;
+  onClose?: () => void;
 }
 
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang }) => {
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang, open = false, onClose }) => {
   
   const { data: dossiers } = useCollection<Dossier>('dossiers');
   const nonLusDossiers = dossiers.reduce((n, d) => n + (d.nonLusAdmin || 0), 0);
@@ -92,7 +95,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
   ];
 
   return (
-    <div className="print:hidden w-64 h-screen bg-slate-900 border-r border-white/5 flex flex-col fixed left-0 top-0 z-50">
+    <>
+    {open && (
+      <button
+        type="button"
+        aria-label="Fermer le menu"
+        onClick={onClose}
+        className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+      />
+    )}
+    <div className={`print:hidden w-64 h-screen bg-slate-900 border-r border-white/5 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
       {/* Header */}
       <div className="p-6 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift flex items-center justify-center shadow-iridescent-sm">
@@ -112,7 +124,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
           return (
             <button
               key={item.id}
-              onClick={() => onChangeView(item.id as ViewState)}
+              onClick={() => { onChangeView(item.id as ViewState); onClose?.(); }}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-[12px] transition-all duration-200 group ${
                 isActive
                   ? 'bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift text-white shadow-iridescent-sm'
@@ -156,6 +168,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
         </button>
       </div>
     </div>
+  </>
   );
 };
 

@@ -10,7 +10,7 @@ interface EspaceClientProps {
 }
 
 /**
- * L'espace client, adresse /espace. Porté du module Dufresne/BDT et branché sur
+ * L'espace client, adresse /espace. Porté du module client de Vexel et branché sur
  * Firebase (Auth, Firestore, Storage) : la porte pour ouvrir ou créer son dossier,
  * puis l'espace complet une fois connecté. Aucune vérification admin ici,
  * n'importe qui peut ouvrir son propre dossier.

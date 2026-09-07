@@ -478,7 +478,7 @@ const AdminCRM: React.FC<AdminCRMProps> = ({ lang }) => {
                      <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><CheckCircle className="w-5 h-5"/> {t.tasks}</h3>
                      
                      <div className="flex-1 overflow-y-auto space-y-3 pr-2 mb-4 custom-scrollbar">
-                        {selectedClient.tasks.length === 0 && <p className="text-sm text-slate-500 italic text-center py-4">{t.noTasks}</p>}
+                        {selectedClient.tasks.length === 0 && <p className="text-sm text-slate-500 text-center py-4">{t.noTasks}</p>}
                         
                         {selectedClient.tasks.map(task => (
                            <div key={task.id} className="group flex items-start gap-3 p-3 rounded-[12px] bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10">

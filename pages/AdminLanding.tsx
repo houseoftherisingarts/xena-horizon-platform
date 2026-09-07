@@ -540,7 +540,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
                    </div>
                 </div>
              ))}
-             {blocks.length === 0 && <p className="text-xs text-slate-500 italic text-center py-4">{t.emptyPage}</p>}
+             {blocks.length === 0 && <p className="text-xs text-slate-500 text-center py-4">{t.emptyPage}</p>}
            </div>
         </div>
 
@@ -633,7 +633,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
                                  value={b.caption} 
                                  onChange={(e) => updateBlock(b.id, 'caption', e.target.value)} 
                                  placeholder={t.addCaption}
-                                 className="bg-transparent text-center text-slate-500 text-sm italic focus:outline-none w-full"
+                                 className="bg-transparent text-center text-slate-500 text-sm focus:outline-none w-full"
                               />
                            </div>
                         </div>
@@ -786,7 +786,7 @@ const AdminLanding: React.FC<AdminLandingProps> = ({ lang }) => {
                            </div>
                            <div className="flex-1 text-center md:text-left">
                               <input value={b.title} onChange={(e) => updateBlock(b.id, 'title', e.target.value)} className="w-full bg-transparent text-2xl font-serif font-bold text-white mb-4 focus:outline-none md:text-left text-center" />
-                              <textarea value={b.content} onChange={(e) => updateBlock(b.id, 'content', e.target.value)} className="w-full bg-transparent text-slate-400 text-lg italic h-40 resize-none focus:outline-none md:text-left text-center" />
+                              <textarea value={b.content} onChange={(e) => updateBlock(b.id, 'content', e.target.value)} className="w-full bg-transparent text-slate-400 text-lg h-40 resize-none focus:outline-none md:text-left text-center" />
                            </div>
                         </div>
                      </div>

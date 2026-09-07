@@ -2,8 +2,8 @@ import type { Dossier, DossierConfig } from '../types';
 import { avancement, indexEtape, piecesManquantes, piecesParCategorie } from './dossier';
 
 /**
- * Le moteur de l'assistant flottant de l'espace client, porté du patron PD.repondre
- * de courtier-dufresne/app/pd-app.js : des sujets par expressions régulières, aucune
+ * Le moteur de l'assistant flottant de l'espace client, porté du patron d'assistant à sujets
+ * du module client de Vexel : des sujets par expressions régulières, aucune
  * clé d'API, aucune requête réseau. Il répond en français sur ce que la page sait
  * vraiment (le catalogue de pièces, le dossier de la personne connectée, les prix
  * affichés sur le site actuel de Laurie) et refuse d'inventer un prix ou une promesse.

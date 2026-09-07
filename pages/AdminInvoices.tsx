@@ -432,7 +432,7 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                   <div className="w-16 h-16 bg-slate-900 text-white flex items-center justify-center font-serif font-bold text-xl mb-4 ml-auto">XH</div>
                   <h2 className="font-bold text-xl">Xena Horizon</h2>
                   <p className="text-slate-500">Consultante Stratégique</p>
-                  <p className="text-slate-500">hello@xenahorizon.com</p>
+                  <p className="text-slate-500">laurie.belhumeur@gmail.com</p>
                </div>
             </div>
 

@@ -524,7 +524,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                        </div>
                     </div>
                  ))}
-                 {blocks.length === 0 && <p className="text-xs text-slate-500 italic text-center py-4">{t.empty}</p>}
+                 {blocks.length === 0 && <p className="text-xs text-slate-500 text-center py-4">{t.empty}</p>}
                </div>
 
                {/* CAMPAIGNS LIST */}
@@ -536,9 +536,9 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                      </button>
                   </div>
                   {campaignsLoading ? (
-                     <p className="text-xs text-slate-500 italic">{t.loading}</p>
+                     <p className="text-xs text-slate-500">{t.loading}</p>
                   ) : campaigns.length === 0 ? (
-                     <p className="text-xs text-slate-500 italic">{t.noCampaigns}</p>
+                     <p className="text-xs text-slate-500">{t.noCampaigns}</p>
                   ) : (
                      <ul className="space-y-1.5">
                         {campaigns.map(c => (
@@ -694,9 +694,9 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                    </button>
                 </div>
                 {subscribersLoading ? (
-                   <p className="text-sm text-slate-400 italic py-8 text-center">{t.loading}</p>
+                   <p className="text-sm text-slate-400 py-8 text-center">{t.loading}</p>
                 ) : subscribers.length === 0 ? (
-                   <p className="text-sm text-slate-400 italic py-8 text-center">{t.noSubscribers}</p>
+                   <p className="text-sm text-slate-400 py-8 text-center">{t.noSubscribers}</p>
                 ) : (
                    <div className="overflow-x-auto">
                       <table className="w-full text-sm">
@@ -718,7 +718,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                                      </span>
                                   </td>
                                   <td className="py-3 pr-4 text-slate-400 text-xs">
-                                     {sub.tags && sub.tags.length > 0 ? sub.tags.join(', ') : '—'}
+                                     {sub.tags && sub.tags.length > 0 ? sub.tags.join(', ') : '·'}
                                   </td>
                                   <td className="py-3 pr-4 text-right">
                                      <button

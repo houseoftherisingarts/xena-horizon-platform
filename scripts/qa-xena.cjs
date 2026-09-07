@@ -15,7 +15,7 @@ const VUES = [
   { nom: 'accueil', path: '/', scrolls: [0, 0.25, 0.5, 0.75, 1] },
   { nom: 'services', path: '/services', scrolls: [0, 0.5, 1] },
   { nom: 'projets', path: '/projets', scrolls: [0, 0.5, 1] },
-  { nom: 'espace-porte', path: '/espace', scrolls: [0] },
+  { nom: 'espace-porte', path: '/espace', scrolls: [0, 0.5, 1] },
 ];
 
 const rapport = { erreurs: [], pages: [] };
@@ -69,9 +69,11 @@ async function connecter(page, email, pw) {
   await mail.waitFor({ timeout: 15000 });
   await mail.fill(email);
   await page.locator('input[type="password"]').first().fill(pw);
-  const bouton = page.locator('button[type="submit"], form button').filter({ hasText: /connecter|connexion|entrer|sign in/i }).first();
+  const bouton = page.locator('form button[type="submit"]').first();
   await bouton.click();
-  await page.waitForTimeout(4000);
+  // On attend que la session soit vraiment ouverte (bandeau de l'espace ou message d'erreur), pas un délai fixe.
+  await page.locator('input[type="password"]').first().waitFor({ state: 'detached', timeout: 25000 }).catch(() => {});
+  await page.waitForTimeout(1500);
 }
 
 (async () => {

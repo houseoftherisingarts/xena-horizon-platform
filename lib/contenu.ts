@@ -1,4 +1,4 @@
-import type { HomeBlock, Product } from '../types';
+import type { ClientArchetype, HomeBlock, Product } from '../types';
 
 /**
  * La source de vérité de la copie publique de Xena Horizon (Laurie Belhumeur).

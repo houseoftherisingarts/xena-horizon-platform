@@ -82,19 +82,19 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
           role="dialog"
           aria-live="polite"
           aria-label={lang === 'FR' ? 'Bandeau de consentement' : 'Consent banner'}
-          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-sm z-[90] bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-[20px] shadow-2xl p-5"
+          className="fixed bottom-0 left-0 right-0 z-[90] bg-slate-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl px-4 py-3 md:px-8 flex flex-col md:flex-row md:items-center gap-3 md:gap-6"
         >
-          <p className="text-sm text-slate-300 mb-4">{t.texte}</p>
-          <div className="flex gap-2 mb-3">
+          <p className="text-sm text-slate-300 md:flex-1">{t.texte}</p>
+          <div className="flex gap-2 md:gap-3">
             <button
               onClick={() => decider('accepte')}
-              className="flex-1 min-h-[44px] px-4 py-2.5 rounded-full bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift text-white text-sm font-medium transition-all shadow-iridescent-sm hover:shadow-iridescent"
+              className="min-h-[44px] px-5 py-2.5 rounded-full bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift text-white text-sm font-medium transition-all shadow-iridescent-sm hover:shadow-iridescent"
             >
               {t.accepter}
             </button>
             <button
               onClick={() => decider('refuse')}
-              className="flex-1 min-h-[44px] px-4 py-2.5 rounded-full border border-white/15 hover:bg-white/5 text-slate-300 text-sm font-medium transition-colors"
+              className="min-h-[44px] px-5 py-2.5 rounded-full border border-white/15 hover:bg-white/5 text-slate-300 text-sm font-medium transition-colors"
             >
               {t.refuser}
             </button>

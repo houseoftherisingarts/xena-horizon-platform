@@ -97,7 +97,7 @@ const AdminEmail: React.FC<AdminEmailProps> = ({ lang }) => {
   const inboxLeads = leads.filter(l => !l.archived);
   const unreadCount = inboxLeads.filter(l => !l.read).length;
 
-  // Auto-summary (no real Gemini call yet — that's task #8)
+  // Auto-summary (no real Gemini call yet, that's task #8)
   useEffect(() => {
     if (selectedLead) {
       setSummary('');

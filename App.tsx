@@ -4,6 +4,9 @@ import { auth } from './firebase';
 import { isAdmin } from './lib/admins';
 import { useDocument, writeDoc } from './lib/firestore';
 import { viewFromPath, pathFromView } from './lib/routes';
+import { BLOCS_ACCUEIL } from './lib/contenu';
+import Consentement from './components/Consentement';
+import NotFound, { cheminInconnu } from './pages/NotFound';
 import Nav from './components/Nav';
 import AdminSidebar from './components/AdminSidebar';
 import Footer from './components/Footer';
@@ -23,6 +26,9 @@ const AdminAgenda = lazy(() => import('./pages/AdminAgenda'));
 const AdminEmail = lazy(() => import('./pages/AdminEmail'));
 const AdminMessenger = lazy(() => import('./pages/AdminMessenger'));
 const SocialCreator = lazy(() => import('./pages/SocialCreator'));
+const AdminDossiers = lazy(() => import('./pages/AdminDossiers'));
+const EspaceClient = lazy(() => import('./pages/EspaceClient'));
+const PublicProjets = lazy(() => import('./pages/PublicProjets'));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
@@ -31,45 +37,18 @@ const PageLoader: React.FC = () => (
 );
 import { ViewState, HomeBlock, Language } from './types';
 
-const INITIAL_HOME_BLOCKS: HomeBlock[] = [
-  {
-    id: 'hero-1',
-    type: 'HERO',
-    tagline: 'Xena Horizon',
-    headline: 'Une histoire \nd\'ordre et de vision',
-    subheadline: 'Passionnée par la structure et la créativité, je transforme le chaos organisationnel en puissance stratégique. Accompagner les artistes et les organismes pour qu\'ils retrouvent leur sécurité et leur impact est ma mission.',
-    ctaText: 'Travailler avec moi',
-    imageUrl: 'https://storage.googleapis.com/salondesinconnus/Laurie/461315215_8126222680823905_5406044944685229780_n.jpg'
-  },
-  {
-    id: 'services-1',
-    type: 'SERVICES_PREVIEW',
-    title: 'Comment pouvons-nous \ncollaborer ?',
-    subtitle: 'Trois axes d\'expertise pour structurer votre ambition.'
-  },
-  {
-    id: 'stats-1',
-    type: 'STATS',
-    stat1Value: '15+', stat1Label: 'Années d\'expérience',
-    stat2Value: '5M$', stat2Label: 'Financement Sécurisé',
-    stat3Value: '100+', stat3Label: 'Artistes Accompagnés'
-  },
-  {
-    id: 'contact-1',
-    type: 'CONTACT',
-    title: 'Prête à structurer votre génie ?',
-    text: 'Ne laissez plus l\'administratif étouffer votre art. Discutons de votre prochaine étape.',
-    email: 'hello@xenahorizon.com'
-  }
-];
 
 const App: React.FC = () => {
   const [currentView, setCurrentViewState] = useState<ViewState>(() =>
     typeof window === 'undefined' ? 'HOME' : viewFromPath(window.location.pathname)
   );
+  const [notFound, setNotFound] = useState<boolean>(() =>
+    typeof window !== 'undefined' && cheminInconnu(window.location.pathname)
+  );
 
   // La vue et l'adresse restent synchronisées : lien direct, bouton Précédent, partage.
   const setCurrentView = (view: ViewState) => {
+    setNotFound(false);
     setCurrentViewState(view);
     const path = pathFromView(view);
     if (window.location.pathname !== path) {
@@ -78,21 +57,33 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0 });
   };
 
+  // Le titre de l'onglet suit la vue (le prérendu couvre le premier chargement, ceci couvre la navigation).
   useEffect(() => {
-    const onPop = () => setCurrentViewState(viewFromPath(window.location.pathname));
+    const titres: Partial<Record<ViewState, string>> = {
+      HOME: 'Xena Horizon | Laurie Belhumeur, consultante en carrière artistique et communication',
+      SERVICES: 'Services et tarifs | Xena Horizon',
+      PROJETS: 'Projets : balado, livre, modèle | Xena Horizon',
+      ESPACE_CLIENT: 'Mon espace | Xena Horizon',
+    };
+    document.title = notFound ? 'Page introuvable | Xena Horizon' : (titres[currentView] ?? (currentView.startsWith('ADMIN') ? 'Admin | Xena Horizon' : titres.HOME!));
+  }, [currentView, notFound]);
+
+  useEffect(() => {
+    const onPop = () => {
+      setNotFound(cheminInconnu(window.location.pathname));
+      setCurrentViewState(viewFromPath(window.location.pathname));
+    };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
   const [lang, setLang] = useState<Language>('FR');
 
   const { data: homeDoc } = useDocument<{ blocks: HomeBlock[] }>('settings/homeBlocks');
-  const homeBlocks: HomeBlock[] = homeDoc?.blocks ?? INITIAL_HOME_BLOCKS;
+  const homeBlocks: HomeBlock[] = homeDoc?.blocks ?? BLOCS_ACCUEIL;
   const heroBlock = homeBlocks.find((b) => b.type === 'HERO') as
     | { imageUrl: string }
     | undefined;
-  const profileImage =
-    heroBlock?.imageUrl ??
-    'https://storage.googleapis.com/salondesinconnus/Laurie/461315215_8126222680823905_5406044944685229780_n.jpg';
+  const profileImage = heroBlock?.imageUrl ?? '/images/laurie-portrait-nb.jpg';
 
   const saveHomeBlocks = async (blocks: HomeBlock[]) => {
     await writeDoc('settings/homeBlocks', { blocks }, { merge: true });
@@ -106,6 +97,7 @@ const App: React.FC = () => {
   };
 
   const [user, setUser] = useState<User | null>(null);
+  const [menuAdminOuvert, setMenuAdminOuvert] = useState(false);
   const [authReady, setAuthReady] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
@@ -142,11 +134,18 @@ const App: React.FC = () => {
   };
 
   const renderView = () => {
+    if (notFound) return <NotFound lang={lang} onChangeView={setCurrentView} />;
     switch (currentView) {
       case 'HOME':
         return <PublicHome blocks={homeBlocks} lang={lang} />;
       case 'SERVICES':
-        return <PublicServices lang={lang} />;
+        return <PublicServices lang={lang} onChangeView={setCurrentView} />;
+      case 'PROJETS':
+        return <PublicProjets lang={lang} />;
+      case 'ESPACE_CLIENT':
+        return <EspaceClient user={user} lang={lang} />;
+      case 'ADMIN_DOSSIERS':
+        return <AdminDossiers lang={lang} />;
       case 'ADMIN_DASHBOARD':
         return <AdminDashboard lang={lang} />;
       case 'ADMIN_WEBSITE':
@@ -186,8 +185,21 @@ const App: React.FC = () => {
           onChangeView={setCurrentView}
           onSignOut={handleSignOut}
           lang={lang}
+          open={menuAdminOuvert}
+          onClose={() => setMenuAdminOuvert(false)}
         />
-        <main className="flex-1 ml-64 min-h-screen overflow-x-clip">
+        <main className="flex-1 md:ml-64 min-h-screen overflow-x-clip">
+          <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-slate-950/90 backdrop-blur-xl border-b border-white/10">
+            <button
+              type="button"
+              onClick={() => setMenuAdminOuvert(true)}
+              aria-label={lang === 'FR' ? 'Ouvrir le menu' : 'Open menu'}
+              className="w-11 h-11 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white"
+            >
+              <span className="block w-5 space-y-1"><span className="block h-0.5 bg-white" /><span className="block h-0.5 bg-white" /><span className="block h-0.5 bg-white" /></span>
+            </button>
+            <span className="font-serif font-bold text-white">Espace Xena</span>
+          </div>
           <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
         </main>
       </div>
@@ -207,6 +219,7 @@ const App: React.FC = () => {
         <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
       </main>
       <Footer onAdminLogin={requestAdmin} lang={lang} />
+      <Consentement lang={lang} />
       <AuthModal
         open={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
