@@ -174,31 +174,27 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
       
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                    {CLIENT_ARCHETYPES.map((a) => {
-                     const title = lang === 'FR' ? a.titleFR : a.titleEN;
-                     const subtitle = lang === 'FR' ? a.subtitleFR : a.subtitleEN;
-                     const description = lang === 'FR' ? a.descriptionFR : a.descriptionEN;
-                     const details = lang === 'FR' ? a.detailsFR : a.detailsEN;
+                     const profil = PROFILS_REELS.find((p) => p.id === a.id);
+                     const tagline = lang === 'FR' ? profil?.taglineFR : profil?.taglineEN;
+                     const title = lang === 'FR' ? profil?.titleFR : profil?.titleEN;
+                     const description = lang === 'FR' ? profil?.descriptionFR : profil?.descriptionEN;
                      return (
-                       <div key={a.id} className="group relative h-[420px] overflow-hidden rounded-[30px] bg-slate-900 border border-white/10 hover:border-cyan-400/40 hover:shadow-iridescent-sm transition-all duration-500">
+                       <a
+                         key={a.id}
+                         href="/services"
+                         className="group relative overflow-hidden rounded-[30px] bg-slate-900 border border-white/10 hover:border-cyan-400/40 hover:shadow-iridescent-sm transition-all duration-500 p-8 flex flex-col"
+                       >
                           <div className={`absolute inset-0 bg-gradient-to-br ${a.gradient} opacity-0 group-hover:opacity-15 transition-opacity duration-500`}></div>
-                          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/95 z-10"></div>
-                          <div className="relative z-20 h-full p-8 flex flex-col justify-end items-start space-y-4">
-                             <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${a.gradient} flex items-center justify-center text-white shadow-iridescent-sm group-hover:scale-110 transition-transform duration-300`}>
-                               {a.icon}
-                             </div>
-                             <div>
-                               <h3 className="text-2xl font-bold text-white mb-1">{title}</h3>
-                               {subtitle && <p className="text-xs font-bold tracking-wide text-emerald-300 mb-2">{subtitle}</p>}
-                               <p className="text-slate-400 group-hover:text-slate-200 transition-colors">{description}</p>
-                             </div>
-                             <div className="pt-2 opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-100">
-                               <p className="text-sm text-slate-300 mb-4 line-clamp-3">{details}</p>
-                               <button className="text-sm font-bold text-cyan-300 flex items-center gap-2">
-                                 {t.explore} <ArrowRight className="w-4 h-4" />
-                               </button>
-                             </div>
+                          <div className={`relative z-10 w-14 h-14 rounded-2xl bg-gradient-to-br ${a.gradient} flex items-center justify-center text-white shadow-iridescent-sm group-hover:scale-110 transition-transform duration-300 mb-5`}>
+                            {a.icon}
                           </div>
-                        </div>
+                          <p className="relative z-10 text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{tagline}</p>
+                          <h3 className="relative z-10 text-2xl font-bold text-white mb-3">{title}</h3>
+                          <p className="relative z-10 text-slate-400 group-hover:text-slate-200 transition-colors mb-6">{description}</p>
+                          <span className="relative z-10 mt-auto inline-flex items-center gap-2 text-sm font-bold text-cyan-300 group-hover:gap-3 transition-all">
+                            {t.explore} <ArrowRight className="w-4 h-4" />
+                          </span>
+                       </a>
                      );
                    })}
                 </div>
