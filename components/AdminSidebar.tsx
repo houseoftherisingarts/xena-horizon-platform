@@ -76,6 +76,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
 
   const menuItems = [
     { id: 'ADMIN_DASHBOARD', label: t.dashboard, icon: LayoutDashboard },
+    { id: 'ADMIN_DOSSIERS', label: t.dossiers, icon: FolderOpen, badge: nonLusDossiers },
     { id: 'ADMIN_AGENDA', label: t.agenda, icon: Calendar },
     { id: 'ADMIN_EMAIL', label: t.email, icon: Inbox },
     { id: 'ADMIN_MESSENGER', label: t.messenger, icon: MessageCircle },
