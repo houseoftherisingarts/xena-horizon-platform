@@ -121,7 +121,7 @@ Site vitrine plus outil de travail de Laurie Belhumeur (marque Xena Horizon, xen
 npm run build                                   # vite build + prérendu des balises, sitemap, robots
 firebase deploy --only hosting --project xena-70977
 firebase deploy --only firestore:rules,storage --project xena-70977
-node /private/tmp/claude-501/-Users-lesalondesinconnus/*/scratchpad/qa-xena.cjs http://localhost:4173 captures   # boucle verdict (comptes témoins dans ~/.config/xena/compte-temoin.txt)
+node scripts/qa-xena.cjs http://localhost:4173 captures   # boucle verdict (comptes témoins dans ~/.config/xena/compte-temoin.txt)
 ```
 
 ### Ce qui attend une décision d'Alex ou de Laurie
