@@ -161,9 +161,9 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
       className={`flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-[16px] border transition-colors ${
         survole
           ? 'border-cyan-400/60 bg-cyan-400/5'
-          : deposee?.etat === 'valide'
+          : etat === 'valide'
           ? 'border-emerald-400/25 bg-emerald-400/5'
-          : deposee?.etat === 'a_refaire'
+          : etat === 'a_refaire'
           ? 'border-amber-400/30 bg-amber-400/5'
           : deposee
           ? 'border-white/10 bg-white/5'
@@ -172,9 +172,9 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
     >
       <span
         className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-          deposee?.etat === 'valide'
+          etat === 'valide'
             ? 'bg-emerald-400/15 text-emerald-300'
-            : deposee?.etat === 'a_refaire'
+            : etat === 'a_refaire'
             ? 'bg-amber-400/15 text-amber-300'
             : deposee
             ? 'bg-cyan-400/15 text-cyan-300'
