@@ -45,6 +45,70 @@ export const BLOCS_ACCUEIL: HomeBlock[] = [
   },
 ];
 
+// --- PROFILS : les trois portes d'entrée du site (cartes accueil + choix de profil /services) ---
+// Copie tirée de lauriebelhumeur.com (« Services aux artistes », « Services aux créatifs et aux
+// entreprises », coaching en stratégie événementielle). Remplace l'ancienne copie générique de
+// l'export AI Studio (« Out of the box », « OBNL & Causes Sociales », « propulser votre art »).
+export interface ProfilMeta {
+  id: ClientArchetype;
+  taglineFR: string;
+  taglineEN: string;
+  titleFR: string;
+  titleEN: string;
+  descriptionFR: string;
+  descriptionEN: string;
+  detailsFR: string;
+  detailsEN: string;
+}
+
+export const PROFILS_REELS: ProfilMeta[] = [
+  {
+    id: 'Artist',
+    taglineFR: 'Toutes disciplines',
+    taglineEN: 'Every discipline',
+    titleFR: 'Artistes',
+    titleEN: 'Artists',
+    descriptionFR:
+      "Tu vois la vie comme un artiste ? Voici avec quoi je peux t'aider : danse, écriture, théâtre, musique, chant, peinture, photo, cirque.",
+    descriptionEN:
+      "Do you see life like an artist? Here's what I can help you with: dance, writing, theatre, music, singing, painting, photography, circus.",
+    detailsFR:
+      "Stratégie de visibilité, identité artistique, rédaction de ta bio, de ta demande de subvention et de ton dossier de presse.",
+    detailsEN:
+      'Visibility strategy, artistic identity, writing your bio, your grant application and your press kit.',
+  },
+  {
+    id: 'Entrepreneur',
+    taglineFR: 'Storytelling & stratégie',
+    taglineEN: 'Storytelling & strategy',
+    titleFR: 'Créatifs et entrepreneurs',
+    titleEN: 'Creatives and entrepreneurs',
+    descriptionFR:
+      "Te faire comprendre du monde des affaires, avec une ligne directrice claire pour ton entreprise.",
+    descriptionEN:
+      'Getting the business world to understand you, with a clear guideline for your business.',
+    detailsFR:
+      "Storytelling, copywriting et accompagnement pour tes événements : lancements, réseautage, festivals, activations de marque.",
+    detailsEN:
+      'Storytelling, copywriting and event support: launches, networking, festivals, brand activations.',
+  },
+  {
+    id: 'NPO',
+    taglineFR: 'Stratégie événementielle',
+    taglineEN: 'Event strategy',
+    titleFR: 'Organisations et entreprises',
+    titleEN: 'Organizations and businesses',
+    descriptionFR:
+      "Stratégie événementielle pour tes lancements, ton réseautage, tes festivals et tes activations de marque.",
+    descriptionEN:
+      'Event strategy for your launches, networking, festivals and brand activations.',
+    detailsFR:
+      "Relations publiques, conférences et animation, pour que ton organisation soit vue et entendue.",
+    detailsEN:
+      'Public relations, conferences and hosting, so your organization is seen and heard.',
+  },
+];
+
 // --- SERVICES : les neuf offres réelles, prix de départ tels qu'écrits sur le site ---
 const ARCHETYPES_TOUS: Product['clientTypes'] = ['Artist', 'Entrepreneur', 'NPO'];
 
