@@ -309,21 +309,23 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                         />
                       </div>
 
-                      {contactStatus === 'success' && (
-                        <div className="flex items-start gap-3 p-4 rounded-[15px] bg-emerald-500/10 border border-emerald-400/30 text-emerald-200">
-                          <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                          <div>
-                            <p className="font-bold">{t.successTitle}</p>
-                            <p className="text-sm text-emerald-300">{t.successText}</p>
+                      <div aria-live="polite">
+                        {contactStatus === 'success' && (
+                          <div className="flex items-start gap-3 p-4 rounded-[15px] bg-emerald-500/10 border border-emerald-400/30 text-emerald-200">
+                            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <p className="font-bold">{t.successTitle}</p>
+                              <p className="text-sm text-emerald-300">{t.successText}</p>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {contactStatus === 'error' && (
-                        <div className="flex items-start gap-3 p-4 rounded-[15px] bg-red-500/10 border border-red-400/30 text-red-200">
-                          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                          <p className="text-sm">{t.errorText}</p>
-                        </div>
-                      )}
+                        )}
+                        {contactStatus === 'error' && (
+                          <div className="flex items-start gap-3 p-4 rounded-[15px] bg-red-500/10 border border-red-400/30 text-red-200">
+                            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm">{t.errorText}</p>
+                          </div>
+                        )}
+                      </div>
 
                       <button
                         type="submit"
