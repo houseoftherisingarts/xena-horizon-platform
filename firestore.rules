@@ -68,19 +68,40 @@ service cloud.firestore {
 
     // Dossier client : un document par personne accompagnée, identifié par son uid.
     match /dossiers/{uid} {
+      // Bornes de taille des champs texte du dossier, tolérantes à leur absence.
+      // `revue` n'apparaît jamais ici : c'est le jugement de Laurie, jamais un champ que le client peut fixer.
+      function projetValide(data) {
+        return !('projet' in data)
+               || (data.projet is map
+                   && texteBorne(data.projet, 'titre', 200)
+                   && texteBorne(data.projet, 'description', 5000)
+                   && texteBorne(data.projet, 'objectif', 2000)
+                   && texteBorne(data.projet, 'echeance', 20));
+      }
+      function dossierBornesOK(data) {
+        return texteBorne(data, 'telephone', 40)
+               && texteBorne(data, 'ville', 80)
+               && texteBorne(data, 'discipline', 80)
+               && texteBorne(data, 'photoURL', 500)
+               && projetValide(data);
+      }
+
       // La personne lit son propre dossier; seule Laurie peut lister la collection.
       allow get: if isOwner(uid) || isAdmin();
       allow list: if isAdmin();
+      // `revue` est absente de la liste hasOnly : un dossier créé par le client ne peut jamais en porter une.
       allow create: if isOwner(uid)
                     && request.resource.data.uid == uid
                     && request.resource.data.courriel is string
                     && request.resource.data.courriel.size() < 200
                     && request.resource.data.nom is string
                     && request.resource.data.nom.size() < 120
-                    && request.resource.data.etape is string
+                    && request.resource.data.etape == 'contact'
+                    && request.resource.data.archive == false
                     && request.resource.data.pieces is map
+                    && dossierBornesOK(request.resource.data)
                     && request.resource.data.keys().hasOnly(['uid','courriel','nom','telephone','ville','photoURL','profil','discipline','projet','etape','pieces','createdAt','updatedAt','derniereActiviteClient','derniereActiviteAdmin','nonLusAdmin','nonLusClient','archive','tags']);
-      // La personne modifie son profil, son projet et ses pièces; l'étape, les notes et l'archivage restent à Laurie.
+      // La personne modifie son profil, son projet et ses pièces; l'étape, l'archivage et la revue (jugement de Laurie) restent hors de sa portée.
       allow update: if isAdmin()
                     || (isOwner(uid)
                         && request.resource.data.uid == uid
@@ -88,7 +109,8 @@ service cloud.firestore {
                              .hasOnly(['nom','telephone','ville','photoURL','profil','discipline','projet','pieces','updatedAt','derniereActiviteClient','nonLusAdmin','nonLusClient'])
                         && request.resource.data.pieces is map
                         && request.resource.data.nom is string
-                        && request.resource.data.nom.size() < 120);
+                        && request.resource.data.nom.size() < 120
+                        && dossierBornesOK(request.resource.data));
       allow delete: if isAdmin();
 
       match /messages/{msgId} {
@@ -97,6 +119,8 @@ service cloud.firestore {
                       && request.resource.data.texte.size() > 0
                       && request.resource.data.texte.size() < 5000
                       && request.resource.data.deUid == request.auth.uid
+                      && request.resource.data.createdAt == request.time
+                      && request.resource.data.keys().hasOnly(['texte','de','deUid','luParAdmin','luParClient','createdAt'])
                       && (
                         (isAdmin() && request.resource.data.de == 'admin')
                         || (isOwner(uid) && request.resource.data.de == 'client')
