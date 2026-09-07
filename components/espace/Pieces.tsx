@@ -48,7 +48,7 @@ interface TexteCarte {
   erreurRetrait: string;
 }
 
-const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; uid: string; t: TexteCarte }> = ({ piece, deposee, uid, t }) => {
+const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatPiece; note?: string; uid: string; t: TexteCarte }> = ({ piece, deposee, etat, note, uid, t }) => {
   const [progres, setProgres] = useState<number | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [survole, setSurvole] = useState(false);
