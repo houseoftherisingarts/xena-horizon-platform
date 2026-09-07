@@ -96,6 +96,8 @@ const PiecesAdmin: React.FC<PiecesAdminProps> = ({ dossier, pieces, lang, onVali
           <div className="space-y-2">
             {liste.map((p) => {
               const d = dossier.pieces?.[p.id];
+              const etat: EtatPiece = etatPiece(dossier, p.id);
+              const revueNote = etat === 'a_refaire' ? dossier.revue?.[p.id]?.note : undefined;
               return (
                 <div key={p.id} className="bg-white/5 border border-white/10 rounded-[15px] p-4">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -103,8 +105,8 @@ const PiecesAdmin: React.FC<PiecesAdminProps> = ({ dossier, pieces, lang, onVali
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-medium text-white">{p.nom}</span>
                         {d ? (
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${etatClasses[d.etat]}`}>
-                            {tr[d.etat as 'valide' | 'depose' | 'a_refaire']}
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${etatClasses[etat]}`}>
+                            {tr[etat as 'valide' | 'deposee' | 'a_refaire' | 'redeposee']}
                           </span>
                         ) : p.option ? (
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/15 text-slate-500">
@@ -122,8 +124,8 @@ const PiecesAdmin: React.FC<PiecesAdminProps> = ({ dossier, pieces, lang, onVali
                           {d.nom} · {formatTaille(d.taille)} · {dateCourte(d.deposeLe)}
                         </p>
                       )}
-                      {d?.etat === 'a_refaire' && d.note && (
-                        <p className="text-xs text-red-300 mt-1">Remarque : {d.note}</p>
+                      {etat === 'a_refaire' && revueNote && (
+                        <p className="text-xs text-red-300 mt-1">Remarque : {revueNote}</p>
                       )}
                     </div>
                     {d && (
@@ -137,7 +139,7 @@ const PiecesAdmin: React.FC<PiecesAdminProps> = ({ dossier, pieces, lang, onVali
                         >
                           <Download className="w-4 h-4" />
                         </button>
-                        {d.etat !== 'valide' && (
+                        {etat !== 'valide' && (
                           <button
                             type="button"
                             onClick={() => onValider(p.id)}
