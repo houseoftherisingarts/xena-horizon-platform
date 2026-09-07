@@ -17,7 +17,7 @@ interface PublicHomeProps {
  */
 const HOME_EN: Record<string, Record<string, string>> = {
   'hero-1': {
-    headline: 'Live from your art\nwithout losing your voice',
+    headline: 'Live from your art\nand keep your voice',
     subheadline:
       'Fifteen years supporting artists of every discipline and creative people, so the business world understands them and they can finally live from their art.',
     ctaText: 'Book an appointment',
