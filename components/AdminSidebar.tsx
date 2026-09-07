@@ -92,7 +92,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
   ];
 
   return (
-    <div className="w-64 h-screen bg-slate-900 border-r border-white/5 flex flex-col fixed left-0 top-0 z-50">
+    <div className="print:hidden w-64 h-screen bg-slate-900 border-r border-white/5 flex flex-col fixed left-0 top-0 z-50">
       {/* Header */}
       <div className="p-6 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift flex items-center justify-center shadow-iridescent-sm">
