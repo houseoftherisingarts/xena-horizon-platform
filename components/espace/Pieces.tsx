@@ -209,8 +209,8 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
         ) : (
           <p className="text-slate-500 text-xs mt-1">{piece.aide || t.aideDefaut}</p>
         )}
-        {deposee?.etat === 'a_refaire' && deposee.note && (
-          <p className="text-amber-300 text-xs mt-2 bg-amber-400/10 border border-amber-400/20 rounded-[10px] px-3 py-2">{deposee.note}</p>
+        {etat === 'a_refaire' && note && (
+          <p className="text-amber-300 text-xs mt-2 bg-amber-400/10 border border-amber-400/20 rounded-[10px] px-3 py-2">{note}</p>
         )}
         {enCours && (
           <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden" role="progressbar" aria-valuenow={progres ?? 0} aria-valuemin={0} aria-valuemax={100}>
