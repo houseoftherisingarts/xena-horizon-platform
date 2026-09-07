@@ -35,6 +35,8 @@ const FORMATS: Format[] = [
 ];
 
 const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
+  const { data: gallery } = useCollection<GalleryImage>('gallery');
+
   // State
   const [selectedFormat, setSelectedFormat] = useState<Format>(FORMATS[0]);
   const [bgImage, setBgImage] = useState("https://picsum.photos/1080/1080");
