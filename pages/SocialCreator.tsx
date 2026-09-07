@@ -550,14 +550,16 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
                     value={nanoPrompt}
                     onChange={(e) => setNanoPrompt(e.target.value)}
                  />
-                 <button 
-                    onClick={handleNanoGenerate}
-                    disabled={isGenerating || (!nanoPrompt && !nanoRefImage)}
-                    className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-slate-900 font-bold rounded-[15px] flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                 <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-slate-900 font-bold rounded-[15px] flex items-center justify-center gap-2 opacity-50 cursor-not-allowed"
                  >
-                    {isGenerating ? <Loader2 className="w-5 h-5 animate-spin"/> : <Sparkles className="w-5 h-5"/>}
-                    {isGenerating ? 'Gemini travaille...' : t.generate}
+                    <Sparkles className="w-5 h-5"/>
+                    {t.generate}
                  </button>
+                 <p className="text-xs text-slate-500 text-center">{t.soon}</p>
               </div>
            </div>
         </div>
