@@ -42,7 +42,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
     },
     EN: {
       learnMore: 'Learn More',
-      explore: 'Explore',
+      explore: 'See services',
       sendMessage: 'Send Message',
       sending: 'Sending…',
       name: 'Full Name',
