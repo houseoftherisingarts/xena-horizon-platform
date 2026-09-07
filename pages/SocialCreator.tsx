@@ -97,6 +97,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
       hint: 'Drag text with mouse',
       selectImg: 'Select Image',
       use: 'Use',
+      emptyGallery: 'No images yet. Add some from the admin Gallery.',
       uploadRef: 'Add reference image (optional)',
       remove: 'Remove'
     }
