@@ -78,6 +78,8 @@ const INITIAL_ANSWERS: WizardAnswers = { topic: '', audience: '', goal: '' };
 type Tab = 'composer' | 'subscribers';
 
 const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
+  const { data: gallery } = useCollection<GalleryImage>('gallery');
+
   // Editor (WIP) state
   const [blocks, setBlocks] = useState<EmailBlock[]>([]);
   const [subject, setSubject] = useState<string>('');
