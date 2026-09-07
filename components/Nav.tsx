@@ -170,7 +170,8 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
             <div className="pt-4 flex items-center justify-between">
                <button
                   onClick={() => { onRequestAdmin(); setIsOpen(false); }}
-                  className="text-sm text-slate-400 flex items-center gap-2"
+                  className="text-sm text-slate-400 opacity-60 hover:opacity-100 flex items-center gap-2 transition-opacity"
+                  aria-label={t.admin}
                 >
                   <Lock className="w-3 h-3" /> {t.admin}
                 </button>
