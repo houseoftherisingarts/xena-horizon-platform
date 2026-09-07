@@ -231,11 +231,128 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
           );
         }
 
-        // --- CONTACT ---
+        // --- CONTACT (précédé des sections fixes : à propos, témoignage, confiance, projets, citation) ---
         if (block.type === 'CONTACT') {
           const b = block as HomeContactBlock;
           return (
-            <section key={b.id} id="contact" className="px-6">
+            <React.Fragment key={b.id}>
+              {/* --- BRÈVE HISTOIRE D'UN TOUT (à propos) --- */}
+              <section id="about" className="px-6">
+                <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-10 lg:gap-16 items-center">
+                  <div className="relative order-2 lg:order-1">
+                    <div className="absolute -inset-3 bg-iridescent rounded-[32px] opacity-25 blur-2xl pointer-events-none" />
+                    <img
+                      src="/images/laurie-apropos.jpg"
+                      alt="Laurie Belhumeur"
+                      className="relative w-full h-[420px] lg:h-[520px] object-cover rounded-[24px] border border-white/10 shadow-2xl"
+                    />
+                  </div>
+                  <div className="order-1 lg:order-2 space-y-6">
+                    <p className="text-xs font-bold uppercase tracking-widest text-cyan-300">{t.aboutEyebrow}</p>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight whitespace-pre-line">
+                      {t.aboutTitle}
+                    </h2>
+                    <div className="space-y-4 text-slate-300 text-base md:text-lg leading-relaxed">
+                      {aboutBody.map((p, i) => (
+                        <p key={i}>{p}</p>
+                      ))}
+                    </div>
+                    <p className="text-lg md:text-xl font-serif text-iridescent">{t.aboutMission}</p>
+                  </div>
+                </div>
+              </section>
+
+              {/* --- TÉMOIGNAGE --- */}
+              {temoignage && temoignageTexte && (
+                <section className="px-6">
+                  <div className="max-w-[1400px] mx-auto">
+                    <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] p-8 md:p-14 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-72 h-72 bg-iridescent rounded-full blur-[110px] opacity-20 pointer-events-none" />
+                      <div className="relative z-10 max-w-3xl">
+                        <div className="w-12 h-12 rounded-2xl bg-iridescent flex items-center justify-center text-white shadow-iridescent-sm mb-6">
+                          <QuoteIcon className="w-5 h-5" />
+                        </div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-4">{t.testimonialLabel}</p>
+                        <p className="text-xl md:text-2xl font-serif text-white leading-relaxed mb-6">{temoignageTexte}</p>
+                        <p className="text-slate-400">
+                          <span className="text-white font-bold">{temoignage.nom}</span> · {temoignage.role}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* --- ILS LUI ONT FAIT CONFIANCE --- */}
+              <section className="px-6">
+                <div className="max-w-[1400px] mx-auto">
+                  <div className="flex items-center gap-4 mb-10">
+                    <span className="text-sm font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">{t.trustLabel}</span>
+                    <div className="h-px bg-gradient-to-r from-white/10 to-transparent flex-1" />
+                  </div>
+                  <div className="flex flex-wrap gap-x-10 gap-y-5">
+                    {CLIENTS_CONFIANCE.map((nom) => (
+                      <span key={nom} className="text-lg md:text-xl font-serif text-slate-300 hover:text-white transition-colors">
+                        {nom}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* --- APERÇU DES PROJETS --- */}
+              <section className="px-6">
+                <div className="max-w-[1400px] mx-auto">
+                  <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-3">{t.projectsLabel}</p>
+                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white whitespace-pre-line">
+                        {t.projectsTitle}
+                      </h2>
+                    </div>
+                    <a href="/projets" className={`${GHOST_BUTTON_CLASSES} text-sm`}>
+                      {t.seeAllProjects} <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {PROJETS.map((p) => (
+                      <a
+                        key={p.id}
+                        href="/projets"
+                        className="group relative h-[340px] overflow-hidden rounded-[24px] bg-slate-900 border border-white/10 hover:border-cyan-400/40 hover:shadow-iridescent-sm transition-all duration-500 block focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                      >
+                        <img
+                          src={p.image}
+                          alt={p.titre}
+                          className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                        <div className="relative z-10 h-full p-7 flex flex-col justify-end">
+                          <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{p.sousTitre}</p>
+                          <h3 className="text-2xl font-serif font-bold text-white mb-3">{p.titre}</h3>
+                          <span className="inline-flex items-center gap-2 text-sm font-bold text-white">
+                            {t.seeProject} <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          </span>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* --- CITATION --- */}
+              <section className="px-6">
+                <div className="max-w-[1400px] mx-auto text-center py-4">
+                  <p className="text-2xl md:text-3xl lg:text-4xl font-serif text-white leading-snug max-w-4xl mx-auto">
+                    « {lang === 'FR' ? CITATION.texteFR : CITATION.texteEN} »
+                  </p>
+                  <p className="mt-6 text-slate-400 text-sm uppercase tracking-widest">
+                    {lang === 'FR' ? CITATION.source : CITATION.sourceEN}
+                  </p>
+                </div>
+              </section>
+
+            <section id="contact" className="px-6">
               <div className="max-w-[1400px] mx-auto">
                 <div className="bg-gradient-to-br from-slate-900 to-slate-900 border border-white/10 rounded-[40px] p-8 md:p-16 overflow-hidden relative">
                   <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-iridescent rounded-full blur-[120px] opacity-25 pointer-events-none"></div>
