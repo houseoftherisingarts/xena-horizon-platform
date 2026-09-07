@@ -84,7 +84,6 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; uid: string
               taille: file.size,
               type: file.type,
               deposeLe: serverTimestamp(),
-              etat: 'depose',
             },
             updatedAt: serverTimestamp(),
             derniereActiviteClient: serverTimestamp(),
