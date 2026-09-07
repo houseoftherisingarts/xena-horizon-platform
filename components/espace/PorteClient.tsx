@@ -158,7 +158,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-6 relative overflow-hidden">
+    <div className="pt-32 pb-20 px-6 relative overflow-hidden">
       <div className="absolute inset-0 bg-iridescent-radial opacity-40 pointer-events-none" />
       <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Colonne gauche : accueil de Laurie + les cinq étapes */}
