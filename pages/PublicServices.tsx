@@ -233,9 +233,9 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
                     </span>
 
                     <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-                      {offer.name}
+                      {nomOffre(offer, lang)}
                     </h3>
-                    <p className="text-slate-400 text-sm mb-6 flex-1">{offer.description}</p>
+                    <p className="text-slate-400 text-sm mb-6 flex-1">{descriptionOffre(offer, lang)}</p>
 
                     <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between gap-3">
                       <span className="text-lg font-bold text-white">{prixAffiche(offer, lang)}</span>
