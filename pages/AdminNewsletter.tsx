@@ -6,8 +6,8 @@ import {
 import { orderBy } from 'firebase/firestore';
 import { serverTimestamp } from 'firebase/firestore';
 import GlassCard from '../components/GlassCard';
-import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES, MOCK_GALLERY } from '../constants';
-import { Language, NewsletterCampaign, Subscriber } from '../types';
+import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
+import { GalleryImage, Language, NewsletterCampaign, Subscriber } from '../types';
 import { useCollection, createDoc, patchDoc, removeDoc } from '../lib/firestore';
 
 interface AdminNewsletterProps {
