@@ -101,6 +101,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
       forgotSent: 'Email sent. Check your inbox.',
       forgotNeedsEmail: 'Write your email in the field above first.',
       errInconnue: 'Sign in failed. Try again.',
+      confidentialite: 'What you upload here lives in a private file: Laurie Belhumeur, and only her, can read it.',
     },
   }[lang];
 
