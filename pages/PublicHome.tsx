@@ -188,7 +188,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang }) => {
                              </div>
                              <div>
                                <h3 className="text-2xl font-bold text-white mb-1">{title}</h3>
-                               {subtitle && <p className="text-xs italic text-emerald-300 mb-2">{subtitle}</p>}
+                               {subtitle && <p className="text-xs font-bold tracking-wide text-emerald-300 mb-2">{subtitle}</p>}
                                <p className="text-slate-400 group-hover:text-slate-200 transition-colors">{description}</p>
                              </div>
                              <div className="pt-2 opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-100">
