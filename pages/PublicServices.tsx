@@ -130,11 +130,11 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {CLIENT_ARCHETYPES.map((a) => {
-              const title = lang === 'FR' ? a.titleFR : a.titleEN;
-              const subtitle = lang === 'FR' ? a.subtitleFR : a.subtitleEN;
-              const tagline = lang === 'FR' ? a.taglineFR : a.taglineEN;
-              const description = lang === 'FR' ? a.descriptionFR : a.descriptionEN;
-              const details = lang === 'FR' ? a.detailsFR : a.detailsEN;
+              const profil = PROFILS_REELS.find((p) => p.id === a.id);
+              const tagline = lang === 'FR' ? profil?.taglineFR : profil?.taglineEN;
+              const title = lang === 'FR' ? profil?.titleFR : profil?.titleEN;
+              const description = lang === 'FR' ? profil?.descriptionFR : profil?.descriptionEN;
+              const details = lang === 'FR' ? profil?.detailsFR : profil?.detailsEN;
 
               return (
                 <button
@@ -143,18 +143,17 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
                   className="group relative text-left rounded-[28px] p-[1px] transition-all duration-500 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
                   style={{ background: 'linear-gradient(135deg, rgba(34,211,238,0.4), rgba(52,211,153,0.4), rgba(59,130,246,0.4))' }}
                 >
-                  <div className="bg-slate-900/95 rounded-[27px] h-full p-8 flex flex-col gap-5 backdrop-blur-xl">
+                  <div className="bg-slate-900/95 rounded-[27px] h-full p-8 flex flex-col gap-4 backdrop-blur-xl">
                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${a.gradient} flex items-center justify-center text-white shadow-iridescent-sm`}>
                       {a.icon}
                     </div>
                     <div>
                       <p className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-2">{tagline}</p>
                       <h2 className="text-3xl font-serif font-bold text-white leading-tight">{title}</h2>
-                      {subtitle && <p className="text-xs font-bold tracking-wide text-emerald-300 mt-1">{subtitle}</p>}
                     </div>
                     <p className="text-slate-300 leading-relaxed">{description}</p>
-                    <p className="text-slate-400 text-sm leading-relaxed flex-1">{details}</p>
-                    <div className="flex items-center gap-2 text-cyan-300 font-bold text-sm pt-2 group-hover:gap-3 transition-all">
+                    <p className="text-slate-400 text-sm leading-relaxed">{details}</p>
+                    <div className="mt-auto pt-2 flex items-center gap-2 text-cyan-300 font-bold text-sm group-hover:gap-3 transition-all">
                       {t.learnMore} <ArrowRight className="w-4 h-4" />
                     </div>
                   </div>
