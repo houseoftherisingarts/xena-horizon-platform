@@ -6,7 +6,7 @@ import {
   GHOST_BUTTON_CLASSES,
 } from '../constants';
 import { useCollection } from '../lib/firestore';
-import { SERVICES_REELS } from '../lib/contenu';
+import { PROFILS_REELS, SERVICES_REELS } from '../lib/contenu';
 import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
 import GlassCard from '../components/GlassCard';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
