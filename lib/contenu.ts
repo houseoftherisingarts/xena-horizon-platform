@@ -285,28 +285,40 @@ export const CLIENTS_CONFIANCE: string[] = [
 // --- PROJETS ---
 export interface LienProjet {
   label: string;
+  labelEn?: string;
   url: string;
 }
 
 export interface Projet {
   id: string;
   titre: string;
+  titreEn: string;
   sousTitre: string;
+  sousTitreEn: string;
   description: string[];
+  descriptionEn: string[];
   image: string;
   liens: LienProjet[];
   extra?: string;
+  extraEn?: string;
 }
 
 export const PROJETS: Projet[] = [
   {
     id: 'balado',
     titre: 'En quête de liberté',
+    titreEn: 'En quête de liberté (In Search of Freedom)',
     sousTitre: 'Balado',
+    sousTitreEn: 'Podcast',
     description: [
       "« En quête de liberté » est un balado qui traite de sujets tabous, de sujets qui font peur, car ils dérangent ou sont méconnus.",
       "Je ne suis pas une experte de tous ces sujets. Je n'ai que les yeux et les oreilles alertes, et lorsqu'un sujet m'interpelle et me tient à cœur, je ne peux faire autrement que d'en parler, éveiller la réflexion et communiquer ce que j'ai appris.",
       "Les premiers épisodes sont consacrés à la violence conjugale : deux mots qui font peur. J'ai eu envie d'aller à la rencontre de différents intervenants qui ont souvent un rôle à jouer lorsqu'une dynamique de violence existe au sein d'un couple. Ce projet se veut une porte d'entrée pour démystifier la violence conjugale et mieux comprendre la réalité de celles et ceux qui interviennent au quotidien.",
+    ],
+    descriptionEn: [
+      '"En quête de liberté" is a podcast that tackles taboo subjects, subjects that scare people because they are unsettling or little understood.',
+      "I'm not an expert on all these subjects. I only have alert eyes and ears, and when a subject speaks to me and matters to me, I can't help but talk about it, spark reflection and share what I've learned.",
+      'The first episodes are devoted to domestic violence: two words that scare people. I wanted to meet the different people who often play a role when a pattern of violence exists within a couple. This project is meant as an entry point to demystify domestic violence and better understand the reality of those who work with it every day.',
     ],
     image: '/images/balado.jpg',
     liens: [
@@ -317,23 +329,37 @@ export const PROJETS: Projet[] = [
   {
     id: 'livre',
     titre: 'Je ne suis pas un robot',
+    titreEn: 'Je ne suis pas un robot (I Am Not a Robot)',
     sousTitre: 'Créer, Ressentir, Transformer',
+    sousTitreEn: 'Create, Feel, Transform',
     description: [
       "Je ne suis pas un robot est un voyage littéraire au cœur du duel incessant entre raison et émotion. À travers un recueil de nouvelles et des textes introspectifs, j'explore ce combat qui a longtemps façonné mon existence.",
       "Au fil des pages, je dévoile mon processus créatif, un cheminement qui m'a permis d'apprivoiser ces deux forces opposées et de les faire cohabiter en harmonie. De la création au ressenti, puis à la transformation, chaque texte est une étape de cette quête intérieure où l'art devient un langage, une thérapie, une révélation.",
       "Le livre compte 126 pages en format 5 x 9 pouces. Il doit son accompagnement littéraire à Jérémy Parent, sa révision à Charles DuBois, son graphisme à Sonia Lapointe et sa mise en page à Alejandro Nathan. La photo de l'auteure est signée Stéphanie Boisvert, celle de la page couverture Jean-Michel Naud.",
     ],
+    descriptionEn: [
+      'Je ne suis pas un robot is a literary journey at the heart of the endless duel between reason and emotion. Through a collection of short stories and introspective texts, I explore a struggle that has long shaped my existence.',
+      'Page after page, I reveal my creative process, a path that let me tame these two opposing forces and let them coexist in harmony. From creation to feeling, then to transformation, each text is a step in this inner quest where art becomes a language, a therapy, a revelation.',
+      "The book runs 126 pages in a 5 x 9 inch format. Its literary guidance came from Jérémy Parent, its revision from Charles DuBois, its graphic design from Sonia Lapointe and its layout from Alejandro Nathan. The author's photo is by Stéphanie Boisvert, the cover photo by Jean-Michel Naud.",
+    ],
     image: '/images/livre-couverture.jpg',
-    liens: [{ label: 'Acheter le livre', url: 'https://www.laruchequebec.com/lauriebelhumeur' }],
+    liens: [{ label: 'Acheter le livre', labelEn: 'Buy the book', url: 'https://www.laruchequebec.com/lauriebelhumeur' }],
     extra: '21,95 $ + taxes et livraison',
+    extraEn: '$21.95 + taxes and shipping',
   },
   {
     id: 'modele',
     titre: 'Modèle et comédienne',
+    titreEn: 'Model and actress',
     sousTitre: 'Over dramatk',
+    sousTitreEn: 'Over dramatk',
     description: [
       "Je suis disponible à titre de modèle pour tes différents shootings photo créatifs.",
       "À l'été 2021, j'ai fait la rencontre de l'artiste photographe, directrice artistique et maquilleuse dramatk. Elle m'a partagé la vision de son projet « Over dramatk » qu'elle mûrissait depuis de nombreuses années : une collection de photos inspirée de l'art et de l'esthétique JPOP. J'ai eu l'honneur d'être son modèle tout au long du projet.",
+    ],
+    descriptionEn: [
+      "I'm available as a model for your creative photo shoots.",
+      'In the summer of 2021, I met photographer, art director and makeup artist dramatk. She shared with me the vision of her project "Over dramatk", which she had been developing for many years: a photo collection inspired by JPOP art and aesthetics. I had the honour of being her model throughout the project.',
     ],
     image: '/images/modele.jpg',
     liens: [
