@@ -73,9 +73,9 @@ export const PROFILS_REELS: ProfilMeta[] = [
     descriptionEN:
       "Do you see life like an artist? Here's what I can help you with: dance, writing, theatre, music, singing, painting, photography, circus.",
     detailsFR:
-      "Stratégie de visibilité, identité artistique, rédaction de ta bio, de ta demande de subvention et de ton dossier de presse.",
+      "Je bâtis avec toi ta stratégie de visibilité et ton identité artistique, et je rédige ta bio, ta demande de subvention et ton dossier de presse.",
     detailsEN:
-      'Visibility strategy, artistic identity, writing your bio, your grant application and your press kit.',
+      'I build your visibility strategy and artistic identity with you, and I write your bio, your grant application and your press kit.',
   },
   {
     id: 'Entrepreneur',
