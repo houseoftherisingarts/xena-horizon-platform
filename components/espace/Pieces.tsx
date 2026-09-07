@@ -147,7 +147,7 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
   };
 
   const enCours = progres !== null;
-  const etatEtiquette = deposee ? (deposee.etat === 'valide' ? t.validee : deposee.etat === 'a_refaire' ? t.aRefaire : null) : null;
+  const etatEtiquette = etat === 'valide' ? t.validee : etat === 'a_refaire' ? t.aRefaire : etat === 'redeposee' ? t.nouveauDepot : null;
 
   return (
     <li
