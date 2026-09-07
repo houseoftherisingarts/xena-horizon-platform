@@ -182,6 +182,14 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
       }));
   }, [filteredDocuments]);
 
+  const LEDGER_ROWS = useMemo(() => {
+    const term = ledgerFilter.trim().toLowerCase();
+    if (!term) return RECENT_TRANSACTIONS;
+    return RECENT_TRANSACTIONS.filter(
+      (tx) => tx.desc.toLowerCase().includes(term) || tx.category.toLowerCase().includes(term)
+    );
+  }, [RECENT_TRANSACTIONS, ledgerFilter]);
+
   // --- KPI CALCS ---
   const now = new Date();
   const ytdDocs = useMemo(
