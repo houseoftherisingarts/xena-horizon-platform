@@ -12,6 +12,7 @@ import { auth, googleProvider } from '../../firebase';
 import { useDossierConfig, EtapeDefEn } from '../../lib/dossier';
 import { Reveal } from '../motion';
 import { EtapeDef, Language } from '../../types';
+import { useTextes } from '../../lib/textes';
 
 /** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
 const titreEtape = (etape: EtapeDef, lang: Language): string => {
@@ -28,6 +29,49 @@ interface PorteClientProps {
 }
 
 type Mode = 'signin' | 'signup';
+
+const TEXTES = {
+  FR: {
+    hLeft: 'Une ligne claire,\net du temps pour créer.',
+    pLeft:
+      "Je suis Laurie. Tu déposes ici ce que tu as, même en vrac, et tu repars avec une direction et les bons mots pour la porter. Tu sais toujours où en est ton projet sans courir après un courriel, et quand une question te vient, je te réponds au même endroit.",
+    etapesTitre: 'Comment ça se déroule',
+    signin: 'Se connecter',
+    signup: 'Créer mon compte',
+    email: 'Courriel',
+    password: 'Mot de passe',
+    btnSignin: 'Ouvrir mon dossier',
+    btnSignup: 'Créer mon dossier',
+    google: 'Continuer avec Google',
+    googleNote: "Ce bouton lit le compte Google déjà connecté sur cet appareil, rien d'autre.",
+    or: 'ou',
+    forgot: 'Mot de passe oublié ?',
+    forgotSent: 'Courriel envoyé. Vérifie ta boîte de réception.',
+    forgotNeedsEmail: "Écris d'abord ton courriel dans le champ ci-dessus.",
+    errInconnue: "La connexion n'a pas fonctionné. Réessaie.",
+    confidentialite: 'Ce que tu déposes ici vit dans un dossier privé : Laurie Belhumeur, seule, peut le lire.',
+  },
+  EN: {
+    hLeft: 'A clear line,\nand time to create.',
+    pLeft:
+      "I'm Laurie. Drop off what you have here, even in rough shape, and you leave with a direction and the right words to carry it. You always know where your project stands without chasing an email, and when a question comes up, I answer you in the same place.",
+    etapesTitre: 'How it unfolds',
+    signin: 'Sign in',
+    signup: 'Create my account',
+    email: 'Email',
+    password: 'Password',
+    btnSignin: 'Open my file',
+    btnSignup: 'Create my file',
+    google: 'Continue with Google',
+    googleNote: 'This button reads the Google account already signed in on this device, nothing else.',
+    or: 'or',
+    forgot: 'Forgot your password?',
+    forgotSent: 'Email sent. Check your inbox.',
+    forgotNeedsEmail: 'Write your email in the field above first.',
+    errInconnue: 'Sign in failed. Try again.',
+    confidentialite: 'What you upload here lives in a private file: Laurie Belhumeur, and only her, can read it.',
+  },
+};
 
 const CHAMP = 'w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris transition-colors';
 
@@ -63,48 +107,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
   const [error, setError] = useState<string | null>(null);
   const [avisReset, setAvisReset] = useState<string | null>(null);
 
-  const t = {
-    FR: {
-      hLeft: 'Ton dossier\nt\'attend.',
-      pLeft:
-        "Je suis Laurie. Ouvre ton espace pour déposer tes pièces, suivre l'avancement de ton dossier et m'écrire directement quand tu as une question. Tout reste au même endroit, et je vois chaque geste que tu fais de mon côté.",
-      etapesTitre: 'Comment ça se déroule',
-      signin: 'Se connecter',
-      signup: 'Créer mon compte',
-      email: 'Courriel',
-      password: 'Mot de passe',
-      btnSignin: 'Ouvrir mon dossier',
-      btnSignup: 'Créer mon dossier',
-      google: 'Continuer avec Google',
-      googleNote: "Ce bouton lit le compte Google déjà connecté sur cet appareil, rien d'autre.",
-      or: 'ou',
-      forgot: 'Mot de passe oublié ?',
-      forgotSent: 'Courriel envoyé. Vérifie ta boîte de réception.',
-      forgotNeedsEmail: "Écris d'abord ton courriel dans le champ ci-dessus.",
-      errInconnue: "La connexion n'a pas fonctionné. Réessaie.",
-      confidentialite: 'Ce que tu déposes ici vit dans un dossier privé : Laurie Belhumeur, seule, peut le lire.',
-    },
-    EN: {
-      hLeft: 'Your file\nis waiting.',
-      pLeft:
-        "I'm Laurie. Open your space to send your files, follow how your file is coming along, and write to me directly when you have a question. Everything stays in one place, and I see every move you make on my end.",
-      etapesTitre: 'How it unfolds',
-      signin: 'Sign in',
-      signup: 'Create my account',
-      email: 'Email',
-      password: 'Password',
-      btnSignin: 'Open my file',
-      btnSignup: 'Create my file',
-      google: 'Continue with Google',
-      googleNote: 'This button reads the Google account already signed in on this device, nothing else.',
-      or: 'or',
-      forgot: 'Forgot your password?',
-      forgotSent: 'Email sent. Check your inbox.',
-      forgotNeedsEmail: 'Write your email in the field above first.',
-      errInconnue: 'Sign in failed. Try again.',
-      confidentialite: 'What you upload here lives in a private file: Laurie Belhumeur, and only her, can read it.',
-    },
-  }[lang];
+  const t = useTextes('porte', TEXTES, lang);
 
   const soumettre = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,7 +164,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
   };
 
   return (
-    <div className="min-h-[100svh] bg-papier pt-32 pb-20 px-gut">
+    <div data-tx-scope="porte" className="min-h-[100svh] bg-papier pt-32 pb-20 px-gut">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-14 items-start">
         {/* Colonne gauche : accueil de Laurie + les cinq étapes */}
         <div className="lg:col-span-6">

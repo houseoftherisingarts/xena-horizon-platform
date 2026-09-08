@@ -1,25 +1,25 @@
 import React from 'react';
 import {
-  LayoutDashboard,
-  Users,
-  ShoppingBag,
-  PenTool,
-  LogOut,
-  Settings,
-  ChevronRight,
-  FileText,
-  Image as ImageIcon,
-  PieChart,
-  LayoutTemplate,
-  Mail,
-  Globe,
   Calendar,
-  MessageCircle,
+  ChevronLeft,
+  FileText,
+  FolderOpen,
+  Image as ImageIcon,
   Inbox,
-  FolderOpen
+  LayoutDashboard,
+  LogOut,
+  Mail,
+  MessageCircle,
+  PenTool,
+  PencilLine,
+  PieChart,
+  ShoppingBag,
+  Users,
+  X,
 } from 'lucide-react';
 import { Dossier, ViewState, Language } from '../types';
 import { useCollection } from '../lib/firestore';
+import { useTextesCtx } from '../lib/textes';
 
 interface AdminSidebarProps {
   currentView: ViewState;
@@ -31,144 +31,157 @@ interface AdminSidebarProps {
   onClose?: () => void;
 }
 
+/** La barre du back-office v2 : papier-2, encre, un filet rose sur l'entrée active. */
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang, open = false, onClose }) => {
-  
   const { data: dossiers } = useCollection<Dossier>('dossiers');
   const nonLusDossiers = dossiers.reduce((n, d) => n + (d.nonLusAdmin || 0), 0);
+  const textes = useTextesCtx();
 
   const t = {
     FR: {
+      marque: 'Xena Horizon',
+      sous: 'Espace admin',
       dashboard: 'Tableau de bord',
       dossiers: 'Dossiers',
+      crm: 'Clients',
+      products: 'Offres',
+      invoices: 'Factures',
+      finance: 'Finances',
       agenda: 'Agenda',
       email: 'Courriels',
       messenger: 'Messagerie',
-      website: 'Éditeur Site Web',
-      crm: 'Clients (CRM)',
-      invoices: 'Facturation',
-      finance: 'Finance & Compta',
-      products: 'Offres & Produits',
-      landing: 'Pages de Vente',
       newsletter: 'Infolettres',
       gallery: 'Galerie',
-      social: 'Studio Social',
-      settings: 'Paramètres',
+      social: 'Studio social',
+      textes: 'Textes du site',
       backToSite: 'Retour au site',
-      signOut: 'Déconnexion'
+      signOut: 'Fermer la session',
+      fermer: 'Fermer le menu',
+      nonLus: 'messages non lus',
     },
     EN: {
+      marque: 'Xena Horizon',
+      sous: 'Admin area',
       dashboard: 'Dashboard',
       dossiers: 'Client files',
+      crm: 'Clients',
+      products: 'Offers',
+      invoices: 'Invoices',
+      finance: 'Finances',
       agenda: 'Calendar',
       email: 'Emails',
       messenger: 'Messenger',
-      website: 'Website Editor',
-      crm: 'Clients (CRM)',
-      invoices: 'Invoicing',
-      finance: 'Finance & Acc.',
-      products: 'Offers & Products',
-      landing: 'Landing Pages',
       newsletter: 'Newsletters',
       gallery: 'Gallery',
-      social: 'Social Studio',
-      settings: 'Settings',
+      social: 'Social studio',
+      textes: 'Site texts',
       backToSite: 'Back to site',
-      signOut: 'Sign out'
-    }
+      signOut: 'Sign out',
+      fermer: 'Close menu',
+      nonLus: 'unread messages',
+    },
   }[lang];
 
   const menuItems: { id: ViewState; label: string; icon: typeof LayoutDashboard; badge?: number }[] = [
     { id: 'ADMIN_DASHBOARD', label: t.dashboard, icon: LayoutDashboard },
     { id: 'ADMIN_DOSSIERS', label: t.dossiers, icon: FolderOpen, badge: nonLusDossiers },
+    { id: 'ADMIN_CRM', label: t.crm, icon: Users },
+    { id: 'ADMIN_PRODUCTS', label: t.products, icon: ShoppingBag },
+    { id: 'ADMIN_INVOICES', label: t.invoices, icon: FileText },
+    { id: 'ADMIN_FINANCE', label: t.finance, icon: PieChart },
     { id: 'ADMIN_AGENDA', label: t.agenda, icon: Calendar },
     { id: 'ADMIN_EMAIL', label: t.email, icon: Inbox },
     { id: 'ADMIN_MESSENGER', label: t.messenger, icon: MessageCircle },
-    { id: 'ADMIN_WEBSITE', label: t.website, icon: Globe },
-    { id: 'ADMIN_CRM', label: t.crm, icon: Users },
-    { id: 'ADMIN_INVOICES', label: t.invoices, icon: FileText },
-    { id: 'ADMIN_FINANCE', label: t.finance, icon: PieChart },
-    { id: 'ADMIN_PRODUCTS', label: t.products, icon: ShoppingBag },
-    { id: 'ADMIN_LANDING', label: t.landing, icon: LayoutTemplate },
     { id: 'ADMIN_NEWSLETTER', label: t.newsletter, icon: Mail },
     { id: 'ADMIN_GALLERY', label: t.gallery, icon: ImageIcon },
     { id: 'ADMIN_SOCIAL', label: t.social, icon: PenTool },
   ];
 
+  const modifierTextes = () => {
+    onChangeView('HOME');
+    textes?.basculerEdition(true);
+    onClose?.();
+  };
+
+  const LIEN = 'w-full flex items-center gap-3 min-h-[44px] px-3 rounded-champ text-sm font-medium transition-colors';
+
   return (
     <>
-    {open && (
-      <button
-        type="button"
-        aria-label="Fermer le menu"
-        onClick={onClose}
-        className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-      />
-    )}
-    <div className={`print:hidden w-64 h-screen bg-slate-900 border-r border-white/5 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
-      {/* Header */}
-      <div className="p-6 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift flex items-center justify-center shadow-iridescent-sm">
-           <span className="text-sm font-sans font-bold text-white">XH</span>
-        </div>
-        <div>
-          <h2 className="text-white font-serif font-bold tracking-wide">Espace Xena</h2>
-          <p className="text-xs text-slate-500 uppercase tracking-wider">Admin</p>
-        </div>
-      </div>
-
-      {/* Menu */}
-      <div className="flex-1 py-8 px-4 space-y-1 overflow-y-auto custom-scrollbar">
-        {menuItems.map((item) => {
-          const isActive = currentView === item.id;
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.id}
-              onClick={() => { onChangeView(item.id as ViewState); onClose?.(); }}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-[12px] transition-all duration-200 group ${
-                isActive
-                  ? 'bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift text-white shadow-iridescent-sm'
-                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-white'}`} />
-                <span className="font-medium text-sm">{item.label}</span>
-              </div>
-              {!!item.badge && (
-                <span className={`w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center ${isActive ? 'bg-white/25 text-white' : 'bg-cyan-400 text-slate-950'}`}>
-                  {item.badge}
-                </span>
-              )}
-              {isActive && <ChevronRight className="w-4 h-4 text-white/90" />}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Footer Actions */}
-      <div className="p-4 border-t border-white/5 space-y-2 bg-slate-900">
-        <button className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-[12px] transition-colors">
-          <Settings className="w-5 h-5" />
-          <span className="text-sm font-medium">{t.settings}</span>
-        </button>
+      {open && (
         <button
-          onClick={() => onChangeView('HOME')}
-          className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-[12px] transition-colors"
-        >
-          <ChevronRight className="w-5 h-5 rotate-180" />
-          <span className="text-sm font-medium">{t.backToSite}</span>
-        </button>
-        <button
-          onClick={onSignOut}
-          className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-[12px] transition-colors"
-        >
-          <LogOut className="w-5 h-5" />
-          <span className="text-sm font-medium">{t.signOut}</span>
-        </button>
-      </div>
-    </div>
-  </>
+          type="button"
+          aria-label={t.fermer}
+          onClick={onClose}
+          className="md:hidden fixed inset-0 z-40 bg-encre/60"
+        />
+      )}
+      <aside
+        className={`print:hidden w-64 h-screen bg-papier-2 border-r border-filet flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${
+          open ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="px-5 pt-6 pb-5 flex items-start justify-between gap-3 border-b border-filet">
+          <button type="button" onClick={() => onChangeView('HOME')} className="text-left">
+            <p className="font-serif text-[1.25rem] text-encre leading-none">{t.marque}</p>
+            <p className="kicker text-gris mt-2">{t.sous}</p>
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t.fermer}
+            className="md:hidden w-11 h-11 -mr-2 -mt-2 flex items-center justify-center text-encre"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
+          {menuItems.map((item) => {
+            const actif = currentView === item.id;
+            const Icone = item.icon;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  onChangeView(item.id);
+                  onClose?.();
+                }}
+                aria-current={actif ? 'page' : undefined}
+                className={`${LIEN} relative ${actif ? 'bg-papier text-encre' : 'text-gris hover:text-encre hover:bg-papier/60'}`}
+              >
+                {actif && <span aria-hidden="true" className="absolute left-0 top-2 bottom-2 w-[2px] bg-rose" />}
+                <Icone className={`w-4 h-4 ${actif ? 'text-rose' : ''}`} aria-hidden="true" />
+                <span className="flex-1 text-left">{item.label}</span>
+                {!!item.badge && (
+                  <span
+                    className="min-w-[1.25rem] h-5 px-1.5 rounded-pilule bg-rose text-papier text-[11px] font-semibold flex items-center justify-center tabular-nums"
+                    aria-label={`${item.badge} ${t.nonLus}`}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+          <button type="button" onClick={modifierTextes} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60 mt-3`}>
+            <PencilLine className="w-4 h-4" aria-hidden="true" />
+            <span className="flex-1 text-left">{t.textes}</span>
+          </button>
+        </nav>
+
+        <div className="p-3 border-t border-filet space-y-0.5">
+          <button type="button" onClick={() => onChangeView('HOME')} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60`}>
+            <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+            <span>{t.backToSite}</span>
+          </button>
+          <button type="button" onClick={onSignOut} className={`${LIEN} text-rose hover:bg-rose/10`}>
+            <LogOut className="w-4 h-4" aria-hidden="true" />
+            <span>{t.signOut}</span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

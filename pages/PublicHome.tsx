@@ -4,7 +4,6 @@
 // s'empilent, la dernière d'encre.
 
 import React, { useEffect, useState } from 'react';
-import type { CSSProperties } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Intro } from '../components/motion';
 import { introDejaJouee, marquerIntroTerminee } from '../lib/intro';
@@ -18,7 +17,6 @@ import Contact from './accueil/Contact';
 import { HOME_EN, STROPHE_ALLUMAGE } from './accueil/textes';
 import type {
   HomeBlock,
-  HomeContactBlock,
   HomeHeroBlock,
   HomeServicesBlock,
   HomeStatsBlock,
@@ -31,20 +29,6 @@ interface PublicHomeProps {
   lang: Language;
   onChangeView?: (view: ViewState) => void;
 }
-
-/** Le canon « Manchette » en variables CSS `--xh-*`, portée aux composants palette-agnostiques
- * du kit motion (Intro, Feuille, Atmosphere) sans toucher à index.css : elles s'appliquent en
- * cascade à tout ce qui vit sous cette racine. */
-const JETONS_MANCHETTE = {
-  '--xh-papier': '#F7F4EE',
-  '--xh-encre': '#1A1A1E',
-  '--xh-encre-douce': '#5E5850',
-  '--xh-filet': '#A8104A',
-  '--xh-lumiere': 'rgba(224, 32, 110, 0.12)',
-  '--xh-lumiere-secondaire': 'rgba(224, 32, 110, 0.07)',
-  '--xh-vignette': 'rgba(26, 26, 30, 0.55)',
-  '--xh-ombre': 'rgba(26, 26, 30, 0.28)',
-} as CSSProperties;
 
 const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) => {
   const [introVisible, setIntroVisible] = useState(() => !introDejaJouee());
@@ -62,13 +46,12 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
   const hero = blocks.find((b): b is HomeHeroBlock => b.type === 'HERO');
   const services = blocks.find((b): b is HomeServicesBlock => b.type === 'SERVICES_PREVIEW');
   const stats = blocks.find((b): b is HomeStatsBlock => b.type === 'STATS');
-  const contact = blocks.find((b): b is HomeContactBlock => b.type === 'CONTACT');
 
   const tr = (blockId: string, field: string, fallback: string): string =>
     lang === 'EN' ? HOME_EN[blockId]?.[field] ?? fallback : fallback;
 
   return (
-    <div className="relative bg-papier" style={JETONS_MANCHETTE}>
+    <div className="relative bg-papier">
       {/* AnimatePresence tient l'intro montée le temps de son `exit` (Intro.tsx) : c'est ce
           délai qui laisse framer-motion raccorder le FLIP du layoutId « xh-marque » vers la
           barre de navigation, au lieu de la faire disparaître dans le même rendu. */}
@@ -124,7 +107,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
       <Temoignage lang={lang} />
       <Projets lang={lang} onChangeView={onChangeView} />
       <Citation lang={lang} />
-      <Contact lang={lang} contact={contact} />
+      <Contact lang={lang} onChangeView={onChangeView} />
     </div>
   );
 };

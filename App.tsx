@@ -11,6 +11,8 @@ import NotFound, { cheminInconnu } from './pages/NotFound';
 import Nav from './components/Nav';
 import AdminSidebar from './components/AdminSidebar';
 import Footer from './components/Footer';
+import Editeur from './components/Editeur';
+import { TextesProvider } from './lib/textes';
 import AuthModal from './components/AuthModal';
 import PublicHome from './pages/PublicHome';
 import PublicServices from './pages/PublicServices';
@@ -20,9 +22,7 @@ const AdminProducts = lazy(() => import('./pages/AdminProducts'));
 const AdminInvoices = lazy(() => import('./pages/AdminInvoices'));
 const AdminGallery = lazy(() => import('./pages/AdminGallery'));
 const AdminFinance = lazy(() => import('./pages/AdminFinance'));
-const AdminLanding = lazy(() => import('./pages/AdminLanding'));
 const AdminNewsletter = lazy(() => import('./pages/AdminNewsletter'));
-const AdminWebsiteEditor = lazy(() => import('./pages/AdminWebsiteEditor'));
 const AdminAgenda = lazy(() => import('./pages/AdminAgenda'));
 const AdminEmail = lazy(() => import('./pages/AdminEmail'));
 const AdminMessenger = lazy(() => import('./pages/AdminMessenger'));
@@ -34,7 +34,7 @@ const PublicAPropos = lazy(() => import('./pages/PublicAPropos'));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
-    <span className="w-10 h-10 rounded-full border-2 border-white/10 border-t-cyan-400 animate-spin" />
+    <span className="w-10 h-10 rounded-pilule border-2 border-filet border-t-rose animate-spin" />
   </div>
 );
 import { ViewState, HomeBlock, Language } from './types';
@@ -153,8 +153,6 @@ const App: React.FC = () => {
         return <AdminDossiers lang={lang} />;
       case 'ADMIN_DASHBOARD':
         return <AdminDashboard lang={lang} />;
-      case 'ADMIN_WEBSITE':
-        return <AdminWebsiteEditor initialBlocks={homeBlocks} onSave={saveHomeBlocks} lang={lang} />;
       case 'ADMIN_CRM':
         return <AdminCRM lang={lang} />;
       case 'ADMIN_PRODUCTS':
@@ -165,8 +163,6 @@ const App: React.FC = () => {
         return <AdminGallery lang={lang} currentProfileImage={profileImage} onUpdateProfileImage={updateProfileImage} />;
       case 'ADMIN_FINANCE':
         return <AdminFinance lang={lang} />;
-      case 'ADMIN_LANDING':
-        return <AdminLanding lang={lang} />;
       case 'ADMIN_NEWSLETTER':
         return <AdminNewsletter lang={lang} />;
       case 'ADMIN_SOCIAL':
@@ -184,34 +180,37 @@ const App: React.FC = () => {
 
   if (isAdminView && userIsAdmin) {
     return (
-      <div className="admin-sombre min-h-screen bg-slate-950 text-slate-100 font-sans flex">
-        <AdminSidebar
-          currentView={currentView}
-          onChangeView={setCurrentView}
-          onSignOut={handleSignOut}
-          lang={lang}
-          open={menuAdminOuvert}
-          onClose={() => setMenuAdminOuvert(false)}
-        />
-        <main className="flex-1 md:ml-64 min-h-screen overflow-x-clip">
-          <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-slate-950/90 backdrop-blur-xl border-b border-white/10">
-            <button
-              type="button"
-              onClick={() => setMenuAdminOuvert(true)}
-              aria-label={lang === 'FR' ? 'Ouvrir le menu' : 'Open menu'}
-              className="w-11 h-11 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white"
-            >
-              <span className="block w-5 space-y-1"><span className="block h-0.5 bg-white" /><span className="block h-0.5 bg-white" /><span className="block h-0.5 bg-white" /></span>
-            </button>
-            <span className="font-serif font-bold text-white">Espace Xena</span>
-          </div>
-          <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
-        </main>
-      </div>
+      <TextesProvider>
+        <div className="min-h-screen bg-papier text-encre font-sans flex">
+          <AdminSidebar
+            currentView={currentView}
+            onChangeView={setCurrentView}
+            onSignOut={handleSignOut}
+            lang={lang}
+            open={menuAdminOuvert}
+            onClose={() => setMenuAdminOuvert(false)}
+          />
+          <main className="flex-1 md:ml-64 min-h-screen overflow-x-clip">
+            <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-papier/90 backdrop-blur-md border-b border-filet">
+              <button
+                type="button"
+                onClick={() => setMenuAdminOuvert(true)}
+                aria-label={lang === 'FR' ? 'Ouvrir le menu' : 'Open menu'}
+                className="w-11 h-11 flex items-center justify-center rounded-pilule border border-filet text-encre"
+              >
+                <span className="block w-5 space-y-1"><span className="block h-0.5 bg-encre" /><span className="block h-0.5 bg-encre" /><span className="block h-0.5 bg-encre" /></span>
+              </button>
+              <span className="font-serif text-encre">Xena Horizon</span>
+            </div>
+            <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
+          </main>
+        </div>
+      </TextesProvider>
     );
   }
 
   return (
+    <TextesProvider>
     <DefilementDoux>
     <div className="min-h-screen bg-papier text-encre font-sans">
       <Nav
@@ -226,6 +225,7 @@ const App: React.FC = () => {
       </main>
       <Footer onAdminLogin={requestAdmin} lang={lang} />
       <Consentement lang={lang} />
+      {userIsAdmin && <Editeur lang={lang} />}
       <AuthModal
         open={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
@@ -234,6 +234,7 @@ const App: React.FC = () => {
       />
     </div>
     </DefilementDoux>
+    </TextesProvider>
   );
 };
 

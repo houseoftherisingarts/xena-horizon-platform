@@ -4,34 +4,61 @@
 @tailwind utilities;
 
 :root {
-  --papier: #F7F4EE;
-  --papier-2: #EFEBE3;
-  --encre: #1A1A1E;
-  --encre-2: #26262B;
-  --gris: #5E5850;
-  --gris-clair: #B8B2A8;
-  --filet: #DDD7CD;
-  --filet-encre: rgba(247, 244, 238, 0.14);
-  --accent: #A8104A;          /* rose */
-  --accent-vif: #E0206E;      /* rose-vif, aplats seulement */
-  --accent-sur-encre: #F2789F; /* rose-clair */
-  --ombre-feuille: 0 -30px 80px rgba(26, 26, 30, 0.18);
-  --ombre-feuille-encre: 0 -30px 80px rgba(26, 26, 30, 0.45);
+  /* Triplets RGB lus par tailwind.config.js (rgb(var(--c-x) / alpha)). Palette « encre » : papier, encre, rose du livre. */
+  --c-papier: 247 244 238;
+  --c-papier-2: 239 235 227;
+  --c-encre: 26 26 30;
+  --c-encre-2: 38 38 43;
+  --c-gris: 94 88 80;
+  --c-gris-clair: 184 178 168;
+  --c-filet: 221 215 205;
+  --c-rose: 168 16 74;
+  --c-rose-vif: 224 32 110;
+  --c-rose-clair: 242 120 159;
+
+  --papier: rgb(var(--c-papier));
+  --papier-2: rgb(var(--c-papier-2));
+  --encre: rgb(var(--c-encre));
+  --encre-2: rgb(var(--c-encre-2));
+  --gris: rgb(var(--c-gris));
+  --gris-clair: rgb(var(--c-gris-clair));
+  --filet: rgb(var(--c-filet));
+  --filet-encre: rgb(var(--c-papier) / 0.14);
+  --accent: rgb(var(--c-rose));              /* rose */
+  --accent-vif: rgb(var(--c-rose-vif));      /* rose-vif, aplats seulement */
+  --accent-sur-encre: rgb(var(--c-rose-clair)); /* rose-clair */
+  --ombre-feuille: 0 -30px 80px rgb(var(--c-encre) / 0.18);
+  --ombre-feuille-encre: 0 -30px 80px rgb(var(--c-encre) / 0.45);
   --ease-maison: cubic-bezier(0.16, 0.8, 0.24, 1);
   --ease-sortie: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --nav: 4.5rem;
-  /* Variante bleue, dormante : --accent: #0B6BA8; --accent-sur-encre: #7CC6F5; */
 
   /* Le kit motion (components/motion) est palette-agnostique et lit ces variables sur toutes les pages. */
   --xh-papier: var(--papier);
   --xh-encre: var(--encre);
   --xh-encre-douce: var(--gris);
   --xh-filet: var(--accent);
-  --xh-lumiere: rgba(224, 32, 110, 0.12);
-  --xh-lumiere-secondaire: rgba(224, 32, 110, 0.07);
-  --xh-vignette: rgba(26, 26, 30, 0.55);
-  --xh-ombre: rgba(26, 26, 30, 0.28);
+  --xh-lumiere: rgb(var(--c-rose-vif) / 0.12);
+  --xh-lumiere-secondaire: rgb(var(--c-rose-vif) / 0.07);
+  --xh-vignette: rgb(var(--c-encre) / 0.55);
+  --xh-ombre: rgb(var(--c-encre) / 0.28);
+}
+
+/* Palette « ciel » : les couleurs du site actuel de Laurie (blanc, noir #181818, bleu ciel #38B6FF de son
+   logo). Le bleu ciel tel quel ne se lit pas en texte (2,3:1 sur blanc) : il sert aux aplats et aux filets,
+   et un azur plus soutenu (#0876B5, 4,9:1) porte les kickers et les liens. Bascule : components/BasculePalette.tsx. */
+:root[data-skin='ciel'] {
+  --c-papier: 255 255 255;
+  --c-papier-2: 241 247 252;
+  --c-encre: 24 24 24;
+  --c-encre-2: 38 38 38;
+  --c-gris: 90 101 112;
+  --c-gris-clair: 174 184 194;
+  --c-filet: 220 229 236;
+  --c-rose: 8 118 181;
+  --c-rose-vif: 56 182 255;
+  --c-rose-clair: 127 208 255;
 }
 
 /* Le sticky des feuilles casse avec overflow-x: hidden. Toujours clip. */
@@ -76,7 +103,7 @@ button:focus-visible, a:focus-visible { outline-offset: 4px; }
 input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(168, 16, 74, 0.35);
+  box-shadow: 0 0 0 3px rgb(var(--c-rose) / 0.35);
 }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -147,3 +174,7 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
 .admin-sombre { color-scheme: dark; }
 .admin-sombre p { max-width: none; }
 .admin-sombre h1, .admin-sombre h2, .admin-sombre h3 { font-weight: 600; }
+
+/* Mode d'édition des textes (components/Editeur.tsx) : chaque texte déclaré porte un liseré et se clique. */
+.mode-edition [data-tx] { outline: 1px dashed rgb(var(--c-rose) / 0.55); outline-offset: 4px; cursor: text; border-radius: 2px; }
+.mode-edition [data-tx]:hover, .mode-edition [data-tx-actif] { outline: 2px solid rgb(var(--c-rose)); background-color: rgb(var(--c-rose-vif) / 0.06); }

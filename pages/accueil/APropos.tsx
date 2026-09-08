@@ -6,6 +6,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Feuille, Parallax, Reveal, TexteRevele } from '../../components/motion';
 import { A_PROPOS_ACCUEIL } from './textes';
+import { useTextes } from '../../lib/textes';
 import type { Language, ViewState } from '../../types';
 
 export interface AProposProps {

@@ -4,21 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        papier: '#F7F4EE',
-        'papier-2': '#EFEBE3',
-        encre: '#1A1A1E',
-        'encre-2': '#26262B',
-        gris: '#5E5850',
-        'gris-clair': '#B8B2A8',
-        filet: '#DDD7CD',
-        'filet-encre': 'rgba(247, 244, 238, 0.14)',
-        rose: '#A8104A',
-        'rose-vif': '#E0206E',
-        'rose-clair': '#F2789F',
-        // Variante bleue, dormante : ne s'active que si Laurie tient à son bleu.
-        // bleu: '#0B6BA8', 'bleu-clair': '#7CC6F5'
-        // Tokens v1 conservés pour le back-office (sombre) tant qu'il n'est pas rhabillé.
-        xena: { dark: '#0f172a', deep: '#020617', cyan: '#22d3ee', emerald: '#34d399', blueAccent: '#3b82f6', accent: '#22d3ee', glass: 'rgba(255, 255, 255, 0.08)', glassBorder: 'rgba(255, 255, 255, 0.18)' },
+        // Chaque couleur lit un triplet RGB posé sur :root (index.css) : la bascule de palette
+        // (data-skin="ciel", couleurs de Laurie) change les triplets, jamais les classes.
+        papier: 'rgb(var(--c-papier) / <alpha-value>)',
+        'papier-2': 'rgb(var(--c-papier-2) / <alpha-value>)',
+        encre: 'rgb(var(--c-encre) / <alpha-value>)',
+        'encre-2': 'rgb(var(--c-encre-2) / <alpha-value>)',
+        gris: 'rgb(var(--c-gris) / <alpha-value>)',
+        'gris-clair': 'rgb(var(--c-gris-clair) / <alpha-value>)',
+        filet: 'rgb(var(--c-filet) / <alpha-value>)',
+        'filet-encre': 'rgb(var(--c-papier) / 0.14)',
+        // « rose » est le nom du rôle accent : en palette ciel, ce même jeton porte le bleu de Laurie.
+        rose: 'rgb(var(--c-rose) / <alpha-value>)',
+        'rose-vif': 'rgb(var(--c-rose-vif) / <alpha-value>)',
+        'rose-clair': 'rgb(var(--c-rose-clair) / <alpha-value>)',
       },
       backgroundImage: {
         iridescent: 'linear-gradient(135deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%)',
@@ -63,10 +62,10 @@ export default {
       boxShadow: {
         iridescent: '0 10px 40px -10px rgba(34,211,238,0.45), 0 6px 20px -6px rgba(52,211,153,0.35)',
         'iridescent-sm': '0 4px 18px -6px rgba(34,211,238,0.4)',
-        feuille: '0 -30px 80px rgba(26, 26, 30, 0.18)',
-        'feuille-encre': '0 -30px 80px rgba(26, 26, 30, 0.45)',
-        panneau: '0 24px 60px -30px rgba(26, 26, 30, 0.25)',
-        focus: '0 0 0 3px rgba(168, 16, 74, 0.35)',
+        feuille: '0 -30px 80px rgb(var(--c-encre) / 0.18)',
+        'feuille-encre': '0 -30px 80px rgb(var(--c-encre) / 0.45)',
+        panneau: '0 24px 60px -30px rgb(var(--c-encre) / 0.25)',
+        focus: '0 0 0 3px rgb(var(--c-rose) / 0.35)',
       },
       transitionTimingFunction: {
         maison: 'cubic-bezier(0.16, 0.8, 0.24, 1)',

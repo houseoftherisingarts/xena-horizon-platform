@@ -197,6 +197,38 @@ async function main() {
     )
   );
 
+  // 10. Lead d'une personne connectée qui porte son propre uid (ok) et lead qui usurpe l'uid d'un autre (refus)
+  await verifie(
+    'lead connecté avec son propre uid (ok)',
+    assertSucceeds(
+      addDoc(collection(dbA, 'leads'), {
+        name: 'Personne A',
+        email: 'a@example.com',
+        message: 'bonjour',
+        source: 'public-home-contact',
+        read: false,
+        archived: false,
+        uid: UID_A,
+        createdAt: serverTimestamp(),
+      })
+    )
+  );
+  await verifie(
+    "lead qui porte l'uid d'un autre (refus attendu)",
+    assertFails(
+      addDoc(collection(dbA, 'leads'), {
+        name: 'Personne A',
+        email: 'a@example.com',
+        message: 'bonjour',
+        source: 'public-home-contact',
+        read: false,
+        archived: false,
+        uid: UID_B,
+        createdAt: serverTimestamp(),
+      })
+    )
+  );
+
   await testEnv.cleanup();
 
   console.log(resultats.join('\n'));

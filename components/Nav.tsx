@@ -4,6 +4,8 @@ import { Lock, Menu, X } from 'lucide-react';
 import { ViewState, Language } from '../types';
 import { useIntroTerminee } from '../lib/intro';
 import { Portail, useLenis } from './motion';
+import BasculePalette from './BasculePalette';
+import { useTextes } from '../lib/textes';
 
 interface NavProps {
   currentView: ViewState;
@@ -14,6 +16,36 @@ interface NavProps {
 }
 
 const MARQUE = 'Xena Horizon';
+
+const TEXTES = {
+  FR: {
+    home: 'Accueil',
+    services: 'Services',
+    projets: 'Projets',
+    about: 'À propos',
+    contact: 'Contact',
+    admin: 'Espace admin',
+    mySpace: 'Mon espace',
+    appointment: 'Prendre rendez-vous',
+    byline: 'par Laurie Belhumeur',
+    ouvrirMenu: 'Ouvrir le menu',
+    fermerMenu: 'Fermer le menu',
+  },
+  EN: {
+    home: 'Home',
+    services: 'Services',
+    projets: 'Projects',
+    about: 'About',
+    contact: 'Contact',
+    admin: 'Admin area',
+    mySpace: 'My space',
+    appointment: 'Book a call',
+    byline: 'by Laurie Belhumeur',
+    ouvrirMenu: 'Open menu',
+    fermerMenu: 'Close menu',
+  },
+};
+
 const EASE_RIDEAU = [0.22, 1, 0.36, 1] as const;
 const EASE_VOYAGE = [0.16, 0.8, 0.24, 1] as const;
 
@@ -75,34 +107,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
     return () => window.removeEventListener('keydown', onKey);
   }, [isOpen]);
 
-  const t = {
-    FR: {
-      home: 'Accueil',
-      services: 'Services',
-      projets: 'Projets',
-      about: 'À propos',
-      contact: 'Contact',
-      admin: 'Espace admin',
-      mySpace: 'Mon espace',
-      appointment: 'Prendre rendez-vous',
-      byline: 'par Laurie Belhumeur',
-      ouvrirMenu: 'Ouvrir le menu',
-      fermerMenu: 'Fermer le menu',
-    },
-    EN: {
-      home: 'Home',
-      services: 'Services',
-      projets: 'Projects',
-      about: 'About',
-      contact: 'Contact',
-      admin: 'Admin area',
-      mySpace: 'My space',
-      appointment: 'Book a call',
-      byline: 'by Laurie Belhumeur',
-      ouvrirMenu: 'Open menu',
-      fermerMenu: 'Close menu',
-    },
-  }[lang];
+  const t = useTextes('nav', TEXTES, lang);
 
   const navLinks: { label: string; view: ViewState; sectionId?: string }[] = [
     { label: t.home, view: 'HOME' },
@@ -147,6 +152,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
 
   return (
     <nav
+      data-tx-scope="nav"
       className={`fixed top-0 left-0 right-0 z-40 h-nav px-gut flex items-center justify-between transition-colors duration-300 ${
         scrolled ? 'bg-papier/85 backdrop-blur-md border-b border-filet' : 'bg-transparent'
       }`}
@@ -194,6 +200,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
       </div>
 
       <div className="hidden md:flex items-center gap-4">
+        <BasculePalette lang={lang} />
         {bascule}
         <button
           type="button"
@@ -302,7 +309,10 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
                 >
                   <Lock className="w-3 h-3" /> {t.admin}
                 </button>
-                <div className="flex items-center justify-center pt-2">{bascule}</div>
+                <div className="flex items-center justify-center gap-6 pt-2">
+                  <BasculePalette lang={lang} />
+                  {bascule}
+                </div>
               </div>
             </motion.div>
           )}
