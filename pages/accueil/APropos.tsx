@@ -99,12 +99,12 @@ const APropos: React.FC<AProposProps> = ({
               <p className="kicker mt-2 text-gris">{kicker1}</p>
             </div>
             <div>
-              <p className="text-h3 font-serif text-encre">{val2}</p>
-              <p className="kicker mt-2 text-gris">{label2}</p>
+              <p className="text-h3 font-serif text-encre">{stat2Value}</p>
+              <p className="kicker mt-2 text-gris">{stat2Label}</p>
             </div>
             <div>
-              <p className="text-h3 font-serif text-encre">{val3}</p>
-              <p className="kicker mt-2 text-gris">{label3}</p>
+              <p className="text-h3 font-serif text-encre">{stat3Value}</p>
+              <p className="kicker mt-2 text-gris">{stat3Label}</p>
             </div>
           </div>
         </div>
