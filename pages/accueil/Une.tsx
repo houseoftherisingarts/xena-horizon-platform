@@ -40,6 +40,7 @@ const Une: React.FC<UneProps> = ({
   opaciteTitre,
   decalageTitre,
   opaciteSousTitre,
+  hauteurPhoto,
 }) => {
   const allerAuContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
