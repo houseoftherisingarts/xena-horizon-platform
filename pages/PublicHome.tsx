@@ -118,6 +118,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
         tagline={t.tagline}
         headline={t.headline}
         subheadline={t.subheadline}
+        pourLes={t.pourLes}
         ctaText={t.ctaText}
         imageUrl={imageUrl}
         strophe={t.strophe}
