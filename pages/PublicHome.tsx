@@ -81,6 +81,8 @@ const TEXTES = {
 
 const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) => {
   const t = useTextes('accueil', TEXTES, lang);
+  const sections = useSections();
+  const on = (id: string) => sectionActive(sections, id);
   const [introVisible, setIntroVisible] = useState(() => !introDejaJouee());
 
   // Rien à faire défiler derrière le voile : le défilement se rouvre dès que l'intro cède la place.
