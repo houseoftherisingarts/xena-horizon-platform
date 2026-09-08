@@ -80,7 +80,25 @@ const App: React.FC = () => {
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
-  const [lang, setLang] = useState<Language>('FR');
+  // La langue choisie survit au rechargement (clé xena.lang); français par défaut.
+  const [lang, setLangEtat] = useState<Language>(() => {
+    try {
+      return window.localStorage.getItem('xena.lang') === 'EN' ? 'EN' : 'FR';
+    } catch {
+      return 'FR';
+    }
+  });
+  const setLang = (l: Language) => {
+    setLangEtat(l);
+    try {
+      window.localStorage.setItem('xena.lang', l);
+    } catch {
+      // stockage bloqué : la langue tient pour la session
+    }
+  };
+  useEffect(() => {
+    document.documentElement.lang = lang === 'EN' ? 'en' : 'fr';
+  }, [lang]);
 
   const { data: homeDoc } = useDocument<{ blocks: HomeBlock[] }>('settings/homeBlocks');
   const homeBlocks: HomeBlock[] = homeDoc?.blocks ?? BLOCS_ACCUEIL;
