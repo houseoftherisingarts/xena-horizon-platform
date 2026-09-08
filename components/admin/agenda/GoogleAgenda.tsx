@@ -185,7 +185,3 @@ const GoogleAgenda: React.FC<Props> = ({ lang }) => {
 };
 
 export default GoogleAgenda;
-
-// Icône de secours (RefreshCw) importée mais non utilisée directement : réservée à un futur bouton
-// « Synchroniser maintenant » quand Blaze sera actif. ponytail: retirer si ça reste inutilisé longtemps.
-void RefreshCw;
