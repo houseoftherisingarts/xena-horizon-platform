@@ -3,12 +3,18 @@ import { Check } from 'lucide-react';
 import { indexEtape, EtapeDefEn } from '../../lib/dossier';
 import { Dossier, DossierConfig, EtapeDef, Language } from '../../types';
 import { Reveal } from '../motion';
+import { useTextes } from '../../lib/textes';
 
 interface ParcoursProps {
   dossier: Dossier;
   config: DossierConfig;
   lang: Language;
 }
+
+const TEXTES = {
+  FR: { parcoursTitre: 'Ton parcours', parcoursSous: 'Le chemin entre le premier contact et le suivi.' },
+  EN: { parcoursTitre: 'Your journey', parcoursSous: 'The road between the first contact and the follow-up.' },
+};
 
 /** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
 const titreEtape = (etape: EtapeDef, lang: Language): string => {
