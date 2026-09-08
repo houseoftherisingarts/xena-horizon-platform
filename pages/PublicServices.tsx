@@ -267,6 +267,11 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
               {book} <ArrowRight className="w-4 h-4" />
             </button>
           </Reveal>
+          {paiementOk && (
+            <Reveal className="mt-6 inline-block rounded-champ border border-filet bg-papier-2 px-5 py-3 text-petit text-encre">
+              {t.merciTexte}
+            </Reveal>
+          )}
         </div>
         <Reveal delay={0.2} className="lg:col-span-5 lg:col-start-9">
           <p className="kicker text-rose mb-4">{t.pricesLabel}</p>

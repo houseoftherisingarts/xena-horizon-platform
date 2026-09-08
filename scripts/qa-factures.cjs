@@ -29,7 +29,7 @@ async function capturerFacturePublique(browser) {
       await page.goto(`${BASE}/facture/exemple`, { waitUntil: 'load', timeout: 60000 });
       await poserPalette(page, combo.skin, combo.nuit);
       await page.reload({ waitUntil: 'load', timeout: 60000 });
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(900);
       const suffixe = combo.nuit ? 'nuit' : combo.skin;
       await page.screenshot({ path: `${OUT}/facture-publique-${suffixe}-${nom}.png`, fullPage: true });
       await page.close();
@@ -49,21 +49,21 @@ async function capturerAdmin(browser) {
   for (const { nom, width, height } of TAILLES) {
     const page = await browser.newPage({ viewport: { width, height } });
     await page.goto(`${BASE}/admin/factures`, { waitUntil: 'load', timeout: 60000 });
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1200);
     await page.screenshot({ path: `${OUT}/admin-liste-${nom}.png`, fullPage: true });
 
     // Nouveau document : remplit deux lignes pour peupler l'aperçu de vraies données.
     const boutonNouveau = page.getByRole('button', { name: /nouveau document|new document/i });
     if (await boutonNouveau.count()) {
       await boutonNouveau.first().click();
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(600);
       const descriptions = page.locator('input[placeholder="Description"], input[placeholder="Description"]');
       const inputs = await page.locator('input[type="text"]').all();
       if (inputs[0]) await inputs[0].fill('Accompagnement stratégique, forfait mensuel');
       const nums = await page.locator('input[type="number"]').all();
       if (nums[0]) await nums[0].fill('1');
       if (nums[1]) await nums[1].fill('850');
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(600);
       await page.screenshot({ path: `${OUT}/admin-editeur-apercu-${nom}.png`, fullPage: true });
     }
     await page.close();
