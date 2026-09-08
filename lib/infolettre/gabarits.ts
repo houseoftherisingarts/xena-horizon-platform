@@ -44,7 +44,7 @@ const GABARIT_NOUVELLE: Gabarit = {
   construire: (l): ContenuGabarit => {
     const fr = l === 'fr';
     const blocs: NewsletterBlock[] = [
-      { type: 'image', content: { url: img('logo-laurie.png'), alt: 'Xena Horizon', href: BRAND.site } },
+      { type: 'image', content: { url: img('logo-laurie.png'), alt: 'Xena Horizon', href: BRAND.site, taille: 'logo' } },
       { type: 'heading', content: { level: 1, align: 'left', text: fr ? 'Quoi de neuf chez Xena Horizon' : "What's new at Xena Horizon" } },
       { type: 'paragraph', content: { text: fr
         ? 'Voici votre premier paragraphe : remplacez-le par la nouvelle que vous voulez partager avec votre communauté.'
@@ -69,7 +69,7 @@ const GABARIT_RENDEZVOUS: Gabarit = {
   construire: (l): ContenuGabarit => {
     const fr = l === 'fr';
     const blocs: NewsletterBlock[] = [
-      { type: 'image', content: { url: img('logo-laurie.png'), alt: 'Xena Horizon', href: BRAND.site } },
+      { type: 'image', content: { url: img('logo-laurie.png'), alt: 'Xena Horizon', href: BRAND.site, taille: 'logo' } },
       { type: 'heading', content: { level: 1, align: 'left', text: fr ? 'Réservons un moment' : "Let's book a moment" } },
       { type: 'paragraph', content: { text: fr
         ? 'Un mot d’invitation : dites ici pourquoi ce moment vaut la peine d’être pris, puis remplacez ce texte par le vôtre.'
@@ -104,7 +104,7 @@ function gabaritBalado(episode: EpisodeBalado, couverture: string): Gabarit {
     construire: (l): ContenuGabarit => {
       const fr = l === 'fr';
       const blocs: NewsletterBlock[] = [
-        { type: 'image', content: { url: img('logo-laurie.png'), alt: 'Xena Horizon', href: BRAND.site } },
+        { type: 'image', content: { url: img('logo-laurie.png'), alt: 'Xena Horizon', href: BRAND.site, taille: 'logo' } },
         { type: 'heading', content: { level: 1, align: 'left', text: fr ? 'Un nouvel épisode à écouter' : 'A new episode to listen to' } },
         { type: 'image', content: { url: couverture, alt: episode.titre, caption: episode.titre } },
         { type: 'paragraph', content: { text: fr
