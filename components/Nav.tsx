@@ -6,6 +6,7 @@ import { useIntroTerminee } from '../lib/intro';
 import { Portail, useLenis } from './motion';
 import BasculePalette from './BasculePalette';
 import { useTextes } from '../lib/textes';
+import { allerAuRendezVous } from '../lib/rendezvous';
 
 interface NavProps {
   currentView: ViewState;
@@ -220,8 +221,11 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
         </button>
         <button
           type="button"
-          onClick={() => handleNavClick('HOME', 'contact')}
-          className="min-h-[44px] px-6 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2 transition-colors"
+          onClick={() => {
+            setIsOpen(false);
+            allerAuRendezVous();
+          }}
+          className="min-h-[44px] px-6 rounded-pilule bg-bouton text-sur-bouton text-sm font-medium hover:bg-bouton-2 transition-colors"
         >
           {t.appointment}
         </button>
@@ -293,8 +297,11 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
               <div className="mt-auto flex flex-col items-stretch gap-3 pt-8">
                 <button
                   type="button"
-                  onClick={() => handleNavClick('HOME', 'contact')}
-                  className="min-h-[44px] px-6 rounded-pilule bg-encre text-papier text-sm font-medium"
+                  onClick={() => {
+            setIsOpen(false);
+            allerAuRendezVous();
+          }}
+                  className="min-h-[44px] px-6 rounded-pilule bg-bouton text-sur-bouton text-sm font-medium"
                 >
                   {t.appointment}
                 </button>

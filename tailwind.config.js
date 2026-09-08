@@ -18,6 +18,10 @@ export default {
         rose: 'rgb(var(--c-rose) / <alpha-value>)',
         'rose-vif': 'rgb(var(--c-rose-vif) / <alpha-value>)',
         'rose-clair': 'rgb(var(--c-rose-clair) / <alpha-value>)',
+        trait: 'rgb(var(--c-trait) / <alpha-value>)',
+        bouton: 'rgb(var(--c-bouton) / <alpha-value>)',
+        'bouton-2': 'rgb(var(--c-bouton-2) / <alpha-value>)',
+        'sur-bouton': 'rgb(var(--c-sur-bouton) / <alpha-value>)',
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', '"Times New Roman"', 'serif'],

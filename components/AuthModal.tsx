@@ -192,7 +192,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onAdminSignIn, lan
             <button
               type="submit"
               disabled={busy}
-              className="w-full justify-center min-h-[44px] px-6 rounded-pilule bg-encre text-papier font-medium hover:bg-encre-2 transition-colors flex items-center gap-2 disabled:opacity-50"
+              className="w-full justify-center min-h-[44px] px-6 rounded-pilule bg-bouton text-sur-bouton font-medium hover:bg-bouton-2 transition-colors flex items-center gap-2 disabled:opacity-50"
             >
               <LogIn className="w-4 h-4" />
               {mode === 'signup' ? t.signup : t.signin}

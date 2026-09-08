@@ -109,7 +109,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
               </p>
               <p
                 className={`rounded-champ px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
-                  m.de === 'client' ? 'bg-papier-2 text-encre rounded-br-[4px]' : 'bg-encre text-papier rounded-bl-[4px]'
+                  m.de === 'client' ? 'bg-papier-2 text-encre rounded-br-[4px]' : 'bg-bouton text-sur-bouton rounded-bl-[4px]'
                 }`}
               >
                 {m.texte}
@@ -142,7 +142,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
           type="submit"
           disabled={busy || !texte.trim()}
           aria-label={t.envoyer}
-          className="w-11 h-11 rounded-pilule bg-encre flex items-center justify-center text-papier flex-shrink-0 disabled:opacity-50 hover:bg-encre-2 transition-colors"
+          className="w-11 h-11 rounded-pilule bg-encre flex items-center justify-center text-papier flex-shrink-0 disabled:opacity-50 hover:bg-bouton-2 transition-colors"
         >
           <Send className="w-4 h-4" />
         </button>

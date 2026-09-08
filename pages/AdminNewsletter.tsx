@@ -464,7 +464,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                type="button"
                onClick={() => setTab('composer')}
                className={`inline-flex items-center gap-2 min-h-[36px] rounded-pilule px-4 text-xs font-semibold transition-colors ${
-                 tab === 'composer' ? 'bg-encre text-papier' : 'border border-filet text-gris hover:text-encre'
+                 tab === 'composer' ? 'bg-bouton text-sur-bouton' : 'border border-filet text-gris hover:text-encre'
                }`}
             >
                <FileText className="w-3.5 h-3.5" aria-hidden="true" /> {t.composer}
@@ -473,7 +473,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                type="button"
                onClick={() => setTab('subscribers')}
                className={`inline-flex items-center gap-2 min-h-[36px] rounded-pilule px-4 text-xs font-semibold transition-colors ${
-                 tab === 'subscribers' ? 'bg-encre text-papier' : 'border border-filet text-gris hover:text-encre'
+                 tab === 'subscribers' ? 'bg-bouton text-sur-bouton' : 'border border-filet text-gris hover:text-encre'
                }`}
             >
                <Users className="w-3.5 h-3.5" aria-hidden="true" /> {t.subscribers}

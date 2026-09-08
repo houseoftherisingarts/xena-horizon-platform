@@ -43,7 +43,7 @@ const Parcours: React.FC<ParcoursProps> = ({ dossier, config, lang }) => {
           return (
             <Reveal key={etape.id} as="li" delay={0.06 * i} y={16} className="relative pl-14 pb-10 last:pb-0">
               {i < config.etapes.length - 1 && (
-                <span aria-hidden="true" className={`absolute left-[19px] top-10 bottom-[-8px] w-px ${faite ? 'bg-rose' : 'bg-filet'}`} />
+                <span aria-hidden="true" className={`absolute left-[19px] top-10 bottom-[-8px] w-px ${faite ? 'bg-trait' : 'bg-filet'}`} />
               )}
               <span
                 aria-hidden="true"

@@ -140,7 +140,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
       </Feuille>
 
       {/* --- LIVRE : la seule feuille d'encre --- */}
-      <Feuille z={2} className="relative bg-encre text-papier px-gut py-feuille overflow-hidden">
+      <Feuille z={2} className="relative bg-bouton text-sur-bouton px-gut py-feuille overflow-hidden">
         <Atmosphere light="82% 10%" strength={0.7} />
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10 items-start">
           <div className="lg:col-span-6">

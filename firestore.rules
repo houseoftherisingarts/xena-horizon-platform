@@ -36,6 +36,9 @@ service cloud.firestore {
              && texteBorne(data, 'ville', 80)
              && texteBorne(data, 'discipline', 80)
              && texteBorne(data, 'photoURL', 500)
+             && texteBorne(data, 'banniereURL', 500)
+             && texteBorne(data, 'bio', 1000)
+             && (!('liens' in data) || (data.liens is map && data.liens.keys().size() <= 6))
              && projetValide(data);
     }
 
@@ -58,7 +61,7 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow create: if request.resource.data.email is string
                     && request.resource.data.email.size() < 200
-                    && request.resource.data.keys().hasOnly(['email','name','tags','status','source','createdAt']);
+                    && request.resource.data.keys().hasOnly(['email','name','tags','status','source','lang','createdAt']);
       allow update, delete: if isAdmin();
     }
 
@@ -77,14 +80,7 @@ service cloud.firestore {
     match /documents/{docId}       { allow read, write: if isAdmin(); }
     match /gallery/{imageId}       { allow read, write: if isAdmin(); }
     match /newsletters/{nlId}      { allow read, write: if isAdmin(); }
-
-    // Conversations: admin can read all; participants can read+write their own thread
-    match /conversations/{convId} {
-      allow read, write: if isAdmin() || isOwner(convId);
-      match /messages/{msgId} {
-        allow read, write: if isAdmin() || isOwner(convId);
-      }
-    }
+    match /newsletters/{nlId}/{document=**} { allow read, write: if isAdmin(); }
 
     // Catalogue des pièces et des étapes du dossier (settings/dossier) : couvert par /settings ci-dessus.
 
@@ -104,13 +100,13 @@ service cloud.firestore {
                     && request.resource.data.archive == false
                     && request.resource.data.pieces is map
                     && dossierBornesOK(request.resource.data)
-                    && request.resource.data.keys().hasOnly(['uid','courriel','nom','telephone','ville','photoURL','profil','discipline','projet','etape','pieces','createdAt','updatedAt','derniereActiviteClient','derniereActiviteAdmin','nonLusAdmin','nonLusClient','archive','tags']);
+                    && request.resource.data.keys().hasOnly(['uid','courriel','nom','telephone','ville','photoURL','banniereURL','bio','liens','profil','discipline','projet','etape','pieces','createdAt','updatedAt','derniereActiviteClient','derniereActiviteAdmin','nonLusAdmin','nonLusClient','archive','tags']);
       // La personne modifie son profil, son projet et ses pièces; l'étape, l'archivage et la revue (jugement de Laurie) restent hors de sa portée.
       allow update: if isAdmin()
                     || (isOwner(uid)
                         && request.resource.data.uid == uid
                         && request.resource.data.diff(resource.data).affectedKeys()
-                             .hasOnly(['nom','telephone','ville','photoURL','profil','discipline','projet','pieces','updatedAt','derniereActiviteClient','nonLusAdmin','nonLusClient'])
+                             .hasOnly(['nom','telephone','ville','photoURL','banniereURL','bio','liens','profil','discipline','projet','pieces','updatedAt','derniereActiviteClient','nonLusAdmin','nonLusClient'])
                         && request.resource.data.pieces is map
                         && request.resource.data.nom is string
                         && request.resource.data.nom.size() < 120
@@ -139,6 +135,47 @@ service cloud.firestore {
       match /notes/{noteId} {
         allow read, write: if isAdmin();
       }
+    }
+
+
+    // Rendez-vous : la personne connectée demande un créneau dans son propre nom, Laurie confirme, annule ou complète.
+    function rdvValide(data) {
+      return data.nom is string && data.nom.size() < 120
+             && data.courriel is string && data.courriel.size() < 200
+             && data.debut is timestamp && data.fin is timestamp
+             && data.fin > data.debut
+             && data.duree is number && data.duree >= 15 && data.duree <= 240
+             && data.salle is string && data.salle.size() < 80
+             && (!('note' in data) || (data.note is string && data.note.size() <= 1000));
+    }
+    match /rendezvous/{rdvId} {
+      allow read: if isAdmin() || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow create: if isAdmin()
+                    || (isOwner(request.resource.data.uid)
+                        && request.resource.data.statut == 'demande'
+                        && request.resource.data.creePar == 'client'
+                        && request.resource.data.debut > request.time
+                        && rdvValide(request.resource.data)
+                        && request.resource.data.keys().hasOnly(['uid','nom','courriel','debut','fin','duree','statut','salle','note','creePar','createdAt','updatedAt']));
+      // La personne ne peut qu'annuler le sien; le reste appartient à Laurie.
+      allow update: if isAdmin()
+                    || (isOwner(resource.data.uid)
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['statut','updatedAt'])
+                        && request.resource.data.statut == 'annule');
+      allow delete: if isAdmin();
+    }
+    // Miroir sans donnée personnelle : les personnes connectées voient les créneaux déjà pris.
+    match /occupations/{rdvId} {
+      allow read: if request.auth != null;
+      allow create: if isAdmin()
+                    || (request.auth != null
+                        && request.resource.data.debut is timestamp
+                        && request.resource.data.fin is timestamp
+                        && request.resource.data.fin > request.resource.data.debut
+                        && request.resource.data.keys().hasOnly(['debut','fin']));
+      allow delete: if isAdmin()
+                    || (request.auth != null && get(/databases/$(database)/documents/rendezvous/$(rdvId)).data.uid == request.auth.uid);
+      allow update: if isAdmin();
     }
 
     // Ressources partagées avec les personnes accompagnées (guides, gabarits).

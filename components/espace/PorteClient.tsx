@@ -13,6 +13,7 @@ import { useDossierConfig, EtapeDefEn } from '../../lib/dossier';
 import { Reveal } from '../motion';
 import { EtapeDef, Language } from '../../types';
 import { useTextes } from '../../lib/textes';
+import { intentionRendezVous } from '../../lib/rendezvous';
 
 /** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
 const titreEtape = (etape: EtapeDef, lang: Language): string => {
@@ -50,6 +51,8 @@ const TEXTES = {
     forgotNeedsEmail: "Écris d'abord ton courriel dans le champ ci-dessus.",
     errInconnue: "La connexion n'a pas fonctionné. Réessaie.",
     confidentialite: 'Ce que tu déposes ici vit dans un dossier privé : Laurie Belhumeur, seule, peut le lire.',
+    rdvKicker: 'Prendre rendez-vous',
+    rdvTexte: 'Crée ton compte en une minute : tu choisis ensuite ton moment dans l\'agenda de Laurie, et la rencontre se fait en vidéo, ici même.',
   },
   EN: {
     hLeft: 'A clear head\nis waiting.',
@@ -70,6 +73,8 @@ const TEXTES = {
     forgotNeedsEmail: 'Write your email in the field above first.',
     errInconnue: 'Sign in failed. Try again.',
     confidentialite: 'What you upload here lives in a private file: Laurie Belhumeur, and only her, can read it.',
+    rdvKicker: 'Book a call',
+    rdvTexte: 'Create your account in a minute: then pick your time in Laurie\'s calendar, and the call happens in video, right here.',
   },
 };
 
@@ -100,7 +105,9 @@ const messageErreur = (err: unknown, t: { errInconnue: string }): string => {
 
 const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
   const config = useDossierConfig();
-  const [mode, setMode] = useState<Mode>('signin');
+  // « Prendre rendez-vous » depuis le site : la porte s'ouvre sur la création du compte, avec le mot qui explique.
+  const [rdv] = useState<boolean>(() => typeof window !== 'undefined' && intentionRendezVous());
+  const [mode, setMode] = useState<Mode>(rdv ? 'signup' : 'signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -187,7 +194,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
             {config.etapes.map((etape, i) => (
               <Reveal key={etape.id} as="li" delay={0.1 * i} className="relative pl-12 pb-8 last:pb-0">
                 {i < config.etapes.length - 1 && (
-                  <span aria-hidden="true" className="absolute left-[15px] top-9 bottom-[-4px] w-px bg-rose/30" />
+                  <span aria-hidden="true" className="absolute left-[15px] top-9 bottom-[-4px] w-px bg-trait/30" />
                 )}
                 <span
                   aria-hidden="true"
@@ -205,6 +212,12 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
         {/* Colonne droite : la porte */}
         <Reveal delay={0.25} y={24} duree={0.9} className="lg:col-span-6 lg:col-start-8">
           <div className="bg-papier-2 border border-filet rounded-champ shadow-panneau p-8 md:p-10">
+            {rdv && (
+              <div className="mb-6 rounded-champ border border-rose/30 bg-rose/5 p-4">
+                <p className="kicker text-rose">{t.rdvKicker}</p>
+                <p className="mt-2 text-petit text-encre">{t.rdvTexte}</p>
+              </div>
+            )}
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 rounded-pilule bg-encre flex items-center justify-center flex-shrink-0">
                 <Lock className="w-5 h-5 text-papier" />
@@ -307,7 +320,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
               <button
                 type="submit"
                 disabled={busy}
-                className="w-full justify-center min-h-[44px] px-6 rounded-pilule bg-encre text-papier font-medium hover:bg-encre-2 transition-colors flex items-center gap-2 disabled:opacity-50"
+                className="w-full justify-center min-h-[44px] px-6 rounded-pilule bg-bouton text-sur-bouton font-medium hover:bg-bouton-2 transition-colors flex items-center gap-2 disabled:opacity-50"
               >
                 {mode === 'signup' ? t.btnSignup : t.btnSignin}
                 <ArrowRight className="w-4 h-4" />

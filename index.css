@@ -4,17 +4,24 @@
 @tailwind utilities;
 
 :root {
-  /* Triplets RGB lus par tailwind.config.js (rgb(var(--c-x) / alpha)). Palette « encre » : papier, encre, rose du livre. */
-  --c-papier: 247 244 238;
-  --c-papier-2: 239 235 227;
-  --c-encre: 26 26 30;
-  --c-encre-2: 38 38 43;
-  --c-gris: 94 88 80;
-  --c-gris-clair: 184 178 168;
-  --c-filet: 221 215 205;
-  --c-rose: 168 16 74;
-  --c-rose-vif: 224 32 110;
-  --c-rose-clair: 242 120 159;
+  /* Triplets RGB lus par tailwind.config.js (rgb(var(--c-x) / alpha)). Palette par défaut « ciel » :
+     les couleurs du site actuel de Laurie et de son logo (blanc, noir #181818, bleu ciel #38B6FF).
+     Le bleu ciel porte les boutons, les traits, les aplats et la sélection; les textes d'accent
+     (kickers, liens) prennent un azur de même teinte, #0876B5, lisible sur blanc (4,9:1). */
+  --c-papier: 255 255 255;
+  --c-papier-2: 241 247 252;
+  --c-encre: 24 24 24;
+  --c-encre-2: 38 38 38;
+  --c-gris: 90 101 112;
+  --c-gris-clair: 174 184 194;
+  --c-filet: 220 229 236;
+  --c-rose: 8 118 181;          /* accent en texte (rôle « rose » du canon) */
+  --c-rose-vif: 56 182 255;     /* le bleu ciel du logo, aplats et formes */
+  --c-rose-clair: 127 208 255;  /* accent sur l'encre */
+  --c-trait: 56 182 255;        /* filets et soulignés d'accent */
+  --c-bouton: 56 182 255;       /* bouton principal */
+  --c-bouton-2: 24 158 232;     /* bouton principal, survol */
+  --c-sur-bouton: 24 24 24;     /* texte du bouton principal */
 
   --papier: rgb(var(--c-papier));
   --papier-2: rgb(var(--c-papier-2));
@@ -24,9 +31,9 @@
   --gris-clair: rgb(var(--c-gris-clair));
   --filet: rgb(var(--c-filet));
   --filet-encre: rgb(var(--c-papier) / 0.14);
-  --accent: rgb(var(--c-rose));              /* rose */
-  --accent-vif: rgb(var(--c-rose-vif));      /* rose-vif, aplats seulement */
-  --accent-sur-encre: rgb(var(--c-rose-clair)); /* rose-clair */
+  --accent: rgb(var(--c-rose));
+  --accent-vif: rgb(var(--c-rose-vif));
+  --accent-sur-encre: rgb(var(--c-rose-clair));
   --ombre-feuille: 0 -30px 80px rgb(var(--c-encre) / 0.18);
   --ombre-feuille-encre: 0 -30px 80px rgb(var(--c-encre) / 0.45);
   --ease-maison: cubic-bezier(0.16, 0.8, 0.24, 1);
@@ -45,20 +52,23 @@
   --xh-ombre: rgb(var(--c-encre) / 0.28);
 }
 
-/* Palette « ciel » : les couleurs du site actuel de Laurie (blanc, noir #181818, bleu ciel #38B6FF de son
-   logo). Le bleu ciel tel quel ne se lit pas en texte (2,3:1 sur blanc) : il sert aux aplats et aux filets,
-   et un azur plus soutenu (#0876B5, 4,9:1) porte les kickers et les liens. Bascule : components/BasculePalette.tsx. */
-:root[data-skin='ciel'] {
-  --c-papier: 255 255 255;
-  --c-papier-2: 241 247 252;
-  --c-encre: 24 24 24;
-  --c-encre-2: 38 38 38;
-  --c-gris: 90 101 112;
-  --c-gris-clair: 174 184 194;
-  --c-filet: 220 229 236;
-  --c-rose: 8 118 181;
-  --c-rose-vif: 56 182 255;
-  --c-rose-clair: 127 208 255;
+/* Palette « encre » : le canon éditorial v2 (papier chaud, encre, rose de la couverture de son livre).
+   Bascule : components/BasculePalette.tsx. */
+:root[data-skin='encre'] {
+  --c-papier: 247 244 238;
+  --c-papier-2: 239 235 227;
+  --c-encre: 26 26 30;
+  --c-encre-2: 38 38 43;
+  --c-gris: 94 88 80;
+  --c-gris-clair: 184 178 168;
+  --c-filet: 221 215 205;
+  --c-rose: 168 16 74;
+  --c-rose-vif: 224 32 110;
+  --c-rose-clair: 242 120 159;
+  --c-trait: 168 16 74;
+  --c-bouton: 26 26 30;
+  --c-bouton-2: 38 38 43;
+  --c-sur-bouton: 247 244 238;
 }
 
 /* Le sticky des feuilles casse avec overflow-x: hidden. Toujours clip. */

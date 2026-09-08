@@ -295,11 +295,11 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                  <div className="flex bg-papier rounded-champ p-1 border border-filet">
                     <button
                       onClick={() => setCurrentDoc({...currentDoc, type: 'Quote', number: currentDoc.number.replace('FAC', 'DEV')})}
-                      className={`flex-1 py-2 text-sm font-medium rounded-champ transition-colors ${currentDoc.type === 'Quote' ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
+                      className={`flex-1 py-2 text-sm font-medium rounded-champ transition-colors ${currentDoc.type === 'Quote' ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'}`}
                     >{t.quote}</button>
                     <button
                       onClick={() => setCurrentDoc({...currentDoc, type: 'Invoice', number: currentDoc.number.replace('DEV', 'FAC')})}
-                      className={`flex-1 py-2 text-sm font-medium rounded-champ transition-colors ${currentDoc.type === 'Invoice' ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
+                      className={`flex-1 py-2 text-sm font-medium rounded-champ transition-colors ${currentDoc.type === 'Invoice' ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'}`}
                     >{t.invoice}</button>
                  </div>
                </div>
@@ -466,7 +466,7 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                   </div>
                </div>
                <div className="text-right">
-                  <div className="w-16 h-16 rounded-champ bg-encre text-papier flex items-center justify-center font-serif font-medium text-xl mb-4 ml-auto">XH</div>
+                  <div className="w-16 h-16 rounded-champ bg-bouton text-sur-bouton flex items-center justify-center font-serif font-medium text-xl mb-4 ml-auto">XH</div>
                   <h2 className="font-sans font-semibold text-encre text-lg">Xena Horizon</h2>
                   <p className="text-gris text-sm">Consultante stratégique</p>
                   <p className="text-gris text-sm">laurie.belhumeur@gmail.com</p>
@@ -566,7 +566,7 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                         className={`inline-flex items-center gap-3 min-h-[44px] px-8 rounded-pilule text-base font-medium transition-colors ${
                            (!currentDoc.signed && currentDoc.type === 'Quote')
                               ? 'bg-papier-2 border border-filet text-gris cursor-not-allowed'
-                              : 'bg-encre text-papier hover:bg-encre-2'
+                              : 'bg-bouton text-sur-bouton hover:bg-bouton-2'
                         }`}
                         onClick={(e) => {
                            if (!currentDoc.signed && currentDoc.type === 'Quote') {

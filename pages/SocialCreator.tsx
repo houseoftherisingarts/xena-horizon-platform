@@ -394,7 +394,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
                           type="button"
                           onClick={() => updateLayer(layer.id, { isBold: !layer.isBold })}
                           className={`px-3 rounded-champ border text-sm font-semibold ${
-                            layer.isBold ? 'bg-encre text-papier border-encre' : 'border-filet text-gris'
+                            layer.isBold ? 'bg-bouton text-sur-bouton border-encre' : 'border-filet text-gris'
                           }`}
                         >
                           B

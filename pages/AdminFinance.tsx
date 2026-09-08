@@ -260,7 +260,7 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
                 <button
                   key={range}
                   onClick={() => setDateRange(range)}
-                  className={`px-4 min-h-[36px] rounded-pilule text-sm font-medium transition-colors ${dateRange === range ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
+                  className={`px-4 min-h-[36px] rounded-pilule text-sm font-medium transition-colors ${dateRange === range ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'}`}
                 >
                   {range}
                 </button>

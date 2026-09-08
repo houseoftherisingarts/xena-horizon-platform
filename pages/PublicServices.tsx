@@ -5,6 +5,7 @@ import { PROFILS_REELS, SERVICES_PAGE, SERVICES_REELS, SIGNATURE, ServiceReel } 
 import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
 import { Feuille, KenBurns, Reveal, TexteRevele, useLenis } from '../components/motion';
 import { useTextes } from '../lib/textes';
+import { allerAuRendezVous } from '../lib/rendezvous';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
 
 interface PublicServicesProps {
@@ -144,14 +145,8 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   const chapitreA = catalogue.filter((p) => p.price > 0);
   const chapitreB = catalogue.filter((p) => p.price <= 0);
 
-  const goToContact = () => {
-    if (onChangeView) {
-      onChangeView('HOME');
-      setTimeout(() => allerA('contact'), 100);
-    } else {
-      window.location.href = '/#contact';
-    }
-  };
+  // « Prendre rendez-vous » ouvre le compte de la personne, puis son onglet Rendez-vous.
+  const goToContact = () => allerAuRendezVous();
 
   const RangeeOffre: React.FC<{ offer: Product; delay: number }> = ({ offer, delay }) => (
     <Reveal
@@ -187,7 +182,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           <Reveal delay={0.45}>
             <button
               onClick={goToContact}
-              className="pilule mt-8 inline-flex items-center gap-2 rounded-pilule bg-encre text-papier px-7 py-3.5 font-medium hover:bg-encre-2 transition-colors"
+              className="pilule mt-8 inline-flex items-center gap-2 rounded-pilule bg-bouton text-sur-bouton px-7 py-3.5 font-medium hover:bg-bouton-2 transition-colors"
             >
               {book} <ArrowRight className="w-4 h-4" />
             </button>
@@ -339,7 +334,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
             <Reveal delay={0.15}>
               <button
                 onClick={goToContact}
-                className="pilule mt-6 inline-flex items-center gap-2 rounded-pilule bg-encre text-papier px-7 py-3.5 font-medium hover:bg-encre-2 transition-colors"
+                className="pilule mt-6 inline-flex items-center gap-2 rounded-pilule bg-bouton text-sur-bouton px-7 py-3.5 font-medium hover:bg-bouton-2 transition-colors"
               >
                 {book} <ArrowRight className="w-4 h-4" />
               </button>

@@ -277,7 +277,7 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
         <label
           htmlFor={`fichier-${piece.id}`}
           className={`inline-flex items-center gap-2 min-h-[44px] px-4 rounded-pilule text-sm font-medium cursor-pointer transition-colors ${
-            deposee ? 'border border-filet text-encre hover:border-encre' : 'bg-encre text-papier hover:bg-encre-2'
+            deposee ? 'border border-filet text-encre hover:border-encre' : 'bg-bouton text-sur-bouton hover:bg-bouton-2'
           }`}
         >
           <Upload className="w-4 h-4" />

@@ -84,7 +84,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
             data-tx-scope="espaceAssistant"
             onClick={ouvrir}
             aria-label={t.ouvrir}
-            className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-pilule bg-encre shadow-panneau flex items-center justify-center text-papier hover:bg-encre-2 transition-colors"
+            className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-pilule bg-encre shadow-panneau flex items-center justify-center text-papier hover:bg-bouton-2 transition-colors"
           >
             <MessageCircle className="w-6 h-6" />
           </button>
@@ -127,7 +127,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
                     key={i}
                     aria-live={i === fil.length - 1 ? 'polite' : undefined}
                     className={`max-w-[85%] rounded-champ px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
-                      b.de === 'moi' ? 'self-end bg-encre text-papier rounded-br-[4px]' : 'self-start bg-papier-2 text-encre rounded-bl-[4px]'
+                      b.de === 'moi' ? 'self-end bg-bouton text-sur-bouton rounded-br-[4px]' : 'self-start bg-papier-2 text-encre rounded-bl-[4px]'
                     }`}
                   >
                     {b.texte}
@@ -172,7 +172,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
                 <button
                   type="submit"
                   aria-label={t.envoyer}
-                  className="w-11 h-11 rounded-pilule bg-encre flex items-center justify-center text-papier flex-shrink-0 hover:bg-encre-2 transition-colors"
+                  className="w-11 h-11 rounded-pilule bg-encre flex items-center justify-center text-papier flex-shrink-0 hover:bg-bouton-2 transition-colors"
                 >
                   <Send className="w-4 h-4" />
                 </button>

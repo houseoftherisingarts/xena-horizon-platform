@@ -231,7 +231,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
                     <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
                       <div
                         className={`max-w-[70%] px-4 py-2 rounded-champ ${
-                          isMe ? 'bg-encre text-papier rounded-br-none' : 'bg-papier border border-filet text-encre rounded-bl-none'
+                          isMe ? 'bg-bouton text-sur-bouton rounded-br-none' : 'bg-papier border border-filet text-encre rounded-bl-none'
                         }`}
                       >
                         <p className="text-sm">{msg.body}</p>

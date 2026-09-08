@@ -214,6 +214,7 @@ export interface Subscriber {
   status: 'active' | 'unsubscribed';
   source?: string;
   unsubscribeToken?: string;
+  lang?: 'fr' | 'en';
   createdAt?: any;
 }
 
@@ -273,6 +274,10 @@ export interface Dossier {
   telephone?: string;
   ville?: string;
   photoURL?: string;
+  /** Profil façon réseau social (onglet « Mon profil ») : bannière, présentation courte, liens. */
+  banniereURL?: string;
+  bio?: string;
+  liens?: Record<string, string>;
   profil: ProfilClient;
   discipline?: string;
   projet: ProjetClient;
@@ -321,4 +326,48 @@ export interface Ressource {
 export interface DossierConfig {
   pieces: PieceDef[];
   etapes: EtapeDef[];
+}
+
+
+// --- RENDEZ-VOUS (calendrier intégré + rencontre vidéo), contrat dans lib/rendezvous.ts ---
+export type StatutRendezVous = 'demande' | 'confirme' | 'annule' | 'complete';
+
+export interface RendezVous {
+  id: string;
+  uid: string;
+  nom: string;
+  courriel: string;
+  debut: any;        // Timestamp
+  fin: any;          // Timestamp
+  duree: number;     // minutes
+  statut: StatutRendezVous;
+  salle: string;     // nom de la salle vidéo (Jitsi), dérivé de l'id
+  note?: string;     // ce que la personne veut aborder
+  noteAdmin?: string;
+  creePar: 'client' | 'admin';
+  createdAt?: any;
+  updatedAt?: any;
+}
+
+/** Miroir public (personnes connectées) d'un créneau pris, sans aucune donnée personnelle. */
+export interface Occupation {
+  id: string;        // = id du rendez-vous
+  debut: any;
+  fin: any;
+}
+
+export interface PlageHoraire {
+  de: string;        // "09:00"
+  a: string;         // "12:00"
+}
+
+/** settings/agenda : les disponibilités de Laurie, éditées dans Admin › Agenda. */
+export interface AgendaConfig {
+  duree: number;             // minutes par rencontre
+  tampon: number;            // minutes entre deux rencontres
+  delaiMinHeures: number;    // délai minimal avant un rendez-vous
+  horizonJours: number;      // jusqu'où on peut réserver
+  fuseau: string;            // 'America/Toronto'
+  jours: Record<'0' | '1' | '2' | '3' | '4' | '5' | '6', PlageHoraire[]>;   // 0 = dimanche
+  exceptions?: Record<string, PlageHoraire[]>;   // 'AAAA-MM-JJ' → plages (vide = journée fermée)
 }

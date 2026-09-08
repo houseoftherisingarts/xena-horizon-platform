@@ -67,7 +67,7 @@ const FilAdmin: React.FC<FilAdminProps> = ({ messages, dossierNom, lang, onSend 
           <div key={m.id} className={`flex ${m.de === 'admin' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={`max-w-[85%] rounded-champ px-4 py-2.5 text-sm ${
-                m.de === 'admin' ? 'bg-encre text-papier' : 'bg-papier-2 border border-filet text-encre'
+                m.de === 'admin' ? 'bg-bouton text-sur-bouton' : 'bg-papier-2 border border-filet text-encre'
               }`}
             >
               <p className="whitespace-pre-wrap break-words">{m.texte}</p>
@@ -92,7 +92,7 @@ const FilAdmin: React.FC<FilAdminProps> = ({ messages, dossierNom, lang, onSend 
             type="submit"
             disabled={busy || !texte.trim()}
             aria-label={tr.send}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-pilule bg-encre text-papier hover:bg-encre-2 transition-colors disabled:opacity-40 min-h-[36px] min-w-[36px] flex items-center justify-center"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-pilule bg-bouton text-sur-bouton hover:bg-bouton-2 transition-colors disabled:opacity-40 min-h-[36px] min-w-[36px] flex items-center justify-center"
           >
             <Send className="w-4 h-4" aria-hidden="true" />
           </button>

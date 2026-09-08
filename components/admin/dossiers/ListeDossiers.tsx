@@ -149,14 +149,14 @@ const ListeDossiers: React.FC<ListeDossiersProps> = ({ dossiers, config, lang, l
             <button
               type="button"
               onClick={() => setAfficherArchives(false)}
-              className={`px-4 min-h-[44px] text-sm font-medium ${!afficherArchives ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
+              className={`px-4 min-h-[44px] text-sm font-medium ${!afficherArchives ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'}`}
             >
               {tr.actifs}
             </button>
             <button
               type="button"
               onClick={() => setAfficherArchives(true)}
-              className={`px-4 min-h-[44px] text-sm font-medium flex items-center gap-1.5 ${afficherArchives ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
+              className={`px-4 min-h-[44px] text-sm font-medium flex items-center gap-1.5 ${afficherArchives ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'}`}
             >
               <Archive className="w-3.5 h-3.5" aria-hidden="true" /> {tr.archives}
             </button>

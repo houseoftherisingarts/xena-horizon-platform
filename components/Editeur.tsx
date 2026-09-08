@@ -291,7 +291,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
               type="button"
               onClick={enregistrer}
               disabled={busy || ctx.nbModifs === 0}
-              className="min-h-[40px] px-4 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2 disabled:opacity-40 flex items-center gap-2"
+              className="min-h-[40px] px-4 rounded-pilule bg-bouton text-sur-bouton text-sm font-medium hover:bg-bouton-2 disabled:opacity-40 flex items-center gap-2"
             >
               <Check className="w-4 h-4" aria-hidden="true" />
               {busy ? L.enregistrement : L.enregistrer}
@@ -312,7 +312,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
             onClick={() => ctx.basculerEdition(true)}
             aria-label={L.ouvrir}
             title={L.ouvrir}
-            className="w-11 h-11 rounded-pilule bg-encre text-papier shadow-panneau flex items-center justify-center hover:bg-rose transition-colors"
+            className="w-11 h-11 rounded-pilule bg-bouton text-sur-bouton shadow-panneau flex items-center justify-center hover:bg-rose transition-colors"
           >
             <PencilLine className="w-5 h-5" aria-hidden="true" />
           </button>
@@ -327,7 +327,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
       {edition && !cible && (
         <p
           role="status"
-          className="fixed z-[100] left-1/2 -translate-x-1/2 bottom-6 rounded-pilule bg-encre text-papier text-petit px-4 py-2 shadow-panneau pointer-events-none"
+          className="fixed z-[100] left-1/2 -translate-x-1/2 bottom-6 rounded-pilule bg-bouton text-sur-bouton text-petit px-4 py-2 shadow-panneau pointer-events-none"
         >
           {L.indice}
         </p>
@@ -351,7 +351,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
                   aria-selected={langEdit === l}
                   onClick={() => setLangEdit(l)}
                   className={`kicker min-h-[32px] px-3 rounded-pilule transition-colors ${
-                    langEdit === l ? 'bg-encre text-papier' : 'text-gris hover:text-encre'
+                    langEdit === l ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'
                   }`}
                 >
                   {l}
@@ -385,7 +385,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
             <button
               type="button"
               onClick={appliquer}
-              className="min-h-[40px] px-4 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2"
+              className="min-h-[40px] px-4 rounded-pilule bg-bouton text-sur-bouton text-sm font-medium hover:bg-bouton-2"
             >
               {L.appliquer}
             </button>

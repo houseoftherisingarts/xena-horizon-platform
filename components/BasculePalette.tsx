@@ -10,20 +10,20 @@ import type { Language } from '../types';
 const BasculePalette: React.FC<{ lang: Language; className?: string }> = ({ lang, className = '' }) => {
   const [skin, poserSkin] = useSkin();
   const ciel = skin === 'ciel';
-  const libelle = lang === 'FR' ? 'Palette du site : encre et rose, ou bleu ciel' : 'Site palette: ink and pink, or sky blue';
+  const libelle = lang === 'FR' ? 'Palette du site : bleu ciel, ou encre et rose' : 'Site palette: sky blue, or ink and pink';
 
   return (
     <button
       type="button"
       role="switch"
-      aria-checked={ciel}
+      aria-checked={!ciel}
       aria-label={libelle}
       title={libelle}
       onClick={() => poserSkin(ciel ? 'encre' : 'ciel')}
       className={`group flex items-center gap-2 min-h-[44px] px-1 text-encre ${className}`}
     >
-      <span className={`kicker transition-opacity ${ciel ? 'opacity-45' : 'opacity-100'}`}>
-        {lang === 'FR' ? 'Encre' : 'Ink'}
+      <span className={`kicker transition-opacity ${ciel ? 'opacity-100' : 'opacity-45'}`}>
+        {lang === 'FR' ? 'Ciel' : 'Sky'}
       </span>
       <span
         aria-hidden="true"
@@ -31,11 +31,11 @@ const BasculePalette: React.FC<{ lang: Language; className?: string }> = ({ lang
       >
         <span
           className="absolute top-[3px] left-[3px] h-[14px] w-[14px] rounded-pilule bg-rose transition-transform duration-panneau ease-expo"
-          style={{ transform: ciel ? 'translateX(18px)' : 'translateX(0)' }}
+          style={{ transform: ciel ? 'translateX(0)' : 'translateX(18px)' }}
         />
       </span>
-      <span className={`kicker transition-opacity ${ciel ? 'opacity-100' : 'opacity-45'}`}>
-        {lang === 'FR' ? 'Ciel' : 'Sky'}
+      <span className={`kicker transition-opacity ${ciel ? 'opacity-45' : 'opacity-100'}`}>
+        {lang === 'FR' ? 'Encre' : 'Ink'}
       </span>
     </button>
   );

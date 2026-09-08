@@ -205,7 +205,7 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
         <button
           type="submit"
           disabled={busy}
-          className="flex items-center gap-2 min-h-[44px] px-6 rounded-pilule bg-encre text-papier font-medium hover:bg-encre-2 transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 min-h-[44px] px-6 rounded-pilule bg-bouton text-sur-bouton font-medium hover:bg-bouton-2 transition-colors disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
           {busy ? t.enregistrement : t.enregistrer}

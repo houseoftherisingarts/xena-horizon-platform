@@ -38,7 +38,7 @@ export const Panneau: React.FC<{
 
 type Variante = 'primaire' | 'secondaire' | 'discret' | 'danger';
 const VARIANTES: Record<Variante, string> = {
-  primaire: 'rounded-pilule bg-encre text-papier hover:bg-encre-2 px-5',
+  primaire: 'rounded-pilule bg-bouton text-sur-bouton hover:bg-bouton-2 px-5',
   secondaire: 'rounded-pilule border border-filet text-encre hover:border-encre px-5',
   discret: 'rounded-pilule text-gris hover:text-encre px-3',
   danger: 'rounded-pilule border border-rose/30 text-rose hover:border-rose px-5',
@@ -128,7 +128,7 @@ export const Etiquette: React.FC<{ tone?: 'neutre' | 'accent' | 'encre'; childre
   const tons = {
     neutre: 'border border-filet text-gris',
     accent: 'bg-rose/10 text-rose',
-    encre: 'bg-encre text-papier',
+    encre: 'bg-bouton text-sur-bouton',
   };
   return (
     <span className={`inline-flex items-center rounded-pilule px-2.5 py-0.5 text-xs font-medium ${tons[tone]} ${className}`}>

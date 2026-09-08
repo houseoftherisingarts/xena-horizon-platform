@@ -481,7 +481,7 @@ const AdminCRM: React.FC<AdminCRMProps> = ({ lang }) => {
                               value={newTaskText}
                               onChange={(e) => setNewTaskText(e.target.value)}
                            />
-                           <button type="submit" aria-label={t.newTask} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-pilule bg-encre text-papier hover:bg-encre-2 transition-colors">
+                           <button type="submit" aria-label={t.newTask} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-pilule bg-bouton text-sur-bouton hover:bg-bouton-2 transition-colors">
                               <Plus className="w-4 h-4" />
                            </button>
                         </div>

@@ -229,6 +229,26 @@ async function main() {
     )
   );
 
+  // 11. Rendez-vous : la personne demande un créneau à son nom (ok), au nom d'un autre (refus), confirme elle-même (refus), annule (ok)
+  const dans3Jours = new Date(Date.now() + 3 * 86400000);
+  const fin3Jours = new Date(dans3Jours.getTime() + 45 * 60000);
+  const rdvValide = (uid) => ({
+    uid, nom: 'Personne A', courriel: 'a@example.com', debut: dans3Jours, fin: fin3Jours, duree: 45, statut: 'demande', salle: 'xena-test', note: 'Mon projet', creePar: 'client', createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+  });
+  await verifie('rendez-vous demandé par la personne (ok)', assertSucceeds(setDoc(doc(dbA, 'rendezvous', 'rdv-a'), rdvValide(UID_A))));
+  await verifie("rendez-vous au nom d'un autre (refus attendu)", assertFails(setDoc(doc(dbA, 'rendezvous', 'rdv-b'), rdvValide(UID_B))));
+  await verifie('rendez-vous déjà confirmé par la personne (refus attendu)', assertFails(setDoc(doc(dbA, 'rendezvous', 'rdv-c'), { ...rdvValide(UID_A), statut: 'confirme' })));
+  await verifie('la personne confirme elle-même (refus attendu)', assertFails(updateDoc(doc(dbA, 'rendezvous', 'rdv-a'), { statut: 'confirme', updatedAt: serverTimestamp() })));
+  await verifie('Laurie confirme (ok)', assertSucceeds(updateDoc(doc(dbAdmin, 'rendezvous', 'rdv-a'), { statut: 'confirme', updatedAt: serverTimestamp() })));
+  await verifie('un autre lit le rendez-vous (refus attendu)', assertFails(getDoc(doc(dbB, 'rendezvous', 'rdv-a'))));
+  await verifie('la personne annule (ok)', assertSucceeds(updateDoc(doc(dbA, 'rendezvous', 'rdv-a'), { statut: 'annule', updatedAt: serverTimestamp() })));
+  await verifie('occupation écrite par la personne (ok)', assertSucceeds(setDoc(doc(dbA, 'occupations', 'rdv-a'), { debut: dans3Jours, fin: fin3Jours })));
+  await verifie("occupation lue par un autre compte (ok)", assertSucceeds(getDoc(doc(dbB, 'occupations', 'rdv-a'))));
+  await verifie('occupation lue sans compte (refus attendu)', assertFails(getDoc(doc(dbAnon, 'occupations', 'rdv-a'))));
+  // 12. Profil : bannière, bio et liens dans les bornes (ok), bio trop longue (refus)
+  await verifie('profil : bannière, bio et liens (ok)', assertSucceeds(updateDoc(doc(dbA, 'dossiers', UID_A), { banniereURL: 'https://firebasestorage.googleapis.com/b', bio: 'Artiste.', liens: { site: 'https://a.example.com' }, updatedAt: serverTimestamp() })));
+  await verifie('profil : bio trop longue (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { bio: 'x'.repeat(1200), updatedAt: serverTimestamp() })));
+
   await testEnv.cleanup();
 
   console.log(resultats.join('\n'));

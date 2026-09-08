@@ -223,7 +223,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ lang }) => {
               {recentOrders.map((order) => (
                 <div key={order.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-pilule bg-encre text-papier flex items-center justify-center font-semibold text-xs flex-shrink-0">
+                    <div className="w-9 h-9 rounded-pilule bg-bouton text-sur-bouton flex items-center justify-center font-semibold text-xs flex-shrink-0">
                       {order.initial}
                     </div>
                     <div className="min-w-0">

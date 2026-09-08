@@ -138,7 +138,7 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
                 <button
                   type="button"
                   onClick={() => decider('accepte')}
-                  className="min-h-[36px] px-4 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2 transition-colors"
+                  className="min-h-[36px] px-4 rounded-pilule bg-bouton text-sur-bouton text-sm font-medium hover:bg-bouton-2 transition-colors"
                 >
                   {t.accepter}
                 </button>

@@ -4,6 +4,7 @@ import { A_PROPOS, BLOCS_ACCUEIL, BLOCS_ACCUEIL_EN, CREDITS } from '../lib/conte
 import { Feuille, KenBurns, Parallax, Reveal, TexteRevele } from '../components/motion';
 import { HomeStatsBlock, Language } from '../types';
 import { useTextes } from '../lib/textes';
+import { allerAuRendezVous } from '../lib/rendezvous';
 
 const TEXTES = {
   FR: {
@@ -165,8 +166,12 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
           <div className="lg:col-span-7">
             <TexteRevele texte={t.rdvTitle} as="h2" par="mot" className="font-serif text-h2" />
             <a
-              href="/#contact"
-              className="pilule mt-6 inline-flex items-center gap-2 rounded-pilule bg-encre text-papier px-7 py-3.5 font-medium hover:bg-encre-2 transition-colors"
+              href="/espace"
+              onClick={(e) => {
+                e.preventDefault();
+                allerAuRendezVous();
+              }}
+              className="pilule mt-6 inline-flex items-center gap-2 rounded-pilule bg-bouton text-sur-bouton px-7 py-3.5 font-medium hover:bg-bouton-2 transition-colors"
             >
               {t.rdv} <ArrowRight className="w-4 h-4" />
             </a>

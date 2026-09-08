@@ -8,6 +8,7 @@ import React from 'react';
 import { motion, type MotionValue } from 'framer-motion';
 import { KenBurns, TexteRevele } from '../../components/motion';
 import type { Language } from '../../types';
+import { allerAuRendezVous } from '../../lib/rendezvous';
 
 export interface UneProps {
   lang: Language;
@@ -49,9 +50,6 @@ const Une: React.FC<UneProps> = ({
   hauteurPhoto,
   demarrer = true,
 }) => {
-  const allerAuContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <div className="flex h-full w-full flex-col sm:block">
@@ -94,7 +92,7 @@ const Une: React.FC<UneProps> = ({
             <p className="max-w-mesure text-lede font-sans font-light text-encre/90">{subheadline}</p>
             <button
               type="button"
-              onClick={allerAuContact}
+              onClick={allerAuRendezVous}
               className="pilule inline-flex items-center rounded-pilule bg-encre px-8 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-papier"
             >
               {ctaText}
