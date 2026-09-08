@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { orderBy } from 'firebase/firestore';
-import { ArrowUp, ArrowDown, Trash2, Plus, Upload, Link2, Eye, EyeOff, AlertCircle, BookOpen } from 'lucide-react';
-import { GLASS_INPUT_CLASSES, ACTION_BUTTON_CLASSES } from '../../../constants';
+import { ArrowUp, ArrowDown, Trash2, Plus, Upload, Link2, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Language, Ressource } from '../../../types';
 import { useCollection, createDoc, patchDoc, removeDoc, uploadFile, deleteFile, makeStoragePath } from '../../../lib/firestore';
+import { Panneau, Champ, Bouton, Etiquette, Vide } from '../ui';
 
 interface RessourcesAdminProps {
   lang: Language;
@@ -123,69 +123,87 @@ const RessourcesAdmin: React.FC<RessourcesAdminProps> = ({ lang }) => {
     }
   };
 
+  const boutonLigne = 'p-2 rounded-champ hover:bg-papier text-gris min-h-[36px] min-w-[36px]';
+
   return (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 space-y-4">
-      <h2 className="text-lg font-serif font-bold text-white flex items-center gap-2">
-        <BookOpen className="w-5 h-5 text-cyan-300" /> {tr.title}
-      </h2>
-      <p className="text-sm text-slate-400">{tr.subtitle}</p>
+    <Panneau titre={tr.title}>
+      <p className="text-sm text-gris -mt-3 mb-4">{tr.subtitle}</p>
 
       {erreur && (
-        <p className="text-sm text-red-300 bg-red-500/10 border border-red-500/20 rounded-[12px] p-3 flex items-center gap-2" role="alert">
+        <p className="text-sm text-rose border border-rose/30 bg-rose/5 rounded-champ p-3 flex items-center gap-2 mb-4" role="alert">
           <AlertCircle className="w-4 h-4" /> {erreur}
         </p>
       )}
 
       <div className="space-y-2">
-        {ressources.length === 0 && <p className="text-sm text-slate-500">{tr.aucune}</p>}
+        {ressources.length === 0 && <Vide titre={tr.aucune} />}
         {ressources.map((r, i) => (
-          <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-[15px] p-3">
+          <div key={r.id} className="flex items-center gap-3 border border-filet rounded-champ p-3">
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{r.titre}</p>
-              {r.description && <p className="text-xs text-slate-500 truncate">{r.description}</p>}
+              <p className="text-sm font-medium text-encre truncate">{r.titre}</p>
+              {r.description && <p className="text-xs text-gris truncate">{r.description}</p>}
             </div>
-            <button
-              type="button"
-              onClick={() => toggleVisible(r)}
-              className={`px-2.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1 min-h-[36px] ${
-                r.visibleClients ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-white/15 text-slate-500'
-              }`}
-            >
-              {r.visibleClients ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-              {r.visibleClients ? tr.visible : tr.masquee}
+            <button type="button" onClick={() => toggleVisible(r)} className="min-h-[36px]">
+              <Etiquette tone={r.visibleClients ? 'accent' : 'neutre'} className="gap-1">
+                {r.visibleClients ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                {r.visibleClients ? tr.visible : tr.masquee}
+              </Etiquette>
             </button>
             <div className="flex items-center gap-1">
-              <button type="button" onClick={() => deplacer(i, -1)} className="p-2 rounded-[10px] hover:bg-white/10 text-slate-400 min-h-[36px] min-w-[36px]" aria-label="up"><ArrowUp className="w-4 h-4" /></button>
-              <button type="button" onClick={() => deplacer(i, 1)} className="p-2 rounded-[10px] hover:bg-white/10 text-slate-400 min-h-[36px] min-w-[36px]" aria-label="down"><ArrowDown className="w-4 h-4" /></button>
-              <button type="button" onClick={() => supprimer(r)} className="p-2 rounded-[10px] hover:bg-red-500/10 text-red-400 min-h-[36px] min-w-[36px]" aria-label="delete"><Trash2 className="w-4 h-4" /></button>
+              <button type="button" onClick={() => deplacer(i, -1)} className={boutonLigne} aria-label="up">
+                <ArrowUp className="w-4 h-4" />
+              </button>
+              <button type="button" onClick={() => deplacer(i, 1)} className={boutonLigne} aria-label="down">
+                <ArrowDown className="w-4 h-4" />
+              </button>
+              <button type="button" onClick={() => supprimer(r)} className={`${boutonLigne} hover:text-rose`} aria-label="delete">
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      <form onSubmit={ajouter} className="pt-4 border-t border-white/10 space-y-3">
-        <div className="flex rounded-[15px] border border-white/10 overflow-hidden w-fit">
-          <button type="button" onClick={() => setMode('url')} className={`px-4 py-2 text-xs font-medium flex items-center gap-1.5 ${mode === 'url' ? 'bg-white/10 text-white' : 'text-slate-400'}`}>
+      <form onSubmit={ajouter} className="pt-4 mt-4 border-t border-filet space-y-3">
+        <div className="flex rounded-champ border border-filet overflow-hidden w-fit">
+          <button
+            type="button"
+            onClick={() => setMode('url')}
+            className={`px-4 py-2 text-xs font-medium flex items-center gap-1.5 min-h-[44px] ${
+              mode === 'url' ? 'bg-papier-2 text-encre' : 'text-gris'
+            }`}
+          >
             <Link2 className="w-3.5 h-3.5" /> {tr.modeUrl}
           </button>
-          <button type="button" onClick={() => setMode('fichier')} className={`px-4 py-2 text-xs font-medium flex items-center gap-1.5 ${mode === 'fichier' ? 'bg-white/10 text-white' : 'text-slate-400'}`}>
+          <button
+            type="button"
+            onClick={() => setMode('fichier')}
+            className={`px-4 py-2 text-xs font-medium flex items-center gap-1.5 min-h-[44px] ${
+              mode === 'fichier' ? 'bg-papier-2 text-encre' : 'text-gris'
+            }`}
+          >
             <Upload className="w-3.5 h-3.5" /> {tr.modeFichier}
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input value={titre} onChange={(e) => setTitre(e.target.value)} placeholder={tr.titrePlaceholder} className={`${GLASS_INPUT_CLASSES} text-sm`} />
-          <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder={tr.descPlaceholder} className={`${GLASS_INPUT_CLASSES} text-sm`} />
+          <Champ label={tr.titrePlaceholder} value={titre} onChange={(e) => setTitre(e.target.value)} />
+          <Champ label={tr.descPlaceholder} value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         {mode === 'url' ? (
-          <input value={urlExterne} onChange={(e) => setUrlExterne(e.target.value)} placeholder={tr.urlPlaceholder} className={`${GLASS_INPUT_CLASSES} text-sm`} />
+          <Champ label={tr.urlPlaceholder} value={urlExterne} onChange={(e) => setUrlExterne(e.target.value)} />
         ) : (
-          <input ref={fileRef} type="file" onChange={(e) => setFichier(e.target.files?.[0] ?? null)} className="text-sm text-slate-300 file:mr-3 file:px-4 file:py-2 file:rounded-[10px] file:border-0 file:bg-white/10 file:text-white file:text-xs" />
+          <input
+            ref={fileRef}
+            type="file"
+            onChange={(e) => setFichier(e.target.files?.[0] ?? null)}
+            className="text-sm text-gris file:mr-3 file:px-4 file:py-2 file:rounded-champ file:border-0 file:bg-encre file:text-papier file:text-xs"
+          />
         )}
-        <button type="submit" disabled={busy} className={`${ACTION_BUTTON_CLASSES} disabled:opacity-50`}>
-          <Plus className="w-4 h-4" /> {busy ? '…' : tr.ajouter}
-        </button>
+        <Bouton type="submit" variante="primaire" icone={Plus} disabled={busy}>
+          {busy ? '…' : tr.ajouter}
+        </Bouton>
       </form>
-    </div>
+    </Panneau>
   );
 };
 
