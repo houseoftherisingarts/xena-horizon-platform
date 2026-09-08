@@ -238,6 +238,3 @@ const ColorField: React.FC<{ label: string; valeur: string; onChange: (v: string
     </div>
   </div>
 );
-
-// Le studio reçoit sa liste d'images publiques ici : réexporté pour SocialCreator.
-export { IMAGES_PUBLIQUES };
