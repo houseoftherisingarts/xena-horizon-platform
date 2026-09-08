@@ -87,7 +87,10 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10 items-start">
           <div className="lg:col-span-6">
             <p className="kicker text-rose-clair mb-4">{t.livre}</p>
-            <h2 className="font-serif text-h2">{lang === 'EN' ? livre.titreEn : livre.titre}</h2>
+            <h2 className="font-serif text-h2">{lang === 'EN' ? titreEtGlose(livre.titreEn).nom : livre.titre}</h2>
+            {lang === 'EN' && titreEtGlose(livre.titreEn).glose && (
+              <p className="text-petit text-gris-clair mt-1">{titreEtGlose(livre.titreEn).glose}</p>
+            )}
             <p className="font-serif text-h3 text-papier/80 mt-2">{lang === 'EN' ? livre.sousTitreEn : livre.sousTitre}</p>
             <div className="mt-6 space-y-4">
               {(lang === 'EN' ? livre.descriptionEn : livre.description).map((p, i) => (
