@@ -2,7 +2,7 @@
 // fait la même chose en cascade sur ses enfants directs. Easing et durée du
 // canon L'Œuvre : cubic-bezier(0.16, 0.8, 0.24, 1), 1,05 s, jamais de rebond.
 
-import React, { Children, Fragment, useMemo } from 'react';
+import React, { Children, useMemo } from 'react';
 import { motion, useReducedMotion, type HTMLMotionProps, type Variants } from 'framer-motion';
 
 const EASE = [0.16, 0.8, 0.24, 1] as const;
