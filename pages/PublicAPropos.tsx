@@ -100,11 +100,13 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
 
       {/* --- LA MISSION --- */}
       <Feuille z={3} className="bg-papier px-gut py-bloc">
+        {/* Taille sur mesure : la phrase réelle (69 caractères) ne tient sur deux lignes ni en text-display
+            ni en text-h2 à 390 ou 1440 ; on ne raccourcit pas la mission de Laurie, on ajuste le corps. */}
         <TexteRevele
           texte={lang === 'EN' ? A_PROPOS.missionEn : A_PROPOS.mission}
           as="p"
           par="mot"
-          className="font-serif text-h2 lg:max-w-[90%]"
+          className="font-serif text-[clamp(1.15rem,0.85rem+2.4vw,2.75rem)] leading-[1.15] lg:max-w-[90%]"
         />
         {stat2Label && (
           <Reveal delay={0.2} as="p" className="kicker text-gris mt-8">
