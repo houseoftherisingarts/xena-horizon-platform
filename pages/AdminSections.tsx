@@ -4,12 +4,10 @@
 
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { doc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { EnTete, Panneau } from '../components/admin/ui';
 import Interrupteur from '../components/Interrupteur';
 import { patchDoc, writeDoc } from '../lib/firestore';
-import { CHEMIN_SECTIONS, SECTIONS_ACCUEIL, sectionActive, useSections } from '../lib/sections';
+import { SECTIONS_ACCUEIL, sectionActive, useSections } from '../lib/sections';
 import { useTextes } from '../lib/textes';
 import type { Language } from '../types';
 
