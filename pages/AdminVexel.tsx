@@ -187,7 +187,20 @@ const TEXTES = {
   },
 };
 
-const VIDE: ContenuCoffre = { nomCarte: '', numero: '', expiration: '', cvv: '', adresse: '', ville: '', province: 'Québec', codePostal: '', telephone: '', courrielFacturation: '', nomLegal: '', neq: '', tps: '', tvq: '', stripeCourriel: '', stripeMotDePasse: '', googleCourriel: '', googleMotDePasse: '', titulaireCompte: '', institution: '', transit: '', numeroCompte: '', notes: '' };
+/** Boucle locale sans compte admin (voir App.tsx, `--mode verif`) : Firestore refuse la lecture de coffre/laurie
+ * sans vraie session admin, l'écran resterait donc vide en capture. Un exemple en mémoire, jamais en production. */
+const EXEMPLE_COFFRE_VERIF: CoffreScelle = {
+  v: 1,
+  cle: '',
+  iv: '',
+  donnees: '',
+  resume: { nomCarte: 'Laurie Belhumeur', derniers4: '4242', expiration: '04/28' },
+  specimen: { chemin: CHEMIN_SPECIMEN, iv: '', contentType: 'application/pdf', taille: 182933 },
+  deposeLe: new Date('2026-09-08T20:00:00'),
+  parCourriel: 'laurie.belhumeur@gmail.com',
+};
+
+const VIDE: ContenuCoffre ={ nomCarte: '', numero: '', expiration: '', cvv: '', adresse: '', ville: '', province: 'Québec', codePostal: '', telephone: '', courrielFacturation: '', nomLegal: '', neq: '', tps: '', tvq: '', stripeCourriel: '', stripeMotDePasse: '', googleCourriel: '', googleMotDePasse: '', titulaireCompte: '', institution: '', transit: '', numeroCompte: '', notes: '' };
 const TYPES_SPECIMEN_ACCEPTES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
 const LIEN_BLAZE = 'https://console.firebase.google.com/project/xena-70977/usage/details';
 
