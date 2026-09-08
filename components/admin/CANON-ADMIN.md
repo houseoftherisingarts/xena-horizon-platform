@@ -31,6 +31,11 @@ Le back-office porte le même canon que le site public et l'espace client (`~/Do
 - Formulaires : étiquette au-dessus du champ, jamais un texte fantôme seul.
 - Mobile : tout reste lisible à 390 px, tableaux dans `overflow-x-auto`, aucune barre de défilement horizontale de page.
 
+## Barre latérale (`components/AdminSidebar.tsx`)
+
+- Le crayon (`components/Editeur.tsx`, en haut à droite de toutes les pages pour un compte admin) est la seule porte vers l'édition des textes : la barre n'a plus d'entrée « Textes du site », il n'y a rien à dédoubler.
+- Desktop seulement : une flèche en bas de la barre replie le menu en rail de 64 px (icônes seules, info-bulle au survol et au focus), state mémorisé dans `localStorage` (`xena.admin.menu`), transition 220 ms `ease-maison`. Le contenu (`App.tsx`, `<main>`) suit la même largeur et la même transition. Sur téléphone, la barre reste le tiroir plein qu'elle a toujours été.
+
 ## Contenu
 
 - Aucun chiffre, aucune phrase, aucun client, aucun événement inventé : les métriques viennent des collections Firestore (`dossiers`, `leads`, `clients`, `products`, `documents`, `gallery`, `newsletters`) ou ne s'affichent pas. Un module sans donnée réelle montre un `Vide` honnête.
