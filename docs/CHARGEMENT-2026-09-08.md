@@ -117,5 +117,44 @@ fichier `sw.js` ni enregistrement `serviceWorker.register`. Rien à corriger.
 
 ## Vérifications
 
-*(section complétée après l'exécution de `scripts/qa-chargement.cjs` : LCP/CLS avant/après, captures
-1440 et 390 regardées, résultat du volet C sur le fragment disparu.)*
+**`tsc --noEmit` propre** sur le dépôt et sur `functions/` : zéro erreur dans les deux cas.
+
+**Volet A (chargement à froid, cinq routes publiques).** Zéro erreur console et zéro erreur page
+sur les cinq routes. LCP entre 140 ms et 1 384 ms (`/espace`, le plus lourd : porte de connexion
+avec ses champs). CLS à 0 sur `/` et `/services`; 0,3 sur `/projets` et `/a-propos`; 0,108 sur
+`/espace`. **Cause du 0,3 trouvée et isolée** (mesurée avec un `PerformanceObserver` qui journalise
+la source du saut) : `Parallax` (`components/motion/Parallax.tsx`), présent sur ces deux pages
+seulement (ni `/` ni `/services` ne l'utilisent), fait bouger le pied de page de quelques dizaines
+de millisecondes après le premier rendu. Le saut ne se voit à l'œil sur aucune des captures
+1440/390 des cinq pages (regardées une par une, voir liste plus bas) : c'est un score qui bouge,
+pas un défaut visible. `Parallax.tsx` appartient au kit `components/motion/`, partagé par d'autres
+pages et d'autres chantiers en cours dans le même arbre de travail : hors des fichiers de cette
+mission, non touché, signalé ici pour le prochain passage dessus.
+
+**Volet B (flash de police, trois instants, 1440 et 390).** Première version du script cassée :
+elle ralentissait TOUT le réseau (proche d'un Slow 4G, tout le HTML/CSS/JS compris), si bien que la
+page restait entièrement blanche aux trois instants et qu'aucune capture ne montrait jamais la
+police bascule elle-même. Corrigé dans `scripts/qa-chargement.cjs` : seuls les deux fichiers de
+police sont désormais retardés (400 ms), le reste du chargement va à sa vitesse réelle. Résultat
+après correction : à 150 ms les polices ne sont pas encore prêtes (`document.fonts.status:
+'loading'`), à 400 ms et 1 500 ms elles sont chargées (`'loaded'`, `check()` vrai pour Figtree et
+Playfair Display). Les trois captures 1440 et les trois captures 390 montrent le mot « Xena » (puis
+« Xena Horizon ») exactement à la même position et à la même taille du début à la fin : aucun saut
+visible pendant la bascule police de repli → police réelle, sur les deux tailles d'écran. La texture
+floue visible sur les captures à 150 et 400 ms est le rideau de l'intro qui se lève (`Intro.tsx`),
+pas un artefact de police.
+
+**Volet C (fragment de build disparu).** Avec le fragment `AdminDashboard-*.js` bloqué : 3
+navigations détectées (chargement initial, `pushState` vers `/admin`, rechargement automatique
+déclenché par `vite:preloadError`), puis, le fragment restant bloqué après le rechargement,
+`ErreurRacine` prend le relais : écran centré, un seul bouton, aucune boucle. Capturé dans
+`fragment-disparu-apres.png`, regardé : texte en anglais parce que Playwright fixe la langue du
+navigateur à `en-US` par défaut (un vrai visiteur francophone voit la version française du même
+écran, cf. `ErreurRacine.tsx`).
+
+**Captures regardées** (`captures-verif/xena2-C-chargement/`), une par une, à l'œil, grille RÈGLE
+-5 : `flash-1440-150/400/1500ms.png`, `flash-390-150/400/1500ms.png`, `froid-accueil-1440/390.png`,
+`froid-services-1440/390.png`, `froid-projets-1440.png`, `froid-a-propos-1440/390.png`,
+`froid-espace-1440.png`, `fragment-disparu-apres.png`. Aucune faute trouvée sur la grille (pleine
+largeur, rien qui cache un titre, titres sur deux lignes au plus, un seul bouton par écran, texte
+lisible).
