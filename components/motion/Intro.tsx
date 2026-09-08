@@ -21,10 +21,15 @@ const CLE_SESSION = 'xh-intro-vue';
 
 function phases(dureeMs: number) {
   const echelle = dureeMs / SOMME_REFERENCE_MS;
+  const tenueS = (TENUE_MS * echelle) / 1000;
   return {
     filetS: (FILET_MS * echelle) / 1000,
-    tenueS: (TENUE_MS * echelle) / 1000,
+    tenueS,
     leveS: (LEVE_MS * echelle) / 1000,
+    // La marque part en fondu sur la fin de la tenue, avant que le rideau ne commence à se
+    // lever : sans ça, la barre et le hero apparaissent par transparence pendant que la marque
+    // est encore pleinement opaque (double exposition, chantier C).
+    fonduS: tenueS * 0.4,
   };
 }
 
