@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import type { User } from 'firebase/auth';
 import { signOut } from 'firebase/auth';
-import { FileText, FolderOpen, LogOut, MessageSquare, Route as RouteIcon, User as UserIcon } from 'lucide-react';
 import { auth } from '../../firebase';
 import { useDocument, writeDoc } from '../../lib/firestore';
 import { avancement, indexEtape, nouveauDossier, useDossierConfig } from '../../lib/dossier';
@@ -19,8 +19,6 @@ interface EspaceShellProps {
 }
 
 type Onglet = 'dossier' | 'pieces' | 'parcours' | 'messages' | 'ressources';
-
-const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
 
 const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const uid = user.uid;
@@ -76,13 +74,6 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         messages: 'Messages',
         ressources: 'Ressources',
       },
-      ongletsCourts: {
-        dossier: 'Dossier',
-        pieces: 'Pièces',
-        parcours: 'Parcours',
-        messages: 'Messages',
-        ressources: 'Ressources',
-      },
       chargement: 'Ouverture de ton dossier…',
     },
     EN: {
@@ -97,22 +88,15 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         messages: 'Messages',
         ressources: 'Resources',
       },
-      ongletsCourts: {
-        dossier: 'File',
-        pieces: 'Docs',
-        parcours: 'Journey',
-        messages: 'Messages',
-        ressources: 'Resources',
-      },
       chargement: 'Opening your file…',
     },
   }[lang];
 
   if (loading || !dossier) {
     return (
-      <div className="min-h-screen pt-32 flex flex-col items-center gap-4" role="status" aria-live="polite">
-        <span className="w-10 h-10 rounded-full border-2 border-white/10 border-t-cyan-400 animate-spin" />
-        <p className="text-slate-400 text-sm">{t.chargement}</p>
+      <div className="min-h-[100svh] bg-papier pt-32 flex flex-col items-center gap-4" role="status" aria-live="polite">
+        <span className="w-8 h-8 rounded-pilule border-2 border-filet border-t-rose animate-spin" />
+        <p className="text-gris text-sm">{t.chargement}</p>
       </div>
     );
   }
@@ -122,85 +106,84 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const etapeCourante = config.etapes[idxEtape];
   const prenom = (dossier.nom || '').trim().split(' ')[0] || (dossier.courriel || '').split('@')[0];
 
-  const onglets: { id: Onglet; label: string; labelCourt: string; icon: React.ReactNode }[] = [
-    { id: 'dossier', label: t.onglets.dossier, labelCourt: t.ongletsCourts.dossier, icon: <UserIcon className="w-4 h-4" /> },
-    { id: 'pieces', label: t.onglets.pieces, labelCourt: t.ongletsCourts.pieces, icon: <FolderOpen className="w-4 h-4" /> },
-    { id: 'parcours', label: t.onglets.parcours, labelCourt: t.ongletsCourts.parcours, icon: <RouteIcon className="w-4 h-4" /> },
-    { id: 'messages', label: t.onglets.messages, labelCourt: t.ongletsCourts.messages, icon: <MessageSquare className="w-4 h-4" /> },
-    { id: 'ressources', label: t.onglets.ressources, labelCourt: t.ongletsCourts.ressources, icon: <FileText className="w-4 h-4" /> },
+  const onglets: { id: Onglet; label: string }[] = [
+    { id: 'dossier', label: t.onglets.dossier },
+    { id: 'pieces', label: t.onglets.pieces },
+    { id: 'parcours', label: t.onglets.parcours },
+    { id: 'messages', label: t.onglets.messages },
+    { id: 'ressources', label: t.onglets.ressources },
   ];
 
   return (
-    <div className="min-h-screen pt-28 md:pt-32 pb-24 px-4 md:px-6 lg:px-10">
-      <div className="max-w-[1400px] mx-auto">
-        {/* Bandeau d'en-tête */}
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-2xl p-6 md:p-8 mb-6 flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl md:text-3xl font-serif font-bold text-white truncate">
-              {t.bonjour} {prenom}
-            </h1>
-            <p className="text-slate-400 text-sm mt-1">{dossier.projet?.titre || dossier.courriel}</p>
-          </div>
-          <div className="flex items-center gap-6 md:gap-10">
-            <div>
-              <p className="text-2xl font-bold text-iridescent">{pct} %</p>
-              <p className="text-xs text-slate-400">{t.pct}</p>
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-semibold text-white">{(lang === 'EN' ? (etapeCourante as { titreEn?: string } | undefined)?.titreEn : undefined) ?? etapeCourante?.titre ?? ''}</p>
-              <p className="text-xs text-slate-400">{t.etape}</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => signOut(auth)}
-            className={`flex items-center gap-2 min-h-[44px] px-5 rounded-full border border-white/15 hover:border-red-400/50 hover:bg-red-500/10 text-slate-300 hover:text-red-200 text-sm font-medium transition-colors flex-shrink-0 ${FOCUS_RING}`}
-          >
-            <LogOut className="w-4 h-4" />
-            {t.deconnexion}
-          </button>
+    <div className="min-h-[100svh] bg-papier pt-28 md:pt-32 pb-24 px-gut">
+      {/* Bandeau d'en-tête : pleine largeur, sans carte */}
+      <div className="border-b border-filet pb-6 mb-8 flex flex-col md:flex-row md:items-end gap-6">
+        <div className="flex-1 min-w-0">
+          <h1 className="font-serif text-h2 text-encre truncate">
+            {t.bonjour} {prenom}
+          </h1>
+          <p className="text-gris text-sm mt-1 mesure">{dossier.projet?.titre || dossier.courriel}</p>
         </div>
+        <div className="flex items-center gap-8">
+          <div>
+            <p className="font-serif text-encre" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
+              {pct} %
+            </p>
+            <p className="kicker text-gris mt-1">{t.pct}</p>
+          </div>
+          <div className="hidden sm:block">
+            <p className="font-sans font-semibold text-sm text-encre">
+              {(lang === 'EN' ? (etapeCourante as { titreEn?: string } | undefined)?.titreEn : undefined) ?? etapeCourante?.titre ?? ''}
+            </p>
+            <p className="kicker text-gris mt-1">{t.etape}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => signOut(auth)}
+          className="min-h-[44px] px-5 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-rose hover:text-rose transition-colors flex-shrink-0"
+        >
+          {t.deconnexion}
+        </button>
+      </div>
 
-        {/* Onglets */}
-        <div className="relative mb-6 -mx-4 px-4 md:mx-0 md:px-0">
-          <div ref={scrollRef} className="flex gap-2 overflow-x-auto pb-2" role="tablist">
-            {onglets.map((o) => (
-              <button
-                key={o.id}
-                ref={onglet === o.id ? activeTabRef : undefined}
-                type="button"
-                role="tab"
-                aria-selected={onglet === o.id}
-                aria-label={o.label}
-                onClick={() => setOnglet(o.id)}
-                className={`flex items-center gap-2 min-h-[44px] px-5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${FOCUS_RING} ${
-                  onglet === o.id
-                    ? 'bg-iridescent text-white shadow-iridescent-sm'
-                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                {o.icon}
-                <span className="hidden sm:inline">{o.label}</span>
-                <span className="sm:hidden">{o.labelCourt}</span>
-              </button>
-            ))}
-          </div>
-          {ongletsDebordent && (
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute right-0 top-0 bottom-2 w-12 bg-gradient-to-l from-slate-950 to-transparent"
-            />
-          )}
+      {/* Onglets soulignés, jamais en pilules */}
+      <div className="relative mb-8">
+        <div ref={scrollRef} className="flex gap-6 overflow-x-auto" role="tablist">
+          {onglets.map((o) => (
+            <button
+              key={o.id}
+              ref={onglet === o.id ? activeTabRef : undefined}
+              type="button"
+              role="tab"
+              aria-selected={onglet === o.id}
+              onClick={() => setOnglet(o.id)}
+              className={`relative min-h-[44px] pb-3 kicker whitespace-nowrap flex-shrink-0 transition-colors ${
+                onglet === o.id ? 'text-encre' : 'text-gris hover:text-encre'
+              }`}
+            >
+              {o.label}
+              {onglet === o.id && (
+                <motion.span layoutId="espace-onglet" className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose" transition={{ duration: 0.2 }} />
+              )}
+            </button>
+          ))}
         </div>
+        {ongletsDebordent && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-papier to-transparent"
+          />
+        )}
+      </div>
 
-        {/* Contenu de l'onglet */}
-        <div>
-          {onglet === 'dossier' && <Profil dossier={dossier} uid={uid} lang={lang} />}
-          {onglet === 'pieces' && <Pieces dossier={dossier} config={config} uid={uid} lang={lang} />}
-          {onglet === 'parcours' && <Parcours dossier={dossier} config={config} lang={lang} />}
-          {onglet === 'messages' && <Messages uid={uid} lang={lang} />}
-          {onglet === 'ressources' && <Ressources lang={lang} />}
-        </div>
+      {/* Contenu de l'onglet */}
+      <div>
+        {onglet === 'dossier' && <Profil dossier={dossier} uid={uid} lang={lang} />}
+        {onglet === 'pieces' && <Pieces dossier={dossier} config={config} uid={uid} lang={lang} />}
+        {onglet === 'parcours' && <Parcours dossier={dossier} config={config} lang={lang} />}
+        {onglet === 'messages' && <Messages uid={uid} lang={lang} />}
+        {onglet === 'ressources' && <Ressources lang={lang} />}
       </div>
 
       <Assistant config={config} dossier={dossier} lang={lang} />
