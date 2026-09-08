@@ -12,6 +12,7 @@ import { formatDate, formatHeure, icsRendezVous, nomSalle, rencontreOuverte, use
 import { useTextes } from '../lib/textes';
 import Rencontre from '../components/espace/Rencontre';
 import Disponibilites from '../components/admin/agenda/Disponibilites';
+import GoogleAgenda from '../components/admin/agenda/GoogleAgenda';
 import type { Dossier, Language, RendezVous, StatutRendezVous } from '../types';
 
 interface AdminAgendaProps {
