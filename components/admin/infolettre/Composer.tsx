@@ -268,7 +268,7 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
   };
 
   const copierHtml = async () => {
-    const html = renderEmailHtml(blocs, { subject: sujet, preheader, unsubscribeUrl: '#', postalAddress: '', fond, bandeau });
+    const html = renderEmailHtml(blocs, { subject: sujet, preheader, unsubscribeUrl: '#', postalAddress: piedCourriel, fond, bandeau });
     await navigator.clipboard.writeText(html);
     setSendInfo(t.copie);
   };
