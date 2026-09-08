@@ -94,7 +94,7 @@ const Sommaire: React.FC<SommaireProps> = ({ lang, title, subtitle, onChangeView
                     style={{ gridTemplateRows: estOuvert ? '1fr' : '0fr' }}
                   >
                     <div className="overflow-hidden">
-                      <p className="col-span-12 max-w-mesure pt-4 text-corps text-encre/75 sm:col-start-6 sm:pl-0">
+                      <p className="max-w-mesure pt-4 text-corps text-encre/75 sm:ml-[calc(5/12*100%)]">
                         {details}
                       </p>
                     </div>
