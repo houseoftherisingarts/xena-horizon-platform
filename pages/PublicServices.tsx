@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { useCollection } from '../lib/firestore';
 import { PROFILS_REELS, SERVICES_PAGE, SERVICES_REELS, SIGNATURE, ServiceReel } from '../lib/contenu';
 import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
-import { Feuille, KenBurns, Reveal, TexteRevele } from '../components/motion';
+import { Feuille, KenBurns, Reveal, TexteRevele, useLenis } from '../components/motion';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
 
 interface PublicServicesProps {
