@@ -140,7 +140,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         </div>
         <div className="flex items-center gap-8">
           <div>
-            <p className="font-serif text-encre" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
+            <p className="font-sans font-semibold tabular-nums text-encre" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
               {pct} %
             </p>
             <p className="kicker text-gris mt-1">{t.pct}</p>
