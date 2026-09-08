@@ -95,12 +95,15 @@ const gabaritBaladoDefaut = (titre: string, image: string): Gabarit['calques'] =
 /** La couverture réelle du balado sert de fond (public/images/balado.jpg), le titre du dernier
  * épisode se lit au chargement du studio (voir SocialCreator.tsx) : ce gabarit part avec un titre
  * générique en attendant, remplacé dès que /balado.json répond. */
+// Le fond n'est jamais la couverture elle-même (elle porte déjà son propre titre imprimé) :
+// un fond dupliqué en plein cadre entrait en collision avec le titre du calque et le rendait
+// illisible. Un portrait de Laurie, sombre, sert d'écrin neutre à la vraie couverture au centre.
 export const GABARIT_BALADO: Gabarit = {
   id: 'balado',
   nom: 'Nouvel épisode de balado',
   nomEn: 'New podcast episode',
   format: 'carre',
-  fond: { src: '/images/balado.jpg', nb: false, luminositePct: 100 },
+  fond: { src: PORTRAIT_NB, nb: true, luminositePct: 42 },
   calques: gabaritBaladoDefaut('Le dernier épisode', '/images/balado.jpg'),
 };
 
