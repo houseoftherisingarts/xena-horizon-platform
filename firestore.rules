@@ -90,7 +90,18 @@ service cloud.firestore {
       allow read: if resource.data.isPublic == true || isAdmin();
       allow write: if isAdmin();
     }
-    match /settings/{key} { allow read: if true; allow write: if isAdmin(); }
+    // settings/facturation porte l'identité légale de Laurie (NEQ, TPS, TVQ) : admin seulement.
+    // Ce que la personne facturée doit voir vit dans le miroir factures_publiques, jamais ici.
+    match /settings/{key} { allow read: if key != 'facturation' || isAdmin(); allow write: if isAdmin(); }
+
+    // Miroir public d'une facture publiée : lisible par jeton (assez long pour être imprévisible),
+    // jamais listable, jamais écrit ailleurs que par Laurie (lib/factures.ts, publierFacture).
+    // La collection documents (source, avec l'identité de la personne facturée) reste admin seulement.
+    match /factures_publiques/{jeton} {
+      allow get: if true;
+      allow list: if false;
+      allow write: if isAdmin();
+    }
 
     // Admin-only collections
     match /clients/{clientId}     { allow read, write: if isAdmin(); }
