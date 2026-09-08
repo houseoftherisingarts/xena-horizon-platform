@@ -2,7 +2,8 @@
 // rend la page dans une iframe isolée. Un seul moteur, jamais deux rendus qui pourraient diverger.
 import React, { useMemo } from 'react';
 import type { Language } from '../../../types';
-import { renderEmailHtml, type BandeauInfolettre, type NewsletterBlock } from '../../../lib/infolettre/renderer';
+import type { BandeauInfolettre, NewsletterBlock } from '../../../lib/infolettre/renderer';
+import { renderEmailHtml } from '../../../lib/infolettre/email';
 import { useTextes } from '../../../lib/textes';
 
 const TEXTES = {
