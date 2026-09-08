@@ -188,7 +188,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
 
         <div className="grid gap-4 sm:grid-cols-2">
           {JOURS_ORDRE.map((jour) => (
-            <div key={jour} className="border border-filet rounded-champ p-4">
+            <div key={jour} className="min-w-0 border border-filet rounded-champ p-4">
               <div className="flex items-center justify-between mb-3">
                 <p className="font-sans font-semibold text-encre text-sm">{t[`jour${jour}` as 'jour0']}</p>
                 <button
