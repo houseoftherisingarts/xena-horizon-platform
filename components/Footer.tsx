@@ -2,6 +2,7 @@ import React from 'react';
 import { Mail, Phone } from 'lucide-react';
 import { Language, ViewState } from '../types';
 import { COORDONNEES, CREDITS } from '../lib/contenu';
+import { useLenis } from './motion';
 
 interface FooterProps {
   onAdminLogin: () => void;
