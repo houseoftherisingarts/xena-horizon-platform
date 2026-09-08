@@ -30,6 +30,8 @@ const SocialCreator = lazy(() => import('./pages/SocialCreator'));
 const AdminDossiers = lazy(() => import('./pages/AdminDossiers'));
 const AdminVexel = lazy(() => import('./pages/AdminVexel'));
 const AdminTemoignages = lazy(() => import('./pages/AdminTemoignages'));
+const AdminVideos = lazy(() => import('./pages/AdminVideos'));
+const AdminSections = lazy(() => import('./pages/AdminSections'));
 const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 const FacturePublique = lazy(() => import('./pages/FacturePublique'));
 const PublicProjets = lazy(() => import('./pages/PublicProjets'));
