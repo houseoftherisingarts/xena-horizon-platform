@@ -76,6 +76,7 @@ const Liste: React.FC<{ onOpen: (id: string | null) => void; lang: Language }> =
                 <th className="py-3 px-4">{t.sujet}</th>
                 <th className="py-3 px-4 hidden sm:table-cell">{t.statut}</th>
                 <th className="py-3 px-4 hidden md:table-cell">{t.langue}</th>
+                <th className="py-3 px-4 hidden lg:table-cell">{t.envois}</th>
                 <th className="py-3 px-4 hidden md:table-cell">{t.maj}</th>
                 <th className="py-3 px-4" />
               </tr>
