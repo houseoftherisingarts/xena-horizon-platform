@@ -165,7 +165,7 @@ export interface HomeImageBlock extends HomeBaseBlock {
 
 export type HomeBlock = HomeHeroBlock | HomeServicesBlock | HomeStatsBlock | HomeContactBlock | HomeTextBlock | HomeImageBlock;
 
-export type ViewState = 'HOME' | 'SERVICES' | 'PROJETS' | 'A_PROPOS' | 'ESPACE_CLIENT' | 'ADMIN_DOSSIERS' | 'ADMIN_DASHBOARD' | 'ADMIN_CRM' | 'ADMIN_SOCIAL' | 'ADMIN_PRODUCTS' | 'ADMIN_INVOICES' | 'ADMIN_GALLERY' | 'ADMIN_FINANCE' | 'ADMIN_NEWSLETTER' | 'ADMIN_AGENDA' | 'ADMIN_EMAIL' | 'ADMIN_MESSENGER' | 'ADMIN_VEXEL' | 'ADMIN_TEMOIGNAGES';
+export type ViewState = 'HOME' | 'SERVICES' | 'PROJETS' | 'A_PROPOS' | 'ESPACE_CLIENT' | 'ADMIN_DOSSIERS' | 'ADMIN_DASHBOARD' | 'ADMIN_CRM' | 'ADMIN_SOCIAL' | 'ADMIN_PRODUCTS' | 'ADMIN_INVOICES' | 'ADMIN_GALLERY' | 'ADMIN_FINANCE' | 'ADMIN_NEWSLETTER' | 'ADMIN_AGENDA' | 'ADMIN_EMAIL' | 'ADMIN_MESSENGER' | 'ADMIN_VEXEL' | 'ADMIN_TEMOIGNAGES' | 'ADMIN_VIDEOS' | 'ADMIN_SECTIONS';
 
 export interface Lead {
   id: string;
