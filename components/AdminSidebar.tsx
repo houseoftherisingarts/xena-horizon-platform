@@ -5,6 +5,7 @@ import {
   FileText,
   FolderOpen,
   Image as ImageIcon,
+  Film,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -14,6 +15,7 @@ import {
   ShieldCheck,
   PieChart,
   ShoppingBag,
+  ToggleLeft,
   Users,
   X,
 } from 'lucide-react';
