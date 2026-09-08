@@ -3,12 +3,8 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-import {
-  Download, Calendar, TrendingUp, TrendingDown, DollarSign,
-  FileSpreadsheet, Filter, ArrowUpRight, ArrowDownRight
-} from 'lucide-react';
-import GlassCard from '../components/GlassCard';
-import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
+import { Download, Filter } from 'lucide-react';
+import { EnTete, Panneau, Bouton, Chiffre, Vide } from '../components/admin/ui';
 import { Language, Client, Document } from '../types';
 import { useCollection } from '../lib/firestore';
 
@@ -17,7 +13,11 @@ interface AdminFinanceProps {
 }
 
 const TAX_RATE = 0.14975;
-const PIE_COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'];
+const ENCRE = '#1A1A1E';
+const ROSE = '#A8104A';
+const FILET = '#DDD7CD';
+const GRIS = '#5E5850';
+const PIE_COLORS = [ROSE, ENCRE, GRIS];
 
 type DateRange = '30D' | '90D' | 'YTD' | 'ALL';
 
@@ -35,19 +35,17 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
 
   const t = {
     FR: {
-      title: 'Analyse Financière',
+      title: 'Analyse financière',
       subtitle: 'Vue d\'ensemble de la santé financière et comptable.',
-      export: 'Exporter Rapport',
-      totalRev: 'Revenus Totaux (YTD)',
-      totalExp: 'Dépenses Totales (YTD)',
-      netProfit: 'Bénéfice Net',
-      margin: 'Marge',
-      taxes: 'Taxes à Remettre (Est.)',
-      cashflow: 'Flux de Trésorerie',
+      export: 'Exporter le rapport',
+      totalRev: 'Revenus totaux (ÉTY)',
+      avgInvoice: 'Facture moyenne (ÉTY)',
+      outstanding: 'Montant en attente',
+      paidCount: 'Factures payées (ÉTY)',
+      cashflow: 'Flux de trésorerie',
       rev: 'Revenus',
-      exp: 'Dépenses',
-      distrib: 'Répartition des Revenus',
-      ledger: 'Grand Livre (Récent)',
+      distrib: 'Répartition des revenus',
+      ledger: 'Grand livre (récent)',
       filter: 'Filtrer...',
       date: 'Date',
       desc: 'Description',
@@ -57,20 +55,22 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
       viewAll: 'Voir toutes les transactions',
       paid: 'Payé',
       pending: 'En attente',
-      loading: 'Chargement...'
+      loading: 'Chargement...',
+      videTitre: 'Aucune transaction',
+      videTexte: 'Aucune facture payée pour cette période.',
+      videGraphTitre: 'Aucune répartition',
+      videGraphTexte: 'Aucun revenu réparti par type de client pour cette période.',
     },
     EN: {
       title: 'Financial Analysis',
       subtitle: 'Overview of financial health and accounting.',
-      export: 'Export Report',
+      export: 'Export report',
       totalRev: 'Total Revenue (YTD)',
-      totalExp: 'Total Expenses (YTD)',
-      netProfit: 'Net Profit',
-      margin: 'Margin',
-      taxes: 'Taxes to Remit (Est.)',
+      avgInvoice: 'Average Invoice (YTD)',
+      outstanding: 'Outstanding Amount',
+      paidCount: 'Paid Invoices (YTD)',
       cashflow: 'Cash Flow',
       rev: 'Revenue',
-      exp: 'Expenses',
       distrib: 'Revenue Distribution',
       ledger: 'Ledger (Recent)',
       filter: 'Filter...',
@@ -82,7 +82,11 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
       viewAll: 'View all transactions',
       paid: 'Paid',
       pending: 'Pending',
-      loading: 'Loading...'
+      loading: 'Loading...',
+      videTitre: 'No transactions',
+      videTexte: 'No paid invoice for this period.',
+      videGraphTitre: 'No distribution',
+      videGraphTexte: 'No revenue split by client type for this period.',
     }
   }[lang];
 
@@ -120,13 +124,12 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
     const labels = lang === 'FR' ? monthLabelsFR : monthLabelsEN;
     const now = new Date();
 
-    const buckets: { name: string; revenus: number; depenses: number; key: string }[] = [];
+    const buckets: { name: string; revenus: number; key: string }[] = [];
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       buckets.push({
         name: labels[d.getMonth()],
         revenus: 0,
-        depenses: 0,
         key: `${d.getFullYear()}-${d.getMonth()}`,
       });
     }
@@ -140,10 +143,9 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
       bucket.revenus += computeItemsTotal(d.items) * (1 + TAX_RATE);
     });
 
-    return buckets.map(({ name, revenus, depenses }) => ({
+    return buckets.map(({ name, revenus }) => ({
       name,
       revenus: Math.round(revenus),
-      depenses: Math.round(depenses),
     }));
   }, [filteredDocuments, lang]);
 
@@ -174,8 +176,8 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
       .map(d => ({
         id: d.id,
         date: d.date,
-        client: d.clientName || '—',
-        desc: d.clientName || '—',
+        client: d.clientName || '–',
+        desc: d.clientName || '–',
         category: 'Revenu',
         amount: Math.round(computeItemsTotal(d.items) * (1 + TAX_RATE) * 100) / 100,
         status: d.status,
@@ -220,9 +222,6 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
       .reduce((sum, d) => sum + computeItemsTotal(d.items) * (1 + TAX_RATE), 0);
   }, [documents]);
 
-  const netProfit = totalRevenue - outstandingTotal;
-  const margin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
-
   // --- EXPORT FUNCTION ---
   const handleExportLedger = () => {
     const headers = ["ID,Date,Client,Category,Amount,Status"];
@@ -241,223 +240,188 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
 
   if (loading) {
     return (
-      <div className="pt-24 px-6 pb-12 max-w-[1600px] mx-auto">
-        <p className="text-slate-400">{t.loading}</p>
+      <div className="px-6 md:px-10 py-10">
+        <p className="text-gris text-sm">{t.loading}</p>
       </div>
     );
   }
 
   return (
-    <div className="pt-24 px-6 pb-12 max-w-[1600px] mx-auto space-y-8">
+    <div className="px-6 md:px-10 py-10 space-y-8">
 
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-4">
-        <div>
-          <h1 className="text-3xl font-serif font-bold text-white">{t.title}</h1>
-          <p className="text-slate-400">{t.subtitle}</p>
-        </div>
-        <div className="flex gap-2">
-           <div className="bg-slate-900 border border-white/10 rounded-[15px] p-1 flex">
+      <EnTete
+        kicker="Finances"
+        titre={t.title}
+        lede={t.subtitle}
+        actions={
+          <>
+            <div className="border border-filet rounded-pilule p-1 flex">
               {(['30D', '90D', 'YTD', 'ALL'] as DateRange[]).map(range => (
-                 <button
+                <button
                   key={range}
                   onClick={() => setDateRange(range)}
-                  className={`px-4 py-2 rounded-[10px] text-sm font-medium transition-all ${dateRange === range ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
-                 >
-                    {range}
-                 </button>
+                  className={`px-4 min-h-[36px] rounded-pilule text-sm font-medium transition-colors ${dateRange === range ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
+                >
+                  {range}
+                </button>
               ))}
-           </div>
-           <button onClick={handleExportLedger} className={ACTION_BUTTON_CLASSES}>
-              <Download className="w-4 h-4" /> {t.export}
-           </button>
-        </div>
-      </div>
+            </div>
+            <Bouton variante="secondaire" icone={Download} onClick={handleExportLedger}>
+              {t.export}
+            </Bouton>
+          </>
+        }
+      />
 
       {/* KPI CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-         <GlassCard className="p-6 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-               <ArrowUpRight className="w-24 h-24 text-emerald-500" />
-            </div>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">{t.totalRev}</p>
-            <h3 className="text-3xl font-bold text-white mb-2">{totalRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })} $</h3>
-            <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full flex items-center gap-1 w-fit">
-               <TrendingUp className="w-3 h-3" /> +12.5% vs N-1
-            </span>
-         </GlassCard>
-
-         <GlassCard className="p-6 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-               <ArrowDownRight className="w-24 h-24 text-red-500" />
-            </div>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">{t.totalExp}</p>
-            <h3 className="text-3xl font-bold text-white mb-2">{averageInvoiceValue.toLocaleString(undefined, { maximumFractionDigits: 0 })} $</h3>
-            <span className="text-xs font-medium text-red-400 bg-red-400/10 px-2 py-1 rounded-full flex items-center gap-1 w-fit">
-               <TrendingDown className="w-3 h-3" /> +5.2% vs N-1
-            </span>
-         </GlassCard>
-
-         <GlassCard className="p-6 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-               <DollarSign className="w-24 h-24 text-blue-500" />
-            </div>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">{t.netProfit}</p>
-            <h3 className="text-3xl font-bold text-white mb-2">{outstandingTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })} $</h3>
-            <span className={`text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1 w-fit ${margin > 0 ? 'text-blue-400 bg-blue-400/10' : 'text-red-400 bg-red-400/10'}`}>
-               {t.margin}: {margin.toFixed(1)}%
-            </span>
-         </GlassCard>
-
-         <GlassCard className="p-6 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-               <FileSpreadsheet className="w-24 h-24 text-purple-500" />
-            </div>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">{t.taxes}</p>
-            <h3 className="text-3xl font-bold text-white mb-2">{paidInvoicesYTD}</h3>
-            <span className="text-xs font-medium text-purple-400 bg-purple-400/10 px-2 py-1 rounded-full flex items-center gap-1 w-fit">
-               TPS/TVQ
-            </span>
-         </GlassCard>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Panneau>
+          <Chiffre valeur={`${totalRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })} $`} libelle={t.totalRev} />
+        </Panneau>
+        <Panneau>
+          <Chiffre valeur={`${averageInvoiceValue.toLocaleString(undefined, { maximumFractionDigits: 0 })} $`} libelle={t.avgInvoice} />
+        </Panneau>
+        <Panneau>
+          <Chiffre valeur={`${outstandingTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })} $`} libelle={t.outstanding} />
+        </Panneau>
+        <Panneau>
+          <Chiffre valeur={paidInvoicesYTD} libelle={t.paidCount} />
+        </Panneau>
       </div>
 
       {/* CHARTS ROW */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-         {/* MAIN CHART */}
-         <div className="lg:col-span-2 bg-slate-900 border border-white/10 rounded-[24px] p-8">
-            <div className="flex justify-between items-center mb-6">
-               <h3 className="text-lg font-bold text-white">{t.cashflow}</h3>
-               <div className="flex gap-4">
-                  <div className="flex items-center gap-2">
-                     <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-                     <span className="text-xs text-slate-400">{t.rev}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                     <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                     <span className="text-xs text-slate-400">{t.exp}</span>
-                  </div>
-               </div>
+        {/* MAIN CHART */}
+        <Panneau
+          className="lg:col-span-2"
+          titre={t.cashflow}
+          actions={
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-pilule bg-rose" />
+              <span className="text-xs text-gris">{t.rev}</span>
             </div>
-            <div className="h-[350px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={MONTHLY_DATA}>
-                     <defs>
-                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                           <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                           <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                        </linearGradient>
-                        <linearGradient id="colorDep" x1="0" y1="0" x2="0" y2="1">
-                           <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                           <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                        </linearGradient>
-                     </defs>
-                     <XAxis dataKey="name" stroke="#64748b" tickLine={false} axisLine={false} />
-                     <YAxis stroke="#64748b" tickLine={false} axisLine={false} tickFormatter={(value) => `${value/1000}k`} />
-                     <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                     <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', color: '#fff' }}
-                        itemStyle={{ color: '#fff' }}
-                     />
-                     <Area type="monotone" dataKey="revenus" stroke="#10b981" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
-                     <Area type="monotone" dataKey="depenses" stroke="#ef4444" fillOpacity={1} fill="url(#colorDep)" strokeWidth={3} />
-                  </AreaChart>
-               </ResponsiveContainer>
-            </div>
-         </div>
+          }
+        >
+          <div className="h-[320px] w-full">
+            {MONTHLY_DATA.every(m => m.revenus === 0) ? (
+              <Vide titre={t.videTitre} texte={t.videTexte} />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={MONTHLY_DATA}>
+                  <defs>
+                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={ROSE} stopOpacity={0.18} />
+                      <stop offset="95%" stopColor={ROSE} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="name" stroke={GRIS} tickLine={false} axisLine={false} fontSize={12} />
+                  <YAxis stroke={GRIS} tickLine={false} axisLine={false} fontSize={12} tickFormatter={(value) => `${value / 1000}k`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={FILET} vertical={false} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#FBF9F4', borderColor: FILET, borderRadius: '6px', color: ENCRE }}
+                    itemStyle={{ color: ENCRE }}
+                  />
+                  <Area type="monotone" dataKey="revenus" stroke={ROSE} fillOpacity={1} fill="url(#colorRev)" strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </Panneau>
 
-         {/* PIE CHART */}
-         <div className="bg-slate-900 border border-white/10 rounded-[24px] p-8 flex flex-col">
-            <h3 className="text-lg font-bold text-white mb-6">{t.distrib}</h3>
-            <div className="flex-1 min-h-[250px] relative">
-               <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                     <Pie
-                        data={REVENUE_BY_SOURCE}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="value"
-                        stroke="none"
-                     >
-                        {REVENUE_BY_SOURCE.map((entry, index) => (
-                           <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                        ))}
-                     </Pie>
-                     <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', color: '#fff' }}
-                        formatter={(value: number) => `${value.toLocaleString()} $`}
-                     />
-                     <Legend verticalAlign="bottom" height={36} iconType="circle" />
-                  </PieChart>
-               </ResponsiveContainer>
-               {/* Center Text */}
-               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] text-center pointer-events-none">
-                  <p className="text-2xl font-bold text-white">100%</p>
-               </div>
-            </div>
-         </div>
+        {/* PIE CHART */}
+        <Panneau titre={t.distrib}>
+          <div className="flex-1 min-h-[250px] relative">
+            {REVENUE_BY_SOURCE.length === 0 ? (
+              <Vide titre={t.videGraphTitre} texte={t.videGraphTexte} />
+            ) : (
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={REVENUE_BY_SOURCE}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {REVENUE_BY_SOURCE.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#FBF9F4', borderColor: FILET, borderRadius: '6px', color: ENCRE }}
+                    formatter={(value: number) => `${value.toLocaleString()} $`}
+                  />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </Panneau>
       </div>
 
       {/* LEDGER TABLE */}
-      <GlassCard className="p-8">
-         <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold text-white">{t.ledger}</h3>
-            <div className="relative">
-               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-               <input
-                  type="text"
-                  value={ledgerFilter}
-                  onChange={(e) => setLedgerFilter(e.target.value)}
-                  placeholder={t.filter}
-                  aria-label={t.filter}
-                  className={`${GLASS_INPUT_CLASSES} pl-10 py-1.5 h-auto text-sm w-48`}
-               />
-            </div>
-         </div>
-
-         <div className="overflow-x-auto">
+      <Panneau
+        titre={t.ledger}
+        actions={
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gris" aria-hidden="true" />
+            <input
+              type="text"
+              value={ledgerFilter}
+              onChange={(e) => setLedgerFilter(e.target.value)}
+              placeholder={t.filter}
+              aria-label={t.filter}
+              className="bg-papier border border-filet rounded-champ pl-10 pr-4 py-2 text-sm text-encre placeholder-gris outline-none focus:border-rose w-48"
+            />
+          </div>
+        }
+      >
+        {LEDGER_ROWS.length === 0 ? (
+          <Vide titre={t.videTitre} texte={t.videTexte} />
+        ) : (
+          <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
-               <thead>
-                  <tr className="border-b border-white/10 text-slate-400 text-xs uppercase tracking-wider">
-                     <th className="py-4 font-bold">{t.date}</th>
-                     <th className="py-4 font-bold">{t.desc}</th>
-                     <th className="py-4 font-bold">{t.cat}</th>
-                     <th className="py-4 font-bold text-right">{t.amount}</th>
-                     <th className="py-4 font-bold text-center">{t.status}</th>
+              <thead>
+                <tr className="divide-y divide-filet border-b border-filet">
+                  <th className="py-3 kicker text-gris">{t.date}</th>
+                  <th className="py-3 kicker text-gris">{t.desc}</th>
+                  <th className="py-3 kicker text-gris">{t.cat}</th>
+                  <th className="py-3 kicker text-gris text-right">{t.amount}</th>
+                  <th className="py-3 kicker text-gris text-center">{t.status}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-filet">
+                {LEDGER_ROWS.map((tx) => (
+                  <tr key={tx.id}>
+                    <td className="py-3 text-sm text-gris">{tx.date}</td>
+                    <td className="py-3 text-sm font-medium text-encre">{tx.desc}</td>
+                    <td className="py-3 text-sm text-gris">{tx.category}</td>
+                    <td className="py-3 text-sm text-right font-medium text-encre">
+                      {tx.amount > 0 ? '+' : ''}{tx.amount.toFixed(2)} $
+                    </td>
+                    <td className="py-3 text-center">
+                      <span className={`inline-flex items-center rounded-pilule px-2.5 py-0.5 text-xs font-medium ${
+                        tx.status === 'Paid' ? 'bg-rose/10 text-rose' : 'border border-filet text-gris'
+                      }`}>
+                        {tx.status === 'Paid' ? t.paid : t.pending}
+                      </span>
+                    </td>
                   </tr>
-               </thead>
-               <tbody className="text-sm text-slate-300">
-                  {LEDGER_ROWS.map((tx) => (
-                     <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                        <td className="py-4 font-mono text-slate-500">{tx.date}</td>
-                        <td className="py-4 font-medium text-white">{tx.desc}</td>
-                        <td className="py-4">
-                           <span className={`px-2 py-1 rounded text-xs ${tx.category === 'Revenu' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
-                              {tx.category}
-                           </span>
-                        </td>
-                        <td className={`py-4 text-right font-bold ${tx.amount > 0 ? 'text-emerald-400' : 'text-slate-200'}`}>
-                           {tx.amount > 0 ? '+' : ''}{tx.amount.toFixed(2)} $
-                        </td>
-                        <td className="py-4 text-center">
-                           <span className={`px-2 py-0.5 rounded-full text-xs border ${
-                              tx.status === 'Paid' ? 'border-emerald-500/30 text-emerald-400' : 'border-yellow-500/30 text-yellow-400'
-                           }`}>
-                              {tx.status === 'Paid' ? t.paid : t.pending}
-                           </span>
-                        </td>
-                     </tr>
-                  ))}
-               </tbody>
+                ))}
+              </tbody>
             </table>
-         </div>
-         <div className="mt-6 text-center">
-            <button className="text-sm text-blue-400 hover:text-white transition-colors font-medium">{t.viewAll}</button>
-         </div>
-      </GlassCard>
+          </div>
+        )}
+        {LEDGER_ROWS.length > 0 && (
+          <div className="mt-6 text-center">
+            <button type="button" className="text-sm text-rose hover:text-encre transition-colors font-medium">{t.viewAll}</button>
+          </div>
+        )}
+      </Panneau>
 
     </div>
   );
