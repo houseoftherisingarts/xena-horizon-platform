@@ -80,7 +80,7 @@ const PlanComptable: React.FC<Props> = ({ lang }) => {
 
   const grouper = (s: Sens) => liste.filter((c) => c.sens === s).sort((a, b) => a.ordre - b.ordre);
 
-  const Groupe: React.FC<{ titre: string; comptes: Compte[] }> = ({ titre, comptes }) => (
+  const Groupe: React.FC<{ titre: string; comptes: Compte[]; estDepense?: boolean }> = ({ titre, comptes, estDepense }) => (
     <div>
       <h3 className="font-sans font-semibold text-encre mb-3">{titre}</h3>
       <div className="overflow-x-auto">
@@ -89,7 +89,7 @@ const PlanComptable: React.FC<Props> = ({ lang }) => {
             <tr className="divide-y divide-filet border-b border-filet">
               <th className="py-2 pr-3 kicker text-gris w-16">{t.code}</th>
               <th className="py-2 pr-3 kicker text-gris">{t.nom}</th>
-              {titre === TEXTES[lang].depense && <th className="py-2 pr-3 kicker text-gris">{t.deductible}</th>}
+              {estDepense && <th className="py-2 pr-3 kicker text-gris">{t.deductible}</th>}
               <th className="py-2 pr-3 kicker text-gris text-center">{t.actif}</th>
               <th className="py-2 kicker text-gris text-right">{lang === 'FR' ? 'Ordre' : 'Order'}</th>
             </tr>

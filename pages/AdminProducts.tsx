@@ -142,7 +142,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
         ...(formData.clientTypes ? { clientTypes: formData.clientTypes } : {}),
         ...(formData.variants ? { variants: formData.variants } : {}),
         ...(formData.paiement ? { paiement: formData.paiement } : {}),
-        ...(formData.prixCents !== undefined ? { prixCents: formData.prixCents, devise: 'CAD' as const } : {}),
+        ...(Number.isFinite(formData.prixCents) ? { prixCents: formData.prixCents, devise: 'CAD' as const } : {}),
         ...(formData.lienPaiement ? { lienPaiement: formData.lienPaiement } : {})
       };
       await createDoc<Omit<Product, 'id'>>('products', payload);
