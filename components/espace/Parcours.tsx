@@ -29,15 +29,12 @@ const sousEtape = (etape: EtapeDef, lang: Language): string => {
 const Parcours: React.FC<ParcoursProps> = ({ dossier, config, lang }) => {
   const idx = indexEtape(config.etapes, dossier.etape);
 
-  const t = {
-    FR: { titre: 'Ton parcours', sous: 'Le chemin entre le premier contact et le suivi.' },
-    EN: { titre: 'Your journey', sous: 'The road between the first contact and the follow-up.' },
-  }[lang];
+  const t = useTextes('espaceParcours', TEXTES, lang);
 
   return (
-    <section className="border-t border-filet pt-8">
-      <h2 className="font-serif text-h3 text-encre mb-1">{t.titre}</h2>
-      <p className="text-gris text-sm mb-10 mesure">{t.sous}</p>
+    <section data-tx-scope="espaceParcours" className="border-t border-filet pt-8">
+      <h2 className="font-serif text-h3 text-encre mb-1">{t.parcoursTitre}</h2>
+      <p className="text-gris text-sm mb-10 mesure">{t.parcoursSous}</p>
 
       <ol className="relative">
         {config.etapes.map((etape, i) => {

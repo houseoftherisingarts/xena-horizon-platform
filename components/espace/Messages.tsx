@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { increment, orderBy, serverTimestamp } from 'firebase/firestore';
 import { AlertCircle, Send } from 'lucide-react';
 import { createDoc, patchDoc, useCollection } from '../../lib/firestore';
+import { useTextes } from '../../lib/textes';
 import { DossierMessage, Language } from '../../types';
 
 interface MessagesProps {
@@ -18,6 +19,27 @@ const jour = (ts: any): string => {
   }
 };
 
+const TEXTES = {
+  FR: {
+    titre: 'Messages',
+    sous: 'Écris directement à Laurie. Elle voit ton message dès qu\'il entre.',
+    placeholder: 'Ton message',
+    envoyer: 'Envoyer',
+    vide: "Aucun message pour l'instant. Écris à Laurie quand tu as une question.",
+    echec: "L'envoi a échoué. Réessaie dans un instant.",
+    laurie: 'Laurie',
+  },
+  EN: {
+    titre: 'Messages',
+    sous: "Write directly to Laurie. She sees your message as soon as it comes in.",
+    placeholder: 'Your message',
+    envoyer: 'Send',
+    vide: 'No messages yet. Write to Laurie whenever you have a question.',
+    echec: 'Sending failed. Try again in a moment.',
+    laurie: 'Laurie',
+  },
+};
+
 const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
   const { data: messages } = useCollection<DossierMessage>(`dossiers/${uid}/messages`, [orderBy('createdAt', 'asc')]);
   const [texte, setTexte] = useState('');
@@ -25,27 +47,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
   const [error, setError] = useState<string | null>(null);
   const filRef = useRef<HTMLDivElement>(null);
   const marqueEnCours = useRef(false);
-
-  const t = {
-    FR: {
-      titre: 'Messages',
-      sous: 'Écris directement à Laurie. Elle voit ton message dès qu\'il entre.',
-      placeholder: 'Ton message',
-      envoyer: 'Envoyer',
-      vide: "Aucun message pour l'instant. Écris à Laurie quand tu as une question.",
-      echec: "L'envoi a échoué. Réessaie dans un instant.",
-      laurie: 'Laurie',
-    },
-    EN: {
-      titre: 'Messages',
-      sous: "Write directly to Laurie. She sees your message as soon as it comes in.",
-      placeholder: 'Your message',
-      envoyer: 'Send',
-      vide: 'No messages yet. Write to Laurie whenever you have a question.',
-      echec: 'Sending failed. Try again in a moment.',
-      laurie: 'Laurie',
-    },
-  }[lang];
+  const t = useTextes('espaceMessages', TEXTES, lang);
 
   useEffect(() => {
     filRef.current?.scrollTo({ top: filRef.current.scrollHeight });
@@ -91,7 +93,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
   };
 
   return (
-    <section className="border-t border-filet pt-8 flex flex-col h-[min(70vh,640px)]">
+    <section data-tx-scope="espaceMessages" className="border-t border-filet pt-8 flex flex-col h-[min(70vh,640px)]">
       <div className="mb-4 flex-shrink-0">
         <h2 className="font-serif text-h3 text-encre">{t.titre}</h2>
         <p className="text-gris text-sm mesure">{t.sous}</p>
