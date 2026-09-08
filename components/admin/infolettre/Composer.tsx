@@ -17,6 +17,7 @@ import {
   type BandeauInfolettre,
 } from '../../../lib/infolettre/renderer';
 import { renderEmailHtml } from '../../../lib/infolettre/email';
+import { COORDONNEES } from '../../../lib/contenu';
 import { chargerGabarits, piedCourriel, type Gabarit } from '../../../lib/infolettre/gabarits';
 import { BlockFrame, InsertPoint, BLOCK_PALETTE } from './BlockFrame';
 import Audience from './Audience';
