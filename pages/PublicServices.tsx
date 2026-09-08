@@ -47,6 +47,14 @@ const SPAN_PROFIL = ['lg:col-span-5', 'lg:col-span-4', 'lg:col-span-3'];
 
 const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) => {
   const { data: produitsFirestore } = useCollection<Product>('products');
+  const lenis = useLenis();
+
+  const allerA = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (lenis) lenis.scrollTo(el, { offset: -72 });
+    else el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const t = {
     FR: {
