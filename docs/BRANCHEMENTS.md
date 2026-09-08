@@ -5,6 +5,40 @@ geste précis à poser, et où déposer le résultat. Une section par intégrati
 seul : tant qu'une section n'est pas faite, la fonction correspondante existe dans le code, compile,
 mais reste inactive (projet Firebase `xena-70977` sur le plan Spark : aucune fonction déployée).
 
+## Infolettre (envoi réel des lettres composées)
+
+Ce que ça fait : le bouton « Envoyer » du composeur (Admin › Infolettres) part réellement vers les
+abonnés au lieu de rester un brouillon. Le module vit dans `components/admin/infolettre/`,
+`lib/infolettre/`, le code serveur dans `functions/src/infolettre/send.ts` (callable
+`envoyerInfolettre`, région `northamerica-northeast1`). Détail complet des étapes et des secrets :
+`functions/README.md`.
+
+**1. Le plan Blaze**, comme pour toute fonction serveur de ce projet (voir plus bas).
+
+**2. Le domaine chez Resend.** Vérifier `xenahorizon.com` (DKIM + SPF) pour pouvoir envoyer depuis
+`infolettre@xenahorizon.com`.
+
+**3. Les secrets côté Firebase** :
+
+```bash
+firebase functions:secrets:set RESEND_API_KEY --project xena-70977
+firebase functions:secrets:set RESEND_WEBHOOK_SECRET --project xena-70977          # rendu par Resend à la création du webhook, étape 5
+firebase functions:secrets:set NEWSLETTER_POSTAL_ADDRESS --project xena-70977      # adresse postale réelle, exigée par la loi anti-pourriel : jamais inventée ici
+```
+
+**4. Le déploiement**, une fois Blaze actif :
+
+```bash
+cd functions && npm install && npm run build
+firebase deploy --only functions --project xena-70977
+```
+
+**5. Le webhook Resend.** Créer un webhook (POST `https://api.resend.com/webhooks`) vers l'URL de
+`resendWebhook` rendue par le déploiement, pour les événements `email.bounced` et `email.complained`.
+
+**Une fois branché**, Laurie teste avec « Test à Laurie » ou « Test à une autre adresse » dans le
+composeur avant tout envoi réel à sa liste.
+
 ## Google Agenda (synchronisation des rendez-vous)
 
 Ce que ça fait : les rendez-vous confirmés de Laurie deviennent des événements dans SON agenda Google,
