@@ -63,3 +63,29 @@ export function periodeCourante(reglages: ReglagesCompta): Periode {
 export function dansPeriode(date: string, periode: Periode): boolean {
   return date >= periode.debut && date <= periode.fin;
 }
+
+// --- Réglages comptables et règles de catégorisation (settings/compta) ---
+
+type ReglagesEtRegles = ReglagesCompta & { regles?: RegleCategorisation[] };
+
+/** Les réglages de Laurie (fréquence de taxes, exercice, taux) avec les valeurs par défaut en secours. */
+export function useReglagesCompta() {
+  const { data, loading } = useDocument<ReglagesEtRegles>('settings/compta');
+  const reglages = useMemo<ReglagesEtRegles>(() => ({ ...REGLAGES_DEFAUT, ...(data || {}) }), [data]);
+  return { reglages, regles: reglages.regles || [], loading };
+}
+
+export async function enregistrerReglagesCompta(patch: Partial<ReglagesCompta>): Promise<void> {
+  await setDoc(doc(db, 'settings/compta'), patch, { merge: true });
+}
+
+/** Ajoute (ou remplace) une règle de catégorisation apprise, dédoublonnée par motif. */
+export async function apprendreRegle(regle: RegleCategorisation, reglesActuelles: RegleCategorisation[]): Promise<void> {
+  const sansDoublon = reglesActuelles.filter((r) => r.motif !== regle.motif);
+  await setDoc(doc(db, 'settings/compta'), { regles: [...sansDoublon, regle] }, { merge: true });
+}
+
+/** Retire une règle de catégorisation. */
+export async function oublierRegle(motif: string, reglesActuelles: RegleCategorisation[]): Promise<void> {
+  await setDoc(doc(db, 'settings/compta'), { regles: reglesActuelles.filter((r) => r.motif !== motif) }, { merge: true });
+}
