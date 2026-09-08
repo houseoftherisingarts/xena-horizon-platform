@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Trash2, Search, Image as ImageIcon, User, CornerDownRight } from 'lucide-react';
+import { Upload, Trash2, User, CornerDownRight } from 'lucide-react';
 import { EnTete, Panneau, Bouton, Champ, Vide, Chargement } from '../components/admin/ui';
 import { GalleryImage, Language } from '../types';
 import { useCollection, createDoc, removeDoc, uploadFile, deleteFile, makeStoragePath } from '../lib/firestore';
