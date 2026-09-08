@@ -87,23 +87,23 @@ const DocumentFacture: React.FC<DocumentFactureProps> = ({
         {clientEmail && <p className="text-sm text-gris">{clientEmail}</p>}
       </div>
 
-      {/* Lignes */}
-      <div className="mt-10 overflow-x-auto">
-        <table className="w-full">
+      {/* Lignes : le prix unitaire se cache sous 640 px, la description a besoin de la place */}
+      <div className="mt-10">
+        <table className="w-full table-fixed">
           <thead>
             <tr className="border-b-2 border-encre">
               <th className="text-left py-3 kicker text-gris">{t.description}</th>
-              <th className="text-center py-3 kicker text-gris w-20">{t.qty}</th>
-              <th className="text-right py-3 kicker text-gris w-28">{t.price}</th>
-              <th className="text-right py-3 kicker text-gris w-28">{t.lineTotal}</th>
+              <th className="text-center py-3 kicker text-gris w-14 sm:w-20">{t.qty}</th>
+              <th className="hidden sm:table-cell text-right py-3 kicker text-gris w-28">{t.price}</th>
+              <th className="text-right py-3 kicker text-gris w-24 sm:w-28">{t.lineTotal}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-filet">
             {items.map((item) => (
               <tr key={item.id}>
-                <td className="py-3 pr-4 text-sm text-encre">{item.description}</td>
+                <td className="py-3 pr-2 sm:pr-4 text-sm text-encre break-words">{item.description}</td>
                 <td className="py-3 text-sm text-encre text-center">{item.quantity}</td>
-                <td className="py-3 text-sm text-gris text-right">{argent(item.price)}</td>
+                <td className="hidden sm:table-cell py-3 text-sm text-gris text-right">{argent(item.price)}</td>
                 <td className="py-3 text-sm text-encre text-right font-medium tabular-nums">{argent(item.quantity * item.price)}</td>
               </tr>
             ))}
