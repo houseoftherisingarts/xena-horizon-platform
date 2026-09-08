@@ -62,7 +62,7 @@ See the services
 
 Public relations, conferences and hosting, so your organization is seen and heard.
 
-0
+15
 
 YEARS OF EXPERIENCE
 
@@ -95,8 +95,8 @@ Photographe boudoir
 
 THEY TRUSTED HER
 
-Le gars fiable
 Ovide Academy
+Salon Enchanthé
 Le Salon des Inconnus, Le gars fiable, Ovide Academy, Salon Enchanthé, Centre psychologique pour artistes, Happyman, Alexis Sénécal
 Le Salon des Inconnus
 Le gars fiable
@@ -187,12 +187,12 @@ Learn more
 <h1> aria-label="Live from your art
 and keep your voice"
 <img> alt="Laurie Belhumeur"
-<img> alt="Laurie Belhumeur, assise, en studio"
+<img> alt="Laurie Belhumeur, seated, in her studio"
 <p> aria-label="Bringing out creativity wherever it exists is my mission."
 <p> aria-label="“to create a clear and precise guideline”"
 <img> alt="Je ne suis pas un robot (I Am Not a Robot)"
 <img> alt="En quête de liberté (In Search of Freedom)"
 <img> alt="Model and actress"
 <p> aria-label="« Logic will take you from point A to point B, imagination will take you absolutely everywhere. And using both to make a delicious blend is even better. »"
-<img> alt="Laurie Belhumeur, sur scène au micro"
+<img> alt="Laurie Belhumeur, on stage at the microphone"
 <div> aria-label="Consent banner"
