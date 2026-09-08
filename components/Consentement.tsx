@@ -121,16 +121,16 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
   return (
     <>
       {valeur === null && pretAAfficher && (
-        <div className="fixed inset-x-0 bottom-0 z-[90] bg-papier border-t border-filet">
+        <div className="fixed z-[90] inset-x-4 bottom-4 sm:inset-x-auto sm:left-auto sm:right-6 sm:bottom-6 sm:w-[min(420px,calc(100vw-3rem))]">
           <Reveal delay={0.3} y={20} amount={0.1}>
             <div
               role="dialog"
               aria-live="polite"
               aria-label={lang === 'FR' ? 'Bandeau de consentement' : 'Consent banner'}
-              className="px-gut py-1.5 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6"
+              className="bg-papier border border-filet rounded-champ shadow-panneau px-5 py-3.5"
             >
-              <p className="text-petit text-encre truncate flex-1 min-w-0">{t.texte}</p>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <p className="text-petit text-encre">{t.texte}</p>
+              <div className="mt-3 flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => decider('accepte')}
@@ -145,14 +145,14 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
                 >
                   {t.refuser}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setPolitiqueOuverte(true)}
-                  className="text-xs text-gris hover:text-rose underline transition-colors whitespace-nowrap"
-                >
-                  {t.lien}
-                </button>
               </div>
+              <button
+                type="button"
+                onClick={() => setPolitiqueOuverte(true)}
+                className="mt-1.5 text-xs text-gris hover:text-rose underline transition-colors"
+              >
+                {t.lien}
+              </button>
             </div>
           </Reveal>
         </div>
