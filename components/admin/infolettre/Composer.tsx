@@ -240,7 +240,7 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
       } else {
         setStatut('envoyee');
         await patchDoc('newsletters', savedId, { statut: 'envoyee', sentAt: serverTimestamp(), envoi: data });
-        setSendInfo(t.envoyeeA(data.total ?? data.envoyes ?? 0));
+        setSendInfo(t.envoyeeA.replace('{n}', String(data.total ?? data.envoyes ?? 0)));
       }
     } catch (e: any) {
       setSendErr(messageEchec(e));
