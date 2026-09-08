@@ -7,7 +7,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { orderBy, serverTimestamp } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { ArrowLeft, X, Save, Send, Eye, SlidersHorizontal, Clock, RotateCcw, Mail, Upload, Copy } from 'lucide-react';
+import { ArrowLeft, X, Save, Send, Eye, SlidersHorizontal, Clock, RotateCcw, Mail, Upload, Copy, FileText, Sparkles, CalendarCheck, Mic } from 'lucide-react';
 import { app } from '../../../firebase';
 import type { Language, GalleryImage } from '../../../types';
 import { useCollection, createDoc, patchDoc, readDoc, uploadFile, makeStoragePath } from '../../../lib/firestore';
@@ -17,7 +17,7 @@ import {
   type BandeauInfolettre,
 } from '../../../lib/infolettre/renderer';
 import { renderEmailHtml } from '../../../lib/infolettre/email';
-import { COORDONNEES } from '../../../lib/contenu';
+import { chargerGabarits, piedCourriel, type Gabarit } from '../../../lib/infolettre/gabarits';
 import { BlockFrame, InsertPoint, BLOCK_PALETTE } from './BlockFrame';
 import Audience from './Audience';
 import Apercu from './Apercu';
