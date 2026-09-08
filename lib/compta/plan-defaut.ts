@@ -3,6 +3,8 @@
 // lib/contenu.ts, SERVICES_REELS); les comptes de dépenses suivent les catégories déductibles usuelles
 // de l'ARC et de Revenu Québec pour un travailleur autonome. Surchargeable dans Firestore
 // settings/plan_comptable (PlanComptable.tsx) : ce fichier ne sert que de valeur de départ.
+import { useMemo } from 'react';
+import { useDocument, writeDoc } from '../firestore';
 import type { Compte } from './types';
 
 export const PLAN_COMPTABLE_DEFAUT: Compte[] = [
