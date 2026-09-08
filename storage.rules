@@ -4,7 +4,7 @@ service firebase.storage {
   match /b/{bucket}/o {
     function isAdmin() {
       return request.auth != null
-        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2']
+        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2', '44uiT7jYDLT7hdsuKkjRX0nwOWJ3']
             || (request.auth.token.email_verified == true
                 && request.auth.token.email in ['houseoftherisingarts@gmail.com', 'laurie.belhumeur@gmail.com']));
     }
@@ -45,6 +45,13 @@ service firebase.storage {
     match /ressources/{file=**} {
       allow read: if request.auth != null;
       allow write: if isAdmin() && request.resource.size < 50 * 1024 * 1024;
+    }
+
+    // Témoignages audio : publics, déposés par Laurie (audio seulement, 15 Mo).
+    match /temoignages/{file=**} {
+      allow read: if true;
+      allow write: if isAdmin() && request.resource.size < 15 * 1024 * 1024 && request.resource.contentType.matches('audio/.*');
+      allow delete: if isAdmin();
     }
 
     // Images du site (hero, galerie de l'accueil) : publiques, déposées par Laurie.

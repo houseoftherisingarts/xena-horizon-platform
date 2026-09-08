@@ -164,7 +164,7 @@ export interface HomeImageBlock extends HomeBaseBlock {
 
 export type HomeBlock = HomeHeroBlock | HomeServicesBlock | HomeStatsBlock | HomeContactBlock | HomeTextBlock | HomeImageBlock;
 
-export type ViewState = 'HOME' | 'SERVICES' | 'PROJETS' | 'A_PROPOS' | 'ESPACE_CLIENT' | 'ADMIN_DOSSIERS' | 'ADMIN_DASHBOARD' | 'ADMIN_CRM' | 'ADMIN_SOCIAL' | 'ADMIN_PRODUCTS' | 'ADMIN_INVOICES' | 'ADMIN_GALLERY' | 'ADMIN_FINANCE' | 'ADMIN_NEWSLETTER' | 'ADMIN_AGENDA' | 'ADMIN_EMAIL' | 'ADMIN_MESSENGER';
+export type ViewState = 'HOME' | 'SERVICES' | 'PROJETS' | 'A_PROPOS' | 'ESPACE_CLIENT' | 'ADMIN_DOSSIERS' | 'ADMIN_DASHBOARD' | 'ADMIN_CRM' | 'ADMIN_SOCIAL' | 'ADMIN_PRODUCTS' | 'ADMIN_INVOICES' | 'ADMIN_GALLERY' | 'ADMIN_FINANCE' | 'ADMIN_NEWSLETTER' | 'ADMIN_AGENDA' | 'ADMIN_EMAIL' | 'ADMIN_MESSENGER' | 'ADMIN_VEXEL' | 'ADMIN_TEMOIGNAGES';
 
 export interface Lead {
   id: string;
@@ -370,4 +370,19 @@ export interface AgendaConfig {
   fuseau: string;            // 'America/Toronto'
   jours: Record<'0' | '1' | '2' | '3' | '4' | '5' | '6', PlageHoraire[]>;   // 0 = dimanche
   exceptions?: Record<string, PlageHoraire[]>;   // 'AAAA-MM-JJ' → plages (vide = journée fermée)
+}
+
+
+// --- TÉMOIGNAGES AUDIO (accueil, porté du site de Philippe Dufresne) ---
+export interface TemoignageAudio {
+  id: string;
+  nom: string;          // « Sophie L. »
+  role?: string;        // « Autrice », « Photographe »
+  audioURL: string;     // Storage temoignages/...
+  storagePath?: string;
+  duree?: number;       // secondes
+  extrait?: string;     // une phrase à lire pendant l'écoute
+  ordre?: number;
+  publie: boolean;
+  createdAt?: any;
 }

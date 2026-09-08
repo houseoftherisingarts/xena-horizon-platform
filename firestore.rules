@@ -5,7 +5,7 @@ service cloud.firestore {
     // UID whitelist must match lib/admins.ts
     function isAdmin() {
       return request.auth != null
-        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2']
+        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2', '44uiT7jYDLT7hdsuKkjRX0nwOWJ3']
             || (request.auth.token.email_verified == true
                 && request.auth.token.email in ['houseoftherisingarts@gmail.com', 'laurie.belhumeur@gmail.com']));
     }
@@ -176,6 +176,17 @@ service cloud.firestore {
       allow delete: if isAdmin()
                     || (request.auth != null && get(/databases/$(database)/documents/rendezvous/$(rdvId)).data.uid == request.auth.uid);
       allow update: if isAdmin();
+    }
+
+
+    // Le coffre pour Vexel : les informations que Laurie dépose pour Alex, chiffrées dans le navigateur avec la clé
+    // publique de Vexel (lib/coffre.ts). Firestore ne voit qu'un texte chiffré et un résumé (nom, quatre derniers chiffres).
+    match /coffre/{docId} { allow read, write: if isAdmin(); }
+
+    // Témoignages audio (accueil) : publics quand publiés, gérés par Laurie.
+    match /temoignagesAudio/{temId} {
+      allow read: if resource.data.publie == true || isAdmin();
+      allow write: if isAdmin();
     }
 
     // Ressources partagées avec les personnes accompagnées (guides, gabarits).

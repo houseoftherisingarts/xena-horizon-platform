@@ -27,6 +27,8 @@ const AdminAgenda = lazy(() => import('./pages/AdminAgenda'));
 const AdminCourriel = lazy(() => import('./pages/AdminCourriel'));
 const SocialCreator = lazy(() => import('./pages/SocialCreator'));
 const AdminDossiers = lazy(() => import('./pages/AdminDossiers'));
+const AdminVexel = lazy(() => import('./pages/AdminVexel'));
+const AdminTemoignages = lazy(() => import('./pages/AdminTemoignages'));
 const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 const PublicProjets = lazy(() => import('./pages/PublicProjets'));
 const PublicAPropos = lazy(() => import('./pages/PublicAPropos'));
@@ -150,6 +152,10 @@ const App: React.FC = () => {
         return <EspaceClient user={user} lang={lang} />;
       case 'ADMIN_DOSSIERS':
         return <AdminDossiers lang={lang} />;
+      case 'ADMIN_VEXEL':
+        return <AdminVexel lang={lang} />;
+      case 'ADMIN_TEMOIGNAGES':
+        return <AdminTemoignages lang={lang} />;
       case 'ADMIN_DASHBOARD':
         return <AdminDashboard lang={lang} />;
       case 'ADMIN_CRM':

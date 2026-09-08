@@ -19,6 +19,8 @@ export const VIEW_PATHS: Record<ViewState, string> = {
   ADMIN_NEWSLETTER: '/admin/infolettre',
   ADMIN_GALLERY: '/admin/galerie',
   ADMIN_SOCIAL: '/admin/social',
+  ADMIN_VEXEL: '/admin/vexel',
+  ADMIN_TEMOIGNAGES: '/admin/temoignages',
 } as Record<ViewState, string>;
 
 const PATH_VIEWS: Record<string, ViewState> = Object.fromEntries(
