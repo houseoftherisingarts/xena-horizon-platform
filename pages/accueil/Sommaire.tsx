@@ -116,7 +116,7 @@ const Sommaire: React.FC<SommaireProps> = ({ lang, title, subtitle, onChangeView
                       }}
                       className="col-span-12 -my-3 inline-flex items-center gap-2 whitespace-nowrap py-3 text-petit font-semibold text-encre transition-colors duration-200 hover:text-rose sm:col-span-2 sm:justify-self-end"
                     >
-                      {L.lien}
+                      {t.lien}
                       <ArrowUpRight className="h-4 w-4" aria-hidden />
                     </a>
                   </div>
