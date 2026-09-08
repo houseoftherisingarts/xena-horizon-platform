@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowUp, ArrowDown, Trash2, Plus, Save, RotateCcw, AlertCircle, Settings2 } from 'lucide-react';
-import { GLASS_INPUT_CLASSES, ACTION_BUTTON_CLASSES } from '../../../constants';
+import { ArrowUp, ArrowDown, Trash2, Plus, Save, RotateCcw, AlertCircle } from 'lucide-react';
 import { DossierConfig, EtapeDef, Language, PieceDef } from '../../../types';
 import { writeDoc } from '../../../lib/firestore';
 import { CONFIG_PAR_DEFAUT, CONFIG_PATH, useDossierConfig } from '../../../lib/dossier';
+import { Panneau, Champ, Bouton } from '../ui';
 
 interface ReglagesDossierProps {
   lang: Language;
@@ -117,98 +117,138 @@ const ReglagesDossier: React.FC<ReglagesDossierProps> = ({ lang }) => {
     }
   };
 
+  const boutonLigne = 'p-2 rounded-champ hover:bg-papier text-gris min-h-[36px] min-w-[36px]';
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-serif font-bold text-white flex items-center gap-3">
-          <Settings2 className="w-7 h-7 text-cyan-300" /> {tr.title}
-        </h1>
-        <p className="text-slate-400 mt-1">{tr.subtitle}</p>
+        <h1 className="font-serif text-h3 text-encre">{tr.title}</h1>
+        <p className="text-gris mt-1 text-sm">{tr.subtitle}</p>
       </div>
 
       {message && (
-        <p className={`text-sm p-3 rounded-[15px] border ${message.type === 'ok' ? 'text-emerald-300 bg-emerald-500/10 border-emerald-500/20' : 'text-red-300 bg-red-500/10 border-red-500/20'}`} role="status" aria-live="polite">
+        <p
+          className={`text-sm p-3 rounded-champ border ${
+            message.type === 'ok' ? 'text-encre border-filet bg-papier-2' : 'text-rose border-rose/30 bg-rose/5'
+          }`}
+          role="status"
+          aria-live="polite"
+        >
           {message.type === 'err' && <AlertCircle className="w-4 h-4 inline mr-1.5" />}
           {message.text}
         </p>
       )}
 
       {/* Pièces */}
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 space-y-4">
-        <h2 className="text-lg font-serif font-bold text-white">{tr.pieces}</h2>
-        {pieces.map((p, i) => (
-          <div key={i} className="bg-white/5 border border-white/10 rounded-[15px] p-4 space-y-2">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-              <input value={p.id} onChange={(e) => majPiece(i, 'id', e.target.value)} placeholder={tr.id} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-              <input value={p.cat} onChange={(e) => majPiece(i, 'cat', e.target.value)} placeholder={tr.cat} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-              <input value={p.nom} onChange={(e) => majPiece(i, 'nom', e.target.value)} placeholder={tr.nom} className={`${GLASS_INPUT_CLASSES} text-sm py-2 md:col-span-2`} />
-            </div>
-            <input value={p.aide ?? ''} onChange={(e) => majPiece(i, 'aide', e.target.value)} placeholder={tr.aide} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <input value={p.nomEn ?? ''} onChange={(e) => majPiece(i, 'nomEn', e.target.value)} placeholder={tr.nomEn} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-              <input value={p.aideEn ?? ''} onChange={(e) => majPiece(i, 'aideEn', e.target.value)} placeholder={tr.aideEn} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-              <input value={p.catEn ?? ''} onChange={(e) => majPiece(i, 'catEn', e.target.value)} placeholder={tr.catEn} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-            </div>
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-xs text-slate-400">
-                <input type="checkbox" checked={!!p.option} onChange={(e) => majPiece(i, 'option', e.target.checked)} className="accent-cyan-400" />
-                {tr.option}
-              </label>
-              <div className="flex items-center gap-1">
-                <button type="button" onClick={() => setPieces((l) => deplacer(l, i, -1))} className="p-2 rounded-[10px] hover:bg-white/10 text-slate-400 min-h-[36px] min-w-[36px]" aria-label="up"><ArrowUp className="w-4 h-4" /></button>
-                <button type="button" onClick={() => setPieces((l) => deplacer(l, i, 1))} className="p-2 rounded-[10px] hover:bg-white/10 text-slate-400 min-h-[36px] min-w-[36px]" aria-label="down"><ArrowDown className="w-4 h-4" /></button>
-                <button type="button" onClick={() => setPieces((l) => l.filter((_, idx) => idx !== i))} className="p-2 rounded-[10px] hover:bg-red-500/10 text-red-400 min-h-[36px] min-w-[36px]" aria-label="delete"><Trash2 className="w-4 h-4" /></button>
+      <Panneau titre={tr.pieces}>
+        <div className="space-y-4">
+          {pieces.map((p, i) => (
+            <div key={i} className="border border-filet rounded-champ p-4 space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+                <Champ label={tr.id} value={p.id} onChange={(e) => majPiece(i, 'id', e.target.value)} />
+                <Champ label={tr.cat} value={p.cat} onChange={(e) => majPiece(i, 'cat', e.target.value)} />
+                <Champ
+                  label={tr.nom}
+                  value={p.nom}
+                  onChange={(e) => majPiece(i, 'nom', e.target.value)}
+                  className="md:col-span-2"
+                />
+              </div>
+              <Champ label={tr.aide} value={p.aide ?? ''} onChange={(e) => majPiece(i, 'aide', e.target.value)} />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <Champ label={tr.nomEn} value={p.nomEn ?? ''} onChange={(e) => majPiece(i, 'nomEn', e.target.value)} />
+                <Champ label={tr.aideEn} value={p.aideEn ?? ''} onChange={(e) => majPiece(i, 'aideEn', e.target.value)} />
+                <Champ label={tr.catEn} value={p.catEn ?? ''} onChange={(e) => majPiece(i, 'catEn', e.target.value)} />
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2 text-xs text-gris">
+                  <input
+                    type="checkbox"
+                    checked={!!p.option}
+                    onChange={(e) => majPiece(i, 'option', e.target.checked)}
+                    className="accent-rose"
+                  />
+                  {tr.option}
+                </label>
+                <div className="flex items-center gap-1">
+                  <button type="button" onClick={() => setPieces((l) => deplacer(l, i, -1))} className={boutonLigne} aria-label="up">
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button type="button" onClick={() => setPieces((l) => deplacer(l, i, 1))} className={boutonLigne} aria-label="down">
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPieces((l) => l.filter((_, idx) => idx !== i))}
+                    className={`${boutonLigne} hover:text-rose`}
+                    aria-label="delete"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => setPieces((l) => [...l, { id: `piece-${Date.now()}`, cat: '', nom: '' }])}
-          className="px-4 py-2 rounded-[12px] bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-sm flex items-center gap-2 min-h-[44px]"
-        >
-          <Plus className="w-4 h-4" /> {tr.ajouterPiece}
-        </button>
-      </div>
+          ))}
+          <Bouton
+            variante="secondaire"
+            icone={Plus}
+            onClick={() => setPieces((l) => [...l, { id: `piece-${Date.now()}`, cat: '', nom: '' }])}
+          >
+            {tr.ajouterPiece}
+          </Bouton>
+        </div>
+      </Panneau>
 
       {/* Étapes */}
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 space-y-4">
-        <h2 className="text-lg font-serif font-bold text-white">{tr.etapes}</h2>
-        {etapes.map((e, i) => (
-          <div key={i} className="bg-white/5 border border-white/10 rounded-[15px] p-4 space-y-2">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <input value={e.id} onChange={(ev) => majEtape(i, 'id', ev.target.value)} placeholder={tr.id} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-              <input value={e.titre} onChange={(ev) => majEtape(i, 'titre', ev.target.value)} placeholder={tr.titre} className={`${GLASS_INPUT_CLASSES} text-sm py-2 md:col-span-2`} />
+      <Panneau titre={tr.etapes}>
+        <div className="space-y-4">
+          {etapes.map((e, i) => (
+            <div key={i} className="border border-filet rounded-champ p-4 space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <Champ label={tr.id} value={e.id} onChange={(ev) => majEtape(i, 'id', ev.target.value)} />
+                <Champ
+                  label={tr.titre}
+                  value={e.titre}
+                  onChange={(ev) => majEtape(i, 'titre', ev.target.value)}
+                  className="md:col-span-2"
+                />
+              </div>
+              <Champ label={tr.sous} value={e.sous} onChange={(ev) => majEtape(i, 'sous', ev.target.value)} />
+              <div className="flex justify-end gap-1">
+                <button type="button" onClick={() => setEtapes((l) => deplacer(l, i, -1))} className={boutonLigne} aria-label="up">
+                  <ArrowUp className="w-4 h-4" />
+                </button>
+                <button type="button" onClick={() => setEtapes((l) => deplacer(l, i, 1))} className={boutonLigne} aria-label="down">
+                  <ArrowDown className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEtapes((l) => l.filter((_, idx) => idx !== i))}
+                  className={`${boutonLigne} hover:text-rose`}
+                  aria-label="delete"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            <input value={e.sous} onChange={(ev) => majEtape(i, 'sous', ev.target.value)} placeholder={tr.sous} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
-            <div className="flex justify-end gap-1">
-              <button type="button" onClick={() => setEtapes((l) => deplacer(l, i, -1))} className="p-2 rounded-[10px] hover:bg-white/10 text-slate-400 min-h-[36px] min-w-[36px]" aria-label="up"><ArrowUp className="w-4 h-4" /></button>
-              <button type="button" onClick={() => setEtapes((l) => deplacer(l, i, 1))} className="p-2 rounded-[10px] hover:bg-white/10 text-slate-400 min-h-[36px] min-w-[36px]" aria-label="down"><ArrowDown className="w-4 h-4" /></button>
-              <button type="button" onClick={() => setEtapes((l) => l.filter((_, idx) => idx !== i))} className="p-2 rounded-[10px] hover:bg-red-500/10 text-red-400 min-h-[36px] min-w-[36px]" aria-label="delete"><Trash2 className="w-4 h-4" /></button>
-            </div>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => setEtapes((l) => [...l, { id: `etape-${Date.now()}`, titre: '', sous: '' }])}
-          className="px-4 py-2 rounded-[12px] bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 text-sm flex items-center gap-2 min-h-[44px]"
-        >
-          <Plus className="w-4 h-4" /> {tr.ajouterEtape}
-        </button>
-      </div>
+          ))}
+          <Bouton
+            variante="secondaire"
+            icone={Plus}
+            onClick={() => setEtapes((l) => [...l, { id: `etape-${Date.now()}`, titre: '', sous: '' }])}
+          >
+            {tr.ajouterEtape}
+          </Bouton>
+        </div>
+      </Panneau>
 
       <div className="flex flex-wrap gap-3">
-        <button type="button" onClick={enregistrer} disabled={busy} className={`${ACTION_BUTTON_CLASSES} disabled:opacity-50`}>
-          <Save className="w-4 h-4" /> {busy ? '…' : tr.save}
-        </button>
-        <button
-          type="button"
-          onClick={reinitialiser}
-          disabled={busy}
-          className="px-6 py-3 rounded-[15px] border border-white/15 hover:border-red-400/50 hover:bg-red-500/5 text-slate-300 hover:text-red-300 text-sm flex items-center gap-2 disabled:opacity-50 min-h-[44px]"
-        >
-          <RotateCcw className="w-4 h-4" /> {tr.reset}
-        </button>
+        <Bouton variante="primaire" icone={Save} onClick={enregistrer} disabled={busy}>
+          {busy ? '…' : tr.save}
+        </Bouton>
+        <Bouton variante="danger" icone={RotateCcw} onClick={reinitialiser} disabled={busy}>
+          {tr.reset}
+        </Bouton>
       </div>
     </div>
   );
