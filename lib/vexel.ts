@@ -4,5 +4,5 @@
  * ouvre un compte client, Laurie devient sa marraine et touche sa part de l'abonnement chaque mois.
  * Le code vit dans le compte partenaire de Laurie chez Vexel (collection `partenaires`).
  */
-export const CODE_PARTENAIRE_LAURIE = 'LAURIE';
+export const CODE_PARTENAIRE_LAURIE = 'XENA-LB26';
 export const LIEN_PARRAINAGE_VEXEL = `https://vexelwebstudio.com/compte?parrain=${CODE_PARTENAIRE_LAURIE}`;
