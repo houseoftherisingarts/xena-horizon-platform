@@ -50,7 +50,9 @@ const Allumage: React.FC<AllumageProps> = ({
   const opaciteTitre = useTransform(p, [0.45, 0.7], [1, 0]);
   const decalageTitre = useTransform(p, [0.45, 0.7], [0, -40]);
 
-  const opaciteStrophe = useTransform(p, [0.55, 0.72], [0, 1]);
+  // Se pose entre 0,55 et 0,72, tient, puis s'efface tout à fait avant la sortie de l'épinglage
+  // (0,97 à 1) pour qu'aucun fragment ne reste visible par-dessus la feuille Sommaire qui monte.
+  const opaciteStrophe = useTransform(p, [0.55, 0.72, 0.97, 1], [0, 1, 1, 0]);
   const decalageStrophe = useTransform(p, [0.55, 0.85], [16, 0]);
   const flouStrophe = useTransform(p, [0.55, 0.85], [18, 0]);
   const filtreStrophe = useMotionTemplate`blur(${flouStrophe}px)`;
