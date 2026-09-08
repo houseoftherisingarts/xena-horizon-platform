@@ -16,6 +16,7 @@ export interface AllumageProps {
   tagline: string;
   headline: string;
   subheadline: string;
+  pourLes: string;
   ctaText: string;
   imageUrl: string;
   strophe: string;
