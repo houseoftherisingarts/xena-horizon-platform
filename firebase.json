@@ -62,6 +62,10 @@
       {
         "source": "/admin{,/**}",
         "destination": "/index.html"
+      },
+      {
+        "source": "/facture/**",
+        "destination": "/index.html"
       }
     ]
   },
