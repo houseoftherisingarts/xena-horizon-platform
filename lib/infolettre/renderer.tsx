@@ -251,13 +251,15 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
     }
     case 'image': {
       const capClass = 'kicker text-gris text-center mt-3';
+      const logo = c.taille === 'logo';
+      const imgClass = logo ? 'w-28 mx-auto block' : 'w-full block';
       if (edit) {
         return (
           <figure className="my-6">
             <button type="button" onClick={(e) => { e.stopPropagation(); edit.pickImage(); }} title="Changer l'image"
-              className="group/img relative block w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-rose">
+              className={`group/img relative block overflow-hidden focus:outline-none focus:ring-2 focus:ring-rose ${logo ? 'w-28 mx-auto' : 'w-full'}`}>
               {c.url
-                ? <img src={c.url} alt={c.alt || ''} className="w-full block" />
+                ? <img src={c.url} alt={c.alt || ''} className={imgClass} />
                 : <div className="aspect-[21/9] max-h-64 w-full border-2 border-dashed border-rose/40 bg-rose/5 flex flex-col items-center justify-center gap-2 text-rose"><span className="kicker">Choisir une image</span></div>}
               <span className="absolute inset-0 flex items-center justify-center bg-encre/0 group-hover/img:bg-encre/40 transition-colors">
                 <span className="opacity-0 group-hover/img:opacity-100 transition-opacity bg-papier text-encre px-4 py-2 rounded-pilule text-xs font-semibold shadow-panneau">Changer l'image</span>
@@ -269,7 +271,7 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
       }
       return (
         <figure className="my-6">
-          {c.url && <a href={/^https?:\/\//.test(c.href || '') ? c.href : BRAND.site} target="_blank" rel="noopener noreferrer" className="block"><img src={c.url} alt={c.alt || ''} className="w-full" /></a>}
+          {c.url && <a href={/^https?:\/\//.test(c.href || '') ? c.href : BRAND.site} target="_blank" rel="noopener noreferrer" className={logo ? 'block w-28 mx-auto' : 'block'}><img src={c.url} alt={c.alt || ''} className={imgClass} /></a>}
           {c.caption && <figcaption className={capClass}>{c.caption}</figcaption>}
         </figure>
       );
