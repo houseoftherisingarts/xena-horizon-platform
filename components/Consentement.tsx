@@ -145,7 +145,7 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
                 <button
                   type="button"
                   onClick={() => decider('refuse')}
-                  className="min-h-[36px] px-4 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-encre transition-colors"
+                  className="min-h-[44px] px-4 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-encre transition-colors"
                 >
                   {t.refuser}
                 </button>
