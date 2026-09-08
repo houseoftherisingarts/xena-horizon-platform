@@ -125,7 +125,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   ];
 
   return (
-    <div className="min-h-[100svh] bg-papier pt-16 pb-24" data-tx-scope="espace">
+    <div className="min-h-[100svh] bg-papier pt-nav pb-24" data-tx-scope="espace">
       {/* Bannière pleine largeur, façon profil de réseau social : image de la personne (ou le défaut du studio), voile encre au bas pour porter le nom. */}
       <div className="relative w-full aspect-[2/1] md:aspect-[3/1] overflow-hidden bg-papier-2">
         <img
