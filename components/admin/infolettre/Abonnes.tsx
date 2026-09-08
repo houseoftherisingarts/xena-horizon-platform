@@ -37,6 +37,7 @@ const TEXTES = {
     retirer: 'Retirer',
     confirmRetirer: 'Retirer cet abonné ?',
     fermer: 'Fermer',
+    total: 'Au total',
   },
   EN: {
     titre: 'Subscribers',
