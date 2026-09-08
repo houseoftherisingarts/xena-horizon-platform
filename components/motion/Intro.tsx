@@ -115,6 +115,7 @@ export const Intro: React.FC<IntroProps> = ({
           />
 
           <motion.p
+            layoutId={layoutId}
             className="relative font-serif text-[clamp(1.8rem,4vw,3.2rem)] tracking-wide"
             style={{ color: 'var(--xh-encre, currentColor)' }}
             initial="cache"
