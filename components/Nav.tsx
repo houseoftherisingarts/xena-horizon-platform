@@ -119,7 +119,9 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
       const aller = () => {
         const el = document.getElementById(sectionId);
         if (!el) return;
-        if (lenis) lenis.scrollTo(el, { offset: -72 });
+        // Lenis lit déjà `scroll-margin-top` sur la cible (index.css, `[id]`) : pas de second
+        // offset ici, sous peine de compter la barre deux fois (mesuré : 144px au lieu de 72).
+        if (lenis) lenis.scrollTo(el);
         else el.scrollIntoView({ behavior: 'smooth' });
       };
       if (changeDeVue) setTimeout(aller, 100);
