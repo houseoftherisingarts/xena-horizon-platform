@@ -227,7 +227,7 @@ function profitPeriode(transactions: Transaction[], debut: string, fin: string):
   let revenus = 0;
   let depenses = 0;
   for (const tr of transactions) {
-    if (!dansPeriode(tr.date, debut, fin)) continue;
+    if (tr.date < debut || tr.date > fin) continue;
     if (tr.sens === 'revenu') revenus += tr.montant;
     else depenses += tr.montant;
   }
