@@ -37,6 +37,9 @@
 /* Le sticky des feuilles casse avec overflow-x: hidden. Toujours clip. */
 html, body { overflow-x: clip; }
 
+/* Toute ancre (Nav, Footer, PublicServices) atterrit sous la barre fixe, jamais cachée dessous. */
+[id] { scroll-margin-top: var(--nav); }
+
 html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
