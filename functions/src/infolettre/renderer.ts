@@ -7,6 +7,9 @@
 
 export const PUBLIC_BASE_URL = 'https://xenahorizon.com';
 
+/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
+const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
+
 export type BlockType = 'heading' | 'paragraph' | 'image' | 'button' | 'divider' | 'quote' | 'cta' | 'spacer' | 'list';
 
 export interface NewsletterBlock {
@@ -86,9 +89,6 @@ export interface RenderEmailOptions {
   postalAddress: string;
   firstName?: string;
   /** En-tête : une image fournie par Laurie (couvertureUrl), ou rien (défaut). */
-
-/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
-const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
   couverture?: Couverture;
   couvertureUrl?: string | null;
   /** Signature texte « Laurie Belhumeur » au bas du corps. Défaut : vrai. */

@@ -277,7 +277,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
                     initial={reduceMotion ? false : { opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: reduceMotion ? 0 : i * 0.06, ease: EASE_RIDEAU }}
-                    className="text-left font-serif text-h3 text-encre py-3 border-b border-filet"
+                    className="min-h-[44px] flex items-center text-left font-serif text-h3 text-encre py-3 border-b border-filet"
                   >
                     {link.label}
                   </motion.button>
