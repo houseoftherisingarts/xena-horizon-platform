@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { User } from 'firebase/auth';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
