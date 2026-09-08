@@ -29,7 +29,6 @@ const TEXTES = {
     subheadline: 'Trois profils, une même écoute : artiste, entrepreneur créatif ou organisme.',
     photoAlt: 'Laurie Belhumeur sur scène',
     signature: SIGNATURE.texteFR,
-    surDemande: 'Sur demande',
   },
   EN: {
     heroTitre: SERVICES_PAGE.titreEN,
