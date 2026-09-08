@@ -128,6 +128,10 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
 
       <Sommaire lang={lang} title={t.servicesTitle} subtitle={t.servicesSubtitle} onChangeView={onChangeView} />
 
+      {/* Entre Sommaire et À propos (voir le commentaire d'en-tête de Capsules.tsx) : ne se rend
+          que si Admin › Sections a la capsule à ON et qu'au moins une capsule est publiée. */}
+      <Capsules lang={lang} />
+
       <APropos
         lang={lang}
         stat1Value={t.stat1Value}
