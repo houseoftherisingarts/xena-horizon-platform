@@ -10,8 +10,8 @@ service firebase.storage {
     }
 
     // Public-readable assets (gallery, social outputs, document PDFs)
-    match /gallery/{file=**}   { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024; }
-    match /social/{file=**}    { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024; }
+    match /gallery/{file=**}   { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|gif)'); }
+    match /social/{file=**}    { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|gif)'); }
     match /documents/{file=**} { allow read: if isAdmin(); allow write: if isAdmin() && request.resource.size < 20 * 1024 * 1024; }
 
     function isOwner(uid) {
@@ -19,7 +19,7 @@ service firebase.storage {
     }
     function typeAccepte() {
       return request.resource.contentType.matches('application/pdf')
-          || request.resource.contentType.matches('image/.*')
+          || request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
           || request.resource.contentType.matches('application/msword')
           || request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*')
           || request.resource.contentType.matches('application/vnd.ms-excel')
@@ -38,7 +38,7 @@ service firebase.storage {
     // Photo de profil de la personne accompagnée.
     match /profils/{uid}/{file} {
       allow read: if isOwner(uid) || isAdmin();
-      allow write: if (isOwner(uid) || isAdmin()) && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow write: if (isOwner(uid) || isAdmin()) && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp'];
     }
 
     // Ressources partagées : lisibles par toute personne connectée, déposées par Laurie.
@@ -57,7 +57,7 @@ service firebase.storage {
     // Images du site (hero, galerie de l'accueil) : publiques, déposées par Laurie.
     match /site/{file=**} {
       allow read: if true;
-      allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024;
+      allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
     }
 
     match /{path=**} { allow read, write: if false; }

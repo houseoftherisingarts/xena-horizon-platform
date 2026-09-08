@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { increment, orderBy, serverTimestamp } from 'firebase/firestore';
 import { AlertCircle, Send } from 'lucide-react';
 import { createDoc, patchDoc, useCollection } from '../../lib/firestore';
@@ -10,33 +10,64 @@ interface MessagesProps {
   lang: Language;
 }
 
-const jour = (ts: any): string => {
-  try {
-    const d: Date | null = ts?.toDate ? ts.toDate() : null;
-    return d ? d.toLocaleDateString('fr-CA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-  } catch {
-    return '';
-  }
+const PHOTO_LAURIE = '/images/laurie-apropos.jpg';
+const HAUTEUR_CHAMP_MAX = 84; // ~3 lignes avant que le champ défile plutôt que de grandir encore
+
+const versDate = (ts: any): Date => {
+  if (ts?.toDate) return ts.toDate();
+  if (ts instanceof Date) return ts;
+  return new Date();
 };
+
+const memeJour = (a: Date, b: Date): boolean =>
+  a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+
+const jourClef = (d: Date): string => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+
+const etiquetteJour = (d: Date, lang: Language, aujourdhui: string, hier: string): string => {
+  const maintenant = new Date();
+  if (memeJour(d, maintenant)) return aujourdhui;
+  const veille = new Date(maintenant);
+  veille.setDate(veille.getDate() - 1);
+  if (memeJour(d, veille)) return hier;
+  const locale = lang === 'EN' ? 'en-CA' : 'fr-CA';
+  return d.toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: d.getFullYear() !== maintenant.getFullYear() ? 'numeric' : undefined,
+  });
+};
+
+const heureCourte = (d: Date, lang: Language): string =>
+  d.toLocaleTimeString(lang === 'EN' ? 'en-CA' : 'fr-CA', { hour: '2-digit', minute: '2-digit' });
+
+type Groupe = { cle: string; de: 'client' | 'admin'; msgs: DossierMessage[] };
+type Item = { kind: 'sep'; cle: string; texte: string } | { kind: 'groupe'; groupe: Groupe };
 
 const TEXTES = {
   FR: {
     titre: 'Messages',
-    sous: 'Écris directement à Laurie. Elle voit ton message dès qu\'il entre.',
+    nomLaurie: 'Laurie Belhumeur',
+    sous: 'Te répond ici, dans ton dossier',
     placeholder: 'Ton message',
     envoyer: 'Envoyer',
-    vide: "Aucun message pour l'instant. Écris à Laurie quand tu as une question.",
-    echec: "L'envoi a échoué. Réessaie dans un instant.",
-    laurie: 'Laurie',
+    vide: 'Écris-moi ici : je te réponds dans ce fil.',
+    echec: 'L\'envoi a échoué. Réessaie dans un instant.',
+    aujourdhui: 'Aujourd\'hui',
+    hier: 'Hier',
+    vu: 'Vu',
   },
   EN: {
     titre: 'Messages',
-    sous: "Write directly to Laurie. She sees your message as soon as it comes in.",
+    nomLaurie: 'Laurie Belhumeur',
+    sous: 'Replies to you here, in your file',
     placeholder: 'Your message',
     envoyer: 'Send',
-    vide: 'No messages yet. Write to Laurie whenever you have a question.',
+    vide: 'Write to me here: I reply to you in this thread.',
     echec: 'Sending failed. Try again in a moment.',
-    laurie: 'Laurie',
+    aujourdhui: 'Today',
+    hier: 'Yesterday',
+    vu: 'Seen',
   },
 };
 
@@ -46,6 +77,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const filRef = useRef<HTMLDivElement>(null);
+  const champRef = useRef<HTMLTextAreaElement>(null);
   const marqueEnCours = useRef(false);
   const t = useTextes('espaceMessages', TEXTES, lang);
 
@@ -66,8 +98,45 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
       });
   }, [messages, uid]);
 
-  const envoyer = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Le champ grandit avec le texte, jusqu'à ~3 lignes, puis défile.
+  useEffect(() => {
+    const el = champRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, HAUTEUR_CHAMP_MAX)}px`;
+  }, [texte]);
+
+  const items = useMemo<Item[]>(() => {
+    const out: Item[] = [];
+    let jourCourant: string | null = null;
+    let groupeCourant: Groupe | null = null;
+
+    messages.forEach((m) => {
+      const d = versDate(m.createdAt);
+      const clef = jourClef(d);
+      if (clef !== jourCourant) {
+        if (groupeCourant) {
+          out.push({ kind: 'groupe', groupe: groupeCourant });
+          groupeCourant = null;
+        }
+        out.push({ kind: 'sep', cle: `sep-${clef}`, texte: etiquetteJour(d, lang, t.aujourdhui, t.hier) });
+        jourCourant = clef;
+      }
+      if (!groupeCourant || groupeCourant.de !== m.de) {
+        if (groupeCourant) out.push({ kind: 'groupe', groupe: groupeCourant });
+        groupeCourant = { cle: m.id, de: m.de, msgs: [m] };
+      } else {
+        groupeCourant.msgs.push(m);
+      }
+    });
+    if (groupeCourant) out.push({ kind: 'groupe', groupe: groupeCourant });
+    return out;
+  }, [messages, lang, t.aujourdhui, t.hier]);
+
+  const dernierMsg = messages[messages.length - 1];
+  const vuDernier = !!dernierMsg && dernierMsg.de === 'client' && !!dernierMsg.luParAdmin;
+
+  const envoyer = async () => {
     const v = texte.trim();
     if (!v || busy) return;
     setBusy(true);
@@ -92,31 +161,91 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
     }
   };
 
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    envoyer();
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      envoyer();
+    }
+  };
+
+  const rendreGroupe = (groupe: Groupe) => {
+    const estClient = groupe.de === 'client';
+    const dernier = groupe.msgs[groupe.msgs.length - 1];
+    const montrerVu = estClient && dernier.id === dernierMsg?.id && vuDernier;
+
+    return (
+      <div key={groupe.cle} className={`flex flex-col gap-1 ${estClient ? 'items-end' : 'items-start'}`}>
+        <div className="flex items-end gap-2 max-w-[78%]">
+          {!estClient && (
+            <img
+              src={PHOTO_LAURIE}
+              alt=""
+              className="w-7 h-7 rounded-full object-cover object-[50%_20%] flex-shrink-0"
+            />
+          )}
+          <div className="flex flex-col gap-1 min-w-0">
+            {groupe.msgs.map((m) => {
+              const estDernierDuGroupe = m.id === dernier.id;
+              const coin = estDernierDuGroupe ? (estClient ? 'rounded-br-[4px]' : 'rounded-bl-[4px]') : '';
+              return (
+                <p
+                  key={m.id}
+                  className={`rounded-[18px] ${coin} px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
+                    estClient ? 'bg-bouton text-sur-bouton' : 'bg-papier-2 text-encre'
+                  }`}
+                >
+                  {m.texte}
+                </p>
+              );
+            })}
+          </div>
+        </div>
+        <p className={`text-xs text-gris ${!estClient ? 'pl-9' : ''}`}>
+          {heureCourte(versDate(dernier.createdAt), lang)}
+          {montrerVu && <span className="block">{t.vu}</span>}
+        </p>
+      </div>
+    );
+  };
+
   return (
-    <section data-tx-scope="espaceMessages" className="border-t border-filet pt-8 flex flex-col h-[min(70vh,640px)]">
-      <div className="mb-4 flex-shrink-0">
-        <h2 className="font-serif text-h3 text-encre">{t.titre}</h2>
-        <p className="text-gris text-sm mesure">{t.sous}</p>
+    <section data-tx-scope="espaceMessages" className="border-t border-filet pt-8 flex flex-col">
+      <h2 className="sr-only">{t.titre}</h2>
+
+      <div className="flex items-center gap-3 pb-4 mb-4 border-b border-filet flex-shrink-0">
+        <img
+          src={PHOTO_LAURIE}
+          alt={t.nomLaurie}
+          className="w-11 h-11 rounded-full object-cover object-[50%_20%] flex-shrink-0"
+        />
+        <div className="min-w-0">
+          <p className="font-sans font-semibold text-encre truncate">{t.nomLaurie}</p>
+          <p className="text-xs text-gris truncate">{t.sous}</p>
+        </div>
       </div>
 
-      <div ref={filRef} data-lenis-prevent className="flex-1 overflow-y-auto space-y-3 pr-1">
-        {messages.length === 0 && <p className="text-gris text-sm py-8 text-center">{t.vide}</p>}
-        {messages.map((m) => (
-          <div key={m.id} className={`flex ${m.de === 'client' ? 'justify-end' : 'justify-start'}`}>
-            <div className="max-w-[80%]">
-              <p className={`text-xs text-gris mb-1 ${m.de === 'client' ? 'text-right' : ''}`}>
-                {m.de === 'client' ? '' : t.laurie} {jour(m.createdAt)}
-              </p>
-              <p
-                className={`rounded-champ px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
-                  m.de === 'client' ? 'bg-papier-2 text-encre rounded-br-[4px]' : 'bg-encre text-papier rounded-bl-[4px]'
-                }`}
-              >
-                {m.texte}
-              </p>
-            </div>
+      <div ref={filRef} data-lenis-prevent className="min-h-[50vh] max-h-[65vh] overflow-y-auto space-y-3 pr-1">
+        {messages.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <img src={PHOTO_LAURIE} alt="" className="w-11 h-11 rounded-full object-cover object-[50%_20%]" />
+            <p className="text-gris text-sm">{t.vide}</p>
           </div>
-        ))}
+        ) : (
+          items.map((item) =>
+            item.kind === 'sep' ? (
+              <p key={item.cle} className="kicker text-gris text-center">
+                {item.texte}
+              </p>
+            ) : (
+              rendreGroupe(item.groupe)
+            )
+          )
+        )}
       </div>
 
       {error && (
@@ -125,24 +254,26 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
         </div>
       )}
 
-      <form onSubmit={envoyer} className="flex items-center gap-2 mt-4 flex-shrink-0">
+      <form onSubmit={onSubmit} className="flex items-end gap-2 mt-4 flex-shrink-0">
         <label htmlFor="msg-champ" className="sr-only">
           {t.placeholder}
         </label>
-        <input
+        <textarea
           id="msg-champ"
-          type="text"
+          ref={champRef}
           value={texte}
           onChange={(e) => setTexte(e.target.value)}
+          onKeyDown={onKeyDown}
           placeholder={t.placeholder}
-          autoComplete="off"
-          className="flex-1 bg-papier border border-filet rounded-pilule px-5 min-h-[44px] text-sm text-encre placeholder-gris transition-colors"
+          maxLength={5000}
+          rows={1}
+          className="flex-1 bg-papier-2 border border-filet rounded-pilule px-5 py-2.5 min-h-[44px] max-h-[84px] text-sm text-encre placeholder-gris resize-none overflow-y-auto transition-colors focus:outline-none focus:border-rose"
         />
         <button
           type="submit"
           disabled={busy || !texte.trim()}
           aria-label={t.envoyer}
-          className="w-11 h-11 rounded-pilule bg-encre flex items-center justify-center text-papier flex-shrink-0 disabled:opacity-50 hover:bg-bouton-2 transition-colors"
+          className="w-11 h-11 rounded-full bg-bouton flex items-center justify-center text-sur-bouton flex-shrink-0 disabled:opacity-50 hover:bg-bouton-2 transition-colors"
         >
           <Send className="w-4 h-4" />
         </button>

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { where } from 'firebase/firestore';
 import { ArrowRight } from 'lucide-react';
 import { useCollection } from '../lib/firestore';
 import { PROFILS_REELS, SERVICES_PAGE, SERVICES_REELS, SIGNATURE, ServiceReel } from '../lib/contenu';
@@ -116,7 +117,7 @@ const texteProfil = (t: Record<string, string>, i: number, champ: 'Tagline' | 'T
 const SPAN_PROFIL = ['lg:col-span-5', 'lg:col-span-4', 'lg:col-span-3'];
 
 const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) => {
-  const { data: produitsFirestore } = useCollection<Product>('products');
+  const { data: produitsFirestore } = useCollection<Product>('products', [where('isPublic', '==', true)]);
   const lenis = useLenis();
 
   const allerA = (id: string) => {

@@ -249,6 +249,18 @@ async function main() {
   await verifie('profil : bannière, bio et liens (ok)', assertSucceeds(updateDoc(doc(dbA, 'dossiers', UID_A), { banniereURL: 'https://firebasestorage.googleapis.com/b', bio: 'Artiste.', liens: { site: 'https://a.example.com' }, updatedAt: serverTimestamp() })));
   await verifie('profil : bio trop longue (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { bio: 'x'.repeat(1200), updatedAt: serverTimestamp() })));
 
+  // 13. Audit des règles du 8 septembre : bornes et formats
+  const fin100ans = new Date(dans3Jours.getTime() + 100 * 365 * 86400000);
+  await verifie('occupation de cent ans (refus attendu)', assertFails(setDoc(doc(dbA, 'occupations', 'occ-longue'), { debut: dans3Jours, fin: fin100ans })));
+  await verifie('pieces avec 25 clés (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { pieces: Object.fromEntries(Array.from({ length: 25 }, (_, i) => [`p${i}`, { nom: 'x' }])), updatedAt: serverTimestamp() })));
+  await verifie('liens avec une clé inconnue (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { liens: { spam: 'https://x.example' }, updatedAt: serverTimestamp() })));
+  await verifie('profil hors liste (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { profil: 'pirate', updatedAt: serverTimestamp() })));
+  await verifie('derniereActiviteAdmin posé à la création (refus attendu)', assertFails(setDoc(doc(dbB, 'dossiers', UID_B), { ...dossierValide(UID_B), derniereActiviteAdmin: serverTimestamp() })));
+  await verifie('rendez-vous dont la durée ne colle pas (refus attendu)', assertFails(setDoc(doc(dbA, 'rendezvous', 'rdv-d'), { ...rdvValide(UID_A), duree: 240 })));
+  await verifie('lead avec un faux courriel (refus attendu)', assertFails(addDoc(collection(dbAnon, 'leads'), { name: 'X', email: 'pas-un-courriel', message: 'bonjour', source: 'public-home-contact', read: false, archived: false, createdAt: serverTimestamp() })));
+  await verifie('abonné avec un faux courriel (refus attendu)', assertFails(addDoc(collection(dbAnon, 'subscribers'), { email: 'pas-un-courriel', status: 'active', createdAt: serverTimestamp() })));
+  await verifie('abonné avec un vrai courriel (ok)', assertSucceeds(addDoc(collection(dbAnon, 'subscribers'), { email: 'abonne@example.com', status: 'active', source: 'site', lang: 'fr', createdAt: serverTimestamp() })));
+
   await testEnv.cleanup();
 
   console.log(resultats.join('\n'));

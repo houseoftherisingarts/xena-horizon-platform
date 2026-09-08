@@ -38,15 +38,32 @@ service cloud.firestore {
              && texteBorne(data, 'photoURL', 500)
              && texteBorne(data, 'banniereURL', 500)
              && texteBorne(data, 'bio', 1000)
-             && (!('liens' in data) || (data.liens is map && data.liens.keys().size() <= 6))
+             && liensValide(data)
+             && (!('pieces' in data) || (data.pieces is map && data.pieces.keys().size() <= 20))
+             && (!('profil' in data) || data.profil in ['artiste', 'entrepreneur', 'organisme'])
+             && (!('tags' in data) || (data.tags is list && data.tags.size() <= 10))
              && projetValide(data);
+    }
+
+    // Les liens du profil : clés connues d'avance, valeurs bornées.
+    function liensValide(data) {
+      return !('liens' in data)
+             || (data.liens is map
+                 && data.liens.keys().hasOnly(['site', 'instagram', 'facebook', 'autre'])
+                 && texteBorne(data.liens, 'site', 300)
+                 && texteBorne(data.liens, 'instagram', 300)
+                 && texteBorne(data.liens, 'facebook', 300)
+                 && texteBorne(data.liens, 'autre', 300));
+    }
+
+    function courrielValide(v) {
+      return v is string && v.size() < 200 && v.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
     }
 
     // Public-write submission endpoints (anti-spam: enforce shape only)
     match /leads/{leadId} {
       allow read: if isAdmin();
-      allow create: if request.resource.data.email is string
-                    && request.resource.data.email.size() < 200
+      allow create: if courrielValide(request.resource.data.email)
                     && request.resource.data.message is string
                     && request.resource.data.message.size() < 5000
                     && request.resource.data.name is string
@@ -59,8 +76,8 @@ service cloud.firestore {
 
     match /subscribers/{subId} {
       allow read: if isAdmin();
-      allow create: if request.resource.data.email is string
-                    && request.resource.data.email.size() < 200
+      allow create: if courrielValide(request.resource.data.email)
+                    && (!('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() < 120))
                     && request.resource.data.keys().hasOnly(['email','name','tags','status','source','lang','createdAt']);
       allow update, delete: if isAdmin();
     }
@@ -100,7 +117,7 @@ service cloud.firestore {
                     && request.resource.data.archive == false
                     && request.resource.data.pieces is map
                     && dossierBornesOK(request.resource.data)
-                    && request.resource.data.keys().hasOnly(['uid','courriel','nom','telephone','ville','photoURL','banniereURL','bio','liens','profil','discipline','projet','etape','pieces','createdAt','updatedAt','derniereActiviteClient','derniereActiviteAdmin','nonLusAdmin','nonLusClient','archive','tags']);
+                    && request.resource.data.keys().hasOnly(['uid','courriel','nom','telephone','ville','photoURL','banniereURL','bio','liens','profil','discipline','projet','etape','pieces','createdAt','updatedAt','derniereActiviteClient','nonLusAdmin','nonLusClient','archive','tags']);
       // La personne modifie son profil, son projet et ses pièces; l'étape, l'archivage et la revue (jugement de Laurie) restent hors de sa portée.
       allow update: if isAdmin()
                     || (isOwner(uid)
@@ -145,6 +162,7 @@ service cloud.firestore {
              && data.debut is timestamp && data.fin is timestamp
              && data.fin > data.debut
              && data.duree is number && data.duree >= 15 && data.duree <= 240
+             && data.fin.toMillis() - data.debut.toMillis() == data.duree * 60000
              && data.salle is string && data.salle.size() < 80
              && (!('note' in data) || (data.note is string && data.note.size() <= 1000));
     }
@@ -172,6 +190,7 @@ service cloud.firestore {
                         && request.resource.data.debut is timestamp
                         && request.resource.data.fin is timestamp
                         && request.resource.data.fin > request.resource.data.debut
+                        && request.resource.data.fin.toMillis() - request.resource.data.debut.toMillis() <= 4 * 3600 * 1000
                         && request.resource.data.keys().hasOnly(['debut','fin']));
       allow delete: if isAdmin()
                     || (request.auth != null && get(/databases/$(database)/documents/rendezvous/$(rdvId)).data.uid == request.auth.uid);
