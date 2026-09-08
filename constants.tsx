@@ -1,18 +1,8 @@
 import React from 'react';
-import { Client, BlogPost, Product, GalleryImage, ClientArchetype } from './types';
-import { Palette, Users, Zap, Sparkles } from 'lucide-react';
+import { Product, ClientArchetype } from './types';
+import { Palette, Users, Zap } from 'lucide-react';
 
 // Le contenu réel de Xena Horizon vit dans lib/contenu.ts (SERVICES_REELS, PROJETS, TEMOIGNAGES...).
-// Les tableaux ci-dessous restent exportés vides, avec leurs noms d'origine, pour ne pas casser les
-// pages admin qui les importent encore (AdminInvoices, AdminLanding, AdminNewsletter, SocialCreator).
-// Le chantier D les rebranche sur Firestore (`clients`, `gallery`).
-export const MOCK_CLIENTS: Client[] = [];
-
-export const MOCK_BLOG_POSTS: BlogPost[] = [];
-
-export const MOCK_PRODUCTS: Product[] = [];
-
-export const MOCK_GALLERY: GalleryImage[] = [];
 
 export const PRICE_RANGES = [
   { label: 'Freemium', min: 0, max: 0, color: 'text-slate-400' },
@@ -101,12 +91,6 @@ export const SERVICES = CLIENT_ARCHETYPES.map(a => ({
   details: a.detailsFR,
 }));
 
-export const ARCHETYPE_BADGE = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-iridescent-soft border border-cyan-400/30 text-cyan-200 text-xs font-bold uppercase tracking-widest">
-    <Sparkles className="w-3 h-3" /> {children}
-  </span>
-);
-
 // Resolve a product's archetype-specific variant (falls back to base fields)
 export function resolveProductForArchetype(p: Product, archetype?: ClientArchetype | null) {
   if (!archetype) return { name: p.name, price: p.price, description: p.description };
@@ -117,11 +101,3 @@ export function resolveProductForArchetype(p: Product, archetype?: ClientArchety
     description: v?.description ?? p.description,
   };
 }
-
-// --- DESIGN TOKENS ---
-export const GLASS_CLASSES = "bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl rounded-[15px]";
-export const GLASS_INPUT_CLASSES = "w-full bg-white/5 border border-white/20 rounded-[15px] p-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 focus:shadow-iridescent-sm transition-all";
-export const ACTION_BUTTON_CLASSES = "px-6 py-3 rounded-[15px] bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift hover:bg-[length:300%_300%] text-white font-medium transition-all shadow-iridescent-sm hover:shadow-iridescent flex items-center gap-2 transform active:scale-95";
-export const GHOST_BUTTON_CLASSES = "px-6 py-3 rounded-[15px] border border-white/15 hover:border-cyan-400/50 hover:bg-white/5 text-white font-medium transition-all flex items-center gap-2";
-export const IRIDESCENT_TEXT = "text-iridescent";
-export const IRIDESCENT_BORDER = "border border-transparent bg-iridescent bg-clip-border";
