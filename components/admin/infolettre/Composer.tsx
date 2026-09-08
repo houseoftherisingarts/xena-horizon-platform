@@ -16,10 +16,11 @@ import { app } from '../../../firebase';
 import type { Language, GalleryImage } from '../../../types';
 import { useCollection, createDoc, patchDoc, readDoc, uploadFile, makeStoragePath } from '../../../lib/firestore';
 import {
-  RenderBlockWeb, POLICES, TAILLES, SEPARATEURS, FONDS_INFOLETTRE, estSombre, renderEmailHtml, BRAND,
+  RenderBlockWeb, POLICES, TAILLES, SEPARATEURS, FONDS_INFOLETTRE, estSombre, BRAND,
   type NewsletterBlock, type BlockType, type NewsletterDoc, type NewsletterVersion, type NewsletterAudience,
   type BandeauInfolettre, type Police, type Taille,
 } from '../../../lib/infolettre/renderer';
+import { renderEmailHtml } from '../../../lib/infolettre/email';
 import { COORDONNEES } from '../../../lib/contenu';
 import Audience from './Audience';
 import Apercu from './Apercu';
