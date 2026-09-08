@@ -275,6 +275,10 @@ async function main() {
   const dbLaurieNonVerifiee = testEnv.authenticatedContext('laurie-test-2', { email: 'laurie.belhumeur@gmail.com', email_verified: false }).firestore();
   await verifie('Laurie (Google, courriel vérifié) lit le coffre (ok)', assertSucceeds(getDoc(doc(dbLaurie, 'coffre', 'laurie'))));
   await verifie('même courriel non vérifié refusé au coffre (refus attendu)', assertFails(getDoc(doc(dbLaurieNonVerifiee, 'coffre', 'laurie'))));
+  // Le coffre n'appartient qu'aux admins : une personne connectée ordinaire, et personne du tout, ne le lisent pas.
+  await verifie('un client connecté lit le coffre (refus attendu)', assertFails(getDoc(doc(dbA, 'coffre', 'laurie'))));
+  await verifie('un anonyme lit le coffre (refus attendu)', assertFails(getDoc(doc(dbAnon, 'coffre', 'laurie'))));
+  await verifie('un client connecté écrit dans le coffre (refus attendu)', assertFails(setDoc(doc(dbA, 'coffre', 'laurie'), { v: 1 })));
 
   await testEnv.cleanup();
 
