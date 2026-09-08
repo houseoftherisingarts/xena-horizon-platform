@@ -144,6 +144,11 @@ const ReglagesDossier: React.FC<ReglagesDossierProps> = ({ lang }) => {
               <input value={p.nom} onChange={(e) => majPiece(i, 'nom', e.target.value)} placeholder={tr.nom} className={`${GLASS_INPUT_CLASSES} text-sm py-2 md:col-span-2`} />
             </div>
             <input value={p.aide ?? ''} onChange={(e) => majPiece(i, 'aide', e.target.value)} placeholder={tr.aide} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <input value={p.nomEn ?? ''} onChange={(e) => majPiece(i, 'nomEn', e.target.value)} placeholder={tr.nomEn} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
+              <input value={p.aideEn ?? ''} onChange={(e) => majPiece(i, 'aideEn', e.target.value)} placeholder={tr.aideEn} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
+              <input value={p.catEn ?? ''} onChange={(e) => majPiece(i, 'catEn', e.target.value)} placeholder={tr.catEn} className={`${GLASS_INPUT_CLASSES} text-sm py-2`} />
+            </div>
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-xs text-slate-400">
                 <input type="checkbox" checked={!!p.option} onChange={(e) => majPiece(i, 'option', e.target.checked)} className="accent-cyan-400" />
