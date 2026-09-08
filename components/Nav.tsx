@@ -155,7 +155,13 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
         className="flex flex-col items-start leading-none min-w-[9rem] text-left"
       >
         {afficherMarque ? (
-          <motion.span layoutId="xh-marque" className="font-serif text-[1.25rem] text-encre">
+          <motion.span
+            layoutId="xh-marque"
+            initial={introTerminee ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ layout: { duration: 0.6, ease: EASE_VOYAGE }, opacity: { duration: 0.2 } }}
+            className="font-serif text-[1.25rem] text-encre"
+          >
             {MARQUE}
           </motion.span>
         ) : (
