@@ -211,7 +211,10 @@ const dateCourte = (ts: any, lang: Language): string => {
 
 const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
   const t = useTextes('adminVexel', TEXTES as any, lang) as unknown as (typeof TEXTES)['FR'];
-  const { data: coffre, loading } = useDocument<CoffreScelle>(CHEMIN_COFFRE);
+  const { data: coffreReel, loading } = useDocument<CoffreScelle>(CHEMIN_COFFRE);
+  // Boucle locale sans compte admin : les règles refusent la lecture, `coffreReel` reste vide.
+  // On montre alors l'exemple en mémoire pour que la capture rende l'état « déjà déposé ».
+  const coffre = coffreReel ?? (import.meta.env.MODE === 'verif' ? EXEMPLE_COFFRE_VERIF : null);
   const [contenu, setContenu] = useState<ContenuCoffre>(VIDE);
   const [specimenFichier, setSpecimenFichier] = useState<File | null>(null);
   const [consent, setConsent] = useState(false);
