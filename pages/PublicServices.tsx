@@ -52,7 +52,8 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   const allerA = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    if (lenis) lenis.scrollTo(el, { offset: -72 });
+    // Lenis lit déjà `scroll-margin-top` sur la cible (index.css, `[id]`) : pas de second offset.
+    if (lenis) lenis.scrollTo(el);
     else el.scrollIntoView({ behavior: 'smooth' });
   };
 
