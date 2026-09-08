@@ -95,7 +95,7 @@ const Contact: React.FC<ContactProps> = ({ lang, contact }) => {
           <Reveal as="div" delay={0.12} className="mt-10">
             <a
               href={`mailto:${COORDONNEES.courriel}`}
-              className="block break-all text-h3 font-serif text-encre transition-colors duration-200 hover:text-rose hover:underline sm:text-h2"
+              className="block break-all text-h3 font-serif text-encre transition-colors duration-200 hover:text-rose hover:underline"
             >
               {COORDONNEES.courriel}
             </a>
