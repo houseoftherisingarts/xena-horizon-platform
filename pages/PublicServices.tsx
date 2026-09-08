@@ -23,13 +23,18 @@ const descriptionOffre = (offer: Product, lang: Language): string => {
   return lang === 'EN' && svc.descriptionEn ? svc.descriptionEn : offer.description;
 };
 
+/** Dès 3 500 $ / From $3,500, séparateur de milliers correct dans les deux langues (espace insécable en FR). */
+const montantAffiche = (montant: number, lang: Language): string =>
+  montant.toLocaleString(lang === 'FR' ? 'fr-CA' : 'en-CA');
+
 /** Dès X $ + taxes, Dès X $ / mois pour l'abonnement, ou Sur demande quand le prix n'est pas public. */
 const prixAffiche = (offer: Product, lang: Language): string => {
   if (offer.price <= 0) return lang === 'FR' ? 'Sur demande' : 'On request';
+  const montant = montantAffiche(offer.price, lang);
   if (offer.id === 'abonnement-mensuel') {
-    return lang === 'FR' ? `Dès ${offer.price} $ / mois` : `From $${offer.price} / month`;
+    return lang === 'FR' ? `Dès ${montant} $ / mois` : `From $${montant} / month`;
   }
-  return lang === 'FR' ? `Dès ${offer.price} $ + taxes` : `From $${offer.price} + taxes`;
+  return lang === 'FR' ? `Dès ${montant} $ + taxes` : `From $${montant} + taxes`;
 };
 
 /** Qui peut se reconnaître dans l'offre, tiré de PROFILS_REELS (jamais un archétype inventé). */
