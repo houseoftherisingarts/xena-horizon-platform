@@ -136,6 +136,19 @@ export const piecesParCategorie = (pieces: PieceDef[]): { cat: string; pieces: P
   return Object.entries(cats).map(([cat, list]) => ({ cat, pieces: list }));
 };
 
+/** Nom, aide et catégorie d'une pièce dans la langue voulue, avec repli sur le FR si les champs EN manquent (catalogue modifié par Laurie sans les remplir). */
+export const libellesPiece = (piece: PieceDef, lang: Language): { nom: string; aide: string; cat: string } => ({
+  nom: (lang === 'EN' && piece.nomEn) || piece.nom,
+  aide: (lang === 'EN' && piece.aideEn) || piece.aide || '',
+  cat: (lang === 'EN' && piece.catEn) || piece.cat,
+});
+
+/** Étiquette d'une catégorie (déduite du catEn d'une de ses pièces) dans la langue voulue, avec repli sur le FR. */
+export const libelleCategorie = (cat: string, pieces: PieceDef[], lang: Language): string => {
+  if (lang !== 'EN') return cat;
+  return pieces.find((p) => p.cat === cat && p.catEn)?.catEn ?? cat;
+};
+
 export type EtatPiece = 'manquante' | 'deposee' | 'valide' | 'a_refaire' | 'redeposee';
 
 const versLeMillis = (ts: any): number => {
