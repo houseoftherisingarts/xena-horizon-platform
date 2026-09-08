@@ -5,7 +5,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Atmosphere, Feuille, Parallax, Reveal } from '../../components/motion';
-import { PROJETS } from '../../lib/contenu';
+import { PROJETS, type Projet } from '../../lib/contenu';
 import type { Language, ViewState } from '../../types';
 
 export interface ProjetsProps {
@@ -20,55 +20,50 @@ const t = {
 
 const parId = (id: string) => PROJETS.find((p) => p.id === id);
 
+const Piece: React.FC<{
+  projet?: Projet;
+  lang: Language;
+  speed: number;
+  delay: number;
+  ratio: string;
+  className?: string;
+  onNaviguer: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+}> = ({ projet, lang, speed, delay, ratio, className, onNaviguer }) => {
+  if (!projet) return null;
+  const sousTitre = lang === 'FR' ? projet.sousTitre : projet.sousTitreEn;
+  const titre = lang === 'FR' ? projet.titre : projet.titreEn;
+
+  return (
+    <Reveal as="div" delay={delay} className={className}>
+      <Parallax speed={speed}>
+        <a href="/projets" onClick={onNaviguer} className="group block focus:outline-none">
+          <div className={`overflow-hidden ${ratio}`}>
+            <img
+              src={projet.image}
+              alt={titre}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
+            />
+          </div>
+          <p className="kicker mt-5 text-rose-clair">{sousTitre}</p>
+          <h3 className="relative mt-2 inline-block text-h3 font-serif text-papier">
+            {titre}
+            <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-rose-clair transition-transform duration-300 ease-out group-hover:scale-x-100" />
+          </h3>
+        </a>
+      </Parallax>
+    </Reveal>
+  );
+};
+
 const Projets: React.FC<ProjetsProps> = ({ lang, onChangeView }) => {
   const L = t[lang];
-  const livre = parId('livre');
-  const balado = parId('balado');
-  const modele = parId('modele');
 
   const aller = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!onChangeView) return;
     e.preventDefault();
     onChangeView('PROJETS');
-  };
-
-  const Piece: React.FC<{
-    projet: typeof livre;
-    speed: number;
-    delay: number;
-    className?: string;
-    ratio: string;
-  }> = ({ projet, speed, delay, className, ratio }) => {
-    if (!projet) return null;
-    const sousTitre = lang === 'FR' ? projet.sousTitre : projet.sousTitreEn;
-    const titre = lang === 'FR' ? projet.titre : projet.titreEn;
-
-    return (
-      <Reveal as="div" delay={delay} className={className}>
-        <Parallax speed={speed}>
-          <a
-            href="/projets"
-            onClick={aller}
-            className="group block focus:outline-none"
-          >
-            <div className={`overflow-hidden ${ratio}`}>
-              <img
-                src={projet.image}
-                alt={titre}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
-              />
-            </div>
-            <p className="kicker mt-5 text-rose-clair">{sousTitre}</p>
-            <h3 className="relative mt-2 inline-block text-h3 font-serif text-papier">
-              {titre}
-              <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-rose-clair transition-transform duration-300 ease-out group-hover:scale-x-100" />
-            </h3>
-          </a>
-        </Parallax>
-      </Reveal>
-    );
   };
 
   return (
@@ -88,20 +83,32 @@ const Projets: React.FC<ProjetsProps> = ({ lang, onChangeView }) => {
         </div>
 
         <div className="grid grid-cols-12 gap-x-col gap-y-14">
-          <Piece projet={livre} speed={0.08} delay={0} ratio="aspect-[4/5]" className="col-span-12 sm:col-span-5" />
           <Piece
-            projet={balado}
+            projet={parId('livre')}
+            lang={lang}
+            speed={0.08}
+            delay={0}
+            ratio="aspect-[4/5]"
+            className="col-span-12 sm:col-span-5"
+            onNaviguer={aller}
+          />
+          <Piece
+            projet={parId('balado')}
+            lang={lang}
             speed={0.14}
             delay={0.12}
             ratio="aspect-square"
             className="col-span-12 sm:col-span-4 sm:mt-[12vh]"
+            onNaviguer={aller}
           />
           <Piece
-            projet={modele}
+            projet={parId('modele')}
+            lang={lang}
             speed={0.2}
             delay={0.24}
             ratio="aspect-[3/4]"
             className="col-span-12 sm:col-span-3 sm:mt-[24vh]"
+            onNaviguer={aller}
           />
         </div>
       </div>
