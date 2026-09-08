@@ -396,6 +396,5 @@ export interface NewsletterVersion {
 }
 
 // Le rendu courriel (RenderEmailOptions, renderEmailHtml, renderEmailText) vit dans le fichier
-// compagnon email.ts, pour garder ce fichier sous 500 lignes. Ré-exporté ici : les deux composeurs
-// n'ont qu'un seul module à connaître, comme documenté ci-dessus.
-export { renderEmailHtml, renderEmailText, type RenderEmailOptions } from './email';
+// compagnon lib/infolettre/email.ts, pour garder celui-ci sous 500 lignes : mêmes blocs, mêmes
+// helpers de texte riche (BRAND, richToHtml, stripRich, exportés ci-dessus), deux sorties.
