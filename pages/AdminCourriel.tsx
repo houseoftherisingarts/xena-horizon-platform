@@ -66,7 +66,7 @@ const AdminCourriel: React.FC<AdminCourrielProps> = ({ lang, onglet = 'courriels
   ]);
 
   return (
-    <div className="px-6 md:px-10 py-10 space-y-8">
+    <div className="px-6 md:px-10 py-10 space-y-8" data-tx-scope="adminCourriel">
       <EnTete kicker={t.kicker} titre={t.titre} />
 
       <div className="flex gap-2 border-b border-filet pb-2">
