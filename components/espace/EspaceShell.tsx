@@ -79,50 +79,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
     }
   }, [loading, dossier, uid, user.email, user.displayName]);
 
-  const t = {
-    FR: {
-      bonjour: 'Bonjour',
-      pct: 'de ton dossier complet',
-      etape: 'Étape en cours',
-      deconnexion: 'Fermer la session',
-      onglets: {
-        dossier: 'Mon dossier',
-        pieces: 'Mes pièces',
-        parcours: 'Mon parcours',
-        messages: 'Messages',
-        ressources: 'Ressources',
-      },
-      ongletsCourt: {
-        dossier: 'Dossier',
-        pieces: 'Pièces',
-        parcours: 'Parcours',
-        messages: 'Messages',
-        ressources: 'Ressources',
-      },
-      chargement: 'Ouverture de ton dossier…',
-    },
-    EN: {
-      bonjour: 'Hello',
-      pct: 'of your file complete',
-      etape: 'Current step',
-      deconnexion: 'Sign out',
-      onglets: {
-        dossier: 'My file',
-        pieces: 'My documents',
-        parcours: 'My journey',
-        messages: 'Messages',
-        ressources: 'Resources',
-      },
-      ongletsCourt: {
-        dossier: 'File',
-        pieces: 'Documents',
-        parcours: 'Journey',
-        messages: 'Messages',
-        ressources: 'Resources',
-      },
-      chargement: 'Opening your file…',
-    },
-  }[lang];
+  const t = useTextes('espace', TEXTES, lang);
 
   if (loading || !dossier) {
     return (
