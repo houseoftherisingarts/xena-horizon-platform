@@ -79,6 +79,7 @@ const Allumage: React.FC<AllumageProps> = ({
             tagline={tagline}
             headline={headline}
             subheadline={subheadline}
+            pourLes={pourLes}
             ctaText={ctaText}
             imageUrl={imageUrl}
           />
