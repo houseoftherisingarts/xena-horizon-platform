@@ -116,10 +116,6 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
 
   useEffect(() => () => definirVisibilite(false), []);
   const t = useTextes('consentement', TEXTES, lang);
-      retraitTexte: 'Write to laurie.belhumeur@gmail.com.',
-      fermer: 'Close',
-    },
-  }[lang];
 
   const decider = (v: Valeur) => {
     ecrire(v);
@@ -134,7 +130,7 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
             <div
               role="dialog"
               aria-live="polite"
-              aria-label={lang === 'FR' ? 'Bandeau de consentement' : 'Consent banner'}
+              aria-label={t.ariaBandeau}
               className="bg-papier border border-filet rounded-champ shadow-panneau px-5 py-3.5"
             >
               <p className="text-petit text-encre">{t.texte}</p>

@@ -104,7 +104,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   ];
 
   return (
-    <div className="min-h-[100svh] bg-papier pt-28 md:pt-32 pb-24 px-gut">
+    <div className="min-h-[100svh] bg-papier pt-28 md:pt-32 pb-24 px-gut" data-tx-scope="espace">
       {/* Bandeau d'en-tête : pleine largeur, sans carte */}
       <div className="border-b border-filet pb-6 mb-8 flex flex-col md:flex-row md:items-end gap-6">
         <div className="flex-1 min-w-0">
