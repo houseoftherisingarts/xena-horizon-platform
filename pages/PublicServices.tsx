@@ -138,6 +138,16 @@ const PREFIXE_PROFIL = ['artist', 'entrepreneur', 'npo'] as const;
 const texteProfil = (t: Record<string, string>, i: number, champ: 'Tagline' | 'Title' | 'Description' | 'Details'): string => t[`${PREFIXE_PROFIL[i]}${champ}`] ?? '';
 const SPAN_PROFIL = ['lg:col-span-5', 'lg:col-span-4', 'lg:col-span-3'];
 
+// Boucle locale sans compte admin (voir CLAUDE.md « boucle locale »), pour capturer les trois chemins de
+// paiement (S'inscrire, Acheter, Sur demande) : rien de Firestore n'en porte encore, le catalogue réel
+// (SERVICES_REELS) non plus. N'existe que sous MODE === 'verif', jamais dans le site public.
+const DEMO_PAIEMENT: Product[] = [
+  { id: 'demo-sur-demande', name: 'Accompagnement sur mesure', price: 350, description: 'Un accompagnement construit selon le projet, discuté ensemble avant de commencer.', type: 'Consulting', category: 'Service', status: 'Active', isPublic: true },
+  { id: 'demo-inscription', name: 'Atelier de groupe', price: 65, description: 'Un atelier collectif à places limitées, réservé par inscription.', type: 'Service', category: 'Service', status: 'Active', isPublic: true, paiement: 'inscription' },
+  { id: 'demo-stripe-checkout', name: 'Fiche diagnostic', price: 7, description: 'Un outil autoportant, payé en ligne et livré aussitôt.', type: 'Digital', category: 'Product', status: 'Active', isPublic: true, paiement: 'stripe', prixCents: 700, stripePriceId: 'price_demo_verif' },
+  { id: 'demo-stripe-lien', name: 'Guide de démarrage', price: 15, description: 'Un guide payé par lien Stripe, en attendant le paiement automatique.', type: 'Digital', category: 'Product', status: 'Active', isPublic: true, paiement: 'stripe', prixCents: 1500, lienPaiement: 'https://buy.stripe.com/demo' },
+];
+
 const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) => {
   const { data: produitsFirestore } = useCollection<Product>('products', [where('isPublic', '==', true)]);
   const lenis = useLenis();
