@@ -1,29 +1,64 @@
 import React, { useState } from 'react';
-import { Plus, FileText, Check, Download, Trash2, ArrowLeft, PenTool, CreditCard, Eye, Edit2 } from 'lucide-react';
+import { Plus, FileText, Check, Trash2, ArrowLeft, PenTool, Eye, Edit2, Send, Copy, Printer, Settings } from 'lucide-react';
 import { EnTete, Panneau, Bouton, Champ, Zone, Selection, Etiquette, Vide, Chargement } from '../components/admin/ui';
-import { Client, Document, DocumentType, DocumentStatus, InvoiceItem, Language } from '../types';
-import { useCollection, createDoc, patchDoc, removeDoc } from '../lib/firestore';
+import DocumentFacture from '../components/admin/factures/DocumentFacture';
+import ReglagesFacturation from '../components/admin/factures/ReglagesFacturation';
+import { Client, Document, DocumentStatus, InvoiceItem, Language } from '../types';
+import { useCollection, useDocument, createDoc, patchDoc, removeDoc } from '../lib/firestore';
+import {
+  DEFAULT_TERMS, FACTURATION_PAR_DEFAUT, ParametresFacturation,
+  calculerTotaux, publierFacture, synchroniserStatutPublic, lienFacturePublique,
+} from '../lib/factures';
 
 interface AdminInvoicesProps {
   lang: Language;
 }
 
-const DEFAULT_TERMS = "1. Paiement: Un acompte de 50% est requis à la signature. La balance est due à la livraison finale.\n2. Validité: Ce devis est valide pour une période de 30 jours.\n3. Retard: Tout retard de paiement de plus de 30 jours entraînera des frais d'intérêt de 2% par mois.\n4. Propriété: Les livrables restent la propriété de Xena Horizon jusqu'au paiement complet.";
-
 const RANGEE_INPUT =
   'w-full bg-papier border border-filet rounded-champ px-3 py-2 text-sm text-encre placeholder-gris outline-none transition-colors focus:border-rose';
+
+const AUJOURDHUI = () => new Date().toISOString().split('T')[0];
+
+/** Publiée ou acceptée, et l'échéance est passée : c'est le seul cas où le libellé s'écarte du statut brut. */
+function enRetard(doc: Document): boolean {
+  return (doc.status === 'Sent' || doc.status === 'Accepted') && !!doc.dueDate && doc.dueDate < AUJOURDHUI();
+}
+
+function libelleStatut(doc: Document, lang: Language): string {
+  if (enRetard(doc)) return lang === 'FR' ? 'En retard' : 'Overdue';
+  const labels: Record<DocumentStatus, { FR: string; EN: string }> = {
+    Draft: { FR: 'Brouillon', EN: 'Draft' },
+    Sent: { FR: 'Publiée', EN: 'Published' },
+    Paid: { FR: 'Payée', EN: 'Paid' },
+    Accepted: { FR: 'Acceptée', EN: 'Accepted' },
+    Declined: { FR: 'Refusée', EN: 'Declined' },
+  };
+  return labels[doc.status][lang];
+}
+
+function statusTone(doc: Document): 'neutre' | 'accent' | 'encre' {
+  if (enRetard(doc) || doc.status === 'Paid' || doc.status === 'Accepted') return 'accent';
+  if (doc.status === 'Sent') return 'encre';
+  return 'neutre';
+}
 
 const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
   const { data: documents, loading } = useCollection<Document>('documents');
   const { data: clients } = useCollection<Client>('clients');
+  const { data: facturationDoc } = useDocument<ParametresFacturation>('settings/facturation');
+  const parametres: ParametresFacturation = { ...FACTURATION_PAR_DEFAUT, ...(facturationDoc || {}) };
+
   const [view, setView] = useState<'list' | 'edit' | 'preview'>('list');
   const [currentDoc, setCurrentDoc] = useState<Document | null>(null);
+  const [reglagesOuverts, setReglagesOuverts] = useState(false);
+  const [lienCopie, setLienCopie] = useState(false);
 
   const t = {
     FR: {
       title: 'Facturation',
       subtitle: 'Gérez vos devis, factures et paiements.',
       newDoc: 'Nouveau document',
+      reglages: 'Réglages',
       quote: 'Devis',
       invoice: 'Facture',
       editor: 'Éditeur',
@@ -32,37 +67,40 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
       selectClient: 'Sélectionner un client...',
       date: 'Date',
       dueDate: 'Échéance',
-      paymentLink: 'Lien de paiement',
       save: 'Enregistrer',
+      lines: 'Lignes',
       description: 'Description',
       qty: 'Qté',
       price: 'Prix',
       addLine: 'Ajouter une ligne',
-      subtotal: 'Sous-total',
-      tax: 'Taxes',
-      total: 'Total',
       terms: 'Conditions',
       back: 'Retour au tableau de bord',
-      billedTo: 'Facturé à',
-      termsTitle: 'Termes et conditions',
+      apercu: 'Aperçu du document',
       signature: 'Signature',
       signed: 'Devis accepté et signé',
       clickSign: 'Cliquer ici pour signer',
-      payDeposit: 'Payer le dépôt',
-      payInvoice: 'Payer la facture',
-      noLink: 'Aucun lien de paiement configuré.',
       status: 'Statut',
       edit: 'Modifier',
       preview: 'Prévisualiser',
       delete: 'Supprimer',
+      publier: 'Publier',
+      republier: 'Mettre le lien à jour',
+      copierLien: 'Copier le lien',
+      lienCopie: 'Lien copié',
+      marquerPayee: 'Marquer payée',
+      total: 'Total',
       videTitre: 'Aucun document',
       videTexte: 'Les devis et factures que vous créez apparaissent ici.',
       loading: 'Chargement...',
+      publierAvant: 'Enregistrez le document avant de le publier.',
+      encadreAvecLien: "La personne facturée paie par le lien de paiement des réglages. Vérifiez que son montant correspond avant d'envoyer.",
+      encadreSansLien: 'Aucun moyen de paiement configuré. Ajoutez un lien de paiement dans les réglages, ou laissez les modalités du document porter le mode de paiement.',
     },
     EN: {
       title: 'Invoicing',
       subtitle: 'Manage quotes, invoices and payments.',
       newDoc: 'New document',
+      reglages: 'Settings',
       quote: 'Quote',
       invoice: 'Invoice',
       editor: 'Editor',
@@ -71,32 +109,34 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
       selectClient: 'Select a client...',
       date: 'Date',
       dueDate: 'Due date',
-      paymentLink: 'Payment link',
       save: 'Save',
+      lines: 'Line items',
       description: 'Description',
       qty: 'Qty',
       price: 'Price',
       addLine: 'Add line',
-      subtotal: 'Subtotal',
-      tax: 'Tax',
-      total: 'Total',
       terms: 'Terms',
       back: 'Back to dashboard',
-      billedTo: 'Billed to',
-      termsTitle: 'Terms & conditions',
+      apercu: 'Document preview',
       signature: 'Signature',
       signed: 'Quote accepted and signed',
       clickSign: 'Click here to sign',
-      payDeposit: 'Pay deposit',
-      payInvoice: 'Pay invoice',
-      noLink: 'No payment link configured.',
       status: 'Status',
       edit: 'Edit',
       preview: 'Preview',
       delete: 'Delete',
+      publier: 'Publish',
+      republier: 'Update the link',
+      copierLien: 'Copy the link',
+      lienCopie: 'Link copied',
+      marquerPayee: 'Mark as paid',
+      total: 'Total',
       videTitre: 'No documents',
       videTexte: 'Quotes and invoices you create appear here.',
       loading: 'Loading...',
+      publierAvant: 'Save the document before publishing it.',
+      encadreAvecLien: "The billed person pays through the payment link set in settings. Check its amount matches before you send it.",
+      encadreSansLien: 'No payment method configured. Add a payment link in settings, or let the terms on the document carry the payment method.',
     },
   }[lang];
 
@@ -108,12 +148,11 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
     clientId: '',
     clientName: '',
     clientEmail: '',
-    date: new Date().toISOString().split('T')[0],
+    date: AUJOURDHUI(),
     dueDate: '',
     items: [{ id: Date.now().toString(), description: '', quantity: 1, price: 0 }],
     status: 'Draft',
-    terms: DEFAULT_TERMS,
-    paymentLink: ''
+    terms: parametres.modalites || DEFAULT_TERMS,
   };
 
   // --- HANDLERS ---
@@ -134,7 +173,6 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
 
   const handleSave = async () => {
     if (!currentDoc) return;
-    // Check if ID exists to update or create
     const exists = currentDoc.id && documents.find(d => d.id === currentDoc.id);
     const { id, ...payload } = currentDoc;
     if (exists) {
@@ -160,39 +198,49 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
 
   const removeItem = (id: string) => {
     if (!currentDoc) return;
-    setCurrentDoc({
-      ...currentDoc,
-      items: currentDoc.items.filter(i => i.id !== id)
-    });
+    setCurrentDoc({ ...currentDoc, items: currentDoc.items.filter(i => i.id !== id) });
   };
 
   const updateItem = (id: string, field: keyof InvoiceItem, value: any) => {
     if (!currentDoc) return;
-    setCurrentDoc({
-      ...currentDoc,
-      items: currentDoc.items.map(i => i.id === id ? { ...i, [field]: value } : i)
-    });
+    setCurrentDoc({ ...currentDoc, items: currentDoc.items.map(i => i.id === id ? { ...i, [field]: value } : i) });
   };
 
-  const calculateTotal = (doc: Document) => {
-    const subtotal = doc.items.reduce((acc, item) => acc + (item.quantity * item.price), 0);
-    const tax = subtotal * 0.14975; // Approx QC Tax
-    return { subtotal, tax, total: subtotal + tax };
-  };
-
-  const statusTone = (status: DocumentStatus): 'neutre' | 'accent' | 'encre' => {
-    if (status === 'Paid' || status === 'Accepted') return 'accent';
-    if (status === 'Sent') return 'encre';
-    return 'neutre';
-  };
-
-  // --- PREVIEW SIGNATURE LOGIC ---
+  // --- SIGNATURE (devis) ---
   const handleSign = async () => {
     if (!currentDoc || !currentDoc.id) return;
-    const signatureDate = new Date().toISOString().split('T')[0];
+    const signatureDate = AUJOURDHUI();
     const partial: Partial<Document> = { signed: true, signatureDate, status: 'Accepted' as DocumentStatus };
     await patchDoc<Document>('documents', currentDoc.id, partial);
     setCurrentDoc({ ...currentDoc, ...partial });
+  };
+
+  // --- PUBLICATION ET PAIEMENT ---
+  const handlePublier = async () => {
+    if (!currentDoc?.id) return;
+    const jeton = await publierFacture(currentDoc, parametres);
+    const nextStatus: DocumentStatus = currentDoc.status === 'Draft' ? 'Sent' : currentDoc.status;
+    if (nextStatus !== currentDoc.status) await patchDoc<Document>('documents', currentDoc.id, { status: nextStatus });
+    setCurrentDoc({ ...currentDoc, jetonPublic: jeton, status: nextStatus });
+  };
+
+  const handleCopierLien = async () => {
+    if (!currentDoc?.jetonPublic) return;
+    const lien = lienFacturePublique(currentDoc.jetonPublic);
+    try {
+      await navigator.clipboard.writeText(lien);
+    } catch {
+      // Le lien reste affiché à l'écran : Laurie le copie à la main si le presse-papier est bloqué.
+    }
+    setLienCopie(true);
+    setTimeout(() => setLienCopie(false), 2000);
+  };
+
+  const handleMarquerPayee = async () => {
+    if (!currentDoc?.id) return;
+    await patchDoc<Document>('documents', currentDoc.id, { status: 'Paid' as DocumentStatus });
+    await synchroniserStatutPublic(currentDoc.jetonPublic, 'Paid');
+    setCurrentDoc({ ...currentDoc, status: 'Paid' });
   };
 
   // --- RENDERERS ---
@@ -205,11 +253,18 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
           titre={t.title}
           lede={t.subtitle}
           actions={
-            <Bouton variante="primaire" icone={Plus} onClick={handleNew}>
-              {t.newDoc}
-            </Bouton>
+            <div className="flex flex-wrap items-center gap-2">
+              <Bouton variante="secondaire" icone={Settings} onClick={() => setReglagesOuverts(v => !v)}>
+                {t.reglages}
+              </Bouton>
+              <Bouton variante="primaire" icone={Plus} onClick={handleNew}>
+                {t.newDoc}
+              </Bouton>
+            </div>
           }
         />
+
+        {reglagesOuverts && <ReglagesFacturation lang={lang} parametres={parametres} onClose={() => setReglagesOuverts(false)} />}
 
         {loading && <Chargement texte={t.loading} />}
 
@@ -245,10 +300,10 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                       <td className="py-3 pr-4 text-sm text-encre">{doc.clientName}</td>
                       <td className="py-3 pr-4 text-sm text-gris">{doc.date}</td>
                       <td className="py-3 pr-4 text-sm">
-                        <Etiquette tone={statusTone(doc.status)}>{doc.status}</Etiquette>
+                        <Etiquette tone={statusTone(doc)}>{libelleStatut(doc, lang)}</Etiquette>
                       </td>
                       <td className="py-3 pr-4 text-sm text-encre text-right tabular-nums">
-                        {calculateTotal(doc).total.toFixed(2)} $
+                        {calculerTotaux(doc.items, parametres).total.toFixed(2)} $
                       </td>
                       <td className="py-3">
                         <div className="flex items-center justify-end gap-1">
@@ -275,8 +330,6 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
   }
 
   if (view === 'edit' && currentDoc) {
-     const totals = calculateTotal(currentDoc);
-
      return (
        <div className="px-6 md:px-10 py-10 space-y-6">
          <div className="flex items-center justify-between">
@@ -288,7 +341,7 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
 
          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            {/* Left Col: Settings */}
+            {/* Colonne gauche : saisie */}
             <Panneau className="space-y-5 h-fit">
                <div>
                  <label className="text-petit font-semibold text-encre mb-1.5 block">{t.type}</label>
@@ -322,269 +375,134 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                </div>
 
                <div>
-                 <label className="text-petit font-semibold text-encre mb-1.5 block">{t.paymentLink} (Square)</label>
-                 <div className="relative">
-                   <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gris" aria-hidden="true" />
-                   <input
-                      type="text"
-                      className="w-full bg-papier border border-filet rounded-champ pl-10 pr-4 py-3 text-encre placeholder-gris outline-none transition-colors focus:border-rose"
-                      placeholder="https://square.link/..."
-                      value={currentDoc.paymentLink || ''}
-                      onChange={e => setCurrentDoc({...currentDoc, paymentLink: e.target.value})}
-                   />
+                 <label className="text-petit font-semibold text-encre mb-1.5 block">{t.lines}</label>
+                 <div className="space-y-2">
+                   {currentDoc.items.map((item) => (
+                     <div key={item.id} className="grid grid-cols-12 gap-2 items-center bg-papier border border-filet p-2 rounded-champ group">
+                        <div className="col-span-6">
+                          <input type="text" className={RANGEE_INPUT} placeholder={t.description} value={item.description}
+                            onChange={(e) => updateItem(item.id, 'description', e.target.value)} />
+                        </div>
+                        <div className="col-span-2">
+                          <input type="number" className={`${RANGEE_INPUT} text-center`} value={item.quantity}
+                            onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 0)} />
+                        </div>
+                        <div className="col-span-3">
+                          <input type="number" className={`${RANGEE_INPUT} text-right`} value={item.price}
+                            onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)} />
+                        </div>
+                        <div className="col-span-1 text-right">
+                          <button onClick={() => removeItem(item.id)} aria-label={t.delete} className="w-9 h-9 flex items-center justify-center text-gris hover:text-rose transition-colors opacity-0 group-hover:opacity-100">
+                            <Trash2 className="w-4 h-4" aria-hidden="true" />
+                          </button>
+                        </div>
+                     </div>
+                   ))}
+                   <Bouton variante="discret" icone={Plus} petit onClick={addItem}>{t.addLine}</Bouton>
                  </div>
                </div>
+
+               <Zone label={t.terms} value={currentDoc.terms} onChange={(e) => setCurrentDoc({...currentDoc, terms: e.target.value})} className="min-h-[6rem]" />
 
                <Bouton variante="primaire" icone={Check} onClick={handleSave} className="w-full justify-center">
                  {t.save}
                </Bouton>
             </Panneau>
 
-            {/* Right Col: Content */}
+            {/* Colonne droite : aperçu du document réel, mis à jour à mesure de la saisie */}
             <div className="lg:col-span-2">
-               <Panneau className="p-8 min-h-[600px] flex flex-col">
-                  <div className="flex justify-between items-start mb-8 pb-8 border-b border-filet">
-                     <div>
-                       <h2 className="font-serif text-h3 text-encre mb-1">{currentDoc.type === 'Quote' ? t.quote : t.invoice}</h2>
-                       <p className="text-gris">#{currentDoc.number}</p>
-                     </div>
-                     <div className="text-right">
-                       <h3 className="font-sans font-semibold text-encre">Xena Horizon</h3>
-                       <p className="text-sm text-gris">Consultante stratégique</p>
-                     </div>
-                  </div>
-
-                  {/* Items */}
-                  <div className="space-y-3 mb-8 flex-1">
-                     <div className="grid grid-cols-12 gap-4 px-2 kicker text-gris">
-                       <div className="col-span-6">{t.description}</div>
-                       <div className="col-span-2 text-center">{t.qty}</div>
-                       <div className="col-span-3 text-right">{t.price}</div>
-                       <div className="col-span-1"></div>
-                     </div>
-                     {currentDoc.items.map((item) => (
-                       <div key={item.id} className="grid grid-cols-12 gap-4 items-center bg-papier border border-filet p-2 rounded-champ group">
-                          <div className="col-span-6">
-                            <input
-                              type="text"
-                              className={RANGEE_INPUT}
-                              placeholder={t.description}
-                              value={item.description}
-                              onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                            />
-                          </div>
-                          <div className="col-span-2">
-                             <input
-                              type="number"
-                              className={`${RANGEE_INPUT} text-center`}
-                              value={item.quantity}
-                              onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value))}
-                            />
-                          </div>
-                          <div className="col-span-3">
-                             <input
-                              type="number"
-                              className={`${RANGEE_INPUT} text-right`}
-                              value={item.price}
-                              onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value))}
-                            />
-                          </div>
-                          <div className="col-span-1 text-right">
-                             <button onClick={() => removeItem(item.id)} aria-label={t.delete} className="w-9 h-9 flex items-center justify-center text-gris hover:text-rose transition-colors opacity-0 group-hover:opacity-100">
-                               <Trash2 className="w-4 h-4" aria-hidden="true" />
-                             </button>
-                          </div>
-                       </div>
-                     ))}
-                     <Bouton variante="discret" icone={Plus} onClick={addItem}>
-                       {t.addLine}
-                     </Bouton>
-                  </div>
-
-                  {/* Totals */}
-                  <div className="flex justify-end mb-8">
-                     <div className="w-64 space-y-2">
-                        <div className="flex justify-between text-gris text-sm">
-                           <span>{t.subtotal}</span>
-                           <span>{totals.subtotal.toFixed(2)} $</span>
-                        </div>
-                        <div className="flex justify-between text-gris text-sm">
-                           <span>{t.tax} (14.975%)</span>
-                           <span>{totals.tax.toFixed(2)} $</span>
-                        </div>
-                        <div className="flex justify-between font-serif text-h3 text-encre pt-2 border-t border-filet">
-                           <span>{t.total}</span>
-                           <span className="tabular-nums">{totals.total.toFixed(2)} $</span>
-                        </div>
-                     </div>
-                  </div>
-
-                  {/* Terms */}
-                  <div className="pt-8 border-t border-filet">
-                     <Zone
-                        label={t.terms}
-                        value={currentDoc.terms}
-                        onChange={(e) => setCurrentDoc({...currentDoc, terms: e.target.value})}
-                        className="min-h-[6rem]"
-                     />
-                  </div>
-
-               </Panneau>
+               <p className="kicker text-gris mb-3">{t.apercu}</p>
+               <DocumentFacture
+                 lang={lang}
+                 numero={currentDoc.number}
+                 type={currentDoc.type}
+                 date={currentDoc.date}
+                 dueDate={currentDoc.dueDate}
+                 clientName={currentDoc.clientName || t.selectClient}
+                 clientEmail={currentDoc.clientEmail}
+                 items={currentDoc.items}
+                 modalites={currentDoc.terms}
+                 note={parametres.note}
+                 vendeur={parametres}
+               />
             </div>
          </div>
        </div>
      );
   }
 
-  // --- PREVIEW MODE ---
+  // --- PRÉVISUALISATION ---
   if (view === 'preview' && currentDoc) {
-     const totals = calculateTotal(currentDoc);
+     const lien = currentDoc.jetonPublic ? lienFacturePublique(currentDoc.jetonPublic) : '';
 
      return (
-       <div className="min-h-screen bg-papier flex flex-col items-center pt-10 pb-20 px-4">
+       <div className="min-h-screen bg-papier flex flex-col items-center pt-10 pb-20 px-4 print:p-0 print:min-h-0">
 
-         <div className="w-full max-w-4xl flex justify-between items-center mb-6">
+         <div className="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 mb-6 print:hidden">
             <button onClick={() => setView('list')} className="flex items-center gap-2 text-gris hover:text-encre transition-colors">
                <ArrowLeft className="w-4 h-4" aria-hidden="true" /> {t.back}
             </button>
-            <Bouton variante="secondaire" icone={Download} petit>
-               PDF
-            </Bouton>
+            <div className="flex flex-wrap items-center gap-2">
+               <Etiquette tone={statusTone(currentDoc)}>{libelleStatut(currentDoc, lang)}</Etiquette>
+               <Bouton variante="secondaire" icone={Send} petit onClick={handlePublier} disabled={!currentDoc.id} title={!currentDoc.id ? t.publierAvant : undefined}>
+                 {currentDoc.jetonPublic ? t.republier : t.publier}
+               </Bouton>
+               {currentDoc.jetonPublic && (
+                 <Bouton variante="secondaire" icone={Copy} petit onClick={handleCopierLien}>
+                   {lienCopie ? t.lienCopie : t.copierLien}
+                 </Bouton>
+               )}
+               <Bouton variante="secondaire" icone={Printer} petit onClick={() => window.print()}>PDF</Bouton>
+               {currentDoc.status !== 'Paid' && (
+                 <Bouton variante="primaire" icone={Check} petit onClick={handleMarquerPayee}>{t.marquerPayee}</Bouton>
+               )}
+            </div>
          </div>
 
-         {/* DOCUMENT PREVIEW (Paper Style) */}
-         <div className="w-full max-w-4xl bg-papier-2 border border-filet rounded-champ shadow-panneau p-12 md:p-16 relative">
+         {currentDoc.jetonPublic && (
+           <div className="w-full max-w-4xl mb-6 bg-papier-2 border border-filet rounded-champ p-4 text-sm text-gris print:hidden">
+             <p>{parametres.lienPaiementStripe ? t.encadreAvecLien : t.encadreSansLien}</p>
+             <a href={lien} target="_blank" rel="noreferrer" className="block mt-2 text-rose break-all">{lien}</a>
+           </div>
+         )}
 
-            {/* Header */}
-            <div className="flex justify-between items-start mb-12">
+         <div className="w-full max-w-4xl print:max-w-none">
+           <DocumentFacture
+             lang={lang}
+             numero={currentDoc.number}
+             type={currentDoc.type}
+             date={currentDoc.date}
+             dueDate={currentDoc.dueDate}
+             clientName={currentDoc.clientName}
+             clientEmail={currentDoc.clientEmail}
+             items={currentDoc.items}
+             modalites={currentDoc.terms}
+             note={parametres.note}
+             vendeur={parametres}
+           >
+             {currentDoc.type === 'Quote' && (
                <div>
-                  <h1 className="font-serif text-h2 text-encre mb-2">{currentDoc.type === 'Quote' ? t.quote : t.invoice}</h1>
-                  <p className="text-gris font-medium text-lg">#{currentDoc.number}</p>
-                  <div className="mt-6 text-sm text-gris space-y-1">
-                     <p><span className="text-encre font-medium">{t.date} :</span> {currentDoc.date}</p>
-                     {currentDoc.dueDate && <p><span className="text-encre font-medium">{t.dueDate} :</span> {currentDoc.dueDate}</p>}
-                  </div>
+                 <h4 className="font-sans font-semibold text-encre mb-4 flex items-center gap-2">
+                   <PenTool className="w-5 h-5" aria-hidden="true" /> {t.signature}
+                 </h4>
+                 {currentDoc.signed ? (
+                   <div className="border border-rose/30 bg-rose/10 rounded-champ p-6 flex items-center gap-4 text-rose">
+                     <div className="w-10 h-10 rounded-pilule bg-rose/10 flex items-center justify-center">
+                       <Check className="w-6 h-6" aria-hidden="true" />
+                     </div>
+                     <div>
+                       <p className="font-medium">{t.signed}</p>
+                       <p className="text-sm text-gris">Le {currentDoc.signatureDate}</p>
+                     </div>
+                   </div>
+                 ) : (
+                   <div className="border border-dashed border-filet rounded-champ p-8 text-center bg-papier cursor-pointer hover:border-rose transition-colors group" onClick={handleSign}>
+                     <p className="font-serif text-h3 text-gris mb-2 group-hover:text-rose transition-colors">{t.clickSign}</p>
+                   </div>
+                 )}
                </div>
-               <div className="text-right">
-                  <div className="w-16 h-16 rounded-champ bg-encre text-papier flex items-center justify-center font-serif font-medium text-xl mb-4 ml-auto">XH</div>
-                  <h2 className="font-sans font-semibold text-encre text-lg">Xena Horizon</h2>
-                  <p className="text-gris text-sm">Consultante stratégique</p>
-                  <p className="text-gris text-sm">laurie.belhumeur@gmail.com</p>
-               </div>
-            </div>
-
-            {/* Client Info */}
-            <div className="mb-12 bg-papier p-6 rounded-champ border border-filet">
-               <h3 className="kicker text-gris mb-2">{t.billedTo}</h3>
-               <p className="font-sans font-semibold text-lg text-encre">{currentDoc.clientName}</p>
-               <p className="text-gris">{currentDoc.clientEmail}</p>
-            </div>
-
-            {/* Table */}
-            <div className="overflow-x-auto mb-12">
-              <table className="w-full">
-                 <thead>
-                    <tr className="border-b-2 border-encre">
-                       <th className="text-left py-4 kicker text-gris">{t.description}</th>
-                       <th className="text-center py-4 kicker text-gris w-24">{t.qty}</th>
-                       <th className="text-right py-4 kicker text-gris w-32">{t.price}</th>
-                       <th className="text-right py-4 kicker text-gris w-32">{t.total}</th>
-                    </tr>
-                 </thead>
-                 <tbody className="divide-y divide-filet">
-                    {currentDoc.items.map(item => (
-                       <tr key={item.id}>
-                          <td className="py-4 text-sm text-encre">{item.description}</td>
-                          <td className="py-4 text-sm text-encre text-center">{item.quantity}</td>
-                          <td className="py-4 text-sm text-gris text-right">{item.price.toFixed(2)} $</td>
-                          <td className="py-4 text-sm text-encre text-right font-medium tabular-nums">{(item.quantity * item.price).toFixed(2)} $</td>
-                       </tr>
-                    ))}
-                 </tbody>
-              </table>
-            </div>
-
-            {/* Summary */}
-            <div className="flex justify-end mb-16">
-               <div className="w-72 space-y-3">
-                  <div className="flex justify-between text-gris text-sm">
-                     <span>{t.subtotal}</span>
-                     <span>{totals.subtotal.toFixed(2)} $</span>
-                  </div>
-                  <div className="flex justify-between text-gris text-sm">
-                     <span>{t.tax} (14.975%)</span>
-                     <span>{totals.tax.toFixed(2)} $</span>
-                  </div>
-                  <div className="flex justify-between font-serif text-h3 text-encre pt-4 border-t-2 border-encre">
-                     <span>{t.total}</span>
-                     <span className="tabular-nums">{totals.total.toFixed(2)} $</span>
-                  </div>
-               </div>
-            </div>
-
-            {/* Terms */}
-            <div className="mb-12">
-               <h4 className="font-sans font-semibold text-encre mb-2">{t.termsTitle}</h4>
-               <p className="text-gris text-sm whitespace-pre-line">{currentDoc.terms}</p>
-            </div>
-
-            {/* ACTION AREA (Quote Signature or Invoice Payment) */}
-            <div className="bg-papier rounded-champ p-8 border border-filet">
-
-               {/* SIGNATURE SPOT FOR QUOTES */}
-               {currentDoc.type === 'Quote' && (
-                  <div className="mb-8">
-                     <h4 className="font-sans font-semibold text-encre mb-4 flex items-center gap-2">
-                        <PenTool className="w-5 h-5" aria-hidden="true" /> {t.signature}
-                     </h4>
-                     {currentDoc.signed ? (
-                        <div className="border border-rose/30 bg-rose/10 rounded-champ p-6 flex items-center gap-4 text-rose">
-                           <div className="w-10 h-10 rounded-pilule bg-rose/10 flex items-center justify-center">
-                              <Check className="w-6 h-6" aria-hidden="true" />
-                           </div>
-                           <div>
-                              <p className="font-medium">{t.signed}</p>
-                              <p className="text-sm text-gris">Le {currentDoc.signatureDate}</p>
-                           </div>
-                        </div>
-                     ) : (
-                        <div className="border border-dashed border-filet rounded-champ p-8 text-center bg-papier-2 cursor-pointer hover:border-rose transition-colors group" onClick={handleSign}>
-                           <p className="font-serif text-h3 text-gris mb-2 group-hover:text-rose transition-colors">{t.clickSign}</p>
-                           <p className="kicker text-gris">Zone de signature numérique</p>
-                        </div>
-                     )}
-                  </div>
-               )}
-
-               {/* PAYMENT BUTTON (Square) */}
-               <div className="flex justify-end">
-                  {currentDoc.paymentLink ? (
-                     <a
-                        href={currentDoc.paymentLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={`inline-flex items-center gap-3 min-h-[44px] px-8 rounded-pilule text-base font-medium transition-colors ${
-                           (!currentDoc.signed && currentDoc.type === 'Quote')
-                              ? 'bg-papier-2 border border-filet text-gris cursor-not-allowed'
-                              : 'bg-bouton text-sur-bouton hover:bg-bouton-2'
-                        }`}
-                        onClick={(e) => {
-                           if (!currentDoc.signed && currentDoc.type === 'Quote') {
-                              e.preventDefault();
-                              alert('Veuillez signer le devis avant de procéder au paiement.');
-                           }
-                        }}
-                     >
-                        <CreditCard className="w-5 h-5" aria-hidden="true" />
-                        {currentDoc.type === 'Quote' ? t.payDeposit : t.payInvoice}
-                     </a>
-                  ) : (
-                     <p className="text-gris text-sm">{t.noLink}</p>
-                  )}
-               </div>
-
-            </div>
-
+             )}
+           </DocumentFacture>
          </div>
        </div>
      );
