@@ -105,6 +105,7 @@ const Allumage: React.FC<AllumageProps> = ({
           decalageTitre={decalageTitre}
           opaciteSousTitre={opaciteSousTitre}
           hauteurPhoto={hauteurPhoto}
+          demarrer={introTerminee}
         />
 
         <motion.div
