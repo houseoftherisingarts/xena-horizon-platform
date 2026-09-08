@@ -5,7 +5,7 @@ import { orderBy } from 'firebase/firestore';
 import { Plus, Trash2, Download, Upload } from 'lucide-react';
 import type { Language, Subscriber } from '../../../types';
 import { useCollection, createDoc, removeDoc } from '../../../lib/firestore';
-import { Panneau, Bouton, Champ, Selection, Zone, Etiquette, Vide, Chargement } from '../ui';
+import { Panneau, Bouton, Champ, Selection, Zone, Etiquette, Vide, Chargement, Chiffre } from '../ui';
 import { useTextes } from '../../../lib/textes';
 
 const TEXTES = {
