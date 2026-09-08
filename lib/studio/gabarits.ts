@@ -184,7 +184,7 @@ export const GABARIT_CARROUSEL: Gabarit = {
     },
     {
       id: 'g-carr-titre', type: 'texte', z: 2, xPct: 50, yPct: 68, wPct: 82, hPct: 22,
-      texte: 'Cinq idées pour clarifier votre image de marque', police: 'serif', taillePct: 6, graisse: 500,
+      texte: 'Cinq idées pour clarifier votre image', police: 'serif', taillePct: 6, graisse: 500,
       couleur: '#FFFFFF', ombre: true, align: 'center',
     },
     {
