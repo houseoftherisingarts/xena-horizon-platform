@@ -162,8 +162,10 @@ function contenuProjets() {
 }
 
 function contenuAPropos() {
+  // Le h1 réel de PublicAPropos.tsx est le nom (LAURIE / BELHUMEUR en deux lignes), pas A_PROPOS.titre
+  // (qui sert de h2 plus bas, « Brève histoire d'un tout ») : même texte, même ordre qu'à l'écran.
   return `
-    <h1>${esc(`${'LAURIE'} ${'BELHUMEUR'}`)}</h1>
+    <h1>Laurie Belhumeur</h1>
     ${p(A_PROPOS.tagline)}
     <section>
       ${A_PROPOS.paragraphes.map(p).join('')}
