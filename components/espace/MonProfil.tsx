@@ -208,15 +208,13 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
       updatedAt: serverTimestamp(),
       derniereActiviteClient: serverTimestamp(),
     };
-    console.log('DEBUG payload', JSON.stringify(payload, (k, v) => (v && v._methodName ? `FieldValue:${v._methodName}` : v)));
     try {
       await patchDoc<Record<string, any>>('dossiers', uid, payload);
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, { displayName: nom.trim() || null, photoURL: photoURL || null });
       }
       setOk(true);
-    } catch (err: any) {
-      console.error('DEBUG MonProfil save', err?.code, err?.message);
+    } catch {
       setError(t.echec);
     } finally {
       setBusy(false);
