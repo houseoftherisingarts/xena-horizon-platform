@@ -110,7 +110,15 @@ const Une: React.FC<UneProps> = ({
         style={{ '--photo-h': hauteurPhoto ?? '36svh' } as unknown as React.CSSProperties}
       >
         <motion.div className="h-full w-full" style={filtre ? { filter: filtre, willChange: 'filter' } : undefined}>
-          <KenBurns src={imageUrl} alt="Laurie Belhumeur" position="50% 22%" className="h-full w-full" />
+          <KenBurns
+            src={imageUrl}
+            srcSet="/images/laurie-portrait-nb-640.webp 640w, /images/laurie-portrait-nb-1200.webp 1200w, /images/laurie-portrait-nb-1920.webp 1920w"
+            sizes="(min-width: 640px) 45vw, 100vw"
+            fetchPriority="high"
+            alt="Laurie Belhumeur"
+            position="50% 22%"
+            className="h-full w-full"
+          />
         </motion.div>
       </motion.div>
     </div>
