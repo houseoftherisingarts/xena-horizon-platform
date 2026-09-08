@@ -4,6 +4,7 @@ import { Language, ViewState } from '../types';
 import { COORDONNEES, CREDITS } from '../lib/contenu';
 import { useLenis } from './motion';
 import { useConsentementVisible } from './Consentement';
+import { useTextes } from '../lib/textes';
 
 interface FooterProps {
   onAdminLogin: () => void;
@@ -11,41 +12,43 @@ interface FooterProps {
   onChangeView?: (view: ViewState) => void;
 }
 
+const TEXTES = {
+  FR: {
+    tagline: 'Consultante en carrière artistique et en communication.',
+    nav: 'Naviguer',
+    home: 'Accueil',
+    services: 'Services',
+    projets: 'Projets',
+    about: 'À propos',
+    contact: 'Contact',
+    mySpace: 'Mon espace',
+    coord: 'Coordonnées',
+    credits: 'Crédit photo',
+    rights: 'Tous droits réservés.',
+    platform: 'Plateforme par Vexel Webstudio',
+    admin: 'Admin',
+  },
+  EN: {
+    tagline: 'Artistic career and communication consultant.',
+    nav: 'Navigate',
+    home: 'Home',
+    services: 'Services',
+    projets: 'Projects',
+    about: 'About',
+    contact: 'Contact',
+    mySpace: 'My space',
+    coord: 'Contact',
+    credits: 'Photo credit',
+    rights: 'All rights reserved.',
+    platform: 'Platform by Vexel Webstudio',
+    admin: 'Admin',
+  },
+};
+
 const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => {
   const lenis = useLenis();
   const bandeauVisible = useConsentementVisible();
-  const t = {
-    FR: {
-      tagline: 'Consultante en carrière artistique et en communication.',
-      nav: 'Naviguer',
-      home: 'Accueil',
-      services: 'Services',
-      projets: 'Projets',
-      about: 'À propos',
-      contact: 'Contact',
-      mySpace: 'Mon espace',
-      coord: 'Coordonnées',
-      credits: 'Crédit photo',
-      rights: 'Tous droits réservés.',
-      platform: 'Plateforme par Vexel Webstudio',
-      admin: 'Admin',
-    },
-    EN: {
-      tagline: 'Artistic career and communication consultant.',
-      nav: 'Navigate',
-      home: 'Home',
-      services: 'Services',
-      projets: 'Projects',
-      about: 'About',
-      contact: 'Contact',
-      mySpace: 'My space',
-      coord: 'Contact',
-      credits: 'Photo credit',
-      rights: 'All rights reserved.',
-      platform: 'Platform by Vexel Webstudio',
-      admin: 'Admin',
-    },
-  }[lang];
+  const t = useTextes('footer', TEXTES, lang);
 
   const goTo = (view: ViewState, sectionId?: string) => {
     if (!onChangeView) return;
