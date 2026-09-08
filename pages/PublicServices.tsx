@@ -251,7 +251,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       {/* --- INTERLUDE : la signature --- */}
       <Feuille z={3} className="bg-papier px-gut py-bloc">
         <TexteRevele
-          texte={lang === 'EN' ? SIGNATURE.texteEN : SIGNATURE.texteFR}
+          texte={t.signature}
           as="p"
           par="mot"
           className="font-serif text-display lg:max-w-[85%]"
