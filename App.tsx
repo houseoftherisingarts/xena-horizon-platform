@@ -132,7 +132,8 @@ const App: React.FC = () => {
     return () => unsub();
   }, []);
 
-  const userIsAdmin = isAdmin(user) || import.meta.env.VITE_EDITEUR_DEMO === '1';
+  // Le crayon de démonstration n'existe que dans un build lancé avec `--mode verif` (boucle locale), jamais en production.
+  const userIsAdmin = isAdmin(user) || (import.meta.env.MODE === 'verif' && import.meta.env.VITE_EDITEUR_DEMO === '1');
   const isAdminView = currentView.startsWith('ADMIN');
 
   // Guard: if user navigates to an admin view but isn't an admin, bounce to HOME and prompt sign-in
