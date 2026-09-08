@@ -187,7 +187,8 @@ const TEXTES = {
   },
 };
 
-const VIDE: ContenuCoffre = { nomCarte: '', numero: '', expiration: '', cvv: '', adresse: '', ville: '', province: 'Québec', codePostal: '', telephone: '', courrielFacturation: '', nomLegal: '', neq: '', tps: '', tvq: '', stripeCourriel: '', stripeMotDePasse: '', googleCourriel: '', googleMotDePasse: '', notes: '' };
+const VIDE: ContenuCoffre = { nomCarte: '', numero: '', expiration: '', cvv: '', adresse: '', ville: '', province: 'Québec', codePostal: '', telephone: '', courrielFacturation: '', nomLegal: '', neq: '', tps: '', tvq: '', stripeCourriel: '', stripeMotDePasse: '', googleCourriel: '', googleMotDePasse: '', titulaireCompte: '', institution: '', transit: '', numeroCompte: '', notes: '' };
+const TYPES_SPECIMEN_ACCEPTES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
 const LIEN_BLAZE = 'https://console.firebase.google.com/project/xena-70977/usage/details';
 
 const dateCourte = (ts: any, lang: Language): string => {
