@@ -224,7 +224,7 @@ export const Toile = React.forwardRef<HTMLDivElement, Props>(
     if (maquetteTelephone) {
       return (
         <div className="relative mx-auto" style={{ width: 'min(100%, 320px)' }}>
-          <div className="rounded-[2.4rem] border-[10px] border-encre bg-encre shadow-panneau overflow-hidden">
+          <div className="relative rounded-[2.4rem] border-[10px] border-encre bg-encre shadow-panneau overflow-hidden">
             <div className="absolute left-1/2 top-2 -translate-x-1/2 w-16 h-4 bg-encre rounded-pilule z-10" />
             {contenu}
           </div>
