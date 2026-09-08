@@ -294,6 +294,43 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
 
   if (loading) return <div className="px-6 md:px-10 py-16 text-center text-gris">…</div>;
 
+  if (gabaritOuvert) {
+    return (
+      <div data-tx-scope="adminInfolettre_composer" className="fixed inset-0 z-50 flex flex-col bg-papier overflow-y-auto">
+        <div className="flex items-center gap-3 px-4 md:px-6 py-3 border-b border-filet bg-papier-2 shrink-0">
+          <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 text-sm text-gris hover:text-encre"><ArrowLeft className="w-4 h-4" aria-hidden="true" /> {t.retour}</button>
+        </div>
+        <div className="flex-1 px-6 md:px-10 py-10 md:py-16 max-w-4xl mx-auto w-full">
+          <p className="kicker text-rose mb-2">{t.gabaritTitre}</p>
+          <h1 className="font-serif text-h2 text-encre mb-3">{t.gabaritTitre}</h1>
+          <p className="text-gris mesure mb-8">{t.gabaritLede}</p>
+          {!gabarits ? (
+            <p className="text-sm text-gris">…</p>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {gabarits.map((g) => {
+                const Icone = ICONE_GABARIT[g.id] || FileText;
+                const c = g.construire(letterLang);
+                return (
+                  <button key={g.id} type="button" onClick={() => appliquerGabarit(g)}
+                    className="group text-left border border-filet rounded-champ overflow-hidden bg-papier-2 hover:border-rose transition-colors">
+                    <div className="h-24 flex items-center justify-center" style={{ background: c.bandeau.fond || BRAND.ink }}>
+                      <Icone className="w-8 h-8" style={{ color: c.bandeau.texte || BRAND.accentSurEncre }} aria-hidden="true" />
+                    </div>
+                    <div className="p-4">
+                      <p className="font-serif text-lede text-encre">{g.nom[lang]}</p>
+                      <p className="text-xs text-gris mt-1">{g.description[lang]}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div data-tx-scope="adminInfolettre_composer" className="fixed inset-0 z-50 flex flex-col bg-papier overflow-y-auto">
       <style>{`.nl-inline{outline:none;cursor:text;min-width:2ch;border-radius:4px;transition:box-shadow .15s}.nl-inline:hover{box-shadow:0 0 0 2px rgb(var(--c-rose)/0.3)}.nl-inline:focus{box-shadow:0 0 0 2px rgb(var(--c-rose)/0.6)}.nl-inline:empty:before{content:attr(data-placeholder);opacity:.4;pointer-events:none}`}</style>
