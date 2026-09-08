@@ -35,7 +35,7 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
   const L = useTextes('contact', TEXTES, lang);
 
   return (
-    <Feuille z={6} className="bg-papier-2">
+    <Feuille z={7} className="bg-papier-2">
       <div id="contact" data-tx-scope="contact" className="grid grid-cols-12 gap-x-col gap-y-10 px-gut py-feuille">
         <div className="col-span-12 sm:col-span-6">
           <Reveal as="h2" className="whitespace-pre-line text-h2 font-serif text-encre">
