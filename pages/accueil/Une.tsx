@@ -21,6 +21,10 @@ export interface UneProps {
   opaciteTitre?: MotionValue<number>;
   decalageTitre?: MotionValue<number>;
   opaciteSousTitre?: MotionValue<number>;
+  /** Hauteur de la bande photo mobile (`--photo-h`), pilotée par la progression de l'épinglage
+   * pour qu'elle remplisse l'espace laissé par le texte qui s'efface. `sm:h-[112%]` prend le
+   * relais dès le format tablette et n'en tient jamais compte. */
+  hauteurPhoto?: MotionValue<string>;
 }
 
 const NAV_PAD = 'pt-[calc(var(--nav)+1.75rem)] sm:pt-[calc(var(--nav)+2.75rem)] lg:pt-[calc(var(--nav)+4rem)]';
