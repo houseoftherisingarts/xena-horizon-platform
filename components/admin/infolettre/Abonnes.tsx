@@ -55,7 +55,7 @@ const TEXTES = {
     importer: 'Import a CSV file',
     importerAide: 'One line per subscriber: email;name;language (fr or en). Paste the content below.',
     importerBouton: 'Import',
-    importerResultat: (n: number, doublons: number, invalides: number) => `${n} added, ${doublons} duplicate(s) skipped, ${invalides} invalid line(s).`,
+    importerResultat: '{n} added, {doublons} duplicate(s) skipped, {invalides} invalid line(s).',
     exporter: 'Export CSV',
     vide: 'No subscriber yet.',
     chargement: 'Loading…',
