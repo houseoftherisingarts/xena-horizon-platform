@@ -30,3 +30,11 @@ export function cheminPaiement(offer: Pick<Product, 'paiement' | 'stripePriceId'
   }
   return 'sur_demande';
 }
+
+/** Ouvre une session Stripe Checkout pour ce prix déjà synchronisé (creerPaiementProduit), rend l'adresse à rediriger. */
+export async function demarrerCheckoutStripe(stripePriceId: string): Promise<string> {
+  const fns = getFunctions(app, 'northamerica-northeast1');
+  const appel = httpsCallable<{ priceId: string }, { url: string }>(fns, 'creerPaiementProduit');
+  const { data } = await appel({ priceId: stripePriceId });
+  return data.url;
+}
