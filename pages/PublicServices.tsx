@@ -65,7 +65,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
     },
     EN: {
       pricesLabel: 'Starting price',
-      book: 'Book an appointment',
+      book: 'Book a call',
       pillA: 'From a starting price',
       pillB: 'On request',
       howTitle: 'How it\nworks',

@@ -27,7 +27,7 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
       enEvenement: 'At an event',
       credit: 'Photo credit',
       rdvTitle: "Let's talk about\nyour next step",
-      rdv: 'Book an appointment',
+      rdv: 'Book a call',
     },
   }[lang];
 

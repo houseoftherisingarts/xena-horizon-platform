@@ -16,6 +16,8 @@ export interface KenBurnsProps {
   duration?: number;
   /** `object-position` CSS (ex. '50% 20%'). */
   position?: string;
+  /** 'eager' pour un hero au-dessus du pli (défaut), 'lazy' pour une photo plus bas dans la page. */
+  loading?: 'eager' | 'lazy';
 }
 
 export const KenBurns: React.FC<KenBurnsProps> = ({
@@ -26,6 +28,7 @@ export const KenBurns: React.FC<KenBurnsProps> = ({
   to = 1.16,
   duration = 22,
   position,
+  loading = 'eager',
 }) => {
   const reduce = useReducedMotion();
   return (
@@ -33,7 +36,7 @@ export const KenBurns: React.FC<KenBurnsProps> = ({
       src={src}
       alt={alt}
       aria-hidden={alt === '' ? true : undefined}
-      loading="eager"
+      loading={loading}
       className={`h-full w-full object-cover ${className}`}
       style={position ? { objectPosition: position } : undefined}
       initial={reduce ? false : { scale: from }}
