@@ -320,7 +320,7 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
       return (
         <blockquote className="my-8 border-l-2 border-rose pl-6 font-serif text-lede text-encre/80">
           <p>« {c.text || ''} »</p>
-          {c.attribution && <cite className={citeClass}>— {c.attribution}</cite>}
+          {c.attribution && <cite className={citeClass}>· {c.attribution}</cite>}
         </blockquote>
       );
     }
