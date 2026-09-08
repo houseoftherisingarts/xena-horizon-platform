@@ -259,7 +259,7 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
   const audienceVide = (audience.mode === 'tags' && audience.tags.length === 0) || (audience.mode === 'choix' && audience.ids.length === 0);
   const sendLive = async () => {
     if (audienceVide) { setSendErr(t.audienceVide); return; }
-    if (!window.confirm(t.confirmEnvoi(audienceLibelle))) return;
+    if (!window.confirm(t.confirmEnvoi.replace('{qui}', audienceLibelle))) return;
     await triggerSend();
   };
 
