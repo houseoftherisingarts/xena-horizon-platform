@@ -76,7 +76,7 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
         <Reveal as="div" delay={0.1} className="col-span-12 sm:col-span-5 sm:col-start-8">
           <img
             src="/images/laurie-portrait-2.jpg"
-            alt="Laurie Belhumeur, sur scène au micro"
+            alt={ALT_PHOTO_CONTACT[lang]}
             loading="lazy"
             decoding="async"
             className="aspect-[4/5] w-full object-cover"
