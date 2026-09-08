@@ -438,6 +438,8 @@ const AdminAgenda: React.FC<AdminAgendaProps> = ({ lang }) => {
         <FormulaireAjout lang={lang} t={t} dossiers={dossiersActifs} dureeParDefaut={config.duree} />
       </Panneau>
 
+      <GoogleAgenda lang={lang} />
+
       <Disponibilites lang={lang} />
     </div>
   );
