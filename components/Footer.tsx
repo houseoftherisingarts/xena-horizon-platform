@@ -25,7 +25,7 @@ const TEXTES = {
     coord: 'Coordonnées',
     credits: 'Crédit photo',
     rights: 'Tous droits réservés.',
-    platform: 'Plateforme par Vexel Webstudio',
+    platform: 'Site créé par Vexel Webstudio',
     admin: 'Admin',
   },
   EN: {
@@ -40,7 +40,7 @@ const TEXTES = {
     coord: 'Contact',
     credits: 'Photo credit',
     rights: 'All rights reserved.',
-    platform: 'Platform by Vexel Webstudio',
+    platform: 'Site by Vexel Webstudio',
     admin: 'Admin',
   },
 };
@@ -119,7 +119,16 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
         <div className="md:col-span-3">
           <p className="kicker text-gris mb-4">{t.credits}</p>
           <p className="text-petit text-gris mb-6">{CREDITS.photographes.join(' · ')}</p>
-          <p className="text-xs text-gris">{t.platform}</p>
+          <p className="text-xs text-gris">
+            <a
+              href="https://vexelwebstudio.com"
+              target="_blank"
+              rel="noopener"
+              className="underline decoration-filet underline-offset-4 hover:text-encre transition-colors"
+            >
+              {t.platform}
+            </a>
+          </p>
           <p className="text-xs text-gris mt-1">
             © {new Date().getFullYear()} Laurie Belhumeur · Xena Horizon. {t.rights}
           </p>

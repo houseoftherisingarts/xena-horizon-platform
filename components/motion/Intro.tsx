@@ -7,12 +7,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-// Constantes de rythme — le pacing de référence (filet 450 ms, tenue
-// 400 ms, levée 650 ms) est mis à l'échelle sur `dureeMs` pour que le
-// total réel soit toujours celui que le prop annonce.
-const FILET_MS = 450;
-const TENUE_MS = 400;
-const LEVE_MS = 650;
+// Constantes de rythme — le pacing de référence (filet 750 ms, tenue
+// 950 ms, levée 700 ms, soit 2,4 s) est mis à l'échelle sur `dureeMs` pour
+// que le total réel soit toujours celui que le prop annonce. Allongé le
+// 8 septembre 2026 à la demande d'Alex : la marque doit avoir le temps
+// de se poser avant que le rideau ne se lève.
+const FILET_MS = 750;
+const TENUE_MS = 950;
+const LEVE_MS = 700;
 const SOMME_REFERENCE_MS = FILET_MS + TENUE_MS + LEVE_MS;
 
 const EASE_FILET = [0.16, 0.8, 0.24, 1] as const;
@@ -48,7 +50,7 @@ export const Intro: React.FC<IntroProps> = ({
   onComplete,
   marque = 'Xena Horizon',
   signature = 'par Laurie Belhumeur',
-  dureeMs = 1100,
+  dureeMs = 2400,
   layoutId,
 }) => {
   const reduce = useReducedMotion();
@@ -96,7 +98,8 @@ export const Intro: React.FC<IntroProps> = ({
 
   const { filetS, tenueS, leveS, fonduS } = phases(dureeMs);
   const lettres = Array.from(marque);
-  const staggerLettre = Math.min(0.03, filetS / Math.max(1, lettres.length) / 2);
+  // Les lettres se mettent au point une à une sur la première moitié du filet.
+  const staggerLettre = Math.min(0.06, filetS / Math.max(1, lettres.length) / 1.5);
   // Le voyage de la marque vers la barre de navigation (layoutId partagé) : 0,6 s, l'easing
   // maison. Posé ici pour que l'intro et Nav.tsx portent exactement la même transition.
   const TRANSITION_VOYAGE = { layout: { duration: 0.6, ease: EASE_FILET } };
@@ -150,7 +153,7 @@ export const Intro: React.FC<IntroProps> = ({
                 style={{ whiteSpace: 'pre' }}
                 variants={{
                   cache: { opacity: 0, filter: 'blur(8px)' },
-                  visible: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.4, ease: EASE_FILET } },
+                  visible: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.55, ease: EASE_FILET } },
                 }}
               >
                 {lettre}
@@ -163,7 +166,7 @@ export const Intro: React.FC<IntroProps> = ({
             style={{ color: 'var(--xh-encre-douce, currentColor)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
-            transition={{ duration: 0.4, delay: filetS * 0.6, ease: EASE_FILET }}
+            transition={{ duration: 0.5, delay: filetS * 0.75, ease: EASE_FILET }}
           >
             {signature}
           </motion.p>

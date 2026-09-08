@@ -72,6 +72,23 @@ const onglet = (page, re) => page.locator('[role="tab"]').filter({ hasText: re }
   r.clientConfirme = /Confirmé|Confirmed/.test(texte3);
   r.ics = await c.page.locator(`${sec} button`).filter({ hasText: /calendrier|calendar/ }).count();
   await c.page.screenshot({ path: path.join(OUT, 'rdv-5-client-confirme-1440.png') });
+  // 4. Le rendez-vous confirmé s'ouvre dans le site : la salle vidéo à même l'espace.
+  const rejoindre = c.page.locator(`${sec} button`).filter({ hasText: /Rejoindre la rencontre|Join the meeting/ }).first();
+  r.boutonRejoindre = await rejoindre.count();
+  if (r.boutonRejoindre) {
+    await rejoindre.click(); await c.page.waitForTimeout(7000);
+    r.salleIframe = await c.page.locator('iframe').count();
+    r.salleUrl = c.page.url().replace(BASE, '');
+    await c.page.screenshot({ path: path.join(OUT, 'rdv-6-salle-1440.png') });
+  }
+  await c.ctx.close();
+  c = await ouvrir(browser, 390);
+  await c.page.goto(BASE + '/espace', { waitUntil: 'load', timeout: 60000 }); await c.page.waitForTimeout(1500);
+  await connecter(c.page, clientEmail, clientPw);
+  await onglet(c.page, /Rendez-vous/).click(); await c.page.waitForTimeout(1500);
+  await c.page.locator(sec).scrollIntoViewIfNeeded().catch(() => {});
+  await c.page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight)); await c.page.waitForTimeout(600);
+  await c.page.screenshot({ path: path.join(OUT, 'rdv-5-client-confirme-390.png') });
   await c.ctx.close();
   await browser.close();
   console.log(JSON.stringify({ ...r, erreurs: erreurs.slice(0, 5) }));

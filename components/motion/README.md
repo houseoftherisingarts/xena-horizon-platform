@@ -28,7 +28,7 @@ prend la main sur le rendu sans toucher au code.
 - `<Portail>` — `createPortal` vers `document.body` après hydratation ; toute fenêtre superposée passe par là.
 - `<DefilementDoux>` + `useLenis()` — fournisseur Lenis (`lerp .1`, `wheelMultiplier 1`),
   désactivé en reduced motion ou pointeur tactile.
-- `<Intro onComplete marque="Xena Horizon" signature="par Laurie Belhumeur" dureeMs=1100>` —
+- `<Intro onComplete marque="Xena Horizon" signature="par Laurie Belhumeur" dureeMs=2400>` —
   GATE 0 : filet, marque lettre par lettre, tenue, rideau qui se lève. Une fois par session.
 
 ## Usage
