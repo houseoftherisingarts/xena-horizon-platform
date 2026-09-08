@@ -249,7 +249,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
         <Reveal as="p" className="text-lede text-gris mb-3">
           {t.howSubtitle}
         </Reveal>
-        <TexteRevele texte={t.howTitle} as="h2" par="mot" className="font-serif text-h2 mb-12" />
+        <TexteRevele key={lang} texte={t.howTitle} as="h2" par="mot" className="font-serif text-h2 mb-12" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-col gap-y-10">
           {ETAPES_PAR_DEFAUT.map((etape, i) => (
             <Reveal key={etape.id} delay={i * 0.08} className="border-t border-filet pt-5">
