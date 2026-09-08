@@ -8,7 +8,8 @@
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "verif:agenda-google": "tsx verif-agenda-google.ts"
   },
   "engines": {
     "node": "22"
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^20.16.0",
     "@types/nodemailer": "^8.0.1",
+    "tsx": "^4.19.0",
     "typescript": "^5.6.0"
   },
   "private": true
