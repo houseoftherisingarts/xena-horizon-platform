@@ -15,6 +15,7 @@ import Projets from './accueil/Projets';
 import Citation from './accueil/Citation';
 import Contact from './accueil/Contact';
 import { HOME_EN, STROPHE_ALLUMAGE } from './accueil/textes';
+import { BLOCS_ACCUEIL } from '../lib/contenu';
 import { useTextes } from '../lib/textes';
 import type {
   HomeBlock,
@@ -31,12 +32,45 @@ interface PublicHomeProps {
   onChangeView?: (view: ViewState) => void;
 }
 
+// Les textes de l'accueil viennent du code (lib/contenu.ts, pages/accueil/textes.ts) et se modifient
+// depuis la page par l'éditeur ; seul le portrait du hero se lit encore dans `blocks` (settings/homeBlocks).
+const HERO = BLOCS_ACCUEIL.find((b): b is HomeHeroBlock => b.type === 'HERO')!;
+const SERVICES = BLOCS_ACCUEIL.find((b): b is HomeServicesBlock => b.type === 'SERVICES_PREVIEW')!;
+const STATS = BLOCS_ACCUEIL.find((b): b is HomeStatsBlock => b.type === 'STATS')!;
+const EN = (id: string, champ: string, repli: string): string => HOME_EN[id]?.[champ] ?? repli;
+
 const TEXTES = {
   FR: {
     signature: 'par Laurie Belhumeur',
+    tagline: HERO.tagline,
+    headline: HERO.headline,
+    subheadline: HERO.subheadline,
+    ctaText: HERO.ctaText,
+    strophe: STROPHE_ALLUMAGE.FR,
+    servicesTitle: SERVICES.title,
+    servicesSubtitle: SERVICES.subtitle,
+    stat1Value: STATS.stat1Value,
+    stat1Label: STATS.stat1Label,
+    stat2Value: STATS.stat2Value,
+    stat2Label: STATS.stat2Label,
+    stat3Value: STATS.stat3Value,
+    stat3Label: STATS.stat3Label,
   },
   EN: {
     signature: 'by Laurie Belhumeur',
+    tagline: HERO.tagline,
+    headline: EN(HERO.id, 'headline', HERO.headline),
+    subheadline: EN(HERO.id, 'subheadline', HERO.subheadline),
+    ctaText: EN(HERO.id, 'ctaText', HERO.ctaText),
+    strophe: STROPHE_ALLUMAGE.EN,
+    servicesTitle: EN(SERVICES.id, 'title', SERVICES.title),
+    servicesSubtitle: EN(SERVICES.id, 'subtitle', SERVICES.subtitle),
+    stat1Value: EN(STATS.id, 'stat1Value', STATS.stat1Value),
+    stat1Label: EN(STATS.id, 'stat1Label', STATS.stat1Label),
+    stat2Value: EN(STATS.id, 'stat2Value', STATS.stat2Value),
+    stat2Label: EN(STATS.id, 'stat2Label', STATS.stat2Label),
+    stat3Value: EN(STATS.id, 'stat3Value', STATS.stat3Value),
+    stat3Label: EN(STATS.id, 'stat3Label', STATS.stat3Label),
   },
 };
 
@@ -54,12 +88,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
     };
   }, [introVisible]);
 
-  const hero = blocks.find((b): b is HomeHeroBlock => b.type === 'HERO');
-  const services = blocks.find((b): b is HomeServicesBlock => b.type === 'SERVICES_PREVIEW');
-  const stats = blocks.find((b): b is HomeStatsBlock => b.type === 'STATS');
-
-  const tr = (blockId: string, field: string, fallback: string): string =>
-    lang === 'EN' ? HOME_EN[blockId]?.[field] ?? fallback : fallback;
+  const imageUrl = blocks.find((b): b is HomeHeroBlock => b.type === 'HERO')?.imageUrl ?? HERO.imageUrl;
 
   return (
     <div className="relative bg-papier" data-tx-scope="accueil">
@@ -81,40 +110,29 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
         )}
       </AnimatePresence>
 
-      {hero && (
-        <Allumage
-          lang={lang}
-          tagline={hero.tagline}
-          headline={tr(hero.id, 'headline', hero.headline)}
-          subheadline={tr(hero.id, 'subheadline', hero.subheadline)}
-          ctaText={tr(hero.id, 'ctaText', hero.ctaText)}
-          imageUrl={hero.imageUrl}
-          strophe={STROPHE_ALLUMAGE[lang]}
-          strapline={stats ? tr(stats.id, 'stat2Label', stats.stat2Label) : ''}
-        />
-      )}
+      <Allumage
+        lang={lang}
+        tagline={t.tagline}
+        headline={t.headline}
+        subheadline={t.subheadline}
+        ctaText={t.ctaText}
+        imageUrl={imageUrl}
+        strophe={t.strophe}
+        strapline={t.stat2Label}
+      />
 
-      {services && (
-        <Sommaire
-          lang={lang}
-          title={tr(services.id, 'title', services.title)}
-          subtitle={tr(services.id, 'subtitle', services.subtitle)}
-          onChangeView={onChangeView}
-        />
-      )}
+      <Sommaire lang={lang} title={t.servicesTitle} subtitle={t.servicesSubtitle} onChangeView={onChangeView} />
 
-      {stats && (
-        <APropos
-          lang={lang}
-          stat1Value={tr(stats.id, 'stat1Value', stats.stat1Value)}
-          stat1Label={tr(stats.id, 'stat1Label', stats.stat1Label)}
-          stat2Value={tr(stats.id, 'stat2Value', stats.stat2Value)}
-          stat2Label={tr(stats.id, 'stat2Label', stats.stat2Label)}
-          stat3Value={tr(stats.id, 'stat3Value', stats.stat3Value)}
-          stat3Label={tr(stats.id, 'stat3Label', stats.stat3Label)}
-          onChangeView={onChangeView}
-        />
-      )}
+      <APropos
+        lang={lang}
+        stat1Value={t.stat1Value}
+        stat1Label={t.stat1Label}
+        stat2Value={t.stat2Value}
+        stat2Label={t.stat2Label}
+        stat3Value={t.stat3Value}
+        stat3Label={t.stat3Label}
+        onChangeView={onChangeView}
+      />
       <Temoignage lang={lang} />
       <Projets lang={lang} onChangeView={onChangeView} />
       <Citation lang={lang} />

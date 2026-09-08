@@ -41,25 +41,10 @@ export function cheminInconnu(pathname: string): boolean {
 }
 
 const NotFound: React.FC<NotFoundProps> = ({ lang, onChangeView }) => {
-  const t = {
-    FR: {
-      code: '404',
-      title: "Cette page n'existe pas",
-      text: "Laurie n'a rien écrit à cette adresse. Retourne à l'accueil, ou continue vers ses services.",
-      cta: "Retour à l'accueil",
-      services: 'Voir les services',
-    },
-    EN: {
-      code: '404',
-      title: 'This page does not exist',
-      text: 'Laurie has written nothing at this address. Head back home, or carry on to her services.',
-      cta: 'Back to home',
-      services: 'See the services',
-    },
-  }[lang];
+  const t = useTextes('consentement', TEXTES, lang);
 
   return (
-    <div className="min-h-[100svh] bg-papier relative px-gut">
+    <div data-tx-scope="consentement" className="min-h-[100svh] bg-papier relative px-gut">
       <span aria-hidden="true" className="absolute top-28 right-gut font-serif text-chiffre text-encre leading-none">
         {t.code}
       </span>
