@@ -92,6 +92,7 @@ const Allumage: React.FC<AllumageProps> = ({
           opaciteTitre={opaciteTitre}
           decalageTitre={decalageTitre}
           opaciteSousTitre={opaciteSousTitre}
+          hauteurPhoto={hauteurPhoto}
         />
 
         <motion.div
