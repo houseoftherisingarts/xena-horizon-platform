@@ -64,7 +64,7 @@ const TEXTES = {
     ongletCourtDossier: 'File',
     ongletCourtPieces: 'Documents',
     ongletCourtParcours: 'Journey',
-    ongletCourtRendezvous: 'Appointments',
+    ongletCourtRendezvous: 'Book',
     ongletCourtMessages: 'Messages',
     ongletCourtRessources: 'Resources',
     ongletCourtProfil: 'Profile',
