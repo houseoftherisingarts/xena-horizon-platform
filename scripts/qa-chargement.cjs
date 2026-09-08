@@ -122,7 +122,7 @@ async function voletC(browser) {
   // dont le hash a changé au dernier déploiement pendant qu'un onglet restait ouvert.
   await page.route('**/assets/AdminDashboard-*.js', (route) => route.abort('failed'));
 
-  await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+  await page.goto(BASE + '/', { waitUntil: 'load', timeout: 20000 });
   // Force la vue admin (le crayon de démo n'est pas nécessaire : on vise seulement le fragment qui échoue).
   await page.evaluate(() => window.history.pushState({}, '', '/admin'));
   await page.evaluate(() => window.dispatchEvent(new PopStateEvent('popstate')));
