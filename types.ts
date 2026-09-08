@@ -67,6 +67,18 @@ export interface Product {
   isPublic: boolean; // Published to public site
   clientTypes?: ClientArchetype[]; // empty/undefined = visible to all archetypes
   variants?: Partial<Record<ClientArchetype, ProductVariant>>; // archetype-specific overrides (name, price, description)
+  /** Comment cette offre se règle : sur demande, inscription (rendez-vous), ou paiement Stripe. Bloc « Paiement » de l'admin. */
+  paiement?: 'sur_demande' | 'inscription' | 'stripe';
+  /** Prix Stripe en cents, distinct de `price` (l'affichage en dollars déjà en place). */
+  prixCents?: number;
+  devise?: 'CAD';
+  /** Écrits par functions/src/produits/stripe.ts, jamais par le formulaire directement. */
+  stripeProductId?: string;
+  stripePriceId?: string;
+  stripeEtat?: 'a_synchroniser' | 'synchronise' | 'erreur';
+  stripeErreur?: string;
+  /** Payment Link Stripe collé par Laurie : chemin de paiement sans fonction serveur, actif avant Blaze. */
+  lienPaiement?: string;
 }
 
 export interface GalleryImage {
