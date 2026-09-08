@@ -81,7 +81,8 @@ export const PRODUITS_DEMO: Product[] = [
     type: 'Consulting',
     category: 'Service',
     status: 'Planned',
-    isPublic: false
+    isPublic: false,
+    paiement: 'sur_demande'
   },
   {
     id: 'demo-elite-1',
