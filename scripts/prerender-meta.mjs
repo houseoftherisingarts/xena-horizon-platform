@@ -37,14 +37,21 @@ const PAGES = [
     path: '/services',
     dir: 'services',
     title: 'Services et tarifs | Xena Horizon',
-    desc: 'Mentorat, stratégie et accompagnement pour artistes, entrepreneurs créatifs et OBNL : les services de Xena Horizon et leurs tarifs.',
+    desc: 'Stratégie de communication, rédaction, identité artistique et événements pour les artistes, les créatifs et les organisations, avec les prix de départ de Laurie Belhumeur.',
     noindex: false,
   },
   {
     path: '/projets',
     dir: 'projets',
     title: 'Projets : balado, livre, modèle | Xena Horizon',
-    desc: 'Le balado, le livre et le modèle d’affaires de Laurie Belhumeur : les projets de Xena Horizon.',
+    desc: 'Le balado En quête de liberté, le livre Je ne suis pas un robot et le projet de modèle et comédienne de Laurie Belhumeur.',
+    noindex: false,
+  },
+  {
+    path: '/a-propos',
+    dir: 'a-propos',
+    title: 'À propos de Laurie Belhumeur | Xena Horizon',
+    desc: 'Consultante en carrière artistique et en communication depuis quinze ans, Laurie Belhumeur accompagne les artistes de toutes disciplines pour qu’ils vivent de leur art.',
     noindex: false,
   },
   {
