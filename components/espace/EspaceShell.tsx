@@ -172,7 +172,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         </div>
 
         {/* Onglets soulignés, jamais en pilules. Sous 640px : deux rangées, aucun défilement horizontal. */}
-        <div className="flex flex-wrap gap-x-6 gap-y-3 my-8" role="tablist">
+        <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-3 my-8" role="tablist">
           {onglets.map((o) => (
             <button
               key={o.id}
