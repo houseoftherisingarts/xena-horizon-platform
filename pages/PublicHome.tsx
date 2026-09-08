@@ -9,6 +9,7 @@ import { Intro } from '../components/motion';
 import { introDejaJouee, marquerIntroTerminee } from '../lib/intro';
 import Allumage from './accueil/Allumage';
 import Sommaire from './accueil/Sommaire';
+import Capsules from './accueil/Capsules';
 import APropos from './accueil/APropos';
 import Temoignage from './accueil/Temoignage';
 import TemoignagesAudio from './accueil/TemoignagesAudio';
