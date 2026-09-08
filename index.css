@@ -22,6 +22,16 @@
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --nav: 4.5rem;
   /* Variante bleue, dormante : --accent: #0B6BA8; --accent-sur-encre: #7CC6F5; */
+
+  /* Le kit motion (components/motion) est palette-agnostique et lit ces variables sur toutes les pages. */
+  --xh-papier: var(--papier);
+  --xh-encre: var(--encre);
+  --xh-encre-douce: var(--gris);
+  --xh-filet: var(--accent);
+  --xh-lumiere: rgba(224, 32, 110, 0.12);
+  --xh-lumiere-secondaire: rgba(224, 32, 110, 0.07);
+  --xh-vignette: rgba(26, 26, 30, 0.55);
+  --xh-ombre: rgba(26, 26, 30, 0.28);
 }
 
 /* Le sticky des feuilles casse avec overflow-x: hidden. Toujours clip. */

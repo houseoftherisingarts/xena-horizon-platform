@@ -140,7 +140,7 @@ const App: React.FC = () => {
     if (notFound) return <NotFound lang={lang} onChangeView={setCurrentView} />;
     switch (currentView) {
       case 'HOME':
-        return <PublicHome blocks={homeBlocks} lang={lang} />;
+        return <PublicHome blocks={homeBlocks} lang={lang} onChangeView={setCurrentView} />;
       case 'SERVICES':
         return <PublicServices lang={lang} onChangeView={setCurrentView} />;
       case 'PROJETS':
@@ -178,7 +178,7 @@ const App: React.FC = () => {
       case 'ADMIN_MESSENGER':
         return <AdminMessenger lang={lang} />;
       default:
-        return <PublicHome blocks={homeBlocks} lang={lang} />;
+        return <PublicHome blocks={homeBlocks} lang={lang} onChangeView={setCurrentView} />;
     }
   };
 
