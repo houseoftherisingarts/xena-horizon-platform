@@ -284,79 +284,81 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
         </div>
       </section>
 
-      <section className="border-t border-filet pt-8">
-        <h2 className="font-serif text-h3 text-encre mb-6">{t.titreInfos}</h2>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="mp-nom" className="block text-petit text-gris mb-1">
-              {t.nom}
-            </label>
-            <input id="mp-nom" type="text" maxLength={120} value={nom} onChange={(e) => setNom(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
-          </div>
-          <div>
-            <label htmlFor="mp-ville" className="block text-petit text-gris mb-1">
-              {t.ville}
-            </label>
-            <input id="mp-ville" type="text" maxLength={80} value={ville} onChange={(e) => setVille(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
-          </div>
-          <div>
-            <label htmlFor="mp-discipline" className="block text-petit text-gris mb-1">
-              {t.discipline}
-            </label>
-            <input
-              id="mp-discipline"
-              type="text"
-              maxLength={80}
-              value={discipline}
-              onChange={(e) => setDiscipline(e.target.value)}
-              placeholder={t.disciplineHolder}
-              className={`${CHAMP} min-h-[44px]`}
-            />
-          </div>
-          <div>
-            <label htmlFor="mp-bio" className="block text-petit text-gris mb-1">
-              {t.bio}
-            </label>
-            <textarea
-              id="mp-bio"
-              maxLength={1000}
-              rows={4}
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              placeholder={t.bioHolder}
-              className={`${CHAMP} resize-none`}
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-filet pt-8">
-        <h2 className="font-serif text-h3 text-encre mb-6">{t.titreLiens}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {(
-            [
-              ['site', t.lienSite],
-              ['instagram', t.lienInstagram],
-              ['facebook', t.lienFacebook],
-              ['autre', t.lienAutre],
-            ] as [keyof Liens, string][]
-          ).map(([cle, label]) => (
-            <div key={cle}>
-              <label htmlFor={`mp-lien-${cle}`} className="block text-petit text-gris mb-1">
-                {label}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-col gap-y-10">
+        <section className="border-t border-filet pt-8">
+          <h2 className="font-serif text-h3 text-encre mb-6">{t.titreInfos}</h2>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="mp-nom" className="block text-petit text-gris mb-1">
+                {t.nom}
+              </label>
+              <input id="mp-nom" type="text" maxLength={120} value={nom} onChange={(e) => setNom(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
+            </div>
+            <div>
+              <label htmlFor="mp-ville" className="block text-petit text-gris mb-1">
+                {t.ville}
+              </label>
+              <input id="mp-ville" type="text" maxLength={80} value={ville} onChange={(e) => setVille(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
+            </div>
+            <div>
+              <label htmlFor="mp-discipline" className="block text-petit text-gris mb-1">
+                {t.discipline}
               </label>
               <input
-                id={`mp-lien-${cle}`}
-                type="url"
-                placeholder="https://…"
-                value={liens[cle]}
-                onChange={(e) => setLiens((prev) => ({ ...prev, [cle]: e.target.value }))}
+                id="mp-discipline"
+                type="text"
+                maxLength={80}
+                value={discipline}
+                onChange={(e) => setDiscipline(e.target.value)}
+                placeholder={t.disciplineHolder}
                 className={`${CHAMP} min-h-[44px]`}
               />
             </div>
-          ))}
-        </div>
-      </section>
+            <div>
+              <label htmlFor="mp-bio" className="block text-petit text-gris mb-1">
+                {t.bio}
+              </label>
+              <textarea
+                id="mp-bio"
+                maxLength={1000}
+                rows={4}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder={t.bioHolder}
+                className={`${CHAMP} resize-none`}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-filet pt-8">
+          <h2 className="font-serif text-h3 text-encre mb-6">{t.titreLiens}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {(
+              [
+                ['site', t.lienSite],
+                ['instagram', t.lienInstagram],
+                ['facebook', t.lienFacebook],
+                ['autre', t.lienAutre],
+              ] as [keyof Liens, string][]
+            ).map(([cle, label]) => (
+              <div key={cle}>
+                <label htmlFor={`mp-lien-${cle}`} className="block text-petit text-gris mb-1">
+                  {label}
+                </label>
+                <input
+                  id={`mp-lien-${cle}`}
+                  type="url"
+                  placeholder="https://…"
+                  value={liens[cle]}
+                  onChange={(e) => setLiens((prev) => ({ ...prev, [cle]: e.target.value }))}
+                  className={`${CHAMP} min-h-[44px]`}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
 
       <div className="flex items-center gap-4 pt-2">
         <button
