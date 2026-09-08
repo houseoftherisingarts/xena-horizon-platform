@@ -125,7 +125,7 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
   const choisirImage = async (
     file: File,
     maxDim: number,
-    dossierStorage: string,
+    prefixe: 'avatar' | 'banniere',
     setUrl: (u: string | undefined) => void,
     setChemin: (c: string | undefined) => void,
     setBusyLocal: (b: boolean) => void,
@@ -145,7 +145,7 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
     setBusyLocal(true);
     try {
       const blob = await redimensionnerImage(file, maxDim);
-      const chemin = `${dossierStorage}/${uid}/${dossierStorage === 'profils' ? 'avatar' : 'banniere'}-${Date.now()}.jpg`;
+      const chemin = `profils/${uid}/${prefixe}-${Date.now()}.jpg`;
       const { url } = await uploadFile(chemin, new File([blob], 'image.jpg', { type: 'image/jpeg' }));
       setUrl(url);
       setChemin(chemin);
@@ -162,14 +162,14 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
-    void choisirImage(file, 512, 'profils', setPhotoURL, setPhotoChemin, setBusyPhoto, dossier.photoURL);
+    void choisirImage(file, 512, 'avatar', setPhotoURL, setPhotoChemin, setBusyPhoto, dossier.photoURL);
   };
 
   const onBanniere = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
-    void choisirImage(file, 1920, 'profils', setBanniereURL, setBanniereChemin, setBusyBanniere, dossier.banniereURL);
+    void choisirImage(file, 1920, 'banniere', setBanniereURL, setBanniereChemin, setBusyBanniere, dossier.banniereURL);
   };
 
   const retirerPhoto = () => {
