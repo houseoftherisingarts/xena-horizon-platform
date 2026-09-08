@@ -360,7 +360,7 @@ const RendezVous: React.FC<RendezVousProps> = ({ user, dossier, lang }) => {
                         </span>
                       </div>
 
-                      {erreurAnnulation && enCours === false && arme && (
+                      {arme && erreurAnnulation && (
                         <div role="alert" className="flex items-center gap-2 text-sm text-rose mt-3">
                           <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" /> {erreurAnnulation}
                         </div>
