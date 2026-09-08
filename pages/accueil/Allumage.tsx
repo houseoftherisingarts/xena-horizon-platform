@@ -55,10 +55,8 @@ const Allumage: React.FC<AllumageProps> = ({
   // remplir l'espace sous la strophe, qui se pose jusqu'à 0.85. sm:h-[112%] ignore cette
   // variable. ponytail: hauteur d'arrivée estimée (NAV_PAD + 2 lignes + kicker), pas mesurée
   // via ref ; à affiner avec un ResizeObserver si un écart persiste sur de très petits écrans.
-  const hauteurPhoto = useTransform(p, [0.7, 0.85], [36, 68], { clamp: true }) as unknown as ReturnType<
-    typeof useMotionTemplate
-  >;
-  const hauteurPhotoSvh = useMotionTemplate`${hauteurPhoto}svh`;
+  const hauteurPhotoValeur = useTransform(p, [0.7, 0.85], [36, 68]);
+  const hauteurPhoto = useMotionTemplate`${hauteurPhotoValeur}svh`;
 
   if (reduce) {
     return (
