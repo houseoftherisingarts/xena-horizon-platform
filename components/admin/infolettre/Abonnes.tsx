@@ -196,7 +196,7 @@ const Abonnes: React.FC<{ lang: Language }> = ({ lang }) => {
               {filtres.map((s) => (
                 <tr key={s.id} className="hover:bg-papier-2 transition-colors">
                   <td className="py-3 px-4 text-encre">{s.email}</td>
-                  <td className="py-3 px-4 hidden md:table-cell text-gris">{s.name || '—'}</td>
+                  <td className="py-3 px-4 hidden md:table-cell text-gris">{s.name || '·'}</td>
                   <td className="py-3 px-4 hidden sm:table-cell"><Etiquette tone={s.status === 'active' ? 'accent' : 'neutre'}>{s.status === 'active' ? t.statutActifs : t.statutDesabonnes}</Etiquette></td>
                   <td className="py-3 px-4 hidden sm:table-cell text-gris text-xs uppercase">{s.lang || 'fr'}</td>
                   <td className="py-3 px-4 text-right">

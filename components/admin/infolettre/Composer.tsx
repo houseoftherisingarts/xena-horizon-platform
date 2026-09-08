@@ -3,7 +3,7 @@
 // une version gardée par heure d'écriture (plus une avant toute restauration). Port du composeur de
 // Krystine (2e génération, 7 septembre 2026) : Iris, la lettre d'or, la traduction et Terminal ne sont
 // pas repris ici (hors périmètre de Xena). ponytail: réordonner par flèches seulement, pas de glisser-
-// déposer — à ajouter si Laurie écrit des lettres longues et que ça devient pénible.
+// déposer, à ajouter si Laurie écrit des lettres longues et que ça devient pénible.
 import React, { useEffect, useRef, useState } from 'react';
 import { orderBy, serverTimestamp } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -387,7 +387,7 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
                 {versions.map((v) => (
                   <li key={v.id} className="border border-filet rounded-champ bg-papier px-4 py-3 flex items-center gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-encre truncate">{v.sujet || '—'}</p>
+                      <p className="text-sm text-encre truncate">{v.sujet || '·'}</p>
                       <p className="text-xs text-gris">{v.savedAt?.toDate?.().toLocaleString(lang === 'FR' ? 'fr-CA' : 'en-CA', { dateStyle: 'medium', timeStyle: 'short' }) || '…'}</p>
                     </div>
                     <button type="button" onClick={() => restaurer(v)} disabled={isReadOnly} aria-label={t.restaurer} className="p-2 rounded-champ text-gris hover:text-rose disabled:opacity-30"><RotateCcw className="w-4 h-4" aria-hidden="true" /></button>

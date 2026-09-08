@@ -144,7 +144,7 @@ const Audience: React.FC<{
               {resultats.map((s) => (
                 <li key={s.id}>
                   <button type="button" disabled={disabled} onClick={() => toggleId(s.id)} className="w-full text-left px-3 py-2 flex justify-between gap-2 hover:bg-papier-2 text-encre">
-                    <span className="truncate">{s.name || '—'} · {s.email}</span>
+                    <span className="truncate">{s.name || '·'} · {s.email}</span>
                     {value.ids.includes(s.id) && <span className="text-rose">✓</span>}
                   </button>
                 </li>

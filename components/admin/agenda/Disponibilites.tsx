@@ -76,7 +76,7 @@ const TEXTES = {
 };
 
 const CHAMP_PETIT =
-  'bg-papier border border-filet rounded-champ px-3 py-2 text-sm text-encre outline-none transition-colors focus:border-rose w-28';
+  'bg-papier border border-filet rounded-champ px-2 py-2 text-sm text-encre outline-none transition-colors focus:border-rose w-[8.5rem] min-w-0';
 
 const Disponibilites: React.FC<Props> = ({ lang }) => {
   const t = useTextes('adminAgendaDispo', TEXTES, lang);
