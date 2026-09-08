@@ -236,7 +236,7 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
       const res: any = await call({ id: savedId, test: testEmail });
       const data = res.data || {};
       if (testEmail) {
-        setSendInfo(t.testEnvoye(testEmail));
+        setSendInfo(t.testEnvoye.replace('{e}', testEmail));
       } else {
         setStatut('envoyee');
         await patchDoc('newsletters', savedId, { statut: 'envoyee', sentAt: serverTimestamp(), envoi: data });
