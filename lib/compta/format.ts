@@ -1,30 +1,31 @@
+// Formatage des montants pour tout le module comptable : fr-CA, espace insécable avant le $, virgule
+// décimale. Réutilisé par Transactions, Import, Conciliation, PlanComptable, Tiers, Recus et les
+// rapports/fiscal des autres bâtisseurs de la vague. Un seul endroit, jamais de deuxième formatteur.
+const MONNAIE = new Intl.NumberFormat('fr-CA', { style: 'currency', currency: 'CAD' });
+const NOMBRE = new Intl.NumberFormat('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const POURCENT = new Intl.NumberFormat('fr-CA', { minimumFractionDigits: 1, maximumFractionDigits: 3 });
+
+/** 1234.5 → "1 234,50 $" */
+export function formatMontant(v: number | undefined | null): string {
+  return MONNAIE.format(v || 0);
+}
+
+/** 1234.5 → "1 234,50" (sans symbole, pour une cellule de tableau dense). */
+export function formatNombre(v: number | undefined | null): string {
+  return NOMBRE.format(v || 0);
+}
+
+/** 9.975 → "9,975 %" */
+export function formatPourcent(v: number | undefined | null): string {
+  return `${POURCENT.format(v || 0)} %`;
+}
+
 /**
- * Formatage des montants comptables (en dollars) : virgule décimale et milliers en fr-CA/en-CA,
- * espace insécable avant le symbole en français. Les chiffres passent par Figtree avec la classe
- * `tabular-nums` côté appelant (voir CLAUDE.md) ; cet helper ne rend que le texte.
+ * Arrondi bancaire à deux décimales. Convention du module : chaque composante (montant, TPS, TVQ) est
+ * arrondie indépendamment au cent près; leur somme peut donc s'écarter d'un cent du total d'origine
+ * (celui inscrit sur le relevé bancaire ou la facture). C'est la convention usuelle des logiciels
+ * comptables : le total connu prime, l'écart d'arrondi ne se répercute jamais sur lui.
  */
-import type { Language } from '../../types';
-
-const ESPACE_INSECABLE = ' ';
-
-export function formatMontant(montant: number, lang: Language = 'FR', decimales = 2): string {
-  const locale = lang === 'FR' ? 'fr-CA' : 'en-CA';
-  const nombre = montant.toLocaleString(locale, {
-    minimumFractionDigits: decimales,
-    maximumFractionDigits: decimales,
-  });
-  return lang === 'FR' ? `${nombre}${ESPACE_INSECABLE}$` : `$${nombre}`;
-}
-
-/** Signe + ou - devant le montant, pour un grand livre ou une ligne de transaction. */
-export function formatMontantSigne(montant: number, lang: Language = 'FR', decimales = 2): string {
-  const signe = montant > 0 ? '+' : '';
-  return `${signe}${formatMontant(montant, lang, decimales)}`;
-}
-
-/** Un pourcentage fr-CA/en-CA (répartition des dépenses, taux effectif). */
-export function formatPourcent(valeur: number, lang: Language = 'FR', decimales = 1): string {
-  const locale = lang === 'FR' ? 'fr-CA' : 'en-CA';
-  const nombre = valeur.toLocaleString(locale, { minimumFractionDigits: decimales, maximumFractionDigits: decimales });
-  return `${nombre}${ESPACE_INSECABLE}%`;
+export function arrondiSous(v: number): number {
+  return Math.round((v + Number.EPSILON) * 100) / 100;
 }
