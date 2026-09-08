@@ -200,6 +200,7 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
   const t = useTextes('adminVexel', TEXTES as any, lang) as unknown as (typeof TEXTES)['FR'];
   const { data: coffre, loading } = useDocument<CoffreScelle>(CHEMIN_COFFRE);
   const [contenu, setContenu] = useState<ContenuCoffre>(VIDE);
+  const [specimenFichier, setSpecimenFichier] = useState<File | null>(null);
   const [consent, setConsent] = useState(false);
   const [remplacer, setRemplacer] = useState(false);
   const [confirmeEffacer, setConfirmeEffacer] = useState(false);
