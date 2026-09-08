@@ -16,6 +16,8 @@ export interface UneProps {
   tagline: string;
   headline: string;
   subheadline: string;
+  /** « Pour les » : le texte fixe devant le mot qui tourne parmi les publics réels (PROFILS_REELS). */
+  pourLes: string;
   ctaText: string;
   imageUrl: string;
   filtre?: MotionValue<string>;
