@@ -123,7 +123,7 @@ export function renderEmailHtml(blocks: NewsletterBlock[], opts: RenderEmailOpti
   ${preheader}
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${fond};padding:32px 16px;">
     <tr><td align="center">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:${fond};">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:${fond};">
         ${bandeau}
         <tr><td style="padding:32px 36px 12px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">

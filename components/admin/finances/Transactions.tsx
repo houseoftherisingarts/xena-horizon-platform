@@ -31,7 +31,7 @@ const TEXTES = {
     titre: 'Transactions', sous: 'The ledger: every revenue and expense, with its taxes.',
     importerFactures: 'Import paid invoices',
     date: 'Date', description: 'Description', tiers: 'Party', compte: 'Account', montant: 'Amount', taxes: 'Taxes', recu: 'Receipt', concilie: 'Reconciled',
-    filtreTexte: 'Search…', tousComptes: 'All accounts', tousSens: 'Revenue and expenses', revenu: 'Revenue', depense: 'Expenses',
+    filtreTexte: 'Search…', tousComptes: 'All accounts', tousSens: 'Revenue and expenses', sensLabel: 'Type', revenu: 'Revenue', depense: 'Expenses',
     ajouter: 'Add', supprimer: 'Delete', confirmerSuppr: 'Delete this transaction?', enregistrer: 'Save', annuler: 'Cancel',
     vide: 'No transactions', videTexte: 'Add a transaction, import a statement, or import paid invoices.',
     page: 'Page', sur: 'of', precedent: 'Previous', suivant: 'Next',
