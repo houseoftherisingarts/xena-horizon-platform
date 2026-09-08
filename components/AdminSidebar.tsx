@@ -56,6 +56,17 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replie]);
 
+  // Info-bulle du rail replié : rendue par portail dans <body>, jamais imbriquée dans la barre, pour ne
+  // jamais se faire recouvrir par le contenu de la page (le contenu et la barre sont deux sous-arbres
+  // d'empilement distincts ; un rendu par portail évite tout ordre de peinture imprévisible entre les deux).
+  const [infoBulle, setInfoBulle] = useState<{ texte: string; top: number; left: number } | null>(null);
+  const montrerInfoBulle = (e: React.FocusEvent | React.MouseEvent, texte: string) => {
+    if (!replie) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    setInfoBulle({ texte, top: r.top + r.height / 2, left: r.right + 8 });
+  };
+  const cacherInfoBulle = () => setInfoBulle(null);
+
   const basculerReplie = () => {
     const v = !replie;
     setReplieEtat(v);
