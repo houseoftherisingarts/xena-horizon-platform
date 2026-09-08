@@ -21,7 +21,7 @@ export interface AllumageProps {
   strapline: string;
 }
 
-const NAV_PAD = 'pt-[calc(var(--nav)+2.75rem)] sm:pt-[calc(var(--nav)+4rem)]';
+const NAV_PAD = 'pt-[calc(var(--nav)+1.75rem)] sm:pt-[calc(var(--nav)+2.75rem)] lg:pt-[calc(var(--nav)+4rem)]';
 
 const Allumage: React.FC<AllumageProps> = ({
   lang,
