@@ -37,6 +37,9 @@ const Allumage: React.FC<AllumageProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const p = usePinProgress(ref);
+  // La cascade du hero (`.in`, TexteRevele) n'attend que la branche animée : elle démarre au
+  // signal synchrone de fin d'intro, jamais avant, jamais sur un compte à zéro (chantier C).
+  const introTerminee = useIntroTerminee();
 
   const gris = useTransform(p, [0, 0.45], [1, 0]);
   const clarte = useTransform(p, [0, 0.45], [1.06, 1]);
