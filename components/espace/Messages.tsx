@@ -9,8 +9,6 @@ interface MessagesProps {
   lang: Language;
 }
 
-const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
-
 const jour = (ts: any): string => {
   try {
     const d: Date | null = ts?.toDate ? ts.toDate() : null;
@@ -93,25 +91,23 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
   };
 
   return (
-    <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-8 flex flex-col h-[min(70vh,640px)]">
+    <section className="border-t border-filet pt-8 flex flex-col h-[min(70vh,640px)]">
       <div className="mb-4 flex-shrink-0">
-        <h2 className="text-lg font-serif font-bold text-white">{t.titre}</h2>
-        <p className="text-slate-400 text-sm">{t.sous}</p>
+        <h2 className="font-serif text-h3 text-encre">{t.titre}</h2>
+        <p className="text-gris text-sm mesure">{t.sous}</p>
       </div>
 
-      <div ref={filRef} className="flex-1 overflow-y-auto space-y-3 pr-1">
-        {messages.length === 0 && <p className="text-slate-500 text-sm py-8 text-center">{t.vide}</p>}
+      <div ref={filRef} data-lenis-prevent className="flex-1 overflow-y-auto space-y-3 pr-1">
+        {messages.length === 0 && <p className="text-gris text-sm py-8 text-center">{t.vide}</p>}
         {messages.map((m) => (
           <div key={m.id} className={`flex ${m.de === 'client' ? 'justify-end' : 'justify-start'}`}>
             <div className="max-w-[80%]">
-              <p className={`text-xs text-slate-500 mb-1 ${m.de === 'client' ? 'text-right' : ''}`}>
+              <p className={`text-xs text-gris mb-1 ${m.de === 'client' ? 'text-right' : ''}`}>
                 {m.de === 'client' ? '' : t.laurie} {jour(m.createdAt)}
               </p>
               <p
-                className={`rounded-[16px] px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line ${
-                  m.de === 'client'
-                    ? 'bg-iridescent text-white rounded-br-[6px]'
-                    : 'bg-white/5 border border-white/10 text-slate-200 rounded-bl-[6px]'
+                className={`rounded-champ px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
+                  m.de === 'client' ? 'bg-papier-2 text-encre rounded-br-[4px]' : 'bg-encre text-papier rounded-bl-[4px]'
                 }`}
               >
                 {m.texte}
@@ -122,7 +118,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
       </div>
 
       {error && (
-        <div role="alert" className="flex items-center gap-2 text-sm text-red-300 mt-3">
+        <div role="alert" className="flex items-center gap-2 text-sm text-rose mt-3">
           <AlertCircle className="w-4 h-4 flex-shrink-0" /> {error}
         </div>
       )}
@@ -138,18 +134,18 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
           onChange={(e) => setTexte(e.target.value)}
           placeholder={t.placeholder}
           autoComplete="off"
-          className="flex-1 bg-white/5 border border-white/20 rounded-full px-5 min-h-[44px] text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition-colors"
+          className="flex-1 bg-papier border border-filet rounded-pilule px-5 min-h-[44px] text-sm text-encre placeholder-gris transition-colors"
         />
         <button
           type="submit"
           disabled={busy || !texte.trim()}
           aria-label={t.envoyer}
-          className={`w-11 h-11 rounded-full bg-iridescent flex items-center justify-center text-white flex-shrink-0 disabled:opacity-50 ${FOCUS_RING}`}
+          className="w-11 h-11 rounded-pilule bg-encre flex items-center justify-center text-papier flex-shrink-0 disabled:opacity-50 hover:bg-encre-2 transition-colors"
         >
           <Send className="w-4 h-4" />
         </button>
       </form>
-    </div>
+    </section>
   );
 };
 
