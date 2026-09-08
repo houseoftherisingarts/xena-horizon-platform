@@ -150,7 +150,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   );
 
   return (
-    <div>
+    <div data-tx-scope="services">
       {/* --- OUVERTURE : manchette + prix de départ --- */}
       <section className="px-gut pt-[calc(var(--nav)+3.5rem)] pb-bloc grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10">
         <div className="lg:col-span-7">
