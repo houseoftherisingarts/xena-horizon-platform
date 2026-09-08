@@ -14,8 +14,6 @@ interface PiecesProps {
   lang: Language;
 }
 
-const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
-
 const poids = (o: number): string => {
   if (o < 1024) return `${o} o`;
   if (o < 1048576) return `${Math.round(o / 1024)} Ko`;
@@ -41,14 +39,34 @@ interface TexteCarte {
   aRefaire: string;
   validee: string;
   nouveauDepot: string;
-  glisser: string;
   erreurType: string;
   erreurTaille: string;
   erreurEnvoi: string;
   erreurRetrait: string;
 }
 
-const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatPiece; note?: string; uid: string; t: TexteCarte }> = ({ piece, deposee, etat, note, uid, t }) => {
+/** Pastille d'état : déposée en gris, validée en rose, à refaire en encre sur rose-clair, nouveau dépôt en rose. */
+const Pastille: React.FC<{ etat: EtatPiece; t: TexteCarte }> = ({ etat, t }) => {
+  if (etat === 'manquante') return null;
+  const styles: Record<Exclude<EtatPiece, 'manquante'>, string> = {
+    deposee: 'bg-papier-2 text-gris border border-filet',
+    valide: 'bg-rose/10 text-rose border border-rose/30',
+    a_refaire: 'bg-rose-clair/25 text-encre border border-rose-clair/40',
+    redeposee: 'bg-rose/10 text-rose border border-rose/30',
+  };
+  const label = { deposee: '', valide: t.validee, a_refaire: t.aRefaire, redeposee: t.nouveauDepot }[etat];
+  if (!label) return null;
+  return <span className={`text-[10px] font-sans font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pilule ${styles[etat]}`}>{label}</span>;
+};
+
+const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatPiece; note?: string; uid: string; t: TexteCarte }> = ({
+  piece,
+  deposee,
+  etat,
+  note,
+  uid,
+  t,
+}) => {
   const [progres, setProgres] = useState<number | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [survole, setSurvole] = useState(false);
@@ -147,7 +165,6 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
   };
 
   const enCours = progres !== null;
-  const etatEtiquette = etat === 'valide' ? t.validee : etat === 'a_refaire' ? t.aRefaire : etat === 'redeposee' ? t.nouveauDepot : null;
 
   return (
     <li
@@ -158,67 +175,47 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
       }}
       onDragLeave={() => setSurvole(false)}
       onDrop={onDrop}
-      className={`flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-[16px] border transition-colors ${
-        survole
-          ? 'border-cyan-400/60 bg-cyan-400/5'
-          : etat === 'valide'
-          ? 'border-emerald-400/25 bg-emerald-400/5'
-          : etat === 'a_refaire'
-          ? 'border-amber-400/30 bg-amber-400/5'
-          : deposee
-          ? 'border-white/10 bg-white/5'
-          : 'border-white/10 bg-white/[0.02]'
+      className={`flex flex-col sm:flex-row sm:items-center gap-4 py-4 border-b transition-colors ${
+        survole ? 'border-dashed border-rose bg-rose-clair/10' : 'border-filet'
       }`}
     >
       <span
-        className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+        className={`w-10 h-10 rounded-pilule flex items-center justify-center flex-shrink-0 border ${
           etat === 'valide'
-            ? 'bg-emerald-400/15 text-emerald-300'
+            ? 'bg-rose/10 border-rose/30 text-rose'
             : etat === 'a_refaire'
-            ? 'bg-amber-400/15 text-amber-300'
+            ? 'bg-rose-clair/20 border-rose-clair/40 text-encre'
             : deposee
-            ? 'bg-cyan-400/15 text-cyan-300'
-            : 'bg-white/5 text-slate-500'
+            ? 'bg-papier-2 border-filet text-encre'
+            : 'bg-papier border-filet text-gris'
         }`}
       >
         {deposee ? <Check className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
       </span>
 
       <div className="flex-1 min-w-0">
-        <p className="text-white font-semibold text-sm flex items-center gap-2 flex-wrap">
+        <p className="text-encre font-semibold text-sm flex items-center gap-2 flex-wrap">
           {piece.nom}
-          {piece.option && <span className="text-slate-500 font-normal text-xs">({t.optionLabel})</span>}
-          {etatEtiquette && (
-            <span
-              className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${
-                etat === 'valide'
-                  ? 'bg-emerald-400/15 text-emerald-300'
-                  : etat === 'a_refaire'
-                  ? 'bg-amber-400/15 text-amber-300'
-                  : 'bg-cyan-400/15 text-cyan-300'
-              }`}
-            >
-              {etatEtiquette}
-            </span>
-          )}
+          {piece.option && <span className="text-gris font-normal text-xs">({t.optionLabel})</span>}
+          <Pastille etat={etat} t={t} />
         </p>
         {deposee ? (
-          <p className="text-slate-400 text-xs mt-1">
+          <p className="text-gris text-xs mt-1">
             {deposee.nom} · {poids(deposee.taille)} · {t.deposeLe} {jour(deposee.deposeLe)}
           </p>
         ) : (
-          <p className="text-slate-500 text-xs mt-1">{piece.aide || t.aideDefaut}</p>
+          <p className="text-gris text-xs mt-1">{piece.aide || t.aideDefaut}</p>
         )}
         {etat === 'a_refaire' && note && (
-          <p className="text-amber-300 text-xs mt-2 bg-amber-400/10 border border-amber-400/20 rounded-[10px] px-3 py-2">{note}</p>
+          <p className="text-encre text-xs mt-2 bg-rose-clair/15 border border-rose-clair/30 rounded-champ px-3 py-2">{note}</p>
         )}
         {enCours && (
-          <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden" role="progressbar" aria-valuenow={progres ?? 0} aria-valuemin={0} aria-valuemax={100}>
-            <div className="h-full bg-iridescent transition-all duration-200" style={{ width: `${progres}%` }} />
+          <div className="mt-2 h-1.5 rounded-pilule bg-papier-2 overflow-hidden" role="progressbar" aria-valuenow={progres ?? 0} aria-valuemin={0} aria-valuemax={100}>
+            <div className="h-full bg-rose transition-all duration-200" style={{ width: `${progres}%` }} />
           </div>
         )}
         {erreur && (
-          <p role="alert" className="flex items-center gap-1.5 text-red-300 text-xs mt-2">
+          <p role="alert" className="flex items-center gap-1.5 text-rose text-xs mt-2">
             <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" /> {erreur}
           </p>
         )}
@@ -235,8 +232,8 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
         />
         <label
           htmlFor={`fichier-${piece.id}`}
-          className={`inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full text-sm font-medium cursor-pointer transition-colors ${FOCUS_RING} ${
-            deposee ? 'border border-white/15 text-slate-300 hover:border-cyan-400/50 hover:text-white' : 'bg-iridescent text-white'
+          className={`inline-flex items-center gap-2 min-h-[44px] px-4 rounded-pilule text-sm font-medium cursor-pointer transition-colors ${
+            deposee ? 'border border-filet text-encre hover:border-encre' : 'bg-encre text-papier hover:bg-encre-2'
           }`}
         >
           <Upload className="w-4 h-4" />
@@ -248,7 +245,7 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
             onClick={retirer}
             aria-label={t.retirer}
             title={t.retirer}
-            className={`w-11 h-11 flex items-center justify-center rounded-full border border-white/15 text-slate-400 hover:border-red-400/40 hover:text-red-300 transition-colors ${FOCUS_RING}`}
+            className="w-11 h-11 flex items-center justify-center rounded-pilule border border-filet text-gris hover:border-rose hover:text-rose transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -274,7 +271,6 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
       aRefaire: 'à refaire',
       validee: 'validée',
       nouveauDepot: 'nouveau dépôt, en attente',
-      glisser: '',
       erreurType: 'Format non accepté. Utilise un PDF, une image, un Word, un Excel ou un texte.',
       erreurTaille: 'Fichier trop lourd. La limite est de 25 Mo.',
       erreurEnvoi: "L'envoi a échoué. Réessaie dans un instant.",
@@ -294,7 +290,6 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
       aRefaire: 'to redo',
       validee: 'approved',
       nouveauDepot: 'new upload, pending review',
-      glisser: '',
       erreurType: 'Format not accepted. Use a PDF, image, Word, Excel or text file.',
       erreurTaille: 'File too large. The limit is 25 MB.',
       erreurEnvoi: 'The upload failed. Try again in a moment.',
@@ -311,14 +306,14 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-8">
-        <h2 className="text-lg font-serif font-bold text-white mb-1">{t.titre}</h2>
-        <p className="text-slate-400 text-sm mb-6">{t.sous}</p>
+    <div className="space-y-10">
+      <section className="border-t border-filet pt-8">
+        <h2 className="font-serif text-h3 text-encre mb-1">{t.titre}</h2>
+        <p className="text-gris text-sm mb-6 mesure">{t.sous}</p>
 
-        <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-3">{t.manquantesTitre}</h3>
+        <h3 className="kicker text-rose mb-3">{t.manquantesTitre}</h3>
         {manquantes.length === 0 ? (
-          <p className="text-slate-400 text-sm">{t.manquantesVide}</p>
+          <p className="text-gris text-sm">{t.manquantesVide}</p>
         ) : (
           <ul className="flex flex-wrap gap-2">
             {manquantes.map((p) => (
@@ -326,7 +321,7 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
                 <button
                   type="button"
                   onClick={() => allerA(p.id)}
-                  className={`min-h-[44px] px-4 rounded-full border border-white/15 text-slate-300 text-sm hover:border-cyan-400/50 hover:text-white transition-colors ${FOCUS_RING}`}
+                  className="min-h-[44px] px-4 rounded-pilule border border-filet text-encre text-sm hover:border-rose hover:text-rose transition-colors"
                 >
                   {p.nom}
                 </button>
@@ -334,12 +329,12 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
             ))}
           </ul>
         )}
-      </div>
+      </section>
 
       {categories.map(({ cat, pieces }) => (
-        <div key={cat} className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">{cat}</h3>
-          <ul className="space-y-3">
+        <section key={cat} className="border-t border-filet pt-8">
+          <h3 className="kicker text-gris mb-4">{cat}</h3>
+          <ul>
             {pieces.map((p) => {
               const etat = etatPiece(dossier, p.id);
               const note = etat === 'a_refaire' ? dossier.revue?.[p.id]?.note : undefined;
@@ -348,7 +343,7 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
               );
             })}
           </ul>
-        </div>
+        </section>
       ))}
     </div>
   );
