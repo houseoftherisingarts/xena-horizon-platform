@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Download, Image as ImageIcon, Plus, Move, Trash2, Square, Smartphone, Monitor, Sparkles, Upload, X } from 'lucide-react';
-import { EnTete, Panneau, Bouton, Zone, Vide } from '../components/admin/ui';
+import { EnTete, Panneau, Bouton, Vide } from '../components/admin/ui';
 import { GalleryImage, Language } from '../types';
 import { useCollection } from '../lib/firestore';
 
