@@ -462,7 +462,9 @@ export const A_PROPOS: AProposContenu = {
 // d'accroche, pas un slogan inventé.
 export const SERVICES_PAGE = {
   titreFR: "Voici avec quoi\nje peux t'aider",
-  titreEN: "Here's what\nI can help you with",
+  // Raccourci pour tenir sur deux lignes aux deux largeurs (règle des titres, DIRECTION-v2 §4 et §9.4) :
+  // la version longue « Here's what I can help you with » déborde sur trois lignes à 1440.
+  titreEN: 'What I can\nhelp you with',
 };
 
 // --- SIGNATURE : sa phrase-signature, verbatim (ligne 73 du scrape en français, ligne 564 en anglais) ---
