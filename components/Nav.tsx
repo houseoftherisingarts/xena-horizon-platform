@@ -47,7 +47,8 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
   // Échap ferme, le focus revient au bouton qui a ouvert, et Tab reste dans le tiroir tant qu'il est ouvert.
   useEffect(() => {
     if (!isOpen) return;
-    const focusables = () => Array.from(drawerRef.current?.querySelectorAll<HTMLElement>('a, button') ?? []);
+    const focusables = (): HTMLElement[] =>
+      Array.from(drawerRef.current?.querySelectorAll<HTMLElement>('a, button') ?? ([] as HTMLElement[]));
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsOpen(false);
