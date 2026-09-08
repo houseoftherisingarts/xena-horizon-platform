@@ -9,7 +9,8 @@
     "shell": "npm run build && firebase functions:shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "verif:agenda-google": "tsx verif-agenda-google.ts"
+    "verif:agenda-google": "tsx verif-agenda-google.ts",
+    "verif:produits-stripe": "tsx verif-produits-stripe.ts"
   },
   "engines": {
     "node": "22"
