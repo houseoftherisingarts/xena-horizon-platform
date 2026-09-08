@@ -398,3 +398,113 @@ export const CITATION = {
   source: "Citation d'Albert Einstein revisitée par Laurie Belhumeur",
   sourceEN: 'Quote from Albert Einstein revisited by Laurie Belhumeur',
 };
+
+// --- À PROPOS (page /a-propos, DIRECTION-v2 §6.4 et §8) ---
+// Les deux paragraphes viennent mot pour mot de la page d'accueil de son site (lignes 110 et 114
+// du scrape) et de sa version anglaise (lignes 601 et 603). La mission et la marque (tagline) sont
+// aussi verbatim. Les neuf casquettes viennent de sa page About, qui n'existe qu'en anglais sur son
+// site (le scrape ne la livre pas en français) : casquettesFR est une TRADUCTION, à valider par
+// Laurie avant la mise en ligne, jamais une invention.
+export interface AProposContenu {
+  titre: string;
+  titreEn: string;
+  paragraphes: string[];
+  paragraphesEn: string[];
+  mission: string;
+  missionEn: string;
+  tagline: string;
+  taglineEn: string;
+  casquettesFR: string[];
+  casquettesEN: string[];
+}
+
+export const A_PROPOS: AProposContenu = {
+  titre: "Brève histoire d'un tout",
+  titreEn: 'Brief story of a whole',
+  paragraphes: [
+    "J'ai toujours été habitée par un désir profond d'accompagner les artistes de toutes disciplines confondues (danse, écriture, théâtre, musique, chant, peinture, photo, cirque, etc.) ainsi que les créatifs à comprendre et être compris par les businessman et les businesswoman de ce monde. Je vise à apporter du changement dans le milieu artistique et culturel afin que les artistes puissent vivre de leur art.",
+    "Mon approche se veut personnalisée et adaptée à chaque artiste que j'accompagne, tout en étant fondée sur mon expérience, mes analyses et mes compétences acquises au cours des quinze dernières années. Mon approche est une combinaison fondée sur les besoins communs que rencontrent les artistes ainsi que les besoins et objectifs précis de chaque artiste.",
+  ],
+  paragraphesEn: [
+    'I have always been driven by a deep desire to support artists from all disciplines (dance, writing, theater, music, singing, painting, photography, circus, etc.) as well as creative people to understand and be understood by the businessmen and businesswomen of this world. I aim to bring change to the artistic and cultural environment so that artists can make a living from their art.',
+    'My approach is personalized and tailored to each artist I work with, drawing on my experience, insights, and skills acquired over the past fifteen years. My approach is a combination of the common needs artists face and the specific needs and goals of each artist.',
+  ],
+  mission: 'Faire ressortir la créativité partout où elle existe est ma mission.',
+  missionEn: 'Bringing out creativity wherever it exists is my mission.',
+  tagline: 'Consultante en carrière artistique et en communication.',
+  taglineEn: 'Artistic career and communication consultant.',
+  casquettesFR: [
+    'Consultante en carrière artistique, artiste des mots et de la parole',
+    "Fondatrice et présidente de l'entreprise Laurie Belhumeur",
+    'Créatrice du balado En quête de liberté',
+    "Animatrice d'événements",
+    'Autrice de nouvelles',
+    'Photographe',
+    'Modèle pour des séances photo',
+    'Créatrice de contenu',
+    'Voyageuse, avide de découvrir de nouvelles cultures',
+  ],
+  casquettesEN: [
+    'Artistic career consultant, artist of words and speech',
+    'Founder and president of the company Laurie Belhumeur',
+    'Podcast creator of En quête de liberté',
+    'Event host',
+    'Writer of short stories',
+    'Photographer',
+    'Model for photo shoots',
+    'Content creator',
+    'Traveler, eager to discover new cultures',
+  ],
+};
+
+// --- SERVICES : titre et intro de la page /services (DIRECTION-v2 §6.2 et §8) ---
+// Le titre reprend mot pour mot l'ouverture de PROFILS_REELS[0].descriptionFR : sa vraie phrase
+// d'accroche, pas un slogan inventé.
+export const SERVICES_PAGE = {
+  titreFR: "Voici avec quoi\nje peux t'aider",
+  titreEN: "Here's what\nI can help you with",
+};
+
+// --- SIGNATURE : sa phrase-signature, verbatim (ligne 73 du scrape en français, ligne 564 en anglais) ---
+export const SIGNATURE = {
+  texteFR: "Avec moi, l'information est ressentie !",
+  texteEN: 'With me, feel the information!',
+};
+
+// --- Le kicker au-dessus de la bande « Ils lui ont fait confiance » (accueil) ---
+export const CLIENTS_TITRE = { FR: 'Ils lui ont fait confiance', EN: 'They trusted her' };
+
+// --- PROJETS : titre et lede de la page /projets, sortis de PublicProjets.tsx (DIRECTION-v2 §8) ---
+export const PROJETS_PAGE = {
+  titre: 'Les projets\nde Laurie',
+  titreEn: "Laurie's\nprojects",
+  lede: 'Un balado, un livre et un projet de modèle. Les mêmes questions qui habitent son accompagnement, vécues à sa manière.',
+  ledeEn: 'A podcast, a book and a modeling project: the same questions that shape her work, lived her own way.',
+};
+
+// --- Jumeaux anglais de BLOCS_ACCUEIL, par id de bloc et par champ (DIRECTION-v2 §8) ---
+// Même contenu que le dictionnaire local HOME_EN de PublicHome.tsx : la traduction est déjà
+// validée, elle vit ici pour que les autres chantiers la lisent depuis la source de vérité.
+export const BLOCS_ACCUEIL_EN: Record<string, Record<string, string>> = {
+  'hero-1': {
+    headline: 'Live from your art\nand keep your voice',
+    subheadline:
+      'Fifteen years supporting artists of every discipline and creative people, so the business world understands them and they can finally live from their art.',
+    ctaText: 'Book an appointment',
+  },
+  'services-1': {
+    title: 'How we can\nwork together',
+    subtitle: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
+  },
+  'stats-1': {
+    stat1Value: '15 years',
+    stat1Label: 'Of experience',
+    stat2Value: 'Every discipline',
+    stat2Label: 'Dance, writing, theatre, music, singing, painting, photography, circus',
+    stat3Label: 'Areas served',
+  },
+  'contact-1': {
+    title: "Let's talk about\nyour next step",
+    text: "Write to me and I'll get back to you quickly. Let's see together if we're a good fit to work together.",
+  },
+};
