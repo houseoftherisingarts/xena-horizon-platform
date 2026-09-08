@@ -134,7 +134,10 @@ const Capsules: React.FC<CapsulesProps> = ({ lang }) => {
   const t = useTextes('accueilCapsules', TEXTES, lang);
   const sections = useSections();
   const { data } = useCollection<VideoCapsule>('videos', [where('publie', '==', true)]);
-  const capsules = useMemo(() => data.slice().sort(parOrdre), [data]);
+  // Boucle de vérification visuelle seulement (voir lib/videos.ts) : jamais en production, la
+  // condition MODE === 'verif' est éliminée du bundle à la construction normale.
+  const brut = data.length === 0 && import.meta.env.MODE === 'verif' ? exemplesCapsulesVerif() : data;
+  const capsules = useMemo(() => brut.slice().sort(parOrdre), [brut]);
   const railRef = useRef<HTMLDivElement>(null);
 
   // Éteinte dans l'admin, ou aucune capsule publiée : rien ne s'affiche, rien ne s'invente à sa place.

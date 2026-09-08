@@ -135,7 +135,7 @@ const Transactions: React.FC<Props> = ({ lang }) => {
           <Champ label={t.nouvelleDate} type="date" value={nouvelle.date} onChange={(e) => setNouvelle((n) => ({ ...n, date: e.target.value }))} required />
           <Champ label={t.nouvelleDesc} value={nouvelle.description} onChange={(e) => setNouvelle((n) => ({ ...n, description: e.target.value }))} required className="lg:col-span-2" />
           <Champ label={t.nouveauTiers} value={nouvelle.tiers} onChange={(e) => setNouvelle((n) => ({ ...n, tiers: e.target.value }))} />
-          <Selection label={t.tousSens.replace(t.tousSens, lang === 'FR' ? 'Sens' : 'Type')} value={nouvelle.sens} onChange={(e) => setNouvelle((n) => ({ ...n, sens: e.target.value as Sens, compteId: '' }))}>
+          <Selection label={t.sensLabel} value={nouvelle.sens} onChange={(e) => setNouvelle((n) => ({ ...n, sens: e.target.value as Sens, compteId: '' }))}>
             <option value="depense">{t.depense}</option>
             <option value="revenu">{t.revenu}</option>
           </Selection>
