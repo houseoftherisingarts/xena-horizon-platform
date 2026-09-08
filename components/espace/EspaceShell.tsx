@@ -12,6 +12,7 @@ import Parcours from './Parcours';
 import Messages from './Messages';
 import Ressources from './Ressources';
 import Assistant from './Assistant';
+import { useTextes } from '../../lib/textes';
 
 interface EspaceShellProps {
   user: User;
@@ -21,6 +22,43 @@ interface EspaceShellProps {
 type Onglet = 'dossier' | 'pieces' | 'parcours' | 'messages' | 'ressources';
 
 const EASE_MAISON = [0.16, 0.8, 0.24, 1] as const;
+
+const TEXTES = {
+  FR: {
+    bonjour: 'Bonjour',
+    pct: 'de ton dossier complet',
+    etape: 'Étape en cours',
+    deconnexion: 'Fermer la session',
+    ongletDossier: 'Mon dossier',
+    ongletPieces: 'Mes pièces',
+    ongletParcours: 'Mon parcours',
+    ongletMessages: 'Messages',
+    ongletRessources: 'Ressources',
+    ongletCourtDossier: 'Dossier',
+    ongletCourtPieces: 'Pièces',
+    ongletCourtParcours: 'Parcours',
+    ongletCourtMessages: 'Messages',
+    ongletCourtRessources: 'Ressources',
+    chargement: 'Ouverture de ton dossier…',
+  },
+  EN: {
+    bonjour: 'Hello',
+    pct: 'of your file complete',
+    etape: 'Current step',
+    deconnexion: 'Sign out',
+    ongletDossier: 'My file',
+    ongletPieces: 'My documents',
+    ongletParcours: 'My journey',
+    ongletMessages: 'Messages',
+    ongletRessources: 'Resources',
+    ongletCourtDossier: 'File',
+    ongletCourtPieces: 'Documents',
+    ongletCourtParcours: 'Journey',
+    ongletCourtMessages: 'Messages',
+    ongletCourtRessources: 'Resources',
+    chargement: 'Opening your file…',
+  },
+};
 
 const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const uid = user.uid;
