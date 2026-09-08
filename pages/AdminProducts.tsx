@@ -301,6 +301,8 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
                 </button>
               </div>
 
+              <Paiement lang={lang} value={formData} onChange={(patch) => setFormData({ ...formData, ...patch })} />
+
               <Zone
                 label={t.desc}
                 className="[&_textarea]:min-h-[6rem]"
