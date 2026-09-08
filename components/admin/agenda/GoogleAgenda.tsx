@@ -87,8 +87,9 @@ const GoogleAgenda: React.FC<Props> = ({ lang }) => {
       const appel = httpsCallable(getFunctions(app, REGION), 'agendaGoogleEtat');
       const res: any = await appel(calendrierId ? { calendrierId } : {});
       setEtat(res.data as EtatConnexion);
-    } catch (e) {
-      setEtat(fonctionAbsente(e) ? 'indisponible' : 'indisponible');
+    } catch {
+      // Fonction non déployée (projet Spark, 'not-found'/'internal') ou hors ligne : même message calme.
+      setEtat('indisponible');
     }
   };
 
