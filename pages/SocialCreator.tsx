@@ -1,6 +1,24 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Download, Image as ImageIcon, Plus, Move, Trash2, Square, Smartphone, Monitor, Sparkles, Upload, X } from 'lucide-react';
-import { EnTete, Panneau, Bouton, Vide } from '../components/admin/ui';
+// Studio social : trois colonnes (formats et gabarits, toile, propriétés), une bande de légende et
+// d'export en bas. Les gabarits et la toile partagent le même moteur de calques (lib/studio,
+// components/admin/studio) : ce qu'on voit dans une vignette est ce que « Utiliser » applique.
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Move, Sparkles, Upload, X } from 'lucide-react';
+import { EnTete, Panneau, Bouton } from '../components/admin/ui';
+import { FormatsPanel } from '../components/admin/studio/FormatsPanel';
+import { PropertiesPanel } from '../components/admin/studio/PropertiesPanel';
+import { LegendBar } from '../components/admin/studio/LegendBar';
+import { Toile } from '../components/admin/studio/Toile';
+import {
+  FORMATS,
+  formatParId,
+  IMAGES_PUBLIQUES,
+  nouveauTexte,
+  nouvelleImage,
+  nouvelleForme,
+} from '../lib/studio/types';
+import type { Calque, Fond, FormeType, Reseau } from '../lib/studio/types';
+import { GABARITS, gabaritBaladoAvecEpisode } from '../lib/studio/gabarits';
+import { telechargerToile, copierTexte } from '../lib/studio/export';
 import { GalleryImage, Language } from '../types';
 import { useCollection } from '../lib/firestore';
 
@@ -8,531 +26,226 @@ interface SocialCreatorProps {
   lang: Language;
 }
 
-interface TextLayer {
-  id: string;
-  text: string;
-  x: number;
-  y: number;
-  fontSize: number;
-  isBold: boolean;
-  color: string;
-}
-
-interface Format {
-  id: string;
-  label: string;
-  width: number;
-  height: number;
-  icon: React.ReactNode;
-}
-
-const FORMATS: Format[] = [
-  { id: 'square', label: 'Carré (1:1)', width: 1080, height: 1080, icon: <Square className="w-4 h-4" /> },
-  { id: 'portrait', label: 'Story (9:16)', width: 1080, height: 1920, icon: <Smartphone className="w-4 h-4" /> },
-  { id: 'feed', label: 'Feed (4:5)', width: 1080, height: 1350, icon: <ImageIcon className="w-4 h-4" /> },
-  { id: 'landscape', label: 'Paysage (16:9)', width: 1920, height: 1080, icon: <Monitor className="w-4 h-4" /> },
-];
-
-const TUILE = 'flex flex-col items-center justify-center p-3 rounded-champ border transition-colors text-xs font-medium';
-const TUILE_ACTIVE = 'border-rose text-rose bg-rose/10';
-const TUILE_INACTIVE = 'border-filet text-gris hover:border-encre hover:text-encre';
+type Onglet = 'formats' | 'toile' | 'proprietes';
 
 const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
   const { data: gallery } = useCollection<GalleryImage>('gallery');
 
-  // State
-  const [selectedFormat, setSelectedFormat] = useState<Format>(FORMATS[0]);
-  const [bgImage, setBgImage] = useState('/images/laurie-portrait-nb.jpg');
-  const [isGrayscale, setIsGrayscale] = useState(true);
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [formatId, setFormatId] = useState<Reseau>('carre');
+  const format = formatParId(formatId);
+  const [fond, setFond] = useState<Fond>({ src: '/images/laurie-portrait-nb.jpg', nb: true, luminositePct: 65 });
+  const [calques, setCalques] = useState<Calque[]>([nouveauTexte({ texte: 'Votre message inspirant', taillePct: 6.5 }), nouveauTexte({ texte: '@xenahorizon', yPct: 72, taillePct: 3, ombre: false })]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [onglet, setOnglet] = useState<Onglet>('toile');
+  const [legende, setLegende] = useState('');
+  const [motsClics, setMotsClics] = useState('');
+  const [copie, setCopie] = useState(false);
+  const [exportEnCours, setExportEnCours] = useState(false);
+  const [choixFond, setChoixFond] = useState(false);
 
-  // Nano Banana State
+  const [episodeBalado, setEpisodeBalado] = useState<string | null>(null);
+  useEffect(() => {
+    fetch('/balado.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((flux) => setEpisodeBalado(flux?.episodes?.[0]?.titre ?? null))
+      .catch(() => setEpisodeBalado(null));
+  }, []);
+
+  // Nano Banana : le bouton reste la promesse déjà en place, aucune clé côté client (voir CLAUDE.md).
   const [isNanoOpen, setIsNanoOpen] = useState(false);
   const [nanoPrompt, setNanoPrompt] = useState('');
   const [nanoRefPreview, setNanoRefPreview] = useState<string | null>(null);
   const nanoFileInputRef = useRef<HTMLInputElement>(null);
 
+  const toileRef = useRef<HTMLDivElement | null>(null);
+  const calque = calques.find((c) => c.id === selectedId) ?? null;
+  const images = useMemo(() => [...IMAGES_PUBLIQUES, ...gallery.map((g) => g.url)], [gallery]);
+  const gabaritsAffiches = useMemo(
+    () => GABARITS.map((g) => (g.id === 'balado' ? gabaritBaladoAvecEpisode(episodeBalado ?? (lang === 'FR' ? 'Le dernier épisode' : 'The latest episode')) : g)),
+    [episodeBalado, lang]
+  );
+
   const t = {
     FR: {
       title: 'Créateur de contenu',
-      subtitle: 'Générez des visuels de marque pour les réseaux sociaux.',
-      format: 'Format',
-      layers: 'Calques texte',
-      add: 'Ajouter',
-      newText: 'Nouveau texte',
-      size: 'Taille police',
-      bgImg: 'Image de fond',
-      bw: 'Noir et blanc',
-      random: 'Aléatoire',
-      gallery: 'Galerie',
-      nano: 'Nano Banana',
-      nanoTitle: 'Génération IA (Nano Banana)',
-      nanoPlaceholder: "Décrivez l'image de fond idéale...",
-      generate: 'Générer',
-      soon: 'La génération par IA arrive bientôt : elle passera par le serveur pour protéger la clé.',
-      download: "Télécharger l'image",
-      hint: 'Glissez les textes avec la souris',
-      selectImg: 'Sélectionner une image',
-      use: 'Utiliser',
-      emptyGallery: "Aucune image. Ajoutez-en depuis la galerie de l'admin.",
-      uploadRef: 'Ajouter une image de référence (optionnel)',
-      remove: 'Retirer',
+      subtitle: 'Gabarits, calques et export pour vos visuels de réseaux sociaux.',
+      format: 'Format', gabarits: 'Gabarits', use: 'Utiliser',
+      onglets: { formats: 'Gabarits', toile: 'Toile', proprietes: 'Propriétés' },
+      ajouter: 'Ajouter', texte: 'Texte', image: 'Image', forme: 'Forme',
+      proprietes: 'Propriétés du calque', contenu: 'Texte', police: 'Police', taille: 'Taille',
+      graisse: 'Graisse', couleur: 'Couleur', ombre: 'Ombre douce', align: 'Alignement',
+      nb: 'Noir et blanc', opacite: 'Opacité', filet: 'Filet seulement',
+      supprimer: 'Supprimer', dupliquer: 'Dupliquer', kit: 'Kit de marque', kitLogo: 'Ajouter le logo',
+      aucunCalque: 'Sélectionnez un calque sur la toile, ou ajoutez-en un ci-dessus.',
+      choisirImage: 'Utiliser cette image',
+      legende: 'Légende', motsClics: 'Mots-clics', signes: 'signes',
+      exporter: 'Exporter en PNG', exportEnCours: 'Export…', copier: 'Copier la légende', copie: 'Copiée',
+      hint: 'Glissez, redimensionnez par les coins, flèches pour ajuster, Suppr pour retirer, Ctrl/Cmd+D pour dupliquer.',
+      fondTitre: 'Fond', fondNb: 'Noir et blanc', fondLuminosite: 'Luminosité', fondImage: 'Changer l’image',
+      nano: 'Nano Banana', nanoTitle: 'Génération IA (Nano Banana)', nanoPlaceholder: "Décrivez l'image de fond idéale...",
+      generate: 'Générer', soon: 'La génération par IA arrive bientôt : elle passera par le serveur pour protéger la clé.',
+      uploadRef: 'Ajouter une image de référence (optionnel)', remove: 'Retirer',
     },
     EN: {
       title: 'Content creator',
-      subtitle: 'Generate branded visuals for social media.',
-      format: 'Format',
-      layers: 'Text layers',
-      add: 'Add',
-      newText: 'New text',
-      size: 'Font size',
-      bgImg: 'Background image',
-      bw: 'Black and white',
-      random: 'Random',
-      gallery: 'Gallery',
-      nano: 'Nano Banana',
-      nanoTitle: 'AI generation (Nano Banana)',
-      nanoPlaceholder: 'Describe the ideal background image...',
-      generate: 'Generate',
-      soon: 'AI generation is coming soon: it will go through the server to protect the key.',
-      download: 'Download image',
-      hint: 'Drag text with mouse',
-      selectImg: 'Select image',
-      use: 'Use',
-      emptyGallery: 'No images yet. Add some from the admin gallery.',
-      uploadRef: 'Add reference image (optional)',
-      remove: 'Remove',
+      subtitle: 'Templates, layers and export for your social visuals.',
+      format: 'Format', gabarits: 'Templates', use: 'Use',
+      onglets: { formats: 'Templates', toile: 'Canvas', proprietes: 'Properties' },
+      ajouter: 'Add', texte: 'Text', image: 'Image', forme: 'Shape',
+      proprietes: 'Layer properties', contenu: 'Text', police: 'Font', taille: 'Size',
+      graisse: 'Weight', couleur: 'Color', ombre: 'Soft shadow', align: 'Alignment',
+      nb: 'Black and white', opacite: 'Opacity', filet: 'Outline only',
+      supprimer: 'Delete', dupliquer: 'Duplicate', kit: 'Brand kit', kitLogo: 'Add logo',
+      aucunCalque: 'Select a layer on the canvas, or add one above.',
+      choisirImage: 'Use this image',
+      legende: 'Caption', motsClics: 'Hashtags', signes: 'characters',
+      exporter: 'Export as PNG', exportEnCours: 'Exporting…', copier: 'Copy caption', copie: 'Copied',
+      hint: 'Drag to move, corner handles to resize, arrows to nudge, Delete to remove, Ctrl/Cmd+D to duplicate.',
+      fondTitre: 'Background', fondNb: 'Black and white', fondLuminosite: 'Brightness', fondImage: 'Change image',
+      nano: 'Nano Banana', nanoTitle: 'AI generation (Nano Banana)', nanoPlaceholder: 'Describe the ideal background image...',
+      generate: 'Generate', soon: 'AI generation is coming soon: it will go through the server to protect the key.',
+      uploadRef: 'Add reference image (optional)', remove: 'Remove',
     },
   }[lang];
 
-  // Text Layers
-  const [layers, setLayers] = useState<TextLayer[]>([
-    { id: '1', text: 'Votre message inspirant', x: 540, y: 540, fontSize: 60, isBold: true, color: '#ffffff' },
-    { id: '2', text: '@xenahorizon', x: 540, y: 900, fontSize: 30, isBold: false, color: '#e2ded4' },
-  ]);
-  const [selectedLayerId, setSelectedLayerId] = useState<string | null>('1');
-
-  // Dragging State
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // --- LOGIC ---
-
-  const addLayer = () => {
-    const newLayer: TextLayer = {
-      id: Date.now().toString(),
-      text: t.newText,
-      x: selectedFormat.width / 2,
-      y: selectedFormat.height / 2,
-      fontSize: 40,
-      isBold: false,
-      color: '#ffffff',
-    };
-    setLayers([...layers, newLayer]);
-    setSelectedLayerId(newLayer.id);
+  const majCalque = (patch: Partial<Calque>) => {
+    if (!selectedId) return;
+    setCalques((cs) => cs.map((c) => (c.id === selectedId ? ({ ...c, ...patch } as Calque) : c)));
+  };
+  const supprimerCalque = () => {
+    setCalques((cs) => cs.filter((c) => c.id !== selectedId));
+    setSelectedId(null);
+  };
+  const dupliquerCalque = () => {
+    if (!calque) return;
+    const copie2: Calque = { ...calque, id: `${calque.id}-${Date.now().toString(36)}`, xPct: Math.min(96, calque.xPct + 3), yPct: Math.min(96, calque.yPct + 3) };
+    setCalques((cs) => [...cs, copie2]);
+    setSelectedId(copie2.id);
+  };
+  const ajouterTexte = () => {
+    const c = nouveauTexte({ z: calques.length + 1 });
+    setCalques((cs) => [...cs, c]);
+    setSelectedId(c.id);
+    setOnglet('toile');
+  };
+  const ajouterImage = (src: string) => {
+    const c = nouvelleImage(src, { z: calques.length + 1 });
+    setCalques((cs) => [...cs, c]);
+    setSelectedId(c.id);
+  };
+  const ajouterForme = (forme: FormeType) => {
+    const c = nouvelleForme(forme, { z: calques.length + 1 });
+    setCalques((cs) => [...cs, c]);
+    setSelectedId(c.id);
   };
 
-  const removeLayer = (id: string) => {
-    setLayers(layers.filter((l) => l.id !== id));
-    if (selectedLayerId === id) setSelectedLayerId(null);
+  const choisirGabarit = (g: (typeof gabaritsAffiches)[number]) => {
+    setFormatId(g.format);
+    setFond(g.fond);
+    setCalques(g.calques.map((c, i) => ({ ...c, id: `${c.id}-${Date.now().toString(36)}${i}` })));
+    setSelectedId(null);
+    setOnglet('toile');
   };
 
-  const updateLayer = (id: string, updates: Partial<TextLayer>) => {
-    setLayers(layers.map((l) => (l.id === id ? { ...l, ...updates } : l)));
+  const exporter = async () => {
+    if (!toileRef.current) return;
+    setExportEnCours(true);
+    setSelectedId(null);
+    // Un cycle de rendu pour que les poignées de sélection disparaissent avant la capture.
+    await new Promise((r) => setTimeout(r, 60));
+    try {
+      await telechargerToile(toileRef.current, format);
+    } finally {
+      setExportEnCours(false);
+    }
   };
 
-  // --- GÉNÉRATION IA ---
-  // La génération par IA (Nano Banana / Gemini) demande une clé qui ne peut pas vivre dans le
-  // navigateur : elle passera par une fonction serveur. En attendant, le bouton reste désactivé
-  // (voir la modale plus bas) et aucune clé n'est exposée côté client.
+  const copier = async () => {
+    const texte = motsClics ? `${legende}\n\n${motsClics}` : legende;
+    if (await copierTexte(texte)) {
+      setCopie(true);
+      setTimeout(() => setCopie(false), 1800);
+    }
+  };
 
   const handleNanoImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setNanoRefPreview(URL.createObjectURL(file));
-    }
+    if (e.target.files && e.target.files[0]) setNanoRefPreview(URL.createObjectURL(e.target.files[0]));
   };
 
-  // --- DRAWING ---
-
-  const generateCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Load Image
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.src = bgImage;
-
-    img.onload = () => {
-      // Clear
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw BG
-      ctx.save();
-      if (isGrayscale) {
-        ctx.filter = 'grayscale(100%) brightness(60%)'; // Darker for text readability
-      } else {
-        ctx.filter = 'brightness(70%)';
-      }
-
-      // Calculate "Cover" fit
-      const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-      const x = canvas.width / 2 - (img.width / 2) * scale;
-      const y = canvas.height / 2 - (img.height / 2) * scale;
-      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-      ctx.restore();
-
-      // Draw Layers
-      layers.forEach((layer) => {
-        ctx.save();
-        ctx.font = `${layer.isBold ? 'bold' : 'normal'} ${layer.fontSize}px serif`;
-        ctx.fillStyle = layer.color;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        // Shadow for readability
-        ctx.shadowColor = 'rgba(0,0,0,0.5)';
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
-
-        // Multiline wrapping logic if text is too long (basic)
-        const maxWidth = canvas.width * 0.8;
-        const words = layer.text.split(' ');
-        let line = '';
-        const lines = [];
-
-        for (let n = 0; n < words.length; n++) {
-          const testLine = line + words[n] + ' ';
-          const metrics = ctx.measureText(testLine);
-          if (metrics.width > maxWidth && n > 0) {
-            lines.push(line);
-            line = words[n] + ' ';
-          } else {
-            line = testLine;
-          }
-        }
-        lines.push(line);
-
-        const lineHeight = layer.fontSize * 1.2;
-        const startY = layer.y - ((lines.length - 1) * lineHeight) / 2;
-
-        lines.forEach((l, i) => {
-          ctx.fillText(l, layer.x, startY + i * lineHeight);
-        });
-
-        // Draw selection box if selected
-        if (layer.id === selectedLayerId && !isDragging) {
-          ctx.strokeStyle = '#A8104A';
-          ctx.lineWidth = 2;
-          ctx.shadowColor = 'transparent';
-          // This is an approximation for visual feedback
-          const totalHeight = lines.length * lineHeight;
-          ctx.strokeRect(layer.x - maxWidth / 2, layer.y - totalHeight / 2 - 10, maxWidth, totalHeight + 20);
-        }
-
-        ctx.restore();
-      });
-    };
-  };
-
-  useEffect(() => {
-    generateCanvas();
-  }, [layers, bgImage, isGrayscale, selectedFormat, selectedLayerId]);
-
-  // --- MOUSE HANDLERS ---
-
-  const getCanvasCoordinates = (e: React.MouseEvent | React.TouchEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return { x: 0, y: 0 };
-
-    const rect = canvas.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
-
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY,
-    };
-  };
-
-  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
-    const coords = getCanvasCoordinates(e);
-
-    const clickedLayer = layers.find((layer) => {
-      const dx = coords.x - layer.x;
-      const dy = coords.y - layer.y;
-      return Math.abs(dx) < 300 && Math.abs(dy) < layer.fontSize * 2;
-    });
-
-    if (clickedLayer) {
-      setSelectedLayerId(clickedLayer.id);
-      setIsDragging(true);
-      setDragOffset({
-        x: coords.x - clickedLayer.x,
-        y: coords.y - clickedLayer.y,
-      });
-    } else {
-      setSelectedLayerId(null);
-    }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDragging || !selectedLayerId) return;
-
-    const coords = getCanvasCoordinates(e);
-    updateLayer(selectedLayerId, {
-      x: coords.x - dragOffset.x,
-      y: coords.y - dragOffset.y,
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleDownload = () => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      // Deselect before printing to remove the selection box
-      const currentSelection = selectedLayerId;
-      setSelectedLayerId(null);
-
-      // Wait for next render frame
-      setTimeout(() => {
-        const link = document.createElement('a');
-        link.download = `xena-${selectedFormat.id}.png`;
-        link.href = canvas.toDataURL('image/png', 1.0);
-        link.click();
-        setSelectedLayerId(currentSelection); // Restore
-      }, 50);
-    }
-  };
+  const ongletBtn = (id: Onglet, label: string) => (
+    <button
+      type="button"
+      onClick={() => setOnglet(id)}
+      className={`flex-1 py-2 rounded-champ text-xs font-semibold transition-colors ${onglet === id ? 'bg-bouton text-sur-bouton' : 'text-gris'}`}
+    >
+      {label}
+    </button>
+  );
 
   return (
-    <div className="px-6 md:px-10 py-10 space-y-8">
+    <div className="px-6 md:px-10 py-10 space-y-6">
       <EnTete titre={t.title} lede={t.subtitle} />
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Controls - Left Panel */}
-        <div className="w-full lg:w-1/3 space-y-6 lg:max-h-[85vh] lg:overflow-y-auto lg:pr-2">
-          {/* Format Selector */}
-          <Panneau titre={t.format}>
-            <div className="grid grid-cols-2 gap-2">
-              {FORMATS.map((fmt) => (
-                <button
-                  key={fmt.id}
-                  type="button"
-                  onClick={() => setSelectedFormat(fmt)}
-                  className={`${TUILE} ${selectedFormat.id === fmt.id ? TUILE_ACTIVE : TUILE_INACTIVE}`}
-                >
-                  {fmt.icon}
-                  <span className="mt-1">{fmt.label}</span>
-                </button>
-              ))}
-            </div>
-          </Panneau>
+      <div className="lg:hidden flex gap-1 bg-papier-2 border border-filet rounded-champ p-1">
+        {ongletBtn('formats', t.onglets.formats)}
+        {ongletBtn('toile', t.onglets.toile)}
+        {ongletBtn('proprietes', t.onglets.proprietes)}
+      </div>
 
-          {/* Text Layers */}
-          <Panneau
-            titre={t.layers}
-            actions={
-              <Bouton variante="secondaire" petit icone={Plus} onClick={addLayer}>
-                {t.add}
-              </Bouton>
-            }
-          >
-            <div className="space-y-3">
-              {layers.map((layer) => (
-                <div
-                  key={layer.id}
-                  className={`p-3 rounded-champ border transition-colors cursor-pointer ${
-                    selectedLayerId === layer.id ? 'border-rose bg-rose/5' : 'border-filet hover:border-encre'
-                  }`}
-                  onClick={() => setSelectedLayerId(layer.id)}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-semibold text-gris">ID : {layer.id}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeLayer(layer.id);
-                      }}
-                      className="text-gris hover:text-rose"
-                      aria-label={t.remove}
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-
-                  {selectedLayerId === layer.id ? (
-                    <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
-                      <textarea
-                        className="w-full bg-papier border border-filet rounded-champ px-3 py-2 text-sm text-encre outline-none transition-colors focus:border-rose h-20 resize-none"
-                        value={layer.text}
-                        onChange={(e) => updateLayer(layer.id, { text: e.target.value })}
-                      />
-                      <div className="flex gap-2">
-                        <input
-                          type="number"
-                          className="w-16 bg-papier border border-filet rounded-champ px-2 py-1.5 text-xs text-encre outline-none transition-colors focus:border-rose"
-                          value={layer.fontSize}
-                          onChange={(e) => updateLayer(layer.id, { fontSize: parseInt(e.target.value) || 0 })}
-                          title={t.size}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => updateLayer(layer.id, { isBold: !layer.isBold })}
-                          className={`px-3 rounded-champ border text-sm font-semibold ${
-                            layer.isBold ? 'bg-bouton text-sur-bouton border-encre' : 'border-filet text-gris'
-                          }`}
-                        >
-                          B
-                        </button>
-                        <input
-                          type="color"
-                          className="h-9 w-9 bg-transparent border border-filet rounded-champ cursor-pointer overflow-hidden"
-                          value={layer.color}
-                          onChange={(e) => updateLayer(layer.id, { color: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-encre truncate">{layer.text}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </Panneau>
-
-          {/* Background */}
-          <Panneau titre={t.bgImg}>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between bg-papier p-3 rounded-champ border border-filet">
-                <span className="text-sm text-encre font-medium">{t.bw}</span>
-                <button
-                  type="button"
-                  onClick={() => setIsGrayscale(!isGrayscale)}
-                  aria-pressed={isGrayscale}
-                  className={`w-12 h-6 rounded-pilule relative transition-colors ${isGrayscale ? 'bg-bouton' : 'bg-filet'}`}
-                >
-                  <span
-                    className={`absolute top-1 left-1 w-4 h-4 bg-papier rounded-pilule transition-transform ${
-                      isGrayscale ? 'translate-x-6' : ''
-                    }`}
-                  />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setBgImage(`/images/laurie-portrait-1.jpg`)}
-                  className={`${TUILE} ${TUILE_INACTIVE}`}
-                >
-                  {t.random}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsGalleryOpen(true)}
-                  className={`${TUILE} ${TUILE_INACTIVE}`}
-                >
-                  {t.gallery}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsNanoOpen(true)}
-                  className={`col-span-2 ${TUILE} border-rose/30 text-rose hover:border-rose`}
-                >
-                  <Sparkles className="w-4 h-4" /> {t.nano}
-                </button>
-              </div>
-            </div>
-          </Panneau>
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className={`w-full lg:w-1/4 lg:max-h-[80vh] lg:overflow-y-auto lg:pr-1 ${onglet === 'formats' ? 'block' : 'hidden'} lg:block`}>
+          <FormatsPanel formats={FORMATS} format={format} onFormat={(f) => setFormatId(f.id)} gabarits={gabaritsAffiches} onGabarit={choisirGabarit} lang={lang} t={t} />
         </div>
 
-        {/* Canvas - Right Panel */}
-        <div className="w-full lg:w-2/3 flex flex-col items-center">
-          <div ref={containerRef} className="relative rounded-champ overflow-hidden border border-filet bg-encre">
-            <canvas
-              ref={canvasRef}
-              width={selectedFormat.width}
-              height={selectedFormat.height}
-              className="max-h-[70vh] w-auto max-w-full cursor-move touch-none"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onTouchStart={handleMouseDown}
-              onTouchMove={handleMouseMove}
-              onTouchEnd={handleMouseUp}
-            />
-            <div className="absolute bottom-4 right-4">
-              <Bouton variante="primaire" icone={Download} onClick={handleDownload}>
-                {t.download}
-              </Bouton>
+        <div className={`w-full lg:w-2/4 flex flex-col items-center gap-4 ${onglet === 'toile' ? 'flex' : 'hidden'} lg:flex`}>
+          <Panneau titre={t.fondTitre} className="w-full">
+            <div className="flex flex-wrap items-center gap-4">
+              <label className="flex items-center gap-2 text-sm text-encre font-medium cursor-pointer">
+                <input type="checkbox" checked={fond.nb} onChange={(e) => setFond({ ...fond, nb: e.target.checked })} className="w-4 h-4 accent-rose" />
+                {t.fondNb}
+              </label>
+              <div className="flex items-center gap-2 flex-1 min-w-[140px]">
+                <span className="text-xs text-gris flex-shrink-0">{t.fondLuminosite}</span>
+                <input type="range" min={30} max={100} value={fond.luminositePct} onChange={(e) => setFond({ ...fond, luminositePct: parseInt(e.target.value, 10) })} className="w-full accent-rose" />
+              </div>
+              <Bouton variante="secondaire" petit onClick={() => setChoixFond((v) => !v)}>{t.fondImage}</Bouton>
+              <Bouton variante="danger" petit icone={Sparkles} onClick={() => setIsNanoOpen(true)}>{t.nano}</Bouton>
             </div>
-          </div>
-          <p className="text-gris text-sm mt-4 flex items-center gap-2">
-            <Move className="w-4 h-4" /> {t.hint}
+            {choixFond && (
+              <div className="mt-3 grid grid-cols-6 gap-2">
+                {images.map((src) => (
+                  <button key={src} type="button" onClick={() => { setFond({ ...fond, src }); setChoixFond(false); }} className={`aspect-square rounded-champ overflow-hidden border ${fond.src === src ? 'border-rose' : 'border-filet hover:border-encre'}`}>
+                    <img src={src} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </Panneau>
+
+          <Toile
+            ref={toileRef}
+            format={format}
+            fond={fond}
+            calques={calques}
+            editable
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            onChange={setCalques}
+            maquetteTelephone={format.id === 'story'}
+            className="max-h-[60vh] w-auto max-w-full rounded-champ border border-filet"
+          />
+          <p className="text-gris text-sm flex items-center gap-2 text-center">
+            <Move className="w-4 h-4 flex-shrink-0" /> {t.hint}
           </p>
+        </div>
+
+        <div className={`w-full lg:w-1/4 lg:max-h-[80vh] lg:overflow-y-auto lg:pl-1 ${onglet === 'proprietes' ? 'block' : 'hidden'} lg:block`}>
+          <PropertiesPanel calque={calque} onChange={majCalque} onDelete={supprimerCalque} onDuplicate={dupliquerCalque} onAddTexte={ajouterTexte} onAddImage={ajouterImage} onAddForme={ajouterForme} images={images} t={t} />
         </div>
       </div>
 
-      {/* GALLERY MODAL */}
-      {isGalleryOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-encre/60">
-          <div className="bg-papier-2 border border-filet rounded-champ shadow-panneau w-full max-w-4xl max-h-[80vh] flex flex-col">
-            <div className="p-6 border-b border-filet flex justify-between items-center">
-              <h2 className="font-serif text-h3 text-encre">{t.selectImg}</h2>
-              <button
-                type="button"
-                onClick={() => setIsGalleryOpen(false)}
-                className="text-gris hover:text-encre"
-                aria-label={t.remove}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-6 overflow-y-auto">
-              {gallery.length === 0 ? (
-                <Vide titre={t.emptyGallery} />
-              ) : (
-                <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
-                  {gallery.map((img) => (
-                    <button
-                      key={img.id}
-                      type="button"
-                      onClick={() => {
-                        setBgImage(img.url);
-                        setIsGalleryOpen(false);
-                      }}
-                      className="aspect-square rounded-champ overflow-hidden border border-filet hover:border-rose transition-colors relative group"
-                    >
-                      <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-encre/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-papier text-xs font-semibold">
-                        {t.use}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <LegendBar legende={legende} onLegende={setLegende} motsClics={motsClics} onMotsClics={setMotsClics} onExporter={exporter} exportEnCours={exportEnCours} onCopier={copier} copie={copie} t={t} />
 
-      {/* NANO BANANA MODAL */}
       {isNanoOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-encre/60">
           <div className="bg-papier-2 border border-filet rounded-champ shadow-panneau w-full max-w-md">
@@ -540,33 +253,21 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
               <h2 className="font-serif text-h3 text-encre flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-rose" /> {t.nanoTitle}
               </h2>
-              <button
-                type="button"
-                onClick={() => setIsNanoOpen(false)}
-                className="text-gris hover:text-encre"
-                aria-label={t.remove}
-              >
+              <button type="button" onClick={() => setIsNanoOpen(false)} className="text-gris hover:text-encre" aria-label={t.remove}>
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-6 space-y-4">
-              {/* Image Upload Area */}
               <div
                 onClick={() => nanoFileInputRef.current?.click()}
-                className={`relative w-full h-32 rounded-champ border border-dashed flex items-center justify-center cursor-pointer transition-colors overflow-hidden ${
-                  nanoRefPreview ? 'border-rose/50 bg-papier' : 'border-filet hover:border-encre'
-                }`}
+                className={`relative w-full h-32 rounded-champ border border-dashed flex items-center justify-center cursor-pointer transition-colors overflow-hidden ${nanoRefPreview ? 'border-rose/50 bg-papier' : 'border-filet hover:border-encre'}`}
               >
                 {nanoRefPreview ? (
                   <>
                     <img src={nanoRefPreview} alt="Référence" className="h-full w-full object-contain opacity-60" />
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setNanoRefPreview(null);
-                        if (nanoFileInputRef.current) nanoFileInputRef.current.value = '';
-                      }}
+                      onClick={(e) => { e.stopPropagation(); setNanoRefPreview(null); if (nanoFileInputRef.current) nanoFileInputRef.current.value = ''; }}
                       className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-papier-2 border border-filet text-encre rounded-pilule"
                       title={t.remove}
                     >
@@ -579,25 +280,15 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
                     <span className="text-xs">{t.uploadRef}</span>
                   </div>
                 )}
-                <input
-                  type="file"
-                  ref={nanoFileInputRef}
-                  onChange={handleNanoImageSelect}
-                  className="hidden"
-                  accept="image/*"
-                />
+                <input type="file" ref={nanoFileInputRef} onChange={handleNanoImageSelect} className="hidden" accept="image/*" />
               </div>
-
               <textarea
                 className="w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris outline-none transition-colors focus:border-rose h-32 resize-none"
                 placeholder={t.nanoPlaceholder}
                 value={nanoPrompt}
                 onChange={(e) => setNanoPrompt(e.target.value)}
               />
-
-              <Bouton variante="secondaire" icone={Sparkles} disabled className="w-full">
-                {t.generate}
-              </Bouton>
+              <Bouton variante="secondaire" icone={Sparkles} disabled className="w-full">{t.generate}</Bouton>
               <p className="text-xs text-gris text-center">{t.soon}</p>
             </div>
           </div>
