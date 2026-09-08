@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getFunctions } from 'firebase/functions';
 import { getAnalytics, isSupported as analyticsSupported, type Analytics } from 'firebase/analytics';
 
 const env = import.meta.env;
