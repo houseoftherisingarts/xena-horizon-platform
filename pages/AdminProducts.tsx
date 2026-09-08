@@ -44,7 +44,16 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
       save: 'Enregistrer',
       onlineStatus: 'En ligne sur la page Services',
       hiddenStatus: 'Masqué du public',
-      loading: 'Chargement...'
+      loading: 'Chargement...',
+      vueLabel: 'Vue de l\'échelle',
+      vueAjustee: 'Ajustée',
+      vueDefilement: 'Défilement',
+      vueCompacte: 'Compacte',
+      zoomLabel: 'Zoom',
+      toutVoir: 'Tout voir',
+      defilerGauche: 'Défiler vers les paliers précédents',
+      defilerDroite: 'Défiler vers les paliers suivants',
+      redimensionner: 'Redimensionner les colonnes'
     },
     EN: {
       title: 'Value Ladder',
