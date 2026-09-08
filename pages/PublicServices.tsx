@@ -46,7 +46,6 @@ const TEXTES = {
     subheadline: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
     photoAlt: 'Laurie Belhumeur on stage',
     signature: SIGNATURE.texteEN,
-    surDemande: 'On request',
   },
 };
 
