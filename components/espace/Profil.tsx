@@ -4,7 +4,6 @@ import { AlertCircle, CheckCircle, Save } from 'lucide-react';
 import { patchDoc } from '../../lib/firestore';
 import { PROFILS } from '../../lib/dossier';
 import { Dossier, Language, ProfilClient } from '../../types';
-import { GLASS_INPUT_CLASSES } from '../../constants';
 
 interface ProfilProps {
   dossier: Dossier;
@@ -12,7 +11,7 @@ interface ProfilProps {
   lang: Language;
 }
 
-const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
+const CHAMP = 'w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris transition-colors';
 
 const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
   const [nom, setNom] = useState(dossier.nom ?? '');
@@ -93,50 +92,50 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
   };
 
   return (
-    <form onSubmit={soumettre} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-8">
-        <h2 className="text-lg font-serif font-bold text-white mb-6">{t.titreQui}</h2>
+    <form onSubmit={soumettre} className="grid grid-cols-1 lg:grid-cols-2 gap-x-col gap-y-10">
+      <section className="border-t border-filet pt-8">
+        <h2 className="font-serif text-h3 text-encre mb-6">{t.titreQui}</h2>
         <div className="space-y-4">
           <div>
-            <label htmlFor="pf-nom" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-nom" className="block text-petit text-gris mb-1">
               {t.nom}
             </label>
-            <input id="pf-nom" type="text" value={nom} onChange={(e) => setNom(e.target.value)} className={`${GLASS_INPUT_CLASSES} min-h-[44px]`} />
+            <input id="pf-nom" type="text" value={nom} onChange={(e) => setNom(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
           </div>
           <div>
-            <label htmlFor="pf-tel" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-tel" className="block text-petit text-gris mb-1">
               {t.telephone}
             </label>
-            <input id="pf-tel" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className={`${GLASS_INPUT_CLASSES} min-h-[44px]`} />
+            <input id="pf-tel" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
           </div>
           <div>
-            <label htmlFor="pf-ville" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-ville" className="block text-petit text-gris mb-1">
               {t.ville}
             </label>
-            <input id="pf-ville" type="text" value={ville} onChange={(e) => setVille(e.target.value)} className={`${GLASS_INPUT_CLASSES} min-h-[44px]`} />
+            <input id="pf-ville" type="text" value={ville} onChange={(e) => setVille(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
           </div>
           <div>
-            <label htmlFor="pf-profil" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-profil" className="block text-petit text-gris mb-1">
               {t.profil}
             </label>
             <select
               id="pf-profil"
               value={profil}
               onChange={(e) => setProfil(e.target.value as ProfilClient)}
-              className={`${GLASS_INPUT_CLASSES} min-h-[44px]`}
+              className={`${CHAMP} min-h-[44px]`}
             >
               {PROFILS.map((p) => (
-                <option key={p.id} value={p.id} className="bg-slate-900">
+                <option key={p.id} value={p.id}>
                   {lang === 'EN' ? p.nomEn : p.nom}
                 </option>
               ))}
             </select>
-            <p className="text-xs text-slate-500 mt-2">
+            <p className="text-xs text-gris mt-2">
               {lang === 'EN' ? PROFILS.find((p) => p.id === profil)?.aideEn : PROFILS.find((p) => p.id === profil)?.aide}
             </p>
           </div>
           <div>
-            <label htmlFor="pf-discipline" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-discipline" className="block text-petit text-gris mb-1">
               {t.discipline}
             </label>
             <input
@@ -145,23 +144,23 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
               value={discipline}
               onChange={(e) => setDiscipline(e.target.value)}
               placeholder={t.disciplineHolder}
-              className={`${GLASS_INPUT_CLASSES} min-h-[44px]`}
+              className={`${CHAMP} min-h-[44px]`}
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-8">
-        <h2 className="text-lg font-serif font-bold text-white mb-6">{t.titreProjet}</h2>
+      <section className="border-t border-filet pt-8">
+        <h2 className="font-serif text-h3 text-encre mb-6">{t.titreProjet}</h2>
         <div className="space-y-4">
           <div>
-            <label htmlFor="pf-ptitre" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-ptitre" className="block text-petit text-gris mb-1">
               {t.projetTitre}
             </label>
-            <input id="pf-ptitre" type="text" value={titre} onChange={(e) => setTitre(e.target.value)} className={`${GLASS_INPUT_CLASSES} min-h-[44px]`} />
+            <input id="pf-ptitre" type="text" value={titre} onChange={(e) => setTitre(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
           </div>
           <div>
-            <label htmlFor="pf-pdesc" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-pdesc" className="block text-petit text-gris mb-1">
               {t.projetDesc}
             </label>
             <textarea
@@ -169,11 +168,11 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className={`${GLASS_INPUT_CLASSES} resize-none`}
+              className={`${CHAMP} resize-none`}
             />
           </div>
           <div>
-            <label htmlFor="pf-pobjectif" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-pobjectif" className="block text-petit text-gris mb-1">
               {t.projetObjectif}
             </label>
             <textarea
@@ -181,11 +180,11 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
               value={objectif}
               onChange={(e) => setObjectif(e.target.value)}
               rows={2}
-              className={`${GLASS_INPUT_CLASSES} resize-none`}
+              className={`${CHAMP} resize-none`}
             />
           </div>
           <div>
-            <label htmlFor="pf-echeance" className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+            <label htmlFor="pf-echeance" className="block text-petit text-gris mb-1">
               {t.echeance}
             </label>
             <input
@@ -193,28 +192,28 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
               type="date"
               value={echeance}
               onChange={(e) => setEcheance(e.target.value)}
-              className={`${GLASS_INPUT_CLASSES} min-h-[44px]`}
+              className={`${CHAMP} min-h-[44px]`}
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="lg:col-span-2 flex items-center gap-4">
+      <div className="lg:col-span-2 flex items-center gap-4 pt-2">
         <button
           type="submit"
           disabled={busy}
-          className={`flex items-center gap-2 min-h-[44px] px-6 py-3 rounded-[15px] bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift hover:bg-[length:300%_300%] text-white font-medium transition-all shadow-iridescent-sm hover:shadow-iridescent disabled:opacity-50 ${FOCUS_RING}`}
+          className="flex items-center gap-2 min-h-[44px] px-6 rounded-pilule bg-encre text-papier font-medium hover:bg-encre-2 transition-colors disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
           {busy ? t.enregistrement : t.enregistrer}
         </button>
         {ok && (
-          <span role="status" aria-live="polite" className="flex items-center gap-2 text-sm text-emerald-300">
-            <CheckCircle className="w-4 h-4" /> {t.succes}
+          <span role="status" aria-live="polite" className="flex items-center gap-2 text-sm text-encre">
+            <CheckCircle className="w-4 h-4 text-rose" /> {t.succes}
           </span>
         )}
         {error && (
-          <span role="alert" className="flex items-center gap-2 text-sm text-red-300">
+          <span role="alert" className="flex items-center gap-2 text-sm text-rose">
             <AlertCircle className="w-4 h-4" /> {error}
           </span>
         )}
