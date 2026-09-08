@@ -432,6 +432,11 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
             <p className="text-sm text-gris">
               {coffre.resume?.nomCarte} · {t.deposeLe} {dateCourte(coffre.deposeLe, lang)} · {coffre.luLe ? `${t.luLe} ${dateCourte(coffre.luLe, lang)}` : t.pasLu}
             </p>
+            {coffre.specimen && (
+              <p className="text-sm text-gris flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-rose" aria-hidden="true" /> {t.specimenStatut}
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-3">
               <Bouton variante="secondaire" onClick={() => setRemplacer(true)} disabled={busy}>
                 {t.remplacer}
