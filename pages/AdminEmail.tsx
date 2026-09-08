@@ -338,7 +338,9 @@ const AdminEmail: React.FC<AdminEmailProps> = ({ lang }) => {
 
               </div>
             ) : (
-              <Vide titre={t.select} />
+              <div className="flex-1 flex items-center justify-center">
+                <Vide titre={t.select} />
+              </div>
             )}
           </div>
 
