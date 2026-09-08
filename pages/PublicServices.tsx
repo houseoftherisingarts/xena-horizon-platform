@@ -151,25 +151,27 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   const goToContact = () => allerAuRendezVous();
 
   const RangeeOffre: React.FC<{ offer: Product; delay: number }> = ({ offer, delay }) => (
-    <Reveal
-      delay={delay}
-      className="border-b border-filet py-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-6 items-baseline"
-    >
-      <div>
-        <h3 className="font-serif text-h3">{nomOffre(offer, lang)}</h3>
-        <p className="text-petit text-gris mt-1">{pourQui(offer, lang)}</p>
-        <p className="text-corps text-gris mesure mt-2">{descriptionOffre(offer, lang)}</p>
-      </div>
-      <div className="flex md:flex-col items-center md:items-end gap-4 md:gap-3 justify-between md:justify-start">
-        <span className="font-sans font-semibold tabular-nums whitespace-nowrap">{prixAffiche(offer, lang)}</span>
-        <button
-          onClick={goToContact}
-          className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-bouton hover:text-sur-bouton"
-        >
-          {book} <ArrowRight className="w-3.5 h-3.5" />
-        </button>
-      </div>
-    </Reveal>
+    <CarteProjecteur>
+      <Reveal
+        delay={delay}
+        className="border-b border-filet py-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-6 items-baseline"
+      >
+        <div>
+          <h3 className="font-serif text-h3">{nomOffre(offer, lang)}</h3>
+          <p className="text-petit text-gris mt-1">{pourQui(offer, lang)}</p>
+          <p className="text-corps text-gris mesure mt-2">{descriptionOffre(offer, lang)}</p>
+        </div>
+        <div className="flex md:flex-col items-center md:items-end gap-4 md:gap-3 justify-between md:justify-start">
+          <span className="font-sans font-semibold tabular-nums whitespace-nowrap">{prixAffiche(offer, lang)}</span>
+          <button
+            onClick={goToContact}
+            className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-bouton hover:text-sur-bouton"
+          >
+            {book} <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </Reveal>
+    </CarteProjecteur>
   );
 
   return (
