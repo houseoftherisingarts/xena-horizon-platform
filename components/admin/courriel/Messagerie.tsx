@@ -83,7 +83,7 @@ const Messagerie: React.FC<MessagerieProps> = ({ dossiers, loading, lang, onChan
     'w-full bg-papier border border-filet rounded-champ px-4 py-2.5 text-sm text-encre placeholder-gris outline-none transition-colors focus:border-rose';
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
+    <div className="flex flex-col lg:flex-row gap-6" data-tx-scope="adminCourriel_messagerie">
       {/* LISTE DES DOSSIERS */}
       <div className={`${selected ? 'hidden lg:flex' : 'flex'} w-full lg:w-80 flex-shrink-0 flex-col gap-3`}>
         <input
