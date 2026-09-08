@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { activerAnalytics } from '../firebase';
 import { Language } from '../types';
+import { useIntroTerminee } from '../lib/intro';
+import { Portail, Reveal } from './motion';
 
 interface ConsentementProps {
   lang: Language;
@@ -34,6 +35,18 @@ function ecrire(valeur: Valeur): void {
 const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
   const [valeur, setValeur] = useState<Valeur | null>(() => (typeof window === 'undefined' ? null : lire()));
   const [politiqueOuverte, setPolitiqueOuverte] = useState(false);
+  const introTerminee = useIntroTerminee();
+  // Le bandeau se pose après l'intro (page intérieure : pas d'intro, il se pose tout de suite).
+  const [pretAAfficher, setPretAAfficher] = useState(introTerminee);
+
+  useEffect(() => {
+    if (introTerminee) {
+      setPretAAfficher(true);
+      return;
+    }
+    const t = setTimeout(() => setPretAAfficher(true), 1800);
+    return () => clearTimeout(t);
+  }, [introTerminee]);
 
   useEffect(() => {
     if (valeur === 'accepte') activerAnalytics();
@@ -77,67 +90,75 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
 
   return (
     <>
-      {valeur === null && (
-        <div
-          role="dialog"
-          aria-live="polite"
-          aria-label={lang === 'FR' ? 'Bandeau de consentement' : 'Consent banner'}
-          className="fixed bottom-0 left-0 right-0 z-[90] bg-slate-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl px-4 py-3 md:px-8 flex flex-col md:flex-row md:items-center gap-3 md:gap-6"
-        >
-          <p className="text-sm text-slate-300 md:flex-1">{t.texte}</p>
-          <div className="flex gap-2 md:gap-3">
-            <button
-              onClick={() => decider('accepte')}
-              className="min-h-[44px] px-5 py-2.5 rounded-full bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift text-white text-sm font-medium transition-all shadow-iridescent-sm hover:shadow-iridescent"
+      {valeur === null && pretAAfficher && (
+        <div className="fixed bottom-gut left-gut right-gut sm:left-auto z-[90] flex justify-center sm:justify-end">
+          <Reveal delay={0.3} y={20} amount={0.1} className="w-full sm:w-auto">
+            <div
+              role="dialog"
+              aria-live="polite"
+              aria-label={lang === 'FR' ? 'Bandeau de consentement' : 'Consent banner'}
+              className="w-full sm:max-w-consentement max-h-[120px] sm:max-h-none bg-papier border border-filet rounded-champ shadow-panneau p-4 flex flex-col gap-3"
             >
-              {t.accepter}
-            </button>
-            <button
-              onClick={() => decider('refuse')}
-              className="min-h-[44px] px-5 py-2.5 rounded-full border border-white/15 hover:bg-white/5 text-slate-300 text-sm font-medium transition-colors"
-            >
-              {t.refuser}
-            </button>
-          </div>
-          <button
-            onClick={() => setPolitiqueOuverte(true)}
-            className="text-xs text-slate-500 hover:text-slate-300 underline transition-colors"
-          >
-            {t.lien}
-          </button>
+              <p className="text-petit text-encre">{t.texte}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => decider('accepte')}
+                  className="min-h-[44px] px-5 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2 transition-colors"
+                >
+                  {t.accepter}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => decider('refuse')}
+                  className="min-h-[44px] px-5 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-encre transition-colors"
+                >
+                  {t.refuser}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPolitiqueOuverte(true)}
+                  className="text-xs text-gris hover:text-rose underline transition-colors ml-auto"
+                >
+                  {t.lien}
+                </button>
+              </div>
+            </div>
+          </Reveal>
         </div>
       )}
 
-      {politiqueOuverte &&
-        createPortal(
-          <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-slate-900 border border-white/10 rounded-[20px] shadow-2xl p-8 relative">
+      {politiqueOuverte && (
+        <Portail>
+          <div className="fixed inset-0 z-[100] bg-encre/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-papier border border-filet rounded-champ shadow-panneau p-8 relative">
               <button
+                type="button"
                 onClick={() => setPolitiqueOuverte(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors"
                 aria-label={t.fermer}
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-gris hover:text-encre transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
-              <h2 className="text-2xl font-serif font-bold text-white mb-6">{t.titrePolitique}</h2>
-              <div className="space-y-5 text-sm text-slate-300">
+              <h2 className="font-serif text-h3 text-encre mb-6">{t.titrePolitique}</h2>
+              <div className="space-y-5 text-sm text-encre">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t.quoi}</h3>
+                  <h3 className="kicker text-gris mb-1">{t.quoi}</h3>
                   <p>{t.quoiTexte}</p>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t.qui}</h3>
+                  <h3 className="kicker text-gris mb-1">{t.qui}</h3>
                   <p>{t.quiTexte}</p>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t.retrait}</h3>
+                  <h3 className="kicker text-gris mb-1">{t.retrait}</h3>
                   <p>{t.retraitTexte}</p>
                 </div>
               </div>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portail>
+      )}
     </>
   );
 };
