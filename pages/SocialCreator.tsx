@@ -588,9 +588,8 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
                 />
               </div>
 
-              <Zone
-                label={t.nanoPlaceholder}
-                className="[&>label]:hidden"
+              <textarea
+                className="w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris outline-none transition-colors focus:border-rose h-32 resize-none"
                 placeholder={t.nanoPlaceholder}
                 value={nanoPrompt}
                 onChange={(e) => setNanoPrompt(e.target.value)}
