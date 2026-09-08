@@ -214,6 +214,16 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
 
   const numeroAffiche = useMemo(() => numeroPropre(contenu.numero).replace(/(.{4})/g, '$1 ').trim(), [contenu.numero]);
 
+  const choisirSpecimen = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fichier = e.target.files?.[0] ?? null;
+    e.target.value = '';
+    if (!fichier) return;
+    if (fichier.size > SPECIMEN_TAILLE_MAX) return setAvis({ ok: false, texte: t.erreurSpecimenTaille });
+    if (!TYPES_SPECIMEN_ACCEPTES.includes(fichier.type)) return setAvis({ ok: false, texte: t.erreurSpecimenType });
+    setAvis(null);
+    setSpecimenFichier(fichier);
+  };
+
   const deposer = async (e: React.FormEvent) => {
     e.preventDefault();
     setAvis(null);
@@ -222,9 +232,18 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
     if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(contenu.expiration.trim())) return setAvis({ ok: false, texte: t.erreurExp });
     setBusy(true);
     try {
-      const scelle = await sceller(contenu, auth.currentUser?.email ?? '');
+      const { scelle, specimenChiffre } = await sceller(contenu, auth.currentUser?.email ?? '', specimenFichier);
+      if (specimenChiffre) {
+        // Le spécimen part chiffré (AES-GCM) : ce qui atterrit dans Storage est un binaire opaque.
+        await uploadBytes(storageRef(storage, CHEMIN_SPECIMEN), specimenChiffre, { contentType: 'application/octet-stream' });
+      } else if (coffre?.specimen) {
+        // Un spécimen existait sous l'ancienne clé (chaque dépôt en tire une nouvelle) : il devient
+        // indéchiffrable avec celle-ci, on l'efface plutôt que de laisser un binaire mort dans Storage.
+        await deleteObject(storageRef(storage, CHEMIN_SPECIMEN)).catch(() => {});
+      }
       await setDoc(doc(db, CHEMIN_COFFRE), scelle);
       setContenu(VIDE);
+      setSpecimenFichier(null);
       setConsent(false);
       setRemplacer(false);
       setAvis({ ok: true, texte: t.succes });
@@ -239,6 +258,7 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
   const effacer = async () => {
     setBusy(true);
     try {
+      if (coffre?.specimen) await deleteObject(storageRef(storage, CHEMIN_SPECIMEN)).catch(() => {});
       await deleteDoc(doc(db, CHEMIN_COFFRE));
       setConfirmeEffacer(false);
       setAvis(null);
