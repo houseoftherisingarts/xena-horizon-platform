@@ -22,6 +22,7 @@ async function shot(page, nom) {
 
 (async () => {
   const browser = await chromium.launch();
+  try {
 
   for (const largeur of [1440, 390]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: largeur === 1440 ? 900 : 844 } });
