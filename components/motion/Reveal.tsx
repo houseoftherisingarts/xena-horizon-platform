@@ -55,11 +55,6 @@ export const Reveal: React.FC<RevealProps> = ({
   );
 };
 
-const conteneur: Variants = {
-  cache: {},
-  visible: {},
-};
-
 const item: Variants = {
   cache: { opacity: 0, y: 36 },
   visible: { opacity: 1, y: 0, transition: { duration: DUREE, ease: EASE } },
