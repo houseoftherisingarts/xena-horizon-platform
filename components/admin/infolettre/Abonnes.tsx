@@ -236,7 +236,7 @@ const Abonnes: React.FC<{ lang: Language }> = ({ lang }) => {
           <Panneau className="max-w-lg w-full" titre={t.importer}>
             <div className="space-y-3">
               <p className="text-sm text-gris">{t.importerAide}</p>
-              <Zone label="CSV" value={csv} onChange={(e) => setCsv(e.target.value)} placeholder="laurie@exemple.com;Laurie;fr" className="min-h-[10rem]" />
+              <Zone label="CSV" value={csv} onChange={(e) => setCsv(e.target.value)} placeholder="laurie@exemple.com;Laurie;fr" rows={8} />
               {importResultat && <p className="text-xs text-rose">{importResultat}</p>}
               <div className="flex justify-end gap-2 pt-2">
                 <Bouton variante="discret" onClick={() => { setModalImport(false); setImportResultat(null); }}>{t.fermer}</Bouton>
