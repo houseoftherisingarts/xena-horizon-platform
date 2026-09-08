@@ -233,6 +233,7 @@ const App: React.FC = () => {
         lang={lang}
       />
     </div>
+    </DefilementDoux>
   );
 };
 
