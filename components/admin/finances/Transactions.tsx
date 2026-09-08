@@ -20,7 +20,7 @@ const TEXTES = {
     titre: 'Transactions', sous: 'Le grand livre : chaque revenu et chaque dépense, avec ses taxes.',
     importerFactures: 'Importer les factures payées',
     date: 'Date', description: 'Description', tiers: 'Tiers', compte: 'Compte', montant: 'Montant', taxes: 'Taxes', recu: 'Reçu', concilie: 'Concilié',
-    filtreTexte: 'Rechercher…', tousComptes: 'Tous les comptes', tousSens: 'Revenus et dépenses', revenu: 'Revenus', depense: 'Dépenses',
+    filtreTexte: 'Rechercher…', tousComptes: 'Tous les comptes', tousSens: 'Revenus et dépenses', sensLabel: 'Sens', revenu: 'Revenus', depense: 'Dépenses',
     ajouter: 'Ajouter', supprimer: 'Supprimer', confirmerSuppr: 'Supprimer cette transaction ?', enregistrer: 'Enregistrer', annuler: 'Annuler',
     vide: 'Aucune transaction', videTexte: "Ajoutez une transaction, importez un relevé, ou importez les factures payées.",
     page: 'Page', sur: 'sur', precedent: 'Précédent', suivant: 'Suivant',
