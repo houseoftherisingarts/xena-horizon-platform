@@ -31,6 +31,30 @@ function ecrire(valeur: Valeur): void {
   }
 }
 
+// Petit registre partagé : Footer.tsx lit la visibilité du bandeau via useConsentementVisible()
+// sans avoir à faire descendre l'état par les props.
+type VisibiliteListener = (visible: boolean) => void;
+let bandeauVisible = false;
+const visibiliteListeners = new Set<VisibiliteListener>();
+
+function definirVisibilite(visible: boolean): void {
+  if (bandeauVisible === visible) return;
+  bandeauVisible = visible;
+  visibiliteListeners.forEach((fn) => fn(visible));
+}
+
+/** Vrai tant que le bandeau de consentement occupe le bas de l'écran. */
+export function useConsentementVisible(): boolean {
+  const [visible, setVisible] = useState(bandeauVisible);
+  useEffect(() => {
+    visibiliteListeners.add(setVisible);
+    return () => {
+      visibiliteListeners.delete(setVisible);
+    };
+  }, []);
+  return visible;
+}
+
 /** Bandeau Loi 25 : mesure d'audience Firebase Analytics seulement, rien d'autre. */
 const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
   const [valeur, setValeur] = useState<Valeur | null>(() => (typeof window === 'undefined' ? null : lire()));
