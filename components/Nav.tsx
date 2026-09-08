@@ -6,6 +6,7 @@ import { ViewState, Language } from '../types';
 import { useIntroTerminee } from '../lib/intro';
 import { Portail, useLenis } from './motion';
 import BasculePalette from './BasculePalette';
+import BasculeNuit from './BasculeNuit';
 import BasculeLangue from './BasculeLangue';
 import { useTextes } from '../lib/textes';
 import { allerAuRendezVous } from '../lib/rendezvous';
@@ -191,6 +192,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
 
       <div className="hidden md:flex items-center gap-4">
         <BasculePalette lang={lang} />
+        <BasculeNuit lang={lang} />
         {bascule}
         <button
           type="button"
@@ -307,6 +309,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
                 </button>
                 <div className="flex items-center justify-center gap-6 pt-2">
                   <BasculePalette lang={lang} />
+                  <BasculeNuit lang={lang} />
                   {bascule}
                 </div>
               </div>

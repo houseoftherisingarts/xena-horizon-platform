@@ -41,3 +41,42 @@ export function useSkin(): [Skin, (skin: Skin) => void] {
   const skin = useSyncExternalStore(abonner, lireSkin, () => 'ciel' as Skin);
   return [skin, poserSkin];
 }
+
+/**
+ * Le mode nuit : une deuxième dimension, indépendante de la palette. `data-nuit` sur <html> renverse
+ * papier et encre (index.css, blocs :root[data-nuit]). Sans choix enregistré (clé xena.nuit), le site
+ * suit le réglage du système (prefers-color-scheme). Le script d'index.html pose l'attribut avant le
+ * premier rendu.
+ */
+const CLE_NUIT = 'xena.nuit';
+const listenersNuit = new Set<() => void>();
+
+const lireNuitDocument = (): boolean => typeof document !== 'undefined' && document.documentElement.hasAttribute('data-nuit');
+
+let nuitCourante: boolean = lireNuitDocument();
+
+export const lireNuit = (): boolean => nuitCourante;
+
+export function poserNuit(nuit: boolean): void {
+  nuitCourante = nuit;
+  if (nuit) document.documentElement.setAttribute('data-nuit', '');
+  else document.documentElement.removeAttribute('data-nuit');
+  try {
+    window.localStorage.setItem(CLE_NUIT, nuit ? '1' : '0');
+  } catch {
+    /* navigation privée */
+  }
+  listenersNuit.forEach((fn) => fn());
+}
+
+const abonnerNuit = (fn: () => void) => {
+  listenersNuit.add(fn);
+  return () => {
+    listenersNuit.delete(fn);
+  };
+};
+
+export function useNuit(): [boolean, (nuit: boolean) => void] {
+  const nuit = useSyncExternalStore(abonnerNuit, lireNuit, () => false);
+  return [nuit, poserNuit];
+}

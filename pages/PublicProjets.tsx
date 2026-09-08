@@ -5,6 +5,7 @@ import { Atmosphere, Feuille, KenBurns, Parallax, Reveal, TexteRevele } from '..
 import { Language } from '../types';
 import { useTextes } from '../lib/textes';
 import Balado from '../components/Balado';
+import { useCadrage } from '../lib/cadrages';
 
 const [BALADO, LIVRE, MODELE] = PROJETS;
 const para = (liste: string[] | undefined, i: number): string => liste?.[i] ?? '';
@@ -82,6 +83,7 @@ const titreEtGlose = (titreEn: string): { nom: string; glose: string | null } =>
 
 const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
   const t = useTextes('projets', TEXTES, lang);
+  const cadreBalado = useCadrage('projets_balado');
 
   const titre = t.titre;
   const lede = t.lede;
@@ -103,12 +105,15 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
       <Feuille z={1} className="bg-papier px-gut py-feuille">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10 items-start">
           <Parallax speed={0.12} className="lg:col-span-5">
-            <img
-              src={balado.image}
-              alt={t.baladoTitre}
-              loading="lazy"
-              className="w-full aspect-square object-cover"
-            />
+            <div className="w-full aspect-square overflow-hidden">
+              <img
+                {...cadreBalado}
+                src={balado.image}
+                alt={t.baladoTitre}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </Parallax>
           <div className="lg:col-span-6 lg:col-start-7">
             <p className="kicker text-rose mb-4">{t.ecouter}</p>
@@ -191,11 +196,12 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
       </Feuille>
 
       {/* --- MODÈLE ET COMÉDIENNE : plein cadre --- */}
-      <Feuille z={3} className="relative bg-papier min-h-[100svh] overflow-hidden">
+      <Feuille z={3} className="encre relative bg-papier min-h-[100svh] overflow-hidden">
         <KenBurns
           src={modele.image}
           alt={t.modeleTitre}
           position="50% 22%"
+          cadre="projets_modele"
           className="absolute inset-0"
           loading="lazy"
         />

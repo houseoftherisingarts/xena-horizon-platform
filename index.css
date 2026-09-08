@@ -71,6 +71,63 @@
   --c-sur-bouton: 247 244 238;
 }
 
+/* Mode nuit (components/BasculeNuit.tsx, lib/skin.ts) : papier et encre se renversent, l'accent de la
+   palette reste. Les ombres et vignettes repassent au noir, sinon elles deviendraient des halos clairs. */
+:root[data-nuit] {
+  color-scheme: dark;
+  --c-papier: 17 17 20;
+  --c-papier-2: 26 26 31;
+  --c-encre: 240 240 242;
+  --c-encre-2: 222 222 226;
+  --c-gris: 164 172 180;
+  --c-gris-clair: 96 104 112;
+  --c-filet: 46 50 56;
+  --c-rose: 92 196 255;         /* accent en texte : le bleu ciel lisible sur le noir */
+  --c-rose-vif: 56 182 255;
+  --c-rose-clair: 8 118 181;    /* accent sur la feuille d'encre, devenue claire */
+  --c-trait: 56 182 255;
+  --c-bouton: 56 182 255;
+  --c-bouton-2: 92 196 255;
+  --c-sur-bouton: 17 17 20;
+  --ombre-feuille: 0 -30px 80px rgb(0 0 0 / 0.55);
+  --ombre-feuille-encre: 0 -30px 80px rgb(0 0 0 / 0.7);
+  --xh-lumiere: rgb(var(--c-rose-vif) / 0.16);
+  --xh-lumiere-secondaire: rgb(var(--c-rose-vif) / 0.08);
+  --xh-vignette: rgb(0 0 0 / 0.6);
+  --xh-ombre: rgb(0 0 0 / 0.45);
+}
+/* La feuille d'encre (classe .encre) reste sombre la nuit : elle se distingue du papier par un ton,
+   pas par un renversement, sinon elle deviendrait une île blanche au milieu du mode nuit. */
+:root[data-nuit] .encre {
+  --c-encre: 28 28 34;
+  --c-encre-2: 38 38 45;
+  --c-papier: 240 240 242;
+  --c-rose-clair: 92 196 255;
+  --ombre-feuille-encre: 0 -30px 80px rgb(0 0 0 / 0.7);
+}
+:root[data-nuit][data-skin='encre'] .encre {
+  --c-encre: 33 32 37;
+  --c-encre-2: 44 43 49;
+  --c-papier: 244 240 232;
+  --c-rose-clair: 242 120 159;
+}
+:root[data-nuit][data-skin='encre'] {
+  --c-papier: 22 21 24;
+  --c-papier-2: 31 30 34;
+  --c-encre: 244 240 232;
+  --c-encre-2: 228 224 216;
+  --c-gris: 172 165 154;
+  --c-gris-clair: 98 92 84;
+  --c-filet: 54 52 58;
+  --c-rose: 242 120 159;
+  --c-rose-vif: 224 32 110;
+  --c-rose-clair: 168 16 74;
+  --c-trait: 242 120 159;
+  --c-bouton: 244 240 232;
+  --c-bouton-2: 228 224 216;
+  --c-sur-bouton: 22 21 24;
+}
+
 /* Le sticky des feuilles casse avec overflow-x: hidden. Toujours clip. */
 html, body { overflow-x: clip; }
 
@@ -166,3 +223,5 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
 /* Mode d'édition des textes (components/Editeur.tsx) : chaque texte déclaré porte un liseré et se clique. */
 .mode-edition [data-tx] { outline: 1px dashed rgb(var(--c-rose) / 0.55); outline-offset: 4px; cursor: text; border-radius: 2px; }
 .mode-edition [data-tx]:hover, .mode-edition [data-tx-actif] { outline: 2px solid rgb(var(--c-rose)); background-color: rgb(var(--c-rose-vif) / 0.06); }
+.mode-edition [data-cadre] { outline: 2px dashed rgb(var(--c-rose) / 0.7); outline-offset: -2px; cursor: move; }
+.mode-edition [data-cadre]:hover, .mode-edition [data-cadre-actif] { outline: 3px solid rgb(var(--c-rose)); }

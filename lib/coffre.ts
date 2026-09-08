@@ -27,6 +27,16 @@ export interface ContenuCoffre {
   codePostal: string;
   telephone: string;
   courrielFacturation: string;
+  /** Entreprise et taxes (Stripe et les factures les demandent). */
+  nomLegal: string;
+  neq: string;
+  tps: string;
+  tvq: string;
+  /** Accès aux comptes existants, pour qu'Alex les configure sans les recréer. */
+  stripeCourriel: string;
+  stripeMotDePasse: string;
+  googleCourriel: string;
+  googleMotDePasse: string;
   notes: string;
 }
 

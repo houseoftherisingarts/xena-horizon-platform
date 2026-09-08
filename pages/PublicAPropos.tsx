@@ -5,6 +5,7 @@ import { Feuille, KenBurns, Parallax, Reveal, TexteRevele } from '../components/
 import { HomeStatsBlock, Language } from '../types';
 import { useTextes } from '../lib/textes';
 import { allerAuRendezVous } from '../lib/rendezvous';
+import { useCadrage } from '../lib/cadrages';
 
 const TEXTES = {
   FR: {
@@ -62,6 +63,8 @@ const TEXTES = {
 /** Gabarit provisoire retiré (chantier B) : voici la page À propos v2. */
 const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
   const t = useTextes('aPropos', TEXTES, lang);
+  const cadreScene = useCadrage('apropos_scene');
+  const cadreEvenement = useCadrage('apropos_evenement');
   const paragraphes = [t.p0, t.p1];
   const casquettes = [t.c0, t.c1, t.c2, t.c3, t.c4, t.c5, t.c6, t.c7, t.c8];
   const stats = BLOCS_ACCUEIL.find((b) => b.type === 'STATS') as HomeStatsBlock | undefined;
@@ -83,6 +86,7 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
             src="/images/laurie-apropos.jpg"
             alt="Laurie Belhumeur"
             position="50% 25%"
+            cadre="apropos_hero"
             className="absolute inset-0"
           />
           <div
@@ -150,11 +154,15 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
       <Feuille z={4} className="bg-papier-2 px-gut py-feuille">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10">
           <Parallax speed={0.1} className="lg:col-span-7">
-            <img src="/images/laurie-portrait-2.jpg" alt={t.surScene} loading="lazy" className="w-full aspect-[4/5] object-cover" />
+            <div className="w-full aspect-[4/5] overflow-hidden">
+              <img {...cadreScene} src="/images/laurie-portrait-2.jpg" alt={t.surScene} loading="lazy" className="h-full w-full object-cover" />
+            </div>
             <p className="text-petit text-gris mt-3">{t.surScene}</p>
           </Parallax>
           <Parallax speed={0.18} className="lg:col-span-4 lg:col-start-9 lg:mt-[10vh]">
-            <img src="/images/laurie-portrait-1.jpg" alt={t.enEvenement} loading="lazy" className="w-full aspect-[4/5] object-cover" />
+            <div className="w-full aspect-[4/5] overflow-hidden">
+              <img {...cadreEvenement} src="/images/laurie-portrait-1.jpg" alt={t.enEvenement} loading="lazy" className="h-full w-full object-cover" />
+            </div>
             <p className="text-petit text-gris mt-3">{t.enEvenement}</p>
           </Parallax>
         </div>

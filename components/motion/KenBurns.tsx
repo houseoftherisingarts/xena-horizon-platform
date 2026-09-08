@@ -6,6 +6,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useReducedMotion } from '@/lib/motion';
+import { useCadrage } from '@/lib/cadrages';
 
 export interface KenBurnsProps {
   src: string;
@@ -27,6 +28,8 @@ export interface KenBurnsProps {
   loading?: 'eager' | 'lazy';
   /** `high` pour la photo du hero, sert `fetchpriority` au navigateur. */
   fetchPriority?: 'high' | 'low' | 'auto';
+  /** Identifiant de cadrage : Laurie peut alors recadrer la photo avec le crayon (lib/cadrages.tsx). */
+  cadre?: string;
 }
 
 export const KenBurns: React.FC<KenBurnsProps> = ({
@@ -41,8 +44,13 @@ export const KenBurns: React.FC<KenBurnsProps> = ({
   position,
   loading = 'eager',
   fetchPriority,
+  cadre,
 }) => {
   const reduce = useReducedMotion();
+  const cadrage = useCadrage(cadre ?? '', position);
+  // Le zoom de Laurie passe par la propriété CSS `scale`, indépendante du `transform` que framer anime :
+  // les deux se multiplient, la boucle garde son amplitude autour du point focal.
+  const zoom = cadrage.cadre.z;
   const controls = useAnimation();
   const ref = useRef<HTMLImageElement>(null);
 
@@ -64,6 +72,10 @@ export const KenBurns: React.FC<KenBurnsProps> = ({
     return () => observateur.disconnect();
   }, [reduce, controls, to, duration]);
 
+  useEffect(() => {
+    ref.current?.style.setProperty('scale', zoom === 1 ? '' : String(zoom));
+  }, [zoom]);
+
   return (
     <motion.img
       ref={ref}
@@ -75,7 +87,9 @@ export const KenBurns: React.FC<KenBurnsProps> = ({
       loading={loading}
       fetchPriority={fetchPriority}
       className={`h-full w-full object-cover ${className}`}
-      style={position ? { objectPosition: position } : undefined}
+      data-cadre={cadre}
+      data-cadre-base={cadrage['data-cadre-base']}
+      style={{ objectPosition: cadrage.style.objectPosition, transformOrigin: cadrage.style.transformOrigin }}
       initial={reduce ? false : { scale: from }}
       animate={reduce ? undefined : controls}
     />

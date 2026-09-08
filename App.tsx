@@ -13,6 +13,7 @@ import AdminSidebar from './components/AdminSidebar';
 import Footer from './components/Footer';
 import Editeur from './components/Editeur';
 import { TextesProvider } from './lib/textes';
+import { CadragesProvider } from './lib/cadrages';
 import AuthModal from './components/AuthModal';
 import PublicHome from './pages/PublicHome';
 import PublicServices from './pages/PublicServices';
@@ -131,7 +132,7 @@ const App: React.FC = () => {
     return () => unsub();
   }, []);
 
-  const userIsAdmin = isAdmin(user);
+  const userIsAdmin = isAdmin(user) || import.meta.env.VITE_EDITEUR_DEMO === '1';
   const isAdminView = currentView.startsWith('ADMIN');
 
   // Guard: if user navigates to an admin view but isn't an admin, bounce to HOME and prompt sign-in
@@ -203,7 +204,7 @@ const App: React.FC = () => {
 
   if (isAdminView && userIsAdmin) {
     return (
-      <TextesProvider>
+      <TextesProvider><CadragesProvider>
         <div className="min-h-screen bg-papier text-encre font-sans flex">
           <AdminSidebar
             currentView={currentView}
@@ -228,12 +229,12 @@ const App: React.FC = () => {
             <Suspense fallback={<PageLoader />}>{renderView()}</Suspense>
           </main>
         </div>
-      </TextesProvider>
+      </CadragesProvider></TextesProvider>
     );
   }
 
   return (
-    <TextesProvider>
+    <TextesProvider><CadragesProvider>
     <DefilementDoux>
     <div className="min-h-screen bg-papier text-encre font-sans">
       <Nav
@@ -257,7 +258,7 @@ const App: React.FC = () => {
       />
     </div>
     </DefilementDoux>
-    </TextesProvider>
+    </CadragesProvider></TextesProvider>
   );
 };
 

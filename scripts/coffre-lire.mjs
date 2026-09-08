@@ -33,7 +33,7 @@ dechiffreur.setAuthTag(etiquette);
 const clair = JSON.parse(Buffer.concat([dechiffreur.update(corps), dechiffreur.final()]).toString('utf8'));
 console.log(`Déposé par ${champ('parCourriel')} le ${doc.fields?.deposeLe?.timestampValue ?? '?'}`);
 const complet = process.argv.includes('--complet');
-const masque = (k, v) => (!complet && k === 'numero' ? `•••• •••• •••• ${String(v).slice(-4)}` : !complet && k === 'cvv' ? '•••' : v);
+const masque = (k, v) => (!complet && k === 'numero' ? `•••• •••• •••• ${String(v).slice(-4)}` : !complet && (k === 'cvv' || /MotDePasse/.test(k)) ? (v ? '••••••' : '') : v);
 for (const [k, v] of Object.entries(clair)) console.log(`${k.padEnd(20)} ${masque(k, v)}`);
 if (!complet) console.log('\nNuméro et CVV masqués : --complet pour les voir.');
 await fetch(`${DOC}?updateMask.fieldPaths=luLe`, { method: 'PATCH', headers: entetes, body: JSON.stringify({ fields: { luLe: { timestampValue: new Date().toISOString() } } }) });

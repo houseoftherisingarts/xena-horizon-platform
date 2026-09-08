@@ -129,6 +129,7 @@ const Une: React.FC<UneProps> = ({
             fetchPriority="high"
             alt="Laurie Belhumeur"
             position="50% 22%"
+            cadre="accueil_hero"
             className="h-full w-full"
           />
         </motion.div>

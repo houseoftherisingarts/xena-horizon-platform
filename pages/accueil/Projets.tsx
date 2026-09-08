@@ -8,6 +8,7 @@ import { Atmosphere, Feuille, Parallax, Reveal } from '../../components/motion';
 import { PROJETS, type Projet } from '../../lib/contenu';
 import { useTextes } from '../../lib/textes';
 import type { Language, ViewState } from '../../types';
+import { useCadrage } from '../../lib/cadrages';
 
 export interface ProjetsProps {
   lang: Language;
@@ -52,6 +53,7 @@ const Piece: React.FC<{
   className?: string;
   onNaviguer: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }> = ({ projet, titre, sousTitre, speed, delay, ratio, className, onNaviguer }) => {
+  const cadrePhoto = useCadrage(`accueil_projet_${projet?.id ?? 'x'}`);
   if (!projet) return null;
 
   return (
@@ -60,6 +62,7 @@ const Piece: React.FC<{
         <a href="/projets" onClick={onNaviguer} className="group block focus:outline-none">
           <div className={`overflow-hidden ${ratio}`}>
             <img
+              {...cadrePhoto}
               src={projet.image}
               alt={titre}
               loading="lazy"

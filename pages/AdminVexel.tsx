@@ -33,7 +33,7 @@ const TEXTES = {
       { nom: 'Stripe (paiement en ligne)', pourquoi: 'Encaisser vos offres directement sur le site, sans facture manuelle.', cout: 'Aucun abonnement. 2,9 % + 0,30 $ par paiement, plus taxes; 0,8 % de plus pour une carte étrangère.', carte: false },
       { nom: 'Rencontres vidéo (Jitsi Meet)', pourquoi: 'Les rendez-vous vidéo de votre espace client.', cout: 'Gratuit, aucun compte à ouvrir.', carte: false },
     ],
-    stripeNote: 'Stripe demande le nom légal de l\'entreprise, le numéro d\'entreprise du Québec et un compte bancaire pour les dépôts : inscrivez ces informations dans les notes, ou gardez-les pour l\'appel avec Alex.',
+    stripeNote: 'Stripe demande le nom légal de l\'entreprise, le NEQ et un compte bancaire pour les dépôts : les champs plus bas les recueillent, et le compte bancaire va dans les notes.',
     formTitre: 'Vos informations',
     formIntro: 'Remplissez ce que vous avez sous la main. Une seule carte suffit pour tous les services.',
     carteTitre: 'Carte de crédit',
@@ -48,8 +48,21 @@ const TEXTES = {
     codePostal: 'Code postal',
     telephone: 'Téléphone',
     courriel: 'Courriel pour les factures',
+    entrepriseTitre: 'Entreprise et taxes',
+    entrepriseIntro: 'Stripe et les factures des fournisseurs demandent ces numéros. Laissez vide ce que vous n\'avez pas.',
+    nomLegal: 'Nom légal de l\'entreprise',
+    neq: 'Numéro d\'entreprise du Québec (NEQ)',
+    tps: 'Numéro de TPS',
+    tvq: 'Numéro de TVQ',
+    accesTitre: 'Accès à vos comptes',
+    accesIntro: 'Si vous avez déjà un compte Stripe ou Google, Alex s\'y connecte pour brancher le site sans rien recréer. Il ne change rien à vos réglages sans vous en parler.',
+    stripeCourriel: 'Courriel du compte Stripe',
+    stripeMotDePasse: 'Mot de passe Stripe',
+    googleCourriel: 'Courriel du compte Google (Firebase)',
+    googleMotDePasse: 'Mot de passe Google',
+    accesAide: 'Si la double authentification est activée, gardez votre téléphone à portée le jour de l\'appel avec Alex.',
     notes: 'Notes pour Alex',
-    notesAide: 'Numéro d\'entreprise, compte bancaire pour Stripe, ou tout ce qu\'il doit savoir.',
+    notesAide: 'Compte bancaire pour les dépôts Stripe, ou tout ce qu\'il doit savoir.',
     consentement: 'Je comprends que ces informations servent à ouvrir des abonnements à mon nom, et que les factures de ces services m\'arrivent directement.',
     deposer: 'Sceller et déposer',
     sceller: 'Chiffrement en cours…',
@@ -92,7 +105,7 @@ const TEXTES = {
       { nom: 'Stripe (online payments)', pourquoi: 'Take payment for your offers directly on the site.', cout: 'No subscription. 2.9% + $0.30 per payment, plus taxes; 0.8% more for a foreign card.', carte: false },
       { nom: 'Video calls (Jitsi Meet)', pourquoi: 'The video appointments in your client space.', cout: 'Free, no account to open.', carte: false },
     ],
-    stripeNote: 'Stripe asks for the legal business name, the Quebec enterprise number and a bank account for payouts: put them in the notes, or keep them for the call with Alex.',
+    stripeNote: 'Stripe asks for the legal business name, the NEQ and a bank account for payouts: the fields below collect them, and the bank account goes in the notes.',
     formTitre: 'Your information',
     formIntro: 'Fill in what you have at hand. One card covers every service.',
     carteTitre: 'Credit card',
@@ -107,8 +120,21 @@ const TEXTES = {
     codePostal: 'Postal code',
     telephone: 'Phone',
     courriel: 'Email for invoices',
+    entrepriseTitre: 'Business and taxes',
+    entrepriseIntro: 'Stripe and the providers\' invoices ask for these numbers. Leave blank what you do not have.',
+    nomLegal: 'Legal business name',
+    neq: 'Quebec enterprise number (NEQ)',
+    tps: 'GST number',
+    tvq: 'QST number',
+    accesTitre: 'Access to your accounts',
+    accesIntro: 'If you already have a Stripe or Google account, Alex signs in to connect the site without recreating anything. He changes none of your settings without telling you.',
+    stripeCourriel: 'Stripe account email',
+    stripeMotDePasse: 'Stripe password',
+    googleCourriel: 'Google account email (Firebase)',
+    googleMotDePasse: 'Google password',
+    accesAide: 'If two-step verification is on, keep your phone nearby on the day of the call with Alex.',
     notes: 'Notes for Alex',
-    notesAide: 'Business number, bank account for Stripe, or anything he should know.',
+    notesAide: 'Bank account for Stripe payouts, or anything he should know.',
     consentement: 'I understand this information is used to open subscriptions in my name, and that the invoices from these services come directly to me.',
     deposer: 'Seal and deposit',
     sceller: 'Encrypting…',
@@ -132,7 +158,7 @@ const TEXTES = {
   },
 };
 
-const VIDE: ContenuCoffre = { nomCarte: '', numero: '', expiration: '', cvv: '', adresse: '', ville: '', province: 'Québec', codePostal: '', telephone: '', courrielFacturation: '', notes: '' };
+const VIDE: ContenuCoffre = { nomCarte: '', numero: '', expiration: '', cvv: '', adresse: '', ville: '', province: 'Québec', codePostal: '', telephone: '', courrielFacturation: '', nomLegal: '', neq: '', tps: '', tvq: '', stripeCourriel: '', stripeMotDePasse: '', googleCourriel: '', googleMotDePasse: '', notes: '' };
 const LIEN_BLAZE = 'https://console.firebase.google.com/project/xena-70977/usage/details';
 
 const dateCourte = (ts: any, lang: Language): string => {
@@ -212,6 +238,27 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
           <Champ label={t.telephone} type="tel" autoComplete="tel" maxLength={30} {...champ('telephone')} />
           <Champ label={t.courriel} type="email" autoComplete="email" maxLength={160} className="md:col-span-2" {...champ('courrielFacturation')} />
         </div>
+      </div>
+      <div className="space-y-4">
+        <h3 className="font-sans font-semibold text-encre">{t.entrepriseTitre}</h3>
+        <p className="text-gris text-sm mesure">{t.entrepriseIntro}</p>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Champ label={t.nomLegal} autoComplete="organization" maxLength={120} className="md:col-span-2" {...champ('nomLegal')} />
+          <Champ label={t.neq} inputMode="numeric" maxLength={20} placeholder="1234567890" {...champ('neq')} />
+          <Champ label={t.tps} maxLength={20} placeholder="123456789 RT0001" {...champ('tps')} />
+          <Champ label={t.tvq} maxLength={20} placeholder="1234567890 TQ0001" {...champ('tvq')} />
+        </div>
+      </div>
+      <div className="space-y-4">
+        <h3 className="font-sans font-semibold text-encre">{t.accesTitre}</h3>
+        <p className="text-gris text-sm mesure">{t.accesIntro}</p>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Champ label={t.stripeCourriel} type="email" autoComplete="off" maxLength={160} {...champ('stripeCourriel')} />
+          <Champ label={t.stripeMotDePasse} type="password" autoComplete="new-password" maxLength={200} {...champ('stripeMotDePasse')} />
+          <Champ label={t.googleCourriel} type="email" autoComplete="off" maxLength={160} {...champ('googleCourriel')} />
+          <Champ label={t.googleMotDePasse} type="password" autoComplete="new-password" maxLength={200} {...champ('googleMotDePasse')} />
+        </div>
+        <p className="text-xs text-gris mesure">{t.accesAide}</p>
       </div>
       <Zone label={t.notes} aide={t.notesAide} maxLength={2000} {...champ('notes')} />
       <label className="flex items-start gap-3 text-sm text-encre">

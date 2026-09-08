@@ -117,7 +117,7 @@ export const CadragesProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (Object.keys(brouillon).length === 0) return;
     const ref = doc(db, CHEMIN_CADRAGES);
     const patch: Record<string, unknown> = { _maj: serverTimestamp() };
-    for (const [id, c] of Object.entries(brouillon)) {
+    for (const [id, c] of Object.entries(brouillon) as [string, Cadre | null][]) {
       patch[id] = c === null ? deleteField() : { x: Math.round(c.x * 10) / 10, y: Math.round(c.y * 10) / 10, z: Math.round(c.z * 100) / 100 };
     }
     await setDoc(ref, { _maj: serverTimestamp() }, { merge: true });
@@ -144,6 +144,8 @@ export interface CadrageRendu {
   style: React.CSSProperties;
   /** À poser sur le <img> : le repère du crayon. */
   'data-cadre': string;
+  /** Le cadrage que le code donne (« x y »), pour que le crayon sache où revenir. */
+  'data-cadre-base': string;
 }
 
 /**
@@ -162,12 +164,13 @@ export function useCadrage(id: string, defaut?: string): CadrageRendu {
     () => ({
       cadre,
       'data-cadre': id,
+      'data-cadre-base': `${base.x} ${base.y}`,
       style: {
         objectPosition: `${cadre.x}% ${cadre.y}%`,
         transformOrigin: `${cadre.x}% ${cadre.y}%`,
         ...(cadre.z !== 1 ? { scale: String(cadre.z) } : {}),
       },
     }),
-    [id, cadre]
+    [id, cadre, base]
   );
 }

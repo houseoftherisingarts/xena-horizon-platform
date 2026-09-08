@@ -11,6 +11,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Check, PencilLine, RotateCcw, X } from 'lucide-react';
 import { useTextesCtx } from '../lib/textes';
+import { useCadragesCtx, cadreDepuisPosition, ZOOM_MAX, type Cadre } from '../lib/cadrages';
 import type { Language } from '../types';
 
 const norm = (s: string): string => s.replace(/\s+/g, ' ').trim();
@@ -22,6 +23,13 @@ interface Cible {
   scope: string;
   cle: string;
   el: HTMLElement;
+}
+
+interface CiblePhoto {
+  id: string;
+  el: HTMLImageElement;
+  /** Cadrage que le code donne à cette photo, lu sur l'élément à l'ouverture. */
+  base: Cadre;
 }
 
 const t = {
@@ -40,7 +48,11 @@ const t = {
     aide: 'Ctrl + Entrée pour appliquer',
     enregistre: 'Textes enregistrés.',
     erreur: "L'enregistrement n'a pas fonctionné. Réessaie.",
-    indice: 'Clique sur un texte pour le modifier.',
+    indice: 'Clique sur un texte pour le modifier, ou sur une photo pour la recadrer.',
+    photo: 'Recadrer la photo',
+    photoAide: 'Glisse le point sur ce qui doit rester au centre, puis règle le zoom.',
+    zoom: 'Zoom',
+    photoBase: 'Photo de base',
   },
   EN: {
     ouvrir: 'Edit the texts on this page',
@@ -57,14 +69,21 @@ const t = {
     aide: 'Ctrl + Enter to apply',
     enregistre: 'Texts saved.',
     erreur: 'Saving failed. Try again.',
-    indice: 'Click on a text to edit it.',
+    indice: 'Click on a text to edit it, or on a photo to reframe it.',
+    photo: 'Reframe the photo',
+    photoAide: 'Drag the dot onto what should stay centred, then set the zoom.',
+    zoom: 'Zoom',
+    photoBase: 'Base photo',
   },
 };
 
 const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
   const ctx = useTextesCtx();
+  const cadrages = useCadragesCtx();
   const L = t[lang];
   const [cible, setCible] = useState<Cible | null>(null);
+  const [photo, setPhoto] = useState<CiblePhoto | null>(null);
+  const apercuRef = useRef<HTMLDivElement>(null);
   const [langEdit, setLangEdit] = useState<Language>(lang);
   const [valeur, setValeur] = useState('');
   const [busy, setBusy] = useState(false);
@@ -164,21 +183,44 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
     const onClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target || target.closest('[data-editeur]')) return;
+      // La photo peut vivre sous un voile (dégradé, masque, filtre de l'allumage) : on cherche aussi
+      // sous le pointeur, pas seulement dans la chaîne des ancêtres.
+      const img =
+        target.closest<HTMLImageElement>('img[data-cadre]') ??
+        (document.elementsFromPoint(e.clientX, e.clientY).find((n) => n.matches('img[data-cadre]')) as HTMLImageElement | undefined) ??
+        null;
+      if (img && cadrages) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.querySelectorAll('[data-tx-actif],[data-cadre-actif]').forEach((d) => {
+          d.removeAttribute('data-tx-actif');
+          d.removeAttribute('data-cadre-actif');
+        });
+        img.setAttribute('data-cadre-actif', '');
+        setCible(null);
+        setPhoto({ id: img.getAttribute('data-cadre') ?? '', el: img, base: cadreDepuisPosition((img.dataset.cadreBase ?? '50 50').split(' ').map((n) => `${n}%`).join(' ')) });
+        setRect(img.getBoundingClientRect());
+        return;
+      }
       const el = target.closest<HTMLElement>('[data-tx]');
       if (!el) return;
       e.preventDefault();
       e.stopPropagation();
       const [scope, cle] = (el.getAttribute('data-tx') ?? '|').split('|');
       if (!scope || !cle) return;
-      document.querySelectorAll('[data-tx-actif]').forEach((d) => d.removeAttribute('data-tx-actif'));
+      document.querySelectorAll('[data-tx-actif],[data-cadre-actif]').forEach((d) => {
+        d.removeAttribute('data-tx-actif');
+        d.removeAttribute('data-cadre-actif');
+      });
       el.setAttribute('data-tx-actif', '');
+      setPhoto(null);
       setCible({ scope, cle, el });
       setLangEdit(lang);
       setRect(el.getBoundingClientRect());
     };
     document.addEventListener('click', onClick, true);
     return () => document.removeEventListener('click', onClick, true);
-  }, [edition, lang]);
+  }, [edition, lang, cadrages]);
 
   // La valeur affichée dans la zone suit la cible et la langue en cours d'édition.
   useEffect(() => {
@@ -197,29 +239,34 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
 
   // La fenêtre suit son élément au défilement et au redimensionnement.
   useEffect(() => {
-    if (!cible) return;
-    const suivre = () => setRect(cible.el.getBoundingClientRect());
+    const el = cible?.el ?? photo?.el;
+    if (!el) return;
+    const suivre = () => setRect(el.getBoundingClientRect());
     window.addEventListener('scroll', suivre, { passive: true });
     window.addEventListener('resize', suivre);
     return () => {
       window.removeEventListener('scroll', suivre);
       window.removeEventListener('resize', suivre);
     };
-  }, [cible]);
+  }, [cible, photo]);
 
   const fermerFenetre = useCallback(() => {
-    document.querySelectorAll('[data-tx-actif]').forEach((d) => d.removeAttribute('data-tx-actif'));
+    document.querySelectorAll('[data-tx-actif],[data-cadre-actif]').forEach((d) => {
+      d.removeAttribute('data-tx-actif');
+      d.removeAttribute('data-cadre-actif');
+    });
     setCible(null);
+    setPhoto(null);
   }, []);
 
   useEffect(() => {
-    if (!cible) return;
+    if (!cible && !photo) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') fermerFenetre();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [cible, fermerFenetre]);
+  }, [cible, photo, fermerFenetre]);
 
   if (!ctx) return null;
 
@@ -241,6 +288,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
     setAvis(null);
     try {
       await ctx.sauvegarder();
+      await cadrages?.sauvegarder();
       fermerFenetre();
       ctx.basculerEdition(false);
       setAvis(L.enregistre);
@@ -255,9 +303,29 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
 
   const annuler = () => {
     ctx.abandonner();
+    cadrages?.abandonner();
     fermerFenetre();
     ctx.basculerEdition(false);
   };
+
+  const nbModifs = ctx.nbModifs + (cadrages?.nbModifs ?? 0);
+
+  // Cadrage de la photo ouverte : brouillon, surcharge enregistrée, sinon ce que le code lui donne.
+  const cadrePhoto: Cadre = photo ? (cadrages?.effectif(photo.id) ?? photo.base) : { x: 50, y: 50, z: 1 };
+  const poserCadre = (partiel: Partial<Cadre>) => {
+    if (!photo || !cadrages) return;
+    cadrages.brouillonner(photo.id, { ...cadrePhoto, ...partiel });
+  };
+  const pointerVers = (e: React.PointerEvent) => {
+    const boite = apercuRef.current?.getBoundingClientRect();
+    if (!boite) return;
+    const x = Math.min(100, Math.max(0, ((e.clientX - boite.left) / boite.width) * 100));
+    const y = Math.min(100, Math.max(0, ((e.clientY - boite.top) / boite.height) * 100));
+    poserCadre({ x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 });
+  };
+  const peutRemettrePhoto = !!photo && (!!cadrages?.surcharges[photo.id] || (cadrages?.brouillon[photo.id] ?? null) !== null);
+  // L'aperçu garde les proportions de la photo telle qu'elle s'affiche dans la page.
+  const ratioPhoto = photo ? Math.max(0.4, Math.min(2.4, photo.el.clientWidth / Math.max(1, photo.el.clientHeight))) : 1;
 
   const surcharge = cible ? ctx.surcharges[cible.scope]?.[cible.cle] : undefined;
   const brouillonCle = cible ? ctx.brouillon[cible.scope]?.[cible.cle] : undefined;
@@ -265,11 +333,17 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
 
   // Position de la fenêtre : sous l'élément, au-dessus s'il manque de place, jamais hors de l'écran.
   const largeur = Math.min(440, (typeof window !== 'undefined' ? window.innerWidth : 440) - 24);
+  // L'aperçu garde les proportions de la photo sans jamais dépasser la moitié de l'écran en hauteur.
+  const hauteurMax = typeof window !== 'undefined' ? Math.max(160, Math.min(window.innerHeight * 0.46, 420)) : 300;
+  const largeurApercu = Math.min(largeur - 32, ratioPhoto * hauteurMax);
+  const hauteurApercu = largeurApercu / ratioPhoto;
   let top = 0;
   let left = 12;
   if (rect && typeof window !== 'undefined') {
-    const h = 300;
-    top = rect.bottom + 10 + h > window.innerHeight ? Math.max(12, rect.top - 10 - h) : rect.bottom + 10;
+    const h = photo ? hauteurApercu + 210 : 300;
+    // Jamais sous la barre d'édition (elle vit sous la barre de navigation, en haut à droite).
+    const plancher = photo ? 150 : 12;
+    top = rect.bottom + 10 + h > window.innerHeight ? Math.max(plancher, rect.top - 10 - h) : Math.max(plancher, rect.bottom + 10);
     left = Math.min(Math.max(12, rect.left), window.innerWidth - largeur - 12);
   }
 
@@ -286,11 +360,11 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
               <PencilLine className="w-4 h-4 text-rose" aria-hidden="true" />
               {L.mode}
             </span>
-            <span className="kicker text-gris px-2">{ctx.nbModifs ? L.n(ctx.nbModifs) : L.aucune}</span>
+            <span className="kicker text-gris px-2">{nbModifs ? L.n(nbModifs) : L.aucune}</span>
             <button
               type="button"
               onClick={enregistrer}
-              disabled={busy || ctx.nbModifs === 0}
+              disabled={busy || nbModifs === 0}
               className="min-h-[40px] px-4 rounded-pilule bg-bouton text-sur-bouton text-sm font-medium hover:bg-bouton-2 disabled:opacity-40 flex items-center gap-2"
             >
               <Check className="w-4 h-4" aria-hidden="true" />
@@ -324,13 +398,91 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
         )}
       </div>
 
-      {edition && !cible && (
+      {edition && !cible && !photo && (
         <p
           role="status"
           className="fixed z-[100] left-1/2 -translate-x-1/2 bottom-6 rounded-pilule bg-bouton text-sur-bouton text-petit px-4 py-2 shadow-panneau pointer-events-none"
         >
           {L.indice}
         </p>
+      )}
+
+      {/* La fenêtre de recadrage d'une photo */}
+      {edition && photo && (
+        <div
+          role="dialog"
+          aria-label={L.photo}
+          className="fixed z-[101] rounded-champ border border-filet bg-papier shadow-panneau p-4 flex flex-col gap-3"
+          style={{ top, left, width: largeur }}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <span className="kicker text-encre">{L.photo}</span>
+            <button
+              type="button"
+              onClick={fermerFenetre}
+              aria-label={L.fermerFenetre}
+              className="w-9 h-9 rounded-pilule text-gris hover:text-encre flex items-center justify-center"
+            >
+              <X className="w-4 h-4" aria-hidden="true" />
+            </button>
+          </div>
+          <p className="text-petit text-gris">{L.photoAide}</p>
+          <div
+            ref={apercuRef}
+            className="relative mx-auto overflow-hidden rounded-champ bg-papier-2 touch-none cursor-crosshair select-none"
+            style={{ width: largeurApercu, height: hauteurApercu }}
+            onPointerDown={(e) => {
+              (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+              pointerVers(e);
+            }}
+            onPointerMove={(e) => {
+              if (e.buttons & 1) pointerVers(e);
+            }}
+          >
+            <img
+              src={photo.el.currentSrc || photo.el.src}
+              alt=""
+              draggable={false}
+              className="h-full w-full object-cover"
+              style={{
+                objectPosition: `${cadrePhoto.x}% ${cadrePhoto.y}%`,
+                transformOrigin: `${cadrePhoto.x}% ${cadrePhoto.y}%`,
+                scale: String(cadrePhoto.z),
+              }}
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-pilule border-2 border-papier bg-rose-vif shadow-panneau"
+              style={{ left: `${cadrePhoto.x}%`, top: `${cadrePhoto.y}%` }}
+            />
+          </div>
+          <label className="flex items-center gap-3 text-petit text-encre">
+            <span className="kicker text-gris w-12">{L.zoom}</span>
+            <input
+              type="range"
+              min={1}
+              max={ZOOM_MAX}
+              step={0.01}
+              value={cadrePhoto.z}
+              onChange={(e) => poserCadre({ z: Number(e.target.value) })}
+              className="flex-1 accent-[rgb(var(--c-rose))]"
+            />
+            <span className="w-12 text-right tabular-nums">{cadrePhoto.z.toFixed(2)}×</span>
+          </label>
+          {peutRemettrePhoto && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!photo || !cadrages) return;
+                cadrages.brouillonner(photo.id, null);
+              }}
+              className="self-start min-h-[40px] px-3 rounded-pilule border border-filet text-encre text-sm hover:border-encre flex items-center gap-2"
+            >
+              <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+              {L.photoBase}
+            </button>
+          )}
+        </div>
       )}
 
       {/* La fenêtre de modification */}

@@ -221,6 +221,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           src="/images/laurie-portrait-2.jpg"
           alt={t.photoAlt}
           position="45% 25%"
+          cadre="services_bande"
           className="absolute inset-0"
           loading="lazy"
         />

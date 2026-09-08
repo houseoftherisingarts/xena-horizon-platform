@@ -11,6 +11,7 @@ import { useTextes } from '../../lib/textes';
 import { allerAuRendezVous } from '../../lib/rendezvous';
 import { ALT_PHOTO_CONTACT, LEGENDE_SCENE } from './textes';
 import type { Language } from '../../types';
+import { useCadrage } from '../../lib/cadrages';
 
 export interface ContactProps {
   lang: Language;
@@ -32,6 +33,7 @@ const TEXTES = {
 };
 
 const Contact: React.FC<ContactProps> = ({ lang }) => {
+  const cadrePhoto = useCadrage('accueil_contact');
   const L = useTextes('contact', TEXTES, lang);
 
   return (
@@ -74,13 +76,16 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
         </div>
 
         <Reveal as="div" delay={0.1} className="col-span-12 sm:col-span-5 sm:col-start-8">
-          <img
-            src="/images/laurie-portrait-2.jpg"
-            alt={ALT_PHOTO_CONTACT[lang]}
-            loading="lazy"
-            decoding="async"
-            className="aspect-[4/5] w-full object-cover"
-          />
+          <div className="aspect-[4/5] w-full overflow-hidden">
+            <img
+              {...cadrePhoto}
+              src="/images/laurie-portrait-2.jpg"
+              alt={ALT_PHOTO_CONTACT[lang]}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover"
+            />
+          </div>
           <p className="mt-3 text-petit text-gris">{LEGENDE_SCENE[lang]}</p>
         </Reveal>
       </div>

@@ -9,6 +9,7 @@ import { Feuille, Parallax, Reveal, TexteRevele } from '../../components/motion'
 import { ALT_PHOTO_APROPOS, A_PROPOS_ACCUEIL } from './textes';
 import { useTextes } from '../../lib/textes';
 import type { Language, ViewState } from '../../types';
+import { useCadrage } from '../../lib/cadrages';
 
 export interface AProposProps {
   lang: Language;
@@ -85,6 +86,7 @@ const APropos: React.FC<AProposProps> = ({
   const t = useTextes('accueilAPropos', TEXTES, lang);
   const paragraphes = [t.p0, t.p1];
 
+  const cadrePhoto = useCadrage('accueil_apropos');
   const chiffre1 = Number.parseInt(stat1Value, 10) || 15;
   const unite1 = stat1Value.replace(/^\d+\s*/, '');
   const kicker1 = `${unite1} ${stat1Label.replace(/^D'/, "d'").replace(/^Of /, 'of ')}`.trim();
@@ -94,13 +96,16 @@ const APropos: React.FC<AProposProps> = ({
       <div data-tx-scope="accueilAPropos" className="grid grid-cols-12 gap-x-col gap-y-10 px-gut py-feuille">
         <div className="col-span-12 sm:col-span-5">
           <Parallax speed={0.14}>
-            <img
-              src="/images/laurie-apropos.jpg"
-              alt={ALT_PHOTO_APROPOS[lang]}
-              loading="lazy"
-              decoding="async"
-              className="aspect-[2/3] w-full object-cover"
-            />
+            <div className="aspect-[2/3] w-full overflow-hidden">
+              <img
+                {...cadrePhoto}
+                src="/images/laurie-apropos.jpg"
+                alt={ALT_PHOTO_APROPOS[lang]}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </Parallax>
 
           <div className="mt-10 flex flex-col gap-8">
