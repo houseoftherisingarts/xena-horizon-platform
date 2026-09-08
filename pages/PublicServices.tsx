@@ -139,7 +139,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       {/* --- OUVERTURE : manchette + prix de départ --- */}
       <section className="px-gut pt-[calc(var(--nav)+3.5rem)] pb-bloc grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10">
         <div className="lg:col-span-7">
-          <TexteRevele texte={titre} as="h1" par="mot" className="font-serif text-h1" />
+          <TexteRevele key={lang} texte={titre} as="h1" par="mot" className="font-serif text-h1" />
           <Reveal delay={0.3} as="p" className="text-lede text-gris mesure mt-6">
             {t.subheadline}
           </Reveal>
