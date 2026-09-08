@@ -94,5 +94,4 @@ export const RevealStagger: React.FC<RevealStaggerProps> = ({ children, stagger 
   );
 };
 
-export { Fragment as _Fragment };
 export default Reveal;
