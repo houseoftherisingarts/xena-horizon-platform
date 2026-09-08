@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { A_PROPOS, BLOCS_ACCUEIL, BLOCS_ACCUEIL_EN, CREDITS } from '../lib/contenu';
 import { Feuille, KenBurns, KickerFocus, MasqueRadial, Parallax, Reveal, TexteRevele } from '../components/motion';
-import { Language } from '../types';
+import { HomeStatsBlock, Language } from '../types';
 
 /** Gabarit provisoire retiré (chantier B) : voici la page À propos v2. */
 const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
