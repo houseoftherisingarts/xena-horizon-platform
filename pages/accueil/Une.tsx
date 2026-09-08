@@ -91,7 +91,7 @@ const Une: React.FC<UneProps> = ({
         <motion.div className="h-full w-full" style={filtre ? { filter: filtre, willChange: 'filter' } : undefined}>
           <KenBurns src={imageUrl} alt="Laurie Belhumeur" position="50% 22%" className="h-full w-full" />
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 };
