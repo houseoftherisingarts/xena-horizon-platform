@@ -141,43 +141,30 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         </button>
       </div>
 
-      {/* Onglets soulignés, jamais en pilules */}
-      <div className="relative mb-8">
-        <div
-          ref={scrollRef}
-          className="flex gap-6 overflow-x-auto snap-x snap-proximity [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          role="tablist"
-        >
-          {onglets.map((o) => (
-            <button
-              key={o.id}
-              ref={onglet === o.id ? activeTabRef : undefined}
-              type="button"
-              role="tab"
-              aria-selected={onglet === o.id}
-              onClick={() => setOnglet(o.id)}
-              className={`relative min-h-[44px] pb-3 kicker whitespace-nowrap shrink-0 snap-start transition-colors ${
-                onglet === o.id ? 'text-encre' : 'text-gris hover:text-encre'
-              }`}
-            >
-              <span className="sm:hidden">{o.labelCourt}</span>
-              <span className="hidden sm:inline">{o.label}</span>
-              {onglet === o.id && (
-                <motion.span
-                  layoutId="espace-onglet"
-                  className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose"
-                  transition={{ duration: 0.2, ease: EASE_MAISON }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
-        {ongletsDebordent && (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-papier to-transparent"
-          />
-        )}
+      {/* Onglets soulignés, jamais en pilules. Sous 640px : deux rangées, aucun défilement horizontal. */}
+      <div className="flex flex-wrap sm:flex-nowrap gap-x-6 gap-y-3 mb-8" role="tablist">
+        {onglets.map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            role="tab"
+            aria-selected={onglet === o.id}
+            onClick={() => setOnglet(o.id)}
+            className={`relative min-h-[44px] pb-3 kicker whitespace-nowrap transition-colors ${
+              onglet === o.id ? 'text-encre' : 'text-gris hover:text-encre'
+            }`}
+          >
+            <span className="sm:hidden">{o.labelCourt}</span>
+            <span className="hidden sm:inline">{o.label}</span>
+            {onglet === o.id && (
+              <motion.span
+                layoutId="espace-onglet"
+                className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose"
+                transition={{ duration: 0.2, ease: EASE_MAISON }}
+              />
+            )}
+          </button>
+        ))}
       </div>
 
       {/* Contenu de l'onglet, en fondu croisé de 200 ms plutôt qu'un remplacement sec. */}
