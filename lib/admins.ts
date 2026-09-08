@@ -10,7 +10,7 @@ export const ADMIN_UIDS = new Set<string>([
 
 export const ADMIN_EMAILS = new Set<string>([
   'houseoftherisingarts@gmail.com',
-  // Laurie : son accès admin s'ajoute ici et dans firestore.rules + storage.rules quand Alex donne ses informations.
+  'laurie.belhumeur@gmail.com', // Laurie : compte Google, courriel vérifié; même liste dans firestore.rules, storage.rules et functions/src/infolettre/send.ts
 ]);
 
 type Identite = Pick<User, 'uid' | 'email' | 'emailVerified'> | string | null | undefined;

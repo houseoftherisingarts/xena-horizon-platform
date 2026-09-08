@@ -270,6 +270,11 @@ async function main() {
   await verifie('lead avec un faux courriel (refus attendu)', assertFails(addDoc(collection(dbAnon, 'leads'), { name: 'X', email: 'pas-un-courriel', message: 'bonjour', source: 'public-home-contact', read: false, archived: false, createdAt: serverTimestamp() })));
   await verifie('abonné avec un faux courriel (refus attendu)', assertFails(addDoc(collection(dbAnon, 'subscribers'), { email: 'pas-un-courriel', status: 'active', createdAt: serverTimestamp() })));
   await verifie('abonné avec un vrai courriel (ok)', assertSucceeds(addDoc(collection(dbAnon, 'subscribers'), { email: 'abonne@example.com', status: 'active', source: 'site', lang: 'fr', createdAt: serverTimestamp() })));
+  // Admin par courriel vérifié (compte Google de Laurie) : entre; le même courriel non vérifié : refusé.
+  const dbLaurie = testEnv.authenticatedContext('laurie-test', { email: 'laurie.belhumeur@gmail.com', email_verified: true }).firestore();
+  const dbLaurieNonVerifiee = testEnv.authenticatedContext('laurie-test-2', { email: 'laurie.belhumeur@gmail.com', email_verified: false }).firestore();
+  await verifie('Laurie (Google, courriel vérifié) lit le coffre (ok)', assertSucceeds(getDoc(doc(dbLaurie, 'coffre', 'laurie'))));
+  await verifie('même courriel non vérifié refusé au coffre (refus attendu)', assertFails(getDoc(doc(dbLaurieNonVerifiee, 'coffre', 'laurie'))));
 
   await testEnv.cleanup();
 
