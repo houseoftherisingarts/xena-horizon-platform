@@ -358,6 +358,7 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
           <p className="text-corps text-encre mesure">{t.pourquoi1}</p>
           <p className="text-corps text-encre mesure">{t.pourquoi2}</p>
         </div>
+        <p className="text-corps text-encre mesure mt-6 pt-6 border-t border-filet">{t.pourquoi3}</p>
       </Panneau>
 
       <Panneau titre={t.coutsTitre}>
