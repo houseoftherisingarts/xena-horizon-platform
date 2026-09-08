@@ -4,12 +4,52 @@ import { useCollection } from '../lib/firestore';
 import { PROFILS_REELS, SERVICES_PAGE, SERVICES_REELS, SIGNATURE, ServiceReel } from '../lib/contenu';
 import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
 import { Feuille, KenBurns, Reveal, TexteRevele, useLenis } from '../components/motion';
+import { useTextes } from '../lib/textes';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
 
 interface PublicServicesProps {
   lang: Language;
   onChangeView?: (view: ViewState) => void;
 }
+
+const TEXTES = {
+  FR: {
+    heroTitre: SERVICES_PAGE.titreFR,
+    pricesLabel: 'Prix de départ',
+    book: 'Prendre rendez-vous',
+    pillA: "À partir d'un prix de départ",
+    pillB: 'Sur demande',
+    howTitle: 'Comment ça\nse passe',
+    howSubtitle: 'Le même parcours pour chaque personne accompagnée, du premier appel au suivi.',
+    spaceTitle: 'Un dossier déjà commencé ?',
+    spaceText: 'Retrouve ton parcours, tes pièces et tes échanges avec Laurie dans ton espace client.',
+    spaceCta: 'Ouvrir mon espace',
+    rdvText: "Écris-moi et je te reviens rapidement. Regardons ensemble si nous sommes faites pour travailler ensemble.",
+    voirOffres: 'Voir les offres',
+    subheadline: 'Trois profils, une même écoute : artiste, entrepreneur créatif ou organisme.',
+    photoAlt: 'Laurie Belhumeur sur scène',
+    signature: SIGNATURE.texteFR,
+    surDemande: 'Sur demande',
+  },
+  EN: {
+    heroTitre: SERVICES_PAGE.titreEN,
+    pricesLabel: 'Starting price',
+    book: 'Book a call',
+    pillA: 'From a starting price',
+    pillB: 'On request',
+    howTitle: 'How it\nworks',
+    howSubtitle: 'The same path for every person, from the first call to the follow-up.',
+    spaceTitle: 'Already have a file open?',
+    spaceText: 'Find your path, your documents and your exchanges with Laurie in your client space.',
+    spaceCta: 'Open my space',
+    rdvText: "Write to me and I'll get back to you quickly. Let's see together if we're a good fit to work together.",
+    voirOffres: 'View services',
+    subheadline: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
+    photoAlt: 'Laurie Belhumeur on stage',
+    signature: SIGNATURE.texteEN,
+    surDemande: 'On request',
+  },
+};
 
 const ARCHETYPES_ORDRE: ClientArchetype[] = ['Artist', 'Entrepreneur', 'NPO'];
 
