@@ -15,31 +15,6 @@ interface Props {
   lang: Language;
 }
 
-const T = {
-  FR: {
-    titre: 'Transactions', sous: 'Le grand livre : chaque revenu et chaque dépense, avec ses taxes.',
-    importerFactures: 'Importer les factures payées',
-    date: 'Date', description: 'Description', tiers: 'Tiers', compte: 'Compte', montant: 'Montant', taxes: 'Taxes', recu: 'Reçu', concilie: 'Concilié',
-    filtreTexte: 'Rechercher…', tousComptes: 'Tous les comptes', tousSens: 'Revenus et dépenses', revenu: 'Revenus', depense: 'Dépenses',
-    ajouter: 'Ajouter', supprimer: 'Supprimer', confirmerSuppr: 'Supprimer cette transaction ?', enregistrer: 'Enregistrer', annuler: 'Annuler',
-    vide: 'Aucune transaction', videTexte: "Ajoutez une transaction, importez un relevé, ou importez les factures payées.",
-    page: 'Page', sur: 'sur', precedent: 'Précédent', suivant: 'Suivant',
-    nouvelleDate: 'Date', nouvelleDesc: 'Description', nouveauMontant: 'Montant avant taxes', nouveauTiers: 'Tiers',
-    importees: (n: number) => `${n} facture${n > 1 ? 's' : ''} importée${n > 1 ? 's' : ''}.`, aucuneNouvelle: 'Aucune nouvelle facture payée à importer.',
-  },
-  EN: {
-    titre: 'Transactions', sous: 'The ledger: every revenue and expense, with its taxes.',
-    importerFactures: 'Import paid invoices',
-    date: 'Date', description: 'Description', tiers: 'Party', compte: 'Account', montant: 'Amount', taxes: 'Taxes', recu: 'Receipt', concilie: 'Reconciled',
-    filtreTexte: 'Search…', tousComptes: 'All accounts', tousSens: 'Revenue and expenses', revenu: 'Revenue', depense: 'Expenses',
-    ajouter: 'Add', supprimer: 'Delete', confirmerSuppr: 'Delete this transaction?', enregistrer: 'Save', annuler: 'Cancel',
-    vide: 'No transactions', videTexte: 'Add a transaction, import a statement, or import paid invoices.',
-    page: 'Page', sur: 'of', precedent: 'Previous', suivant: 'Next',
-    nouvelleDate: 'Date', nouvelleDesc: 'Description', nouveauMontant: 'Amount before taxes', nouveauTiers: 'Party',
-    importees: (n: number) => `${n} invoice${n > 1 ? 's' : ''} imported.`, aucuneNouvelle: 'No new paid invoice to import.',
-  },
-}[undefined as unknown as Language]; // placeholder replaced below (voir bloc t = T)
-
 const TEXTES = {
   FR: {
     titre: 'Transactions', sous: 'Le grand livre : chaque revenu et chaque dépense, avec ses taxes.',

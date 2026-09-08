@@ -240,8 +240,10 @@ export function projectionImpot(
   params: ParametresFiscaux,
   aujourdhui: Date
 ): ProjectionImpot {
-  const { debut, fin } = bornesExercice(reglages);
-  const profitADate = profitPeriode(transactions, iso(debut), iso(aujourdhui));
+  const exercice = exerciceContenant(reglages, aujourdhui);
+  const debut = new Date(exercice.debut);
+  const fin = new Date(exercice.fin);
+  const profitADate = profitPeriode(transactions, exercice.debut, iso(aujourdhui));
   const joursEcoules = Math.max(1, Math.round((aujourdhui.getTime() - debut.getTime()) / 86400000) + 1);
   const joursExercice = Math.max(1, Math.round((fin.getTime() - debut.getTime()) / 86400000) + 1);
   const trojeune = joursEcoules < 30;
