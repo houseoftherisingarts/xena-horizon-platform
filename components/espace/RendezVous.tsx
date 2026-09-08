@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { User } from 'firebase/auth';
-import { collection, doc, orderBy, where, writeBatch } from 'firebase/firestore';
-import { serverTimestamp } from 'firebase/firestore';
+import { collection, doc, orderBy, serverTimestamp, where, writeBatch } from 'firebase/firestore';
 import { AlertCircle, ChevronLeft, ChevronRight, Download, Video } from 'lucide-react';
 import { db } from '../../firebase';
 import { patchDoc, removeDoc, useCollection } from '../../lib/firestore';
