@@ -9,6 +9,13 @@ service firebase.storage {
                 && request.auth.token.email in ['houseoftherisingarts@gmail.com', 'laurie.belhumeur@gmail.com']));
     }
 
+    // Le spécimen de chèque du coffre pour Vexel : chiffré dans le navigateur (lib/coffre.ts), le binaire
+    // ici est opaque sans la clé privée d'Alex. Admin seulement, comme le document Firestore coffre/laurie.
+    match /coffre/laurie/{file} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024;
+    }
+
     // Public-readable assets (gallery, social outputs, document PDFs)
     match /gallery/{file=**}   { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|gif)'); }
     match /social/{file=**}    { allow read: if true; allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|gif)'); }
