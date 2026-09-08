@@ -93,7 +93,7 @@ const TAILLE_MAX = 15 * 1024 * 1024;
 const glisser = (texte: string): string =>
   texte
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '') || 'temoignage';
