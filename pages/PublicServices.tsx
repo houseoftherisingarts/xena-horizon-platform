@@ -106,7 +106,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   const goToContact = () => {
     if (onChangeView) {
       onChangeView('HOME');
-      setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100);
+      setTimeout(() => allerA('contact'), 100);
     } else {
       window.location.href = '/#contact';
     }
