@@ -21,6 +21,7 @@ const TEXTES = {
     ecart: 'Écart', ecartNul: 'Tout concorde.', ecartTexte: 'Différence entre le solde de fin attendu et le solde de fin du relevé.',
     soldeCalcule: 'Solde calculé', date: 'Date', description: 'Description', montant: 'Montant', tout: 'Tout cocher', rien: 'Tout décocher',
     vide: 'Aucune transaction ce mois-ci', videTexte: 'Choisissez un autre mois, ou ajoutez des transactions.',
+    dejaConcilie: 'déjà conciliée', marquerN: (n: number) => `Marquer ${n} transaction${n > 1 ? 's' : ''} conciliée${n > 1 ? 's' : ''}`,
   },
   EN: {
     titre: 'Bank reconciliation', sous: 'Check the transactions that appear on your statement, until the gap is zero.',
