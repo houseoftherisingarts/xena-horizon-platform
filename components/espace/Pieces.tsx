@@ -325,7 +325,7 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
                   onClick={() => allerA(p.id)}
                   className="min-h-[44px] px-4 rounded-pilule border border-filet text-encre text-sm hover:border-rose hover:text-rose transition-colors"
                 >
-                  {p.nom}
+                  {libellesPiece(p, lang).nom}
                 </button>
               </li>
             ))}
