@@ -11,6 +11,7 @@ import Allumage from './accueil/Allumage';
 import Sommaire from './accueil/Sommaire';
 import APropos from './accueil/APropos';
 import Temoignage from './accueil/Temoignage';
+import TemoignagesAudio from './accueil/TemoignagesAudio';
 import Projets from './accueil/Projets';
 import Citation from './accueil/Citation';
 import Contact from './accueil/Contact';
