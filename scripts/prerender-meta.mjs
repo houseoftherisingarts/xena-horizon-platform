@@ -106,6 +106,7 @@ function contenuAccueil() {
       </ul>
     </section>
     <section>
+      <!-- Extrait verbatim de pages/accueil/Temoignage.tsx (TEXTES.FR.extrait), pas dans lib/contenu.ts -->
       <h2>« créer une ligne directrice claire et précise »</h2>
       ${p(TEMOIGNAGES[0].texteFR)}
       <p>${esc(TEMOIGNAGES[0].nom)} — ${esc(TEMOIGNAGES[0].role)}</p>
