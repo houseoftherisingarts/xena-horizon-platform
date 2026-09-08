@@ -192,92 +192,16 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
         }
       />
 
-      {loading && <Chargement texte={t.loading} />}
+      {loading && !enDemo && <Chargement texte={t.loading} />}
 
-      {/* Kanban / Ladder View */}
-      <div className="overflow-x-auto pb-2">
-        <div className="flex gap-4 min-w-max">
-          {productsByRange.map((range, idx) => (
-            <div key={idx} className="w-[280px] md:w-[320px] flex flex-col gap-3">
-              {/* Column Header */}
-              <div className="flex items-center justify-between px-3 py-2 bg-papier-2 border border-filet rounded-champ">
-                <h3 className="kicker text-gris">{range.label}</h3>
-                <Etiquette tone="neutre">{range.products.length}</Etiquette>
-              </div>
-
-              {/* Column Drop Area */}
-              <div className="flex-1 bg-papier border border-filet rounded-champ p-3 space-y-3">
-                {range.products.length === 0 ? (
-                  <Vide titre={t.empty} />
-                ) : (
-                  range.products.map(product => (
-                    <div
-                      key={product.id}
-                      onClick={() => openEditModal(product)}
-                      className="bg-papier-2 border border-filet rounded-champ p-4 cursor-pointer transition-colors hover:border-encre"
-                    >
-                      <div className="flex justify-between items-start mb-3 gap-2">
-                        <Etiquette tone="neutre">{product.category === 'Service' ? t.service : t.product}</Etiquette>
-                        <Etiquette tone={product.status === 'Active' ? 'accent' : 'neutre'}>{product.status}</Etiquette>
-                      </div>
-
-                      <h4 className="font-sans font-semibold text-encre mb-2 leading-tight">{product.name}</h4>
-                      <p className="text-xs text-gris mb-4 line-clamp-3 leading-relaxed">{product.description}</p>
-
-                      <div className="flex justify-between items-center pt-3 border-t border-filet">
-                        <span className="font-serif text-lg text-encre tabular-nums">
-                          {product.price === 0 ? t.free : `${product.price}$`}
-                        </span>
-
-                        {/* Publish/Unpublish Quick Action */}
-                        <button
-                          onClick={(e) => togglePublish(e, product)}
-                          className={`text-xs flex items-center gap-1 px-2 py-1 rounded-pilule transition-colors ${
-                            product.isPublic ? 'bg-rose/10 text-rose' : 'text-gris hover:text-encre'
-                          }`}
-                          title={product.isPublic ? t.unpublish : t.publish}
-                        >
-                          {product.isPublic ? (
-                            <>
-                              <Check className="w-3 h-3" /> {t.online}
-                            </>
-                          ) : (
-                            <>
-                              <Globe className="w-3 h-3" /> {t.publish}
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-
-                {/* Add Quick Button */}
-                <Bouton
-                  variante="discret"
-                  icone={Plus}
-                  onClick={() => {
-                    setEditingProduct(null);
-                    setFormData({
-                      name: '',
-                      price: range.min === 0 ? 0 : Math.ceil(range.min),
-                      description: '',
-                      type: 'Digital',
-                      category: 'Product',
-                      status: 'Concept',
-                      isPublic: false
-                    });
-                    setIsModalOpen(true);
-                  }}
-                  className="w-full"
-                >
-                  {t.addHere}
-                </Bouton>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <EchelleValeur
+        paliers={productsByRange}
+        lang={lang}
+        t={t}
+        onOpen={openEditModal}
+        onQuickAdd={openQuickAdd}
+        onTogglePublish={togglePublish}
+      />
 
       {/* EDIT/CREATE MODAL */}
       {isModalOpen && (
