@@ -131,6 +131,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
     { id: 'ADMIN_GALLERY', label: t.gallery, icon: ImageIcon },
     { id: 'ADMIN_SOCIAL', label: t.social, icon: PenTool },
     { id: 'ADMIN_TEMOIGNAGES', label: t.temoignages, icon: Mic },
+    { id: 'ADMIN_VIDEOS', label: t.videos, icon: Film },
+    { id: 'ADMIN_SECTIONS', label: t.sections, icon: ToggleLeft },
     { id: 'ADMIN_VEXEL', label: t.vexel, icon: ShieldCheck },
   ];
 
