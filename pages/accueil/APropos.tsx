@@ -6,11 +6,17 @@ import React, { useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Feuille, Parallax, Reveal, TexteRevele } from '../../components/motion';
 import { A_PROPOS_ACCUEIL } from './textes';
-import type { HomeStatsBlock, Language, ViewState } from '../../types';
+import type { Language, ViewState } from '../../types';
 
 export interface AProposProps {
   lang: Language;
-  stats?: HomeStatsBlock;
+  /** Déjà traduites par PublicHome (tr()) : 15 ans / D'expérience, les disciplines, les zones. */
+  stat1Value: string;
+  stat1Label: string;
+  stat2Value: string;
+  stat2Label: string;
+  stat3Value: string;
+  stat3Label: string;
   onChangeView?: (v: ViewState) => void;
 }
 
