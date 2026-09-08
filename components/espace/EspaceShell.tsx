@@ -163,7 +163,11 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
 
       {/* Onglets soulignés, jamais en pilules */}
       <div className="relative mb-8">
-        <div ref={scrollRef} className="flex gap-6 overflow-x-auto" role="tablist">
+        <div
+          ref={scrollRef}
+          className="flex gap-6 overflow-x-auto snap-x snap-proximity [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="tablist"
+        >
           {onglets.map((o) => (
             <button
               key={o.id}
@@ -172,11 +176,12 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
               role="tab"
               aria-selected={onglet === o.id}
               onClick={() => setOnglet(o.id)}
-              className={`relative min-h-[44px] pb-3 kicker whitespace-nowrap flex-shrink-0 transition-colors ${
+              className={`relative min-h-[44px] pb-3 kicker whitespace-nowrap shrink-0 snap-start transition-colors ${
                 onglet === o.id ? 'text-encre' : 'text-gris hover:text-encre'
               }`}
             >
-              {o.label}
+              <span className="sm:hidden">{o.labelCourt}</span>
+              <span className="hidden sm:inline">{o.label}</span>
               {onglet === o.id && (
                 <motion.span layoutId="espace-onglet" className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose" transition={{ duration: 0.2 }} />
               )}
