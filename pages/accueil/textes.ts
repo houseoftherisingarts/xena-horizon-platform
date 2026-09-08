@@ -59,3 +59,13 @@ export const CLIENTS_TITRE = { FR: 'Ils lui ont fait confiance', EN: 'They trust
 
 /** Légende fonctionnelle sous la photo de contact (Laurie sur scène, au micro). */
 export const LEGENDE_SCENE = { FR: 'Sur scène', EN: 'On stage' };
+
+/** Texte alternatif des deux photos éditoriales de l'accueil, pour les lecteurs d'écran. */
+export const ALT_PHOTO_CONTACT = {
+  FR: 'Laurie Belhumeur, sur scène au micro',
+  EN: 'Laurie Belhumeur, on stage at the microphone',
+};
+export const ALT_PHOTO_APROPOS = {
+  FR: 'Laurie Belhumeur, assise, en studio',
+  EN: 'Laurie Belhumeur, seated, in her studio',
+};

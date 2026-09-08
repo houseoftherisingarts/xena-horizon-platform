@@ -5,11 +5,8 @@ Services
 Projects
 About
 Contact
-SKY
-INK
-FR
-/
 EN
+FR
 My space
 Book a call
 404
@@ -60,7 +57,7 @@ Learn more
 
 --- attributs ---
 <button> aria-label="Site palette: sky blue, or ink and pink" title="Site palette: sky blue, or ink and pink"
-<button> aria-label="FR / EN"
+<button> aria-label="Language: English. Switch to French" title="Language: English. Switch to French"
 <button> aria-label="Admin area" title="Admin area"
 <button> aria-label="Open menu"
 <div> aria-label="Consent banner"

@@ -5,11 +5,8 @@ Services
 Projects
 About
 Contact
-SKY
-INK
-FR
-/
 EN
+FR
 My space
 Book a call
 What I can
@@ -58,76 +55,76 @@ Public relations, conferences and hosting, so your organization is seen and hear
 
 View services
 From a starting price
-Abonnement mensuel
+Monthly subscription
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Trois questions par mois pour les besoins spontanés qui n'ont pas besoin d'une consultation complète. Dès 99 $ par mois, engagement minimum de trois mois.
+Three questions a month for the spontaneous needs that don't require a full consultation. From $99 a month, three-month minimum commitment.
 
 From $99 / month
 Book a call
-Rédaction
+Writing
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Ta biographie, ton scénario, ton identité artistique, une demande de subvention, un dossier de presse, tes textes de vente ou tes publications, écrits avec toi. Dès 1 000 $ + taxes.
+Your biography, your script, your artistic identity, a grant application, a press kit, your sales texts or your publications, written with you. From $1,000 + taxes.
 
 From $1,000 + taxes
 Book a call
-Stratégie de communication
+Communication strategy
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Améliorer ton marketing, augmenter ta visibilité, tes ventes et le rayonnement de ta carrière ou de ton entreprise. Dès 3 500 $ + taxes.
+Improve your marketing, increase your visibility, your sales and the reach of your career or your business. From $3,500 + taxes.
 
 From $3,500 + taxes
 Book a call
-Tu te sens perdu
+You feel lost
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Ta tête déborde de projets et tu ne sais plus par où commencer. Nous mettons de l'ordre dans tout ça et nous en sortons une ligne directrice claire. Dès 3 500 $ + taxes.
+Your head is overflowing with projects and you no longer know where to start. We bring order to it all and come out with a clear guideline. From $3,500 + taxes.
 
 From $3,500 + taxes
 Book a call
 On request
-Coaching en stratégie événementielle
+Event strategy coaching
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Lancements, réseautage, performances, ateliers et conférences, festivals et tournées, activations de marque, spectacles : nous bâtissons ensemble un événement cohérent avec qui tu es. Sur demande.
+Launches, networking, performances, workshops and conferences, festivals and tours, brand activations, shows: we build an event together that is coherent with who you are. On request.
 
 On request
 Book a call
-Conférences et animation
+Conferences and activities
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Des conférences et de l'animation d'événements, sur plusieurs sujets. Sur demande.
+Conferences and event hosting, on a range of topics. On request.
 
 On request
 Book a call
-Formation de groupe
+Group training
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Une journée pour comprendre l'identité artistique et le monde des affaires, et la mettre en pratique tout de suite. Sur demande.
+A day to understand artistic identity and the business world, and to put it into practice right away. On request.
 
 On request
 Book a call
-Identité artistique et de marque
+Artistic and brand identity
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Ton identité artistique ou celle de ta marque, et la gestion de ta réputation, bâties pour tenir dans le temps. Sur demande.
+Your artistic identity or your brand identity, and your reputation management, built to last. On request.
 
 On request
 Book a call
-Stratégie de visibilité et relations publiques
+Visibility strategy and public relations
 
 Artists · Creatives and entrepreneurs · Organizations and businesses
 
-Être vue et entendue du bon public : une stratégie de visibilité et de relations publiques adaptée à ton projet et à ton entreprise. Sur demande.
+Being seen and heard by the right audience: a visibility and public relations strategy tailored to your project and your business. On request.
 
 On request
 Book a call
@@ -177,8 +174,10 @@ Open my space
 
 FREQUENTLY ASKED QUESTIONS
 
-Before you
-book a call
+Beforeyoubookacall
+
+The questions that come up before a first appointment.
+
 How does an appointment with Laurie work?
 
 You click Book an appointment, you create your account, then you choose a time among Laurie's availabilities. She confirms your request, and the video meeting takes place right in your client space, on the site.
@@ -235,7 +234,7 @@ Learn more
 
 --- attributs ---
 <button> aria-label="Site palette: sky blue, or ink and pink" title="Site palette: sky blue, or ink and pink"
-<button> aria-label="FR / EN"
+<button> aria-label="Language: English. Switch to French" title="Language: English. Switch to French"
 <button> aria-label="Admin area" title="Admin area"
 <button> aria-label="Open menu"
 <h1> aria-label="What I can

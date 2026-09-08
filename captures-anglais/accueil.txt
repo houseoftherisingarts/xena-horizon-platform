@@ -5,11 +5,8 @@ Services
 Projects
 About
 Contact
-SKY
-INK
-FR
-/
 EN
+FR
 My space
 Book a call
 Live from your art
@@ -98,13 +95,9 @@ Photographe boudoir
 
 THEY TRUSTED HER
 
-Le Salon des Inconnus
 Le gars fiable
 Ovide Academy
-Salon Enchanthé
-Centre psychologique pour artistes
-Happyman
-Alexis Sénécal
+Le Salon des Inconnus, Le gars fiable, Ovide Academy, Salon Enchanthé, Centre psychologique pour artistes, Happyman, Alexis Sénécal
 Le Salon des Inconnus
 Le gars fiable
 Ovide Academy
@@ -188,7 +181,7 @@ Learn more
 
 --- attributs ---
 <button> aria-label="Site palette: sky blue, or ink and pink" title="Site palette: sky blue, or ink and pink"
-<button> aria-label="FR / EN"
+<button> aria-label="Language: English. Switch to French" title="Language: English. Switch to French"
 <button> aria-label="Admin area" title="Admin area"
 <button> aria-label="Open menu"
 <h1> aria-label="Live from your art
