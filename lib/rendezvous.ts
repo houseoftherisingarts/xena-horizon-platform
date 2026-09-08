@@ -4,6 +4,11 @@
  * donnée personnelle dans `occupations/{id}` pour que les autres personnes connectées voient les créneaux
  * pris. La rencontre se tient dans une salle vidéo Jitsi Meet nommée d'après l'id : aucune clé d'API,
  * aucun serveur. Quand le projet passera sur Blaze, `salleUrl` pourra pointer une salle Daily privée.
+ *
+ * Synchronisation Google Agenda (functions/src/agenda/google.ts, pas encore déployée) : un rendez-vous
+ * confirmé porte un `googleEventId` une fois jumelé à l'agenda Google de Laurie, et `occupations/{id}`
+ * peut aussi venir de là (`source: 'google'`, id `google-<hachage>`) — `creneauxLibres` ci-dessous les
+ * traite comme n'importe quelle autre occupation, sans distinction de source.
  */
 import { useMemo } from 'react';
 import { Timestamp, serverTimestamp } from 'firebase/firestore';
