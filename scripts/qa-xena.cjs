@@ -15,6 +15,7 @@ const VUES = [
   { nom: 'accueil', path: '/', scrolls: [0, 0.25, 0.5, 0.75, 1] },
   { nom: 'services', path: '/services', scrolls: [0, 0.5, 1] },
   { nom: 'projets', path: '/projets', scrolls: [0, 0.5, 1] },
+  { nom: 'a-propos', path: '/a-propos', scrolls: [0, 0.5, 1] },
   { nom: 'espace-porte', path: '/espace', scrolls: [0, 0.5, 1] },
 ];
 
@@ -87,7 +88,7 @@ async function connecter(page, email, pw) {
       await capturer(page, v.nom, largeur, v.scrolls);
     }
     // Pages publiques en anglais : bascule FR/EN puis mêmes captures
-    for (const v of VUES.slice(0, 3)) {
+    for (const v of VUES.slice(0, 4)) {
       await page.goto(BASE + v.path, { waitUntil: 'load', timeout: 60000 });
       await page.waitForTimeout(1500);
       const bascule = page.locator('button').filter({ hasText: /^\s*FR\s*\/\s*EN\s*$/ }).first();
