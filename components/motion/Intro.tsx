@@ -74,8 +74,26 @@ export const Intro: React.FC<IntroProps> = ({
       // mode privé ou stockage bloqué : tant pis, l'intro rejouera au prochain chargement
     }
     const total = reduce ? 100 : dureeMs;
-    const t = setTimeout(() => onComplete?.(), total);
-    return () => clearTimeout(t);
+    const debut = performance.now();
+    let terminee = false;
+    const terminer = () => {
+      if (terminee) return;
+      terminee = true;
+      onComplete?.();
+    };
+    const t = setTimeout(terminer, total);
+    // Filet : un onglet ouvert en arrière-plan retarde les temporisateurs (throttling du
+    // navigateur, onglet suspendu) sans jamais les annuler ; si `t` n'a pas encore pu tourner à
+    // son retour au premier plan, on lève le rideau nous-mêmes au lieu de laisser le visiteur
+    // devant un voile figé plus longtemps que prévu.
+    const surVisible = () => {
+      if (document.visibilityState === 'visible' && performance.now() - debut >= total) terminer();
+    };
+    document.addEventListener('visibilitychange', surVisible);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('visibilitychange', surVisible);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dejaVue, reduce, dureeMs]);
 
