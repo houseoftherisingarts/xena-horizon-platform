@@ -48,4 +48,4 @@ assert.equal(rejoue[0].id, occ[0].id);
 const autre = occupationsDepuisFreebusy([{ start: '2026-10-05T10:00:00Z', end: '2026-10-05T11:00:00Z' }]);
 assert.notEqual(autre[0].id, occ[0].id);
 
-console.log('verif-agenda-google : ' + (10) + ' vérifications passées.');
+console.log('verif-agenda-google : toutes les vérifications sont passées.');
