@@ -8,7 +8,6 @@ import { avancement, indexEtape, nouveauDossier, PROFILS, useDossierConfig } fro
 import { intentionRendezVous, effacerIntentionRendezVous } from '../../lib/rendezvous';
 import { Dossier, Language } from '../../types';
 import Avatar from './Avatar';
-import Profil from './Profil';
 import Pieces from './Pieces';
 import Parcours from './Parcours';
 import RendezVous from './RendezVous';
