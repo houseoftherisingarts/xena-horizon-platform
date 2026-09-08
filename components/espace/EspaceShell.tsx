@@ -120,12 +120,12 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const etapeCourante = config.etapes[idxEtape];
   const prenom = (dossier.nom || '').trim().split(' ')[0] || (dossier.courriel || '').split('@')[0];
 
-  const onglets: { id: Onglet; label: string }[] = [
-    { id: 'dossier', label: t.onglets.dossier },
-    { id: 'pieces', label: t.onglets.pieces },
-    { id: 'parcours', label: t.onglets.parcours },
-    { id: 'messages', label: t.onglets.messages },
-    { id: 'ressources', label: t.onglets.ressources },
+  const onglets: { id: Onglet; label: string; labelCourt: string }[] = [
+    { id: 'dossier', label: t.onglets.dossier, labelCourt: t.ongletsCourt.dossier },
+    { id: 'pieces', label: t.onglets.pieces, labelCourt: t.ongletsCourt.pieces },
+    { id: 'parcours', label: t.onglets.parcours, labelCourt: t.ongletsCourt.parcours },
+    { id: 'messages', label: t.onglets.messages, labelCourt: t.ongletsCourt.messages },
+    { id: 'ressources', label: t.onglets.ressources, labelCourt: t.ongletsCourt.ressources },
   ];
 
   return (
