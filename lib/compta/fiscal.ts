@@ -114,8 +114,10 @@ export function projectionTaxes(
   reglages: ReglagesCompta,
   aujourdhui: Date
 ): ProjectionTaxes {
-  const { debut, fin } = bornesExercice(reglages);
-  const periodeADate: Periode = { debut: iso(debut), fin: iso(aujourdhui), libelle: 'Exercice à date' };
+  const exercice = exerciceContenant(reglages, aujourdhui);
+  const debut = new Date(exercice.debut);
+  const fin = new Date(exercice.fin);
+  const periodeADate: Periode = { debut: exercice.debut, fin: iso(aujourdhui), libelle: 'Exercice à date' };
   const aDate = taxesARemettre(transactions, reglages, periodeADate);
   const joursEcoules = Math.max(1, Math.round((aujourdhui.getTime() - debut.getTime()) / 86400000) + 1);
   const joursExercice = Math.max(1, Math.round((fin.getTime() - debut.getTime()) / 86400000) + 1);
@@ -130,7 +132,7 @@ export function projectionTaxes(
       tvq: Math.round(aDate.net.tvq * facteur * 100) / 100,
       total: Math.round(aDate.net.total * facteur * 100) / 100,
     },
-    prochaineEcheance: prochaineEcheanceTaxes(reglages, { debut: iso(debut), fin: iso(fin), libelle: 'Exercice' }),
+    prochaineEcheance: prochaineEcheanceTaxes(reglages, exercice),
   };
 }
 
