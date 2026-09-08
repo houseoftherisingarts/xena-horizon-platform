@@ -91,34 +91,34 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
   return (
     <>
       {valeur === null && pretAAfficher && (
-        <div className="fixed bottom-gut left-gut right-gut sm:left-auto z-[90] flex justify-center sm:justify-end">
-          <Reveal delay={0.3} y={20} amount={0.1} className="w-full sm:w-auto">
+        <div className="fixed inset-x-0 bottom-0 z-[90] bg-papier border-t border-filet">
+          <Reveal delay={0.3} y={20} amount={0.1}>
             <div
               role="dialog"
               aria-live="polite"
               aria-label={lang === 'FR' ? 'Bandeau de consentement' : 'Consent banner'}
-              className="w-full sm:max-w-consentement max-h-[120px] sm:max-h-none bg-papier border border-filet rounded-champ shadow-panneau p-4 flex flex-col gap-3"
+              className="px-gut py-1.5 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6"
             >
-              <p className="text-petit text-encre">{t.texte}</p>
-              <div className="flex flex-wrap items-center gap-2">
+              <p className="text-petit text-encre truncate flex-1 min-w-0">{t.texte}</p>
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => decider('accepte')}
-                  className="min-h-[44px] px-5 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2 transition-colors"
+                  className="min-h-[36px] px-4 rounded-pilule bg-encre text-papier text-sm font-medium hover:bg-encre-2 transition-colors"
                 >
                   {t.accepter}
                 </button>
                 <button
                   type="button"
                   onClick={() => decider('refuse')}
-                  className="min-h-[44px] px-5 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-encre transition-colors"
+                  className="min-h-[36px] px-4 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-encre transition-colors"
                 >
                   {t.refuser}
                 </button>
                 <button
                   type="button"
                   onClick={() => setPolitiqueOuverte(true)}
-                  className="text-xs text-gris hover:text-rose underline transition-colors ml-auto"
+                  className="text-xs text-gris hover:text-rose underline transition-colors whitespace-nowrap"
                 >
                   {t.lien}
                 </button>
