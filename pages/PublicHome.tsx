@@ -135,6 +135,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
         onChangeView={onChangeView}
       />
       <Temoignage lang={lang} />
+      <TemoignagesAudio lang={lang} />
       <Projets lang={lang} onChangeView={onChangeView} />
       <Citation lang={lang} />
       <Contact lang={lang} />
