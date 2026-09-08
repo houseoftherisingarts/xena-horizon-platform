@@ -12,8 +12,8 @@ export interface TemoignageProps {
 }
 
 const EXTRAITS: Record<Language, string> = {
-  FR: 'créer une ligne directrice claire et précise par rapport au futur de ma compagnie',
-  EN: 'to create a clear and precise guideline for the future of my company',
+  FR: 'créer une ligne directrice claire et précise',
+  EN: 'to create a clear and precise guideline',
 };
 
 const Temoignage: React.FC<TemoignageProps> = ({ lang }) => {
