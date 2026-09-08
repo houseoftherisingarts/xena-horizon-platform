@@ -105,7 +105,7 @@ async function voletB(browser) {
       await page.screenshot({ path: path.join(OUT, `flash-${taille}-${cible}ms.png`) }).catch(() => {});
       etats.push({ instantMs: cible, ...etatPolices });
     }
-    await page.waitForTimeout(2000); // laisse le réseau ralenti finir de tout livrer avant de fermer
+    await page.waitForTimeout(600); // laisse les deux fontes retardées finir d'arriver avant de fermer
     rapport.volB_flashPolice.push({ taille, etats });
     await ctx.close();
   }
