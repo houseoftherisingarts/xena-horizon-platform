@@ -51,6 +51,15 @@ const Allumage: React.FC<AllumageProps> = ({
   const flouStrophe = useTransform(p, [0.55, 0.85], [18, 0]);
   const filtreStrophe = useMotionTemplate`blur(${flouStrophe}px)`;
 
+  // Sur mobile, la photo grandit une fois le titre disparu (opaciteTitre finit à 0.7) pour
+  // remplir l'espace sous la strophe, qui se pose jusqu'à 0.85. sm:h-[112%] ignore cette
+  // variable. ponytail: hauteur d'arrivée estimée (NAV_PAD + 2 lignes + kicker), pas mesurée
+  // via ref ; à affiner avec un ResizeObserver si un écart persiste sur de très petits écrans.
+  const hauteurPhoto = useTransform(p, [0.7, 0.85], [36, 68], { clamp: true }) as unknown as ReturnType<
+    typeof useMotionTemplate
+  >;
+  const hauteurPhotoSvh = useMotionTemplate`${hauteurPhoto}svh`;
+
   if (reduce) {
     return (
       <section className="relative min-h-[100svh] bg-papier">
