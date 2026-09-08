@@ -89,6 +89,9 @@ const Liste: React.FC<{ onOpen: (id: string | null) => void; lang: Language }> =
                     <Etiquette tone={n.statut === 'envoyee' ? 'accent' : 'neutre'}>{n.statut === 'envoyee' ? t.envoyee : t.brouillon}</Etiquette>
                   </td>
                   <td className="py-3 px-4 hidden md:table-cell text-gris text-xs uppercase">{n.lang}</td>
+                  <td className="py-3 px-4 hidden lg:table-cell text-gris text-xs">
+                    {n.envoi ? `${n.envoi.envoyes}/${n.envoi.total}${n.envoi.echecs ? ` · ${n.envoi.echecs} ⚠` : ''}` : '·'}
+                  </td>
                   <td className="py-3 px-4 hidden md:table-cell text-gris text-xs">{n.updatedAt?.toDate?.().toLocaleDateString('fr-CA') || '·'}</td>
                   <td className="py-3 px-4 text-right whitespace-nowrap">
                     <Bouton variante="discret" petit icone={n.statut === 'envoyee' ? Eye : Pen} onClick={() => onOpen(n.id)}>
