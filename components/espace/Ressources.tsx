@@ -3,10 +3,26 @@ import { orderBy, where } from 'firebase/firestore';
 import { Download, FileText } from 'lucide-react';
 import { useCollection } from '../../lib/firestore';
 import { Language, Ressource } from '../../types';
+import { useTextes } from '../../lib/textes';
 
 interface RessourcesProps {
   lang: Language;
 }
+
+const TEXTES = {
+  FR: {
+    ressourcesTitre: 'Ressources',
+    ressourcesSous: 'Les guides et gabarits que Laurie partage avec toi.',
+    ressourcesVide: 'Rien de partagé pour le moment.',
+    ressourcesTelecharger: 'Télécharger',
+  },
+  EN: {
+    ressourcesTitre: 'Resources',
+    ressourcesSous: 'The guides and templates Laurie shares with you.',
+    ressourcesVide: 'Nothing shared yet.',
+    ressourcesTelecharger: 'Download',
+  },
+};
 
 const Ressources: React.FC<RessourcesProps> = ({ lang }) => {
   const { data: ressources, loading } = useCollection<Ressource>('ressources', [
