@@ -75,7 +75,7 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const uid = user.uid;
   const { data: dossier, loading } = useDocument<Dossier>(`dossiers/${uid}`);
   const config = useDossierConfig();
-  const [onglet, setOnglet] = useState<Onglet>(() => (intentionRendezVous() ? 'rendezvous' : 'dossier'));
+  const [onglet, setOnglet] = useState<Onglet>(() => (intentionRendezVous() ? 'rendezvous' : 'profil'));
   const creationEnCours = useRef(false);
 
   // Une venue depuis « Prendre rendez-vous » sur le site public ouvre directement cet onglet, une seule fois.
