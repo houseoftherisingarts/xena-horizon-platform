@@ -96,9 +96,6 @@ const TEXTES = {
   },
 };
 
-const selectCls = 'px-2 py-1.5 rounded-champ bg-papier border border-filet text-xs text-encre outline-none focus:border-rose';
-const iconBtn = 'w-8 h-8 rounded-champ bg-papier border border-filet text-gris hover:text-encre hover:border-encre flex items-center justify-center transition-colors disabled:opacity-30';
-
 const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
   const t = useTextes('adminInfolettre_composer', TEXTES, lang);
   const [loading, setLoading] = useState(id !== null);
