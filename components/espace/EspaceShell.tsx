@@ -207,7 +207,6 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: EASE_MAISON }}
           >
-            {onglet === 'dossier' && <Profil dossier={dossier} uid={uid} lang={lang} />}
             {onglet === 'pieces' && <Pieces dossier={dossier} config={config} uid={uid} lang={lang} />}
             {onglet === 'parcours' && <Parcours dossier={dossier} config={config} lang={lang} />}
             {onglet === 'rendezvous' && <RendezVous user={user} dossier={dossier} lang={lang} />}
