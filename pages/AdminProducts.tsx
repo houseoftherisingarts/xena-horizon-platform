@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, X, Trash2, Save, Globe, Check, EyeOff } from 'lucide-react';
-import { EnTete, Panneau, Bouton, Champ, Zone, Selection, Etiquette, Vide, Chargement } from '../components/admin/ui';
+import { Plus, X, Trash2, Save, Globe, EyeOff } from 'lucide-react';
+import { EnTete, Panneau, Bouton, Champ, Zone, Selection, Chargement } from '../components/admin/ui';
+import { EchelleValeur, type PalierOffres } from '../components/admin/offres/EchelleValeur';
+import { PRODUITS_DEMO } from '../lib/offresDemo';
 import { PRICE_RANGES } from '../constants';
 import { Product, ProductStatus, ProductCategory, Language } from '../types';
 import { useCollection, createDoc, patchDoc, removeDoc } from '../lib/firestore';
@@ -10,7 +12,10 @@ interface AdminProductsProps {
 }
 
 const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
-  const { data: products, loading } = useCollection<Product>('products');
+  const { data: productsFirestore, loading } = useCollection<Product>('products');
+  // Boucle verdict sans compte admin (voir CLAUDE.md « boucle locale ») : un exemple en mémoire, jamais ailleurs.
+  const enDemo = import.meta.env.MODE === 'verif' && productsFirestore.length === 0;
+  const products = enDemo ? PRODUITS_DEMO : productsFirestore;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
