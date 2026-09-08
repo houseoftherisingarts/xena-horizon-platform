@@ -41,11 +41,11 @@ const NotFound: React.FC<NotFoundProps> = ({ lang, onChangeView }) => {
   }[lang];
 
   return (
-    <div className="min-h-[100svh] bg-papier flex flex-col justify-end px-gut pb-[clamp(4rem,10vh,8rem)] pt-nav">
-      <span aria-hidden="true" className="self-end font-serif text-chiffre text-encre leading-none mb-8 md:mb-16">
+    <div className="min-h-[100svh] bg-papier relative px-gut">
+      <span aria-hidden="true" className="absolute top-28 right-gut font-serif text-chiffre text-encre leading-none">
         {t.code}
       </span>
-      <div className="max-w-[8ch] w-full sm:max-w-mesure">
+      <div className="absolute bottom-[clamp(4rem,10vh,8rem)] left-gut right-gut sm:right-auto sm:max-w-mesure">
         <Reveal as="h1" className="font-serif text-h2 text-encre mb-4">
           {t.title}
         </Reveal>
