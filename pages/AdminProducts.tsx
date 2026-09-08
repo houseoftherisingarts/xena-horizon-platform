@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, X, Trash2, Save, Globe, EyeOff } from 'lucide-react';
 import { EnTete, Panneau, Bouton, Champ, Zone, Selection, Chargement } from '../components/admin/ui';
 import { EchelleValeur, type PalierOffres } from '../components/admin/offres/EchelleValeur';
+import { Paiement } from '../components/admin/offres/Paiement';
 import { PRODUITS_DEMO } from '../lib/offresDemo';
 import { PRICE_RANGES } from '../constants';
 import { Product, ProductStatus, ProductCategory, Language } from '../types';
