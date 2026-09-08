@@ -21,9 +21,21 @@ export interface AProposProps {
   onChangeView?: (v: ViewState) => void;
 }
 
-const t = {
-  FR: { lire: "Lire son histoire" },
-  EN: { lire: 'Read her story' },
+const TEXTES = {
+  FR: {
+    lire: 'Lire son histoire',
+    titre: A_PROPOS_ACCUEIL.titre.FR,
+    p0: A_PROPOS_ACCUEIL.paragraphes.FR[0],
+    p1: A_PROPOS_ACCUEIL.paragraphes.FR[1],
+    mission: A_PROPOS_ACCUEIL.mission.FR,
+  },
+  EN: {
+    lire: 'Read her story',
+    titre: A_PROPOS_ACCUEIL.titre.EN,
+    p0: A_PROPOS_ACCUEIL.paragraphes.EN[0],
+    p1: A_PROPOS_ACCUEIL.paragraphes.EN[1],
+    mission: A_PROPOS_ACCUEIL.mission.EN,
+  },
 };
 
 const Compteur: React.FC<{ valeur: number; className?: string }> = ({ valeur, className }) => {
