@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Lock, Trash2, Plus } from 'lucide-react';
-import { GLASS_INPUT_CLASSES } from '../../../constants';
 import { DossierNote, Language } from '../../../types';
 import { dateCourte } from './util';
 
@@ -30,6 +29,9 @@ const t = {
   },
 };
 
+const CHAMP =
+  'w-full bg-papier-2 border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris outline-none transition-colors focus:border-rose h-20 resize-none text-sm';
+
 const NotesPrivees: React.FC<NotesPriveesProps> = ({ notes, lang, onAdd, onDelete }) => {
   const tr = t[lang];
   const [texte, setTexte] = useState('');
@@ -52,44 +54,44 @@ const NotesPrivees: React.FC<NotesPriveesProps> = ({ notes, lang, onAdd, onDelet
   };
 
   return (
-    <div className="bg-slate-950/50 rounded-[20px] border border-white/5 p-6">
-      <h3 className="text-lg font-serif font-bold text-white mb-1 flex items-center gap-2">
-        <Lock className="w-5 h-5 text-cyan-300" /> {tr.title}
+    <div className="bg-papier border border-filet rounded-champ p-6">
+      <h3 className="font-sans font-semibold text-encre mb-1 flex items-center gap-2">
+        <Lock className="w-4 h-4 text-rose" aria-hidden="true" /> {tr.title}
       </h3>
-      <p className="text-xs text-slate-500 mb-4">{tr.subtitle}</p>
+      <p className="text-xs text-gris mb-4">{tr.subtitle}</p>
 
       <form onSubmit={ajouter} className="space-y-2 mb-4">
         <textarea
           value={texte}
           onChange={(e) => setTexte(e.target.value)}
           placeholder={tr.placeholder}
-          className={`${GLASS_INPUT_CLASSES} h-20 resize-none text-sm`}
+          className={CHAMP}
         />
-        {erreur && <p className="text-xs text-red-400" role="alert">{erreur}</p>}
+        {erreur && <p className="text-xs text-rose" role="alert">{erreur}</p>}
         <button
           type="submit"
           disabled={busy || !texte.trim()}
-          className="px-4 py-2 rounded-[10px] bg-white/10 hover:bg-white/15 text-white text-xs font-medium disabled:opacity-40 min-h-[44px] flex items-center gap-1.5"
+          className="px-4 rounded-pilule border border-filet text-encre hover:border-encre text-xs font-medium disabled:opacity-40 min-h-[44px] flex items-center gap-1.5"
         >
-          <Plus className="w-4 h-4" /> {busy ? '…' : tr.add}
+          <Plus className="w-4 h-4" aria-hidden="true" /> {busy ? '…' : tr.add}
         </button>
       </form>
 
-      <div className="space-y-2 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-        {notes.length === 0 && <p className="text-sm text-slate-500">{tr.empty}</p>}
+      <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+        {notes.length === 0 && <p className="text-sm text-gris">{tr.empty}</p>}
         {notes.map((n) => (
-          <div key={n.id} className="group flex items-start gap-2 bg-white/5 rounded-[12px] p-3 border border-white/5">
+          <div key={n.id} className="group flex items-start gap-2 bg-papier-2 rounded-champ p-3 border border-filet">
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-slate-200 whitespace-pre-wrap break-words">{n.texte}</p>
-              <p className="text-[10px] text-slate-500 mt-1">{dateCourte(n.createdAt)}</p>
+              <p className="text-sm text-encre whitespace-pre-wrap break-words">{n.texte}</p>
+              <p className="text-[10px] text-gris mt-1">{dateCourte(n.createdAt)}</p>
             </div>
             <button
               type="button"
               onClick={() => onDelete(n.id)}
               aria-label={lang === 'FR' ? 'Supprimer la note' : 'Delete note'}
-              className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 text-slate-500 hover:text-red-400 transition-opacity p-1"
+              className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 text-gris hover:text-rose transition-opacity p-1"
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
             </button>
           </div>
         ))}
