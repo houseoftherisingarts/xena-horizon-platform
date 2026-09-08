@@ -67,6 +67,16 @@ service firebase.storage {
       allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
     }
 
+    // Capsules vidéo (accueil, mode éducatif) : fichier, affiche et sous-titres, publics, déposés par Laurie.
+    match /videos/{videoId}/{file} {
+      allow read: if true;
+      allow write: if isAdmin()
+                   && request.resource.size < 200 * 1024 * 1024
+                   && (request.resource.contentType in ['video/mp4', 'video/webm', 'text/vtt']
+                       || request.resource.contentType.matches('image/.*'));
+      allow delete: if isAdmin();
+    }
+
     match /{path=**} { allow read, write: if false; }
   }
 }
