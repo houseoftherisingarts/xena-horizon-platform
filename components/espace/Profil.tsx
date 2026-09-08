@@ -4,6 +4,7 @@ import { AlertCircle, CheckCircle, Save } from 'lucide-react';
 import { patchDoc } from '../../lib/firestore';
 import { PROFILS } from '../../lib/dossier';
 import { Dossier, Language, ProfilClient } from '../../types';
+import { useTextes } from '../../lib/textes';
 
 interface ProfilProps {
   dossier: Dossier;
@@ -12,6 +13,45 @@ interface ProfilProps {
 }
 
 const CHAMP = 'w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris transition-colors';
+
+const TEXTES = {
+  FR: {
+    titreQui: 'Qui tu es',
+    titreProjet: 'Ton projet',
+    nom: 'Nom complet',
+    telephone: 'Téléphone',
+    ville: 'Ville',
+    profil: 'Ton profil',
+    discipline: 'Discipline',
+    disciplineHolder: 'Danse, théâtre, écriture, musique…',
+    projetTitre: 'Titre du projet',
+    projetDesc: 'Description',
+    projetObjectif: 'Objectif',
+    echeance: 'Échéance',
+    enregistrer: 'Enregistrer',
+    enregistrement: 'Enregistrement…',
+    succes: 'Profil enregistré.',
+    echec: "L'enregistrement a échoué. Réessaie dans un instant.",
+  },
+  EN: {
+    titreQui: 'Who you are',
+    titreProjet: 'Your project',
+    nom: 'Full name',
+    telephone: 'Phone',
+    ville: 'City',
+    profil: 'Your profile',
+    discipline: 'Discipline',
+    disciplineHolder: 'Dance, theatre, writing, music…',
+    projetTitre: 'Project title',
+    projetDesc: 'Description',
+    projetObjectif: 'Goal',
+    echeance: 'Deadline',
+    enregistrer: 'Save',
+    enregistrement: 'Saving…',
+    succes: 'Profile saved.',
+    echec: 'Saving failed. Try again in a moment.',
+  },
+};
 
 const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
   const [nom, setNom] = useState(dossier.nom ?? '');
