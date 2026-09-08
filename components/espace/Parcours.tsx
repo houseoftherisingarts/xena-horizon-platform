@@ -2,6 +2,7 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import { indexEtape, EtapeDefEn } from '../../lib/dossier';
 import { Dossier, DossierConfig, EtapeDef, Language } from '../../types';
+import { Reveal } from '../motion';
 
 interface ParcoursProps {
   dossier: Dossier;
@@ -28,41 +29,40 @@ const Parcours: React.FC<ParcoursProps> = ({ dossier, config, lang }) => {
   }[lang];
 
   return (
-    <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-xl p-6 md:p-10">
-      <h2 className="text-lg font-serif font-bold text-white mb-1">{t.titre}</h2>
-      <p className="text-slate-400 text-sm mb-8">{t.sous}</p>
+    <section className="border-t border-filet pt-8">
+      <h2 className="font-serif text-h3 text-encre mb-1">{t.titre}</h2>
+      <p className="text-gris text-sm mb-10 mesure">{t.sous}</p>
 
       <ol className="relative">
         {config.etapes.map((etape, i) => {
           const faite = i < idx;
           const ici = i === idx;
           return (
-            <li key={etape.id} className="relative pl-12 pb-10 last:pb-0">
+            <Reveal key={etape.id} as="li" delay={0.06 * i} y={16} className="relative pl-14 pb-10 last:pb-0">
               {i < config.etapes.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className={`absolute left-[15px] top-8 bottom-[-8px] w-px ${faite ? 'bg-cyan-400/50' : 'bg-white/10'}`}
-                />
+                <span aria-hidden="true" className={`absolute left-[19px] top-10 bottom-[-8px] w-px ${faite ? 'bg-rose' : 'bg-filet'}`} />
               )}
               <span
                 aria-hidden="true"
-                className={`absolute left-0 top-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                className={`absolute left-0 top-0 w-10 h-10 rounded-pilule flex items-center justify-center font-serif text-lg border ${
                   faite
-                    ? 'bg-iridescent text-white'
+                    ? 'bg-rose border-rose text-papier'
                     : ici
-                    ? 'bg-iridescent-soft border-2 border-cyan-400 text-cyan-200 shadow-iridescent-sm'
-                    : 'bg-white/5 border border-white/15 text-slate-500'
+                    ? 'border-2 border-rose text-rose'
+                    : 'border-filet text-gris'
                 }`}
               >
                 {faite ? <Check className="w-4 h-4" /> : i + 1}
               </span>
-              <p className={`font-semibold ${ici ? 'text-white text-lg' : faite ? 'text-slate-200' : 'text-slate-400'}`}>{titreEtape(etape, lang)}</p>
-              <p className={`text-sm mt-1 ${ici ? 'text-slate-300' : 'text-slate-500'}`}>{sousEtape(etape, lang)}</p>
-            </li>
+              <p className={`font-sans font-semibold ${ici ? 'text-encre text-lg' : faite ? 'text-encre' : 'text-gris'}`}>
+                {titreEtape(etape, lang)}
+              </p>
+              <p className={`text-sm mt-1 mesure ${ici ? 'text-gris' : 'text-gris/80'}`}>{sousEtape(etape, lang)}</p>
+            </Reveal>
           );
         })}
       </ol>
-    </div>
+    </section>
   );
 };
 
