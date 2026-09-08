@@ -10,7 +10,7 @@ fs.mkdirSync(OUT, { recursive: true });
     const page = await ctx.newPage();
     const t0 = Date.now();
     await page.goto(BASE + '/', { waitUntil: 'commit', timeout: 60000 });
-    const instants = [500, 1300, 2100, 2900, 3600];
+    const instants = [500, 1200, 1800, 2400, 3000, 3700];
     for (const ms of instants) {
       const attente = ms - (Date.now() - t0); if (attente > 0) await page.waitForTimeout(attente);
       await page.screenshot({ path: path.join(OUT, `intro-${ms}ms-${largeur}.png`) });

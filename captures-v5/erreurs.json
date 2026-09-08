@@ -1,0 +1,4 @@
+[
+  "1440 CONSOLE: Loading the script 'https://www.googletagmanager.com/gtag/js?l=dataLayer&id=G-ZBXZLK36QV' violates the following Content Security Policy directive: \"script-src 'self' 'sha256-WtEly+HdxG199q8W6vAR/s0vvE9BMUpzxWcm5jpdaYQ=' https://apis.google.com https://accounts.google.com https://*.gstatic.com https",
+  "390 CONSOLE: Loading the script 'https://www.googletagmanager.com/gtag/js?l=dataLayer&id=G-ZBXZLK36QV' violates the following Content Security Policy directive: \"script-src 'self' 'sha256-WtEly+HdxG199q8W6vAR/s0vvE9BMUpzxWcm5jpdaYQ=' https://apis.google.com https://accounts.google.com https://*.gstatic.com https"
+]

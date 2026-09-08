@@ -10,6 +10,8 @@ import type { Language } from '../types';
 export interface LecteurAudioProps {
   src: string;
   nom: string;
+  /** « temoignage » (défaut) ou « episode » : change seulement le libellé accessible. */
+  genre?: 'temoignage' | 'episode';
   lang: Language;
   onLecture?: () => void;
   className?: string;
@@ -25,7 +27,7 @@ const mmss = (secondes: number): string => {
   return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
 };
 
-export const LecteurAudio: React.FC<LecteurAudioProps> = ({ src, nom, lang, onLecture, className = '' }) => {
+export const LecteurAudio: React.FC<LecteurAudioProps> = ({ src, nom, lang, onLecture, className = '', genre = 'temoignage' }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [joue, setJoue] = useState(false);
   const [ecoule, setEcoule] = useState(0);
@@ -86,14 +88,15 @@ export const LecteurAudio: React.FC<LecteurAudioProps> = ({ src, nom, lang, onLe
   };
 
   const pct = duree > 0 ? (ecoule / duree) * 100 : 0;
+  const episode = genre === 'episode';
   const libelle =
     lang === 'FR'
       ? joue
-        ? `Mettre en pause le témoignage de ${nom}`
-        : `Écouter le témoignage de ${nom}`
+        ? `Mettre en pause ${episode ? "l'épisode" : 'le témoignage de'} ${nom}`
+        : `Écouter ${episode ? "l'épisode" : 'le témoignage de'} ${nom}`
       : joue
-        ? `Pause the testimonial from ${nom}`
-        : `Play the testimonial from ${nom}`;
+        ? `Pause the ${episode ? 'episode' : 'testimonial from'} ${nom}`
+        : `Play the ${episode ? 'episode' : 'testimonial from'} ${nom}`;
 
   return (
     <div className={`flex items-center gap-4 ${className}`}>

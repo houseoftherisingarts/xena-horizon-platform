@@ -7,13 +7,13 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-// Constantes de rythme — le pacing de référence (filet 750 ms, tenue
-// 950 ms, levée 700 ms, soit 2,4 s) est mis à l'échelle sur `dureeMs` pour
+// Constantes de rythme — le pacing de référence (filet 700 ms, tenue
+// 1 200 ms, levée 700 ms, soit 2,6 s) est mis à l'échelle sur `dureeMs` pour
 // que le total réel soit toujours celui que le prop annonce. Allongé le
 // 8 septembre 2026 à la demande d'Alex : la marque doit avoir le temps
 // de se poser avant que le rideau ne se lève.
-const FILET_MS = 750;
-const TENUE_MS = 950;
+const FILET_MS = 700;
+const TENUE_MS = 1200;
 const LEVE_MS = 700;
 const SOMME_REFERENCE_MS = FILET_MS + TENUE_MS + LEVE_MS;
 
@@ -31,7 +31,7 @@ function phases(dureeMs: number) {
     // La marque part en fondu sur la fin de la tenue, avant que le rideau ne commence à se
     // lever : sans ça, la barre et le hero apparaissent par transparence pendant que la marque
     // est encore pleinement opaque (double exposition, chantier C).
-    fonduS: tenueS * 0.4,
+    fonduS: tenueS * 0.3,
   };
 }
 
@@ -50,7 +50,7 @@ export const Intro: React.FC<IntroProps> = ({
   onComplete,
   marque = 'Xena Horizon',
   signature = 'par Laurie Belhumeur',
-  dureeMs = 2400,
+  dureeMs = 2600,
   layoutId,
 }) => {
   const reduce = useReducedMotion();
@@ -99,7 +99,7 @@ export const Intro: React.FC<IntroProps> = ({
   const { filetS, tenueS, leveS, fonduS } = phases(dureeMs);
   const lettres = Array.from(marque);
   // Les lettres se mettent au point une à une sur la première moitié du filet.
-  const staggerLettre = Math.min(0.06, filetS / Math.max(1, lettres.length) / 1.5);
+  const staggerLettre = Math.min(0.04, filetS / Math.max(1, lettres.length) / 1.5);
   // Le voyage de la marque vers la barre de navigation (layoutId partagé) : 0,6 s, l'easing
   // maison. Posé ici pour que l'intro et Nav.tsx portent exactement la même transition.
   const TRANSITION_VOYAGE = { layout: { duration: 0.6, ease: EASE_FILET } };
@@ -153,7 +153,7 @@ export const Intro: React.FC<IntroProps> = ({
                 style={{ whiteSpace: 'pre' }}
                 variants={{
                   cache: { opacity: 0, filter: 'blur(8px)' },
-                  visible: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.55, ease: EASE_FILET } },
+                  visible: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.5, ease: EASE_FILET } },
                 }}
               >
                 {lettre}

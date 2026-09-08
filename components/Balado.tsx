@@ -43,7 +43,7 @@ const Balado: React.FC<{ lang: Language }> = ({ lang }) => {
                 </p>
               </div>
               <div className="md:col-span-7">
-                <LecteurAudio src={e.url} nom={e.titre} lang={lang} />
+                <LecteurAudio src={e.url} nom={e.titre} lang={lang} genre="episode" />
               </div>
             </li>
           ))}

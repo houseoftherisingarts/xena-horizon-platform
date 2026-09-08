@@ -1,0 +1,39 @@
+{
+  "erreurs": [],
+  "largeur-1440": {
+    "ongletActif": "MON PROFIL",
+    "nbOnglets": 6,
+    "libellesOnglets": [
+      "MON PROFIL",
+      "MES PIÈCES",
+      "MON PARCOURS",
+      "RENDEZ-VOUS",
+      "MESSAGES",
+      "RESSOURCES"
+    ],
+    "h2s": [
+      "Ta photo et ta bannière",
+      "Qui tu es",
+      "Tes liens",
+      "Ton projet"
+    ]
+  },
+  "largeur-390": {
+    "ongletActif": "PROFIL",
+    "nbOnglets": 6,
+    "libellesOnglets": [
+      "PROFIL",
+      "PIÈCES",
+      "PARCOURS",
+      "RDV",
+      "MESSAGES",
+      "RESSOURCES"
+    ],
+    "h2s": [
+      "Ta photo et ta bannière",
+      "Qui tu es",
+      "Tes liens",
+      "Ton projet"
+    ]
+  }
+}

@@ -12,8 +12,9 @@ const erreurs = []; const r = {};
 async function ouvrir(browser, largeur) {
   const ctx = await browser.newContext({ viewport: { width: largeur, height: largeur > 600 ? 900 : 844 } });
   const page = await ctx.newPage();
-  page.on('console', (m) => { if (m.type() === 'error' && !/meet\.jit\.si|baladoquebec|podtrac/.test(m.text())) erreurs.push(`${largeur}: ${m.text().slice(0, 200)}`); });
+  page.on('console', (m) => { if (m.type() === 'error' && !/meet\.jit\.si|baladoquebec|podtrac|Failed to load resource/.test(m.text())) erreurs.push(`${largeur}: ${m.text().slice(0, 200)}`); });
   page.on('pageerror', (e) => erreurs.push(`${largeur} PAGEERROR: ${e.message.slice(0, 200)}`));
+  page.on('response', (res) => { if (res.status() === 404) erreurs.push(`${largeur} 404 ${res.url().slice(0, 140)}`); });
   return { ctx, page };
 }
 async function connecter(page, email, pw) {
@@ -55,7 +56,7 @@ const shot = (page, nom, largeur) => page.screenshot({ path: path.join(OUT, `${n
   for (const largeur of [1440, 390]) {
     const c = await ouvrir(browser, largeur);
     await c.page.goto(BASE + '/projets', { waitUntil: 'load', timeout: 60000 }); await c.page.waitForTimeout(2000);
-    const sec = c.page.locator('section').filter({ hasText: /Les épisodes|Episodes/ }).first();
+    const sec = c.page.locator('[data-tx-scope="balado"]').first();
     r['baladoSection' + largeur] = await sec.count();
     if (await sec.count()) {
       await sec.scrollIntoViewIfNeeded(); await c.page.waitForTimeout(600);

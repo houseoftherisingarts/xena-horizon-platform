@@ -79,7 +79,7 @@ const Rencontre: React.FC<RencontreProps> = ({ salle, nom, lang, onQuitter }) =>
           width: '100%',
           height: '100%',
           userInfo: { displayName: nom },
-          configOverwrite: { prejoinPageEnabled: true, disableDeepLinking: true },
+          configOverwrite: { prejoinPageEnabled: true, disableDeepLinking: true, subject: 'Rencontre Xena Horizon' },
           interfaceConfigOverwrite: { SHOW_JITSI_WATERMARK: false },
         });
         apiRef.current = api;
