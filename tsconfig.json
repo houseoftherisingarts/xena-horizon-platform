@@ -25,5 +25,13 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "functions",
+    "dist",
+    "dist-verif*",
+    "captures*",
+    "public"
+  ]
 }

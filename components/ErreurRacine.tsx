@@ -9,6 +9,9 @@ interface EtatErreur {
 }
 
 export class ErreurRacine extends React.Component<React.PropsWithChildren, EtatErreur> {
+  // ponytail: le dépôt n'a pas @types/react (React 19 sans types), la classe de base est donc
+  // typée any et ne déclare pas props; on le déclare ici plutôt que d'installer les types partout.
+  declare readonly props: Readonly<{ children?: React.ReactNode }>;
   state: EtatErreur = { aPlante: false };
 
   static getDerivedStateFromError(): EtatErreur {

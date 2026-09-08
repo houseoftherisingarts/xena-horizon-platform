@@ -133,7 +133,7 @@ const PlanComptable: React.FC<Props> = ({ lang }) => {
         <p className="text-gris text-sm mesure mb-6">{t.sous}</p>
         <div className="space-y-8">
           <Groupe titre={t.revenu} comptes={grouper('revenu')} />
-          <Groupe titre={t.depense} comptes={grouper('depense')} />
+          <Groupe titre={t.depense} comptes={grouper('depense')} estDepense />
         </div>
       </Panneau>
 

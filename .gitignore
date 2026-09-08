@@ -37,3 +37,7 @@ node_modules/
 
 # cache de déploiement Firebase
 .firebase/
+
+# dossiers de vérification des agents
+dist-verif*/
+captures*/

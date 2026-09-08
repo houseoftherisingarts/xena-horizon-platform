@@ -40,6 +40,10 @@ async function capturerFacturePublique(browser) {
 async function capturerPdf(browser) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(`${BASE}/facture/exemple`, { waitUntil: 'load', timeout: 60000 });
+  // Le document tarde à paraître : la lecture Firestore réelle échoue d'abord (jeton de test),
+  // et l'exemple `verif` ne s'affiche qu'une fois `loading` retombé. On attend le total, pas un délai fixe.
+  await page.waitForSelector('text=Total', { timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(500);
   await page.emulateMedia({ media: 'print' });
   await page.pdf({ path: `${OUT}/facture-exemple.pdf`, format: 'Letter', printBackground: true });
   await page.close();
