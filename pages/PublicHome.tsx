@@ -117,39 +117,46 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
         )}
       </AnimatePresence>
 
-      <Allumage
-        lang={lang}
-        tagline={t.tagline}
-        headline={t.headline}
-        subheadline={t.subheadline}
-        pourLes={t.pourLes}
-        ctaText={t.ctaText}
-        imageUrl={imageUrl}
-        strophe={t.strophe}
-        strapline={t.stat2Label}
-      />
+      {on('allumage') && (
+        <Allumage
+          lang={lang}
+          tagline={t.tagline}
+          headline={t.headline}
+          subheadline={t.subheadline}
+          pourLes={t.pourLes}
+          ctaText={t.ctaText}
+          imageUrl={imageUrl}
+          strophe={t.strophe}
+          strapline={t.stat2Label}
+        />
+      )}
 
-      <Sommaire lang={lang} title={t.servicesTitle} subtitle={t.servicesSubtitle} onChangeView={onChangeView} />
+      {on('sommaire') && (
+        <Sommaire lang={lang} title={t.servicesTitle} subtitle={t.servicesSubtitle} onChangeView={onChangeView} />
+      )}
 
       {/* Entre Sommaire et À propos (voir le commentaire d'en-tête de Capsules.tsx) : ne se rend
-          que si Admin › Sections a la capsule à ON et qu'au moins une capsule est publiée. */}
-      <Capsules lang={lang} />
+          que si Admin › Sections a la capsule à ON et qu'au moins une capsule est publiée
+          (Capsules.tsx applique elle-même ces deux conditions). */}
+      {on('capsules') && <Capsules lang={lang} />}
 
-      <APropos
-        lang={lang}
-        stat1Value={t.stat1Value}
-        stat1Label={t.stat1Label}
-        stat2Value={t.stat2Value}
-        stat2Label={t.stat2Label}
-        stat3Value={t.stat3Value}
-        stat3Label={t.stat3Label}
-        onChangeView={onChangeView}
-      />
-      <Temoignage lang={lang} />
-      <TemoignagesAudio lang={lang} />
-      <Projets lang={lang} onChangeView={onChangeView} />
-      <Citation lang={lang} />
-      <Contact lang={lang} />
+      {on('apropos') && (
+        <APropos
+          lang={lang}
+          stat1Value={t.stat1Value}
+          stat1Label={t.stat1Label}
+          stat2Value={t.stat2Value}
+          stat2Label={t.stat2Label}
+          stat3Value={t.stat3Value}
+          stat3Label={t.stat3Label}
+          onChangeView={onChangeView}
+        />
+      )}
+      {on('temoignage') && <Temoignage lang={lang} />}
+      {on('temoignagesAudio') && <TemoignagesAudio lang={lang} />}
+      {on('projets') && <Projets lang={lang} onChangeView={onChangeView} />}
+      {on('citation') && <Citation lang={lang} />}
+      {on('contact') && <Contact lang={lang} />}
     </div>
   );
 };
