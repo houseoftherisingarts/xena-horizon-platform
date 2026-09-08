@@ -90,8 +90,11 @@ async function shot(page, nom) {
     rapport.erreurs.push(`export: ${e.message.slice(0, 300)}`);
   }
   await page.close();
-
-  await browser.close();
-  fs.writeFileSync(path.join(OUT, 'rapport.json'), JSON.stringify(rapport, null, 2));
-  console.log(JSON.stringify(rapport, null, 2));
+  } catch (e) {
+    rapport.erreurs.push(`fatal: ${e.message.slice(0, 300)}`);
+  } finally {
+    await browser.close();
+    fs.writeFileSync(path.join(OUT, 'rapport.json'), JSON.stringify(rapport, null, 2));
+    console.log(JSON.stringify(rapport, null, 2));
+  }
 })();
