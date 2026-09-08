@@ -76,6 +76,12 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
     if (valeur === 'accepte') activerAnalytics();
   }, [valeur]);
 
+  useEffect(() => {
+    definirVisibilite(valeur === null && pretAAfficher);
+  }, [valeur, pretAAfficher]);
+
+  useEffect(() => () => definirVisibilite(false), []);
+
   const t = {
     FR: {
       texte: 'Ce site mesure sa fréquentation avec Firebase Analytics, et rien d\'autre.',
