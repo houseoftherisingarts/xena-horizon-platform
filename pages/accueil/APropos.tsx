@@ -95,7 +95,7 @@ const APropos: React.FC<AProposProps> = ({
           <Parallax speed={0.14}>
             <img
               src="/images/laurie-apropos.jpg"
-              alt="Laurie Belhumeur, assise, en studio"
+              alt={ALT_PHOTO_APROPOS[lang]}
               loading="lazy"
               decoding="async"
               className="aspect-[2/3] w-full object-cover"
