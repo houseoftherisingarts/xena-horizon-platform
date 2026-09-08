@@ -55,7 +55,12 @@ const Une: React.FC<UneProps> = ({
   demarrer = true,
 }) => {
   const motsPublics = useMemo(
-    () => PROFILS_REELS.map((profil) => (lang === 'EN' ? profil.titleEN : profil.titleFR)),
+    () =>
+      PROFILS_REELS.map((profil) => {
+        // « Pour les artistes » : le libellé du profil perd sa majuscule initiale au milieu de la phrase.
+        const titre = lang === 'EN' ? profil.titleEN : profil.titleFR;
+        return titre.charAt(0).toLowerCase() + titre.slice(1);
+      }),
     [lang]
   );
 
