@@ -76,7 +76,7 @@ const Messagerie: React.FC<MessagerieProps> = ({ dossiers, loading, lang, onChan
       luParAdmin: true,
       luParClient: false,
     });
-    await patchDoc('dossiers', selected.id, { nonLusClient: 1, derniereActiviteAdmin: new Date() });
+    await patchDoc('dossiers', selected.id, { nonLusClient: increment(1), derniereActiviteAdmin: serverTimestamp() });
   };
 
   const CHAMP =
