@@ -45,7 +45,7 @@ async function capturerPdf(browser) {
   await page.waitForSelector('text=Total', { timeout: 15000 }).catch(() => {});
   await page.waitForTimeout(500);
   await page.emulateMedia({ media: 'print' });
-  await page.pdf({ path: `${OUT}/facture-exemple.pdf`, format: 'Letter', printBackground: true });
+  await page.pdf({ path: `${OUT}/facture-exemple.pdf`, format: 'Letter', printBackground: true, preferCSSPageSize: true });
   await page.close();
 }
 

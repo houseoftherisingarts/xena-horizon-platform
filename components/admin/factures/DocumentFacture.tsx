@@ -50,11 +50,11 @@ const DocumentFacture: React.FC<DocumentFactureProps> = ({
   const totaux = calculerTotaux(items, vendeur);
 
   return (
-    <div className={`bg-papier-2 border border-filet rounded-champ shadow-panneau print:shadow-none print:border-0 print:rounded-none p-8 sm:p-12 md:p-16 ${className}`}>
+    <div className={`bg-papier-2 border border-filet rounded-champ shadow-panneau print:shadow-none print:border-0 print:rounded-none p-8 sm:p-12 md:p-16 print:p-8 ${className}`}>
       <style>{'@page { size: letter; margin: 0.65in; }'}</style>
 
       {/* En-tête : logo, type de document et numéro */}
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-6 pb-8 border-b border-filet">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-6 pb-8 print:pb-4 border-b border-filet">
         <img src="/images/logo-laurie.png" alt="Xena Horizon" className="h-12 w-auto object-contain" />
         <div className="sm:text-right">
           <h1 className="font-serif text-h3 text-encre">{type === 'Quote' ? t.quote : t.invoice}</h1>
@@ -63,7 +63,7 @@ const DocumentFacture: React.FC<DocumentFactureProps> = ({
       </div>
 
       {/* Vendeur et échéances */}
-      <div className="grid sm:grid-cols-2 gap-8 mt-8">
+      <div className="grid sm:grid-cols-2 gap-8 mt-8 print:mt-5">
         <div>
           <p className="kicker text-gris mb-2">{vendeur.nomLegal ? vendeur.nomLegal : 'Xena Horizon'}</p>
           <div className="text-sm text-gris leading-relaxed">
@@ -81,14 +81,14 @@ const DocumentFacture: React.FC<DocumentFactureProps> = ({
       </div>
 
       {/* Client */}
-      <div className="mt-6 bg-papier p-5 rounded-champ border border-filet">
+      <div className="mt-6 print:mt-4 bg-papier p-5 print:p-4 rounded-champ border border-filet">
         <p className="kicker text-gris mb-1">{t.billedTo}</p>
         <p className="font-sans font-semibold text-encre">{clientName}</p>
         {clientEmail && <p className="text-sm text-gris">{clientEmail}</p>}
       </div>
 
       {/* Lignes : le prix unitaire se cache sous 640 px, la description a besoin de la place */}
-      <div className="mt-10">
+      <div className="mt-10 print:mt-6">
         <table className="w-full table-fixed">
           <thead>
             <tr className="border-b-2 border-encre">
@@ -112,7 +112,7 @@ const DocumentFacture: React.FC<DocumentFactureProps> = ({
       </div>
 
       {/* Totaux */}
-      <div className="flex justify-end mt-8">
+      <div className="flex justify-end mt-8 print:mt-5">
         <div className="w-full sm:w-72 space-y-2">
           <div className="flex justify-between text-gris text-sm">
             <span>{t.subtotal}</span><span className="tabular-nums">{argent(totaux.sousTotal)}</span>
@@ -135,17 +135,17 @@ const DocumentFacture: React.FC<DocumentFactureProps> = ({
 
       {/* Modalités et remerciement */}
       {modalites && (
-        <div className="mt-10 pt-8 border-t border-filet">
+        <div className="mt-10 pt-8 print:mt-5 print:pt-4 border-t border-filet">
           <p className="kicker text-gris mb-2">{t.terms}</p>
           <p className="text-gris text-sm whitespace-pre-line">{modalites}</p>
         </div>
       )}
-      {note && <p className="mt-6 text-sm text-encre">{note}</p>}
+      {note && <p className="mt-6 print:mt-4 text-sm text-encre">{note}</p>}
 
       {/* Zone d'action (signature, paiement) : jamais sur le papier */}
       {children && <div className="mt-10 print:hidden">{children}</div>}
 
-      <p className="mt-12 pt-6 border-t border-filet text-xs text-gris text-center">
+      <p className="mt-12 pt-6 print:mt-2 print:pt-2 border-t border-filet text-xs text-gris text-center">
         <a href="https://vexelwebstudio.com" target="_blank" rel="noreferrer" className="hover:text-rose transition-colors">{t.site}</a>
       </p>
     </div>

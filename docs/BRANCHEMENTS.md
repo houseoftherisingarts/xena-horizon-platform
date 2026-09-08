@@ -53,3 +53,56 @@ firebase deploy --only functions:agendaGoogleConnecter,functions:agendaGoogleRet
 **Une fois branché**, Laurie clique « Connecter mon Google Agenda » dans Admin › Agenda et suit l'écran
 Google. Rien d'autre à faire de son côté : la synchronisation tourne seule toutes les 15 minutes, et
 sur-le-champ à chaque confirmation, annulation ou fin de rendez-vous.
+
+## Stripe (paiement d'une facture publiée)
+
+Ce que ça fait : la personne qui reçoit une facture à l'adresse `/facture/{jeton}` voit un bouton
+« Payer par carte » et règle le montant exact sans quitter la page. Le module vit dans
+`lib/factures.ts`, `components/admin/factures/DocumentFacture.tsx`, `pages/FacturePublique.tsx` et,
+côté serveur, `functions/src/factures/paiement.ts`.
+
+**Deux chemins, un seul actif à la fois.**
+
+**Chemin A (actif dès maintenant, sans clé ni fonction) : un lien de paiement Stripe.** Laurie crée un
+lien de paiement dans son compte Stripe (Stripe › Paiements › Liens de paiement) au montant de la
+facture, et le colle dans Admin › Factures › Réglages, champ « Lien de paiement ». La page publique
+l'affiche telle quelle, avec le courriel du client et le numéro de facture ajoutés à l'adresse. Un lien
+de paiement Stripe est à montant fixe : Laurie doit en créer un qui correspond au bon montant pour
+chaque facture (ou une poignée de liens à montants ronds), tant que le chemin B n'est pas branché.
+
+**Chemin B (montant exact, automatique, demande le forfait Blaze) : Stripe Checkout.**
+
+1. **Le compte Stripe de Laurie.** Depuis [dashboard.stripe.com](https://dashboard.stripe.com), copier
+   la clé secrète (Développeurs › Clés API, « Clé secrète », commence par `sk_live_` ou `sk_test_`
+   pour essayer d'abord).
+2. **Les secrets côté Firebase** (une fois le plan Blaze actif, voir point 4) :
+
+   ```bash
+   firebase functions:secrets:set STRIPE_SECRET_KEY_XENA --project xena-70977   # la clé secrète de l'étape 1
+   ```
+
+3. **Le point de terminaison webhook.** Une fois la fonction déployée (point 4), Stripe › Développeurs
+   › Webhooks › « Ajouter un point de terminaison », adresse :
+
+   ```
+   https://northamerica-northeast1-xena-70977.cloudfunctions.net/webhookStripeXena
+   ```
+
+   Événement à cocher : `checkout.session.completed`. Stripe rend alors une clé de signature
+   (`whsec_...`) :
+
+   ```bash
+   firebase functions:secrets:set STRIPE_WEBHOOK_SECRET_XENA --project xena-70977   # le whsec_... ci-dessus
+   ```
+
+4. **Le plan Blaze.** Comme pour l'infolettre et l'agenda Google, aucune fonction ne se déploie tant
+   que le projet reste sur Spark. Une fois Blaze actif :
+
+   ```bash
+   firebase deploy --only functions:creerPaiementFacture,functions:webhookStripeXena --project xena-70977
+   ```
+
+**Une fois branché**, le bouton « Payer par carte » de la page publique peut appeler `creerPaiementFacture`
+au lieu du lien de paiement statique : ce dernier raccord (quelques lignes dans
+`pages/FacturePublique.tsx`) se fait au moment où Alex active le chemin B, pour ne pas préparer un
+appel à une fonction qui n'existe pas encore côté serveur.
