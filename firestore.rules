@@ -103,6 +103,10 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Les paiements Stripe reçus pour une offre (functions/src/produits/stripe.ts, webhookStripeProduits) :
+    // seule la fonction (Admin SDK, ignore ces règles) y écrit; Laurie les consulte, personne d'autre.
+    match /commandes/{commandeId} { allow read: if isAdmin(); allow write: if false; }
+
     // Admin-only collections
     match /clients/{clientId}     { allow read, write: if isAdmin(); }
     match /documents/{docId}       { allow read, write: if isAdmin(); }
