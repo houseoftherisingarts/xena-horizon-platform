@@ -92,7 +92,18 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
         />
       )}
 
-      <APropos lang={lang} stats={stats} onChangeView={onChangeView} />
+      {stats && (
+        <APropos
+          lang={lang}
+          stat1Value={tr(stats.id, 'stat1Value', stats.stat1Value)}
+          stat1Label={tr(stats.id, 'stat1Label', stats.stat1Label)}
+          stat2Value={tr(stats.id, 'stat2Value', stats.stat2Value)}
+          stat2Label={tr(stats.id, 'stat2Label', stats.stat2Label)}
+          stat3Value={tr(stats.id, 'stat3Value', stats.stat3Value)}
+          stat3Label={tr(stats.id, 'stat3Label', stats.stat3Label)}
+          onChangeView={onChangeView}
+        />
+      )}
       <Temoignage lang={lang} />
       <Projets lang={lang} onChangeView={onChangeView} />
       <Citation lang={lang} />
