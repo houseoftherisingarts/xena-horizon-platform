@@ -4,6 +4,7 @@
 import React from 'react';
 import { Feuille, Reveal, TexteRevele } from '../../components/motion';
 import { TEMOIGNAGES } from '../../lib/contenu';
+import Clients from './Clients';
 import type { Language } from '../../types';
 
 export interface TemoignageProps {
