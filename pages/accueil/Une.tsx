@@ -77,25 +77,13 @@ const Une: React.FC<UneProps> = ({
         </div>
       </div>
 
-      {/* La photo : bande pleine largeur sous le texte sur mobile ; déborde à droite et
-          en bas, masquée à gauche, dès sm. */}
+      {/* La photo : bande pleine largeur sous le texte sur mobile (pas de masque, rien à
+          protéger en dessous) ; déborde à droite et en bas, masquée à gauche, dès sm. */}
       <div
-        className="relative h-[36svh] w-full shrink-0 sm:absolute sm:right-[-3%] sm:top-0 sm:h-[112%] sm:w-[42%] sm:shrink"
-        style={{
-          WebkitMaskImage: 'linear-gradient(to right, black 100%, black 100%)',
-          maskImage: 'linear-gradient(to right, black 100%, black 100%)',
-        }}
+        className="relative h-[36svh] w-full shrink-0 [mask-image:none] sm:absolute sm:right-[-3%] sm:top-0 sm:h-[112%] sm:w-[42%] sm:shrink sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)]"
       >
-        <div className="absolute inset-0 hidden sm:block sm:[mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)] sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)]">
-          <motion.div className="h-full w-full" style={filtre ? { filter: filtre, willChange: 'filter' } : undefined}>
-            <KenBurns src={imageUrl} alt="Laurie Belhumeur" position="50% 20%" className="h-full w-full" />
-          </motion.div>
-        </div>
-        <motion.div
-          className="h-full w-full sm:hidden"
-          style={filtre ? { filter: filtre, willChange: 'filter' } : undefined}
-        >
-          <KenBurns src={imageUrl} alt="Laurie Belhumeur" position="50% 25%" className="h-full w-full" />
+        <motion.div className="h-full w-full" style={filtre ? { filter: filtre, willChange: 'filter' } : undefined}>
+          <KenBurns src={imageUrl} alt="Laurie Belhumeur" position="50% 22%" className="h-full w-full" />
         </motion.div>
       </div>
     </div>
