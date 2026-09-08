@@ -12,8 +12,12 @@ const rapport = { erreurs: [], captures: [] };
 
 async function shot(page, nom) {
   const p = path.join(OUT, `${nom}.png`);
-  await page.screenshot({ path: p });
-  rapport.captures.push(nom);
+  try {
+    await page.screenshot({ path: p, timeout: 45000 });
+    rapport.captures.push(nom);
+  } catch (e) {
+    rapport.erreurs.push(`capture ${nom}: ${e.message.slice(0, 200)}`);
+  }
 }
 
 (async () => {
