@@ -132,7 +132,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
 
               {fil.length <= 1 && (
                 <div className="flex flex-wrap gap-2 px-4 pb-3 flex-shrink-0">
-                  {SUGGESTIONS_ASSISTANT.map((s) => (
+                  {SUGGESTIONS_ASSISTANT[lang].map((s) => (
                     <button
                       key={s}
                       type="button"
