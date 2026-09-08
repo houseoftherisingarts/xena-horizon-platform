@@ -98,6 +98,7 @@ const Une: React.FC<UneProps> = ({
           >
             <p className="kicker text-rose">{tagline}</p>
             <p className="max-w-mesure text-lede font-sans font-light text-encre/90">{subheadline}</p>
+            <MotsTournants prefixe={pourLes} mots={motsPublics} className="max-w-mesure" />
             <button
               type="button"
               onClick={allerAuRendezVous}
