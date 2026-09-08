@@ -203,14 +203,8 @@ async function synchroniserUnRendezVous(
     } catch (e) {
       console.warn(`[agendaGoogleSync] suppression ${rdvId}`, e);
     }
-    await ref.update({ googleEventId: FirebaseFirestoreFieldValueDelete() });
+    await ref.update({ googleEventId: FieldValue.delete() });
   }
-}
-
-// Import tardif pour garder FieldValue local à cette seule fonction (évite un import supplémentaire en tête de fichier).
-function FirebaseFirestoreFieldValueDelete() {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  return (require('firebase-admin/firestore') as typeof import('firebase-admin/firestore')).FieldValue.delete();
 }
 
 /** Les plages occupées de Google (freebusy, HORIZON_JOURS jours) → occupations/{id} source 'google'. */
