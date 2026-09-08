@@ -180,7 +180,8 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
 
   const catalogue: Product[] = useMemo(() => {
     const publics = (produitsFirestore ?? []).filter((p) => p.isPublic && p.status === 'Active');
-    return publics.length > 0 ? publics : SERVICES_REELS;
+    if (publics.length > 0) return publics;
+    return import.meta.env.MODE === 'verif' ? DEMO_PAIEMENT : SERVICES_REELS;
   }, [produitsFirestore]);
 
   const prixVedettes = SERVICES_REELS.filter((s) =>
