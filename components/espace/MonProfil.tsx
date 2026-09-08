@@ -222,13 +222,13 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
   };
 
   return (
-    <form onSubmit={soumettre} data-tx-scope="espaceMonProfil" className="max-w-3xl space-y-10">
+    <form onSubmit={soumettre} data-tx-scope="espaceMonProfil" className="space-y-10">
       <section className="border-t border-filet pt-8">
         <h2 className="font-serif text-h3 text-encre mb-6">{t.titrePhotos}</h2>
         <div className="space-y-6">
           <div>
             <p className="text-petit text-gris mb-2">{t.banniereLabel}</p>
-            <div className="relative w-full aspect-[3/1] rounded-champ overflow-hidden bg-papier-2 border border-filet">
+            <div className="relative w-full max-w-xl aspect-[3/1] rounded-champ overflow-hidden bg-papier-2 border border-filet">
               {banniereURL && <img src={banniereURL} alt="" className="w-full h-full object-cover" />}
               {busyBanniere && (
                 <div className="absolute inset-0 flex items-center justify-center bg-encre/30">

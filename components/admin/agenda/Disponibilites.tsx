@@ -174,7 +174,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
         type="button"
         onClick={onRetirer}
         aria-label={t.retirer}
-        className="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-pilule text-gris hover:text-rose transition-colors"
+        className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-pilule text-gris hover:text-rose transition-colors"
       >
         <Trash2 className="w-4 h-4" aria-hidden="true" />
       </button>
@@ -195,7 +195,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
                   type="button"
                   onClick={() => ajouterPlage(jour)}
                   aria-label={t.ajouterPlage}
-                  className="w-9 h-9 flex items-center justify-center rounded-pilule text-gris hover:text-encre transition-colors"
+                  className="w-11 h-11 flex items-center justify-center rounded-pilule text-gris hover:text-encre transition-colors"
                 >
                   <Plus className="w-4 h-4" aria-hidden="true" />
                 </button>
@@ -293,7 +293,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
                           type="button"
                           onClick={() => ajouterPlageException(cle)}
                           aria-label={t.ajouterPlage}
-                          className="w-9 h-9 flex items-center justify-center rounded-pilule text-gris hover:text-encre transition-colors"
+                          className="w-11 h-11 flex items-center justify-center rounded-pilule text-gris hover:text-encre transition-colors"
                         >
                           <Plus className="w-4 h-4" aria-hidden="true" />
                         </button>
@@ -301,7 +301,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
                           type="button"
                           onClick={() => retirerException(cle)}
                           aria-label={t.retirerException}
-                          className="w-9 h-9 flex items-center justify-center rounded-pilule text-gris hover:text-rose transition-colors"
+                          className="w-11 h-11 flex items-center justify-center rounded-pilule text-gris hover:text-rose transition-colors"
                         >
                           <Trash2 className="w-4 h-4" aria-hidden="true" />
                         </button>
