@@ -1,0 +1,25 @@
+{
+  "erreurs": [
+    "390 gabarit rendezvous: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2').filter({ hasText: /^(Gabarits|Templates)$/ }).locator('xpath=ancestor::section[1]').locator('div.grid > button').nt",
+    "390 gabarit balado: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2').filter({ hasText: /^(Gabarits|Templates)$/ }).locator('xpath=ancestor::section[1]').locator('div.grid > button').nt",
+    "390 gabarit temoignage: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2').filter({ hasText: /^(Gabarits|Templates)$/ }).locator('xpath=ancestor::section[1]').locator('div.grid > button').nt",
+    "390 gabarit conseil: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2').filter({ hasText: /^(Gabarits|Templates)$/ }).locator('xpath=ancestor::section[1]').locator('div.grid > button').nt",
+    "390 gabarit carrousel: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2').filter({ hasText: /^(Gabarits|Templates)$/ }).locator('xpath=ancestor::section[1]').locator('div.grid > button').nt"
+  ],
+  "captures": [
+    "studio-defaut-1440",
+    "studio-gabarit-citation-1440",
+    "studio-gabarit-rendezvous-1440",
+    "studio-gabarit-balado-1440",
+    "studio-gabarit-temoignage-1440",
+    "studio-gabarit-conseil-1440",
+    "studio-gabarit-carrousel-1440",
+    "studio-nuit-1440",
+    "studio-encre-1440",
+    "studio-defaut-390",
+    "studio-gabarit-citation-390",
+    "studio-nuit-390",
+    "studio-encre-390",
+    "export-reel.png"
+  ]
+}

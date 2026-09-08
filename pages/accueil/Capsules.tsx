@@ -17,6 +17,7 @@ import { Feuille, Reveal, TexteRevele } from '../../components/motion';
 import { useCollection } from '../../lib/firestore';
 import { useTextes } from '../../lib/textes';
 import { sectionActive, useSections } from '../../lib/sections';
+import { exemplesCapsulesVerif } from '../../lib/videos';
 import type { Language, VideoCapsule } from '../../types';
 
 export interface CapsulesProps {
