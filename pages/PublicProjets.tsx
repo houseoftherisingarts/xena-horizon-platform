@@ -53,7 +53,10 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
           </Parallax>
           <div className="lg:col-span-6 lg:col-start-7">
             <p className="kicker text-rose mb-4">{t.ecouter}</p>
-            <h2 className="font-serif text-h2">{lang === 'EN' ? balado.titreEn : balado.titre}</h2>
+            <h2 className="font-serif text-h2">{lang === 'EN' ? titreEtGlose(balado.titreEn).nom : balado.titre}</h2>
+            {lang === 'EN' && titreEtGlose(balado.titreEn).glose && (
+              <p className="text-petit text-gris mt-1">{titreEtGlose(balado.titreEn).glose}</p>
+            )}
             <div className="mt-6 space-y-4">
               {(lang === 'EN' ? balado.descriptionEn : balado.description).map((p, i) => (
                 <Reveal key={i} delay={i * 0.08} as="p" className="text-corps text-gris mesure">
