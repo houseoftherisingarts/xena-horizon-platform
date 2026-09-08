@@ -284,7 +284,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
             <div className="space-y-3">
               {Object.entries(exceptions)
                 .sort(([a], [b]) => a.localeCompare(b))
-                .map(([cle, plages]) => (
+                .map(([cle, plages]: [string, PlageHoraire[]]) => (
                   <div key={cle} className="border border-filet rounded-champ p-3">
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-sm font-semibold text-encre">{cle}</p>
