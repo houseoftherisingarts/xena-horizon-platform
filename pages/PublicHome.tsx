@@ -15,6 +15,7 @@ import Projets from './accueil/Projets';
 import Citation from './accueil/Citation';
 import Contact from './accueil/Contact';
 import { HOME_EN, STROPHE_ALLUMAGE } from './accueil/textes';
+import { useTextes } from '../lib/textes';
 import type {
   HomeBlock,
   HomeHeroBlock,
