@@ -21,6 +21,8 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+// Même région que les fonctions de l'infolettre (functions/src/infolettre/mail.ts) : northamerica-northeast1.
+export const functions = getFunctions(app, 'northamerica-northeast1');
 export const googleProvider = new GoogleAuthProvider();
 
 // La mesure d'audience (Loi 25) ne démarre qu'après consentement — jamais au chargement.
