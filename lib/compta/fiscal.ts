@@ -82,7 +82,7 @@ export function taxesARemettre(
   let ctiTps = 0;
   let rtiTvq = 0;
   for (const tr of transactions) {
-    if (!dansPeriode(tr.date, periode.debut, periode.fin)) continue;
+    if (tr.date < periode.debut || tr.date > periode.fin) continue;
     if (tr.sens === 'revenu') {
       percuTps += tr.tps;
       percuTvq += tr.tvq;
