@@ -122,7 +122,7 @@ const APropos: React.FC<AProposProps> = ({
           </div>
           <TexteRevele texte={mission} as="p" par="mot" className="mt-8 max-w-mesure text-display font-serif text-rose" />
 
-          <div className="mt-auto pt-10 text-right">
+          <div className="-mb-3 mt-auto pt-10 text-right">
             <a
               href="/a-propos"
               onClick={(e) => {
@@ -131,7 +131,7 @@ const APropos: React.FC<AProposProps> = ({
                   onChangeView('A_PROPOS');
                 }
               }}
-              className="inline-flex items-center gap-2 text-petit font-semibold text-encre transition-colors duration-200 hover:text-rose"
+              className="inline-flex items-center gap-2 py-3 text-petit font-semibold text-encre transition-colors duration-200 hover:text-rose"
             >
               {L.lire}
             </a>
