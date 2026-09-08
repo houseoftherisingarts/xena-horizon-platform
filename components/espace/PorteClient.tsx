@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -9,7 +10,7 @@ import {
 import { AlertCircle, ArrowRight, CheckCircle, Lock, Mail } from 'lucide-react';
 import { auth, googleProvider } from '../../firebase';
 import { useDossierConfig, EtapeDefEn } from '../../lib/dossier';
-import { GLASS_INPUT_CLASSES } from '../../constants';
+import { Reveal } from '../motion';
 import { EtapeDef, Language } from '../../types';
 
 /** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
@@ -28,7 +29,7 @@ interface PorteClientProps {
 
 type Mode = 'signin' | 'signup';
 
-const FOCUS_RING = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
+const CHAMP = 'w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris transition-colors';
 
 const messageErreur = (err: unknown, t: { errInconnue: string }): string => {
   const code = (err as AuthError)?.code;
@@ -160,165 +161,169 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
   };
 
   return (
-    <div className="pt-32 pb-20 px-6 relative overflow-hidden">
-      <div className="absolute inset-0 bg-iridescent-radial opacity-40 pointer-events-none" />
-      <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <div className="min-h-[100svh] bg-papier pt-32 pb-20 px-gut">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-14 items-start">
         {/* Colonne gauche : accueil de Laurie + les cinq étapes */}
-        <div>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white leading-[1.15] mb-6">
+        <div className="lg:col-span-6">
+          <Reveal as="h1" className="font-serif text-h1 text-encre mb-6">
             {t.hLeft.split('\n').map((ligne, i, arr) => (
-              <span key={i} className={i === 1 ? 'text-iridescent' : ''}>
+              <span key={i} className="block">
                 {ligne}
                 {i < arr.length - 1 && <br />}
               </span>
             ))}
-          </h1>
-          <p className="text-lg text-slate-300 leading-relaxed max-w-xl mb-10">{t.pLeft}</p>
+          </Reveal>
+          <Reveal delay={0.1} as="p" className="text-lede text-gris mesure mb-10">
+            {t.pLeft}
+          </Reveal>
 
-          <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-300 mb-4">{t.etapesTitre}</h2>
-          <ol className="space-y-4">
+          <Reveal delay={0.2} as="h2" className="kicker text-rose mb-6">
+            {t.etapesTitre}
+          </Reveal>
+          <ol className="relative">
             {config.etapes.map((etape, i) => (
-              <li key={etape.id} className="flex items-start gap-4">
-                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-iridescent-soft border border-cyan-400/30 text-cyan-200 text-xs font-bold flex items-center justify-center">
+              <Reveal key={etape.id} as="li" delay={0.1 * i} className="relative pl-12 pb-8 last:pb-0">
+                {i < config.etapes.length - 1 && (
+                  <span aria-hidden="true" className="absolute left-[15px] top-9 bottom-[-4px] w-px bg-rose/30" />
+                )}
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 w-8 h-8 rounded-pilule border border-rose/40 text-rose font-serif text-sm flex items-center justify-center"
+                >
                   {i + 1}
                 </span>
-                <div>
-                  <p className="text-white font-semibold text-sm">{titreEtape(etape, lang)}</p>
-                  <p className="text-slate-400 text-sm">{sousEtape(etape, lang)}</p>
-                </div>
-              </li>
+                <p className="text-encre font-semibold text-sm">{titreEtape(etape, lang)}</p>
+                <p className="text-gris text-sm">{sousEtape(etape, lang)}</p>
+              </Reveal>
             ))}
           </ol>
         </div>
 
         {/* Colonne droite : la porte */}
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-2xl p-8 md:p-10">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-full bg-iridescent flex items-center justify-center flex-shrink-0">
-              <Lock className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex bg-white/5 border border-white/10 rounded-full p-1 flex-1">
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('signin');
-                  setError(null);
-                  setAvisReset(null);
-                }}
-                className={`flex-1 min-h-[36px] rounded-full text-xs font-bold transition-colors ${FOCUS_RING} ${
-                  mode === 'signin' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {t.signin}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('signup');
-                  setError(null);
-                  setAvisReset(null);
-                }}
-                className={`flex-1 min-h-[36px] rounded-full text-xs font-bold transition-colors ${FOCUS_RING} ${
-                  mode === 'signup' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {t.signup}
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={avecGoogle}
-            disabled={busy}
-            className={`w-full flex items-center justify-center gap-3 min-h-[44px] px-4 py-3 rounded-[12px] bg-white text-slate-900 font-medium hover:bg-slate-100 transition-colors disabled:opacity-50 mb-2 ${FOCUS_RING}`}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.43.34-2.1V7.07H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.93l3.66-2.83z" />
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.07.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83C6.71 7.31 9.14 5.38 12 5.38z" />
-            </svg>
-            {t.google}
-          </button>
-          <p className="text-xs text-slate-500 mb-6">{t.googleNote}</p>
-
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs text-slate-500 uppercase tracking-wider">{t.or}</span>
-            <div className="flex-1 h-px bg-white/10" />
-          </div>
-
-          <form onSubmit={soumettre} className="space-y-3">
-            <div className="relative">
-              <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true" />
-              <label htmlFor="porte-email" className="sr-only">
-                {t.email}
-              </label>
-              <input
-                id="porte-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t.email}
-                required
-                autoComplete="email"
-                className={`${GLASS_INPUT_CLASSES} pl-11 min-h-[44px]`}
-              />
-            </div>
-            <div className="relative">
-              <Lock className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true" />
-              <label htmlFor="porte-password" className="sr-only">
-                {t.password}
-              </label>
-              <input
-                id="porte-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder={t.password}
-                required
-                minLength={6}
-                autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
-                className={`${GLASS_INPUT_CLASSES} pl-11 min-h-[44px]`}
-              />
-            </div>
-
-            {error && (
-              <div role="alert" className="flex items-start gap-2 text-sm text-red-300 bg-red-500/10 border border-red-500/20 rounded-[12px] p-3">
-                <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span>{error}</span>
+        <Reveal delay={0.25} y={24} duree={0.9} className="lg:col-span-6 lg:col-start-8">
+          <div className="bg-papier-2 border border-filet rounded-champ shadow-panneau p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-pilule bg-encre flex items-center justify-center flex-shrink-0">
+                <Lock className="w-5 h-5 text-papier" />
               </div>
-            )}
-            {avisReset && (
-              <div role="status" aria-live="polite" className="flex items-start gap-2 text-sm text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-[12px] p-3">
-                <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span>{avisReset}</span>
+              <div className="relative flex flex-1 border-b border-filet">
+                {(['signin', 'signup'] as Mode[]).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => {
+                      setMode(m);
+                      setError(null);
+                      setAvisReset(null);
+                    }}
+                    className={`relative flex-1 min-h-[40px] text-xs font-sans font-semibold uppercase tracking-wide transition-colors ${
+                      mode === m ? 'text-encre' : 'text-gris hover:text-encre'
+                    }`}
+                  >
+                    {m === 'signin' ? t.signin : t.signup}
+                    {mode === m && (
+                      <motion.span layoutId="porte-onglet" className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose" transition={{ duration: 0.2 }} />
+                    )}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             <button
-              type="submit"
+              type="button"
+              onClick={avecGoogle}
               disabled={busy}
-              className={`w-full justify-center min-h-[44px] px-6 py-3 rounded-[15px] bg-iridescent bg-[length:200%_200%] motion-safe:animate-iridescent-shift hover:bg-[length:300%_300%] text-white font-medium transition-all shadow-iridescent-sm hover:shadow-iridescent flex items-center gap-2 disabled:opacity-50 ${FOCUS_RING}`}
+              className="w-full flex items-center justify-center gap-3 min-h-[44px] px-4 py-3 rounded-champ border border-filet text-encre font-medium hover:border-encre transition-colors disabled:opacity-50 mb-2"
             >
-              {mode === 'signup' ? t.btnSignup : t.btnSignin}
-              <ArrowRight className="w-4 h-4" />
+              <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.43.34-2.1V7.07H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.93l3.66-2.83z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.07.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83C6.71 7.31 9.14 5.38 12 5.38z" />
+              </svg>
+              {t.google}
             </button>
-          </form>
+            <p className="text-xs text-gris mb-6">{t.googleNote}</p>
 
-          <button
-            type="button"
-            onClick={reinitialiser}
-            disabled={busy}
-            className={`w-full mt-4 text-xs text-slate-400 hover:text-white transition-colors min-h-[32px] ${FOCUS_RING}`}
-          >
-            {t.forgot}
-          </button>
-        </div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex-1 h-px bg-filet" />
+              <span className="kicker text-gris">{t.or}</span>
+              <div className="flex-1 h-px bg-filet" />
+            </div>
+
+            <form onSubmit={soumettre} className="space-y-4">
+              <div>
+                <label htmlFor="porte-email" className="block text-petit text-gris mb-1">
+                  {t.email}
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gris" aria-hidden="true" />
+                  <input
+                    id="porte-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                    className={`${CHAMP} pl-11 min-h-[44px]`}
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="porte-password" className="block text-petit text-gris mb-1">
+                  {t.password}
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gris" aria-hidden="true" />
+                  <input
+                    id="porte-password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                    className={`${CHAMP} pl-11 min-h-[44px]`}
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div role="alert" className="flex items-start gap-2 text-sm text-rose bg-rose-clair/10 border border-rose/20 rounded-champ p-3">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <span>{error}</span>
+                </div>
+              )}
+              {avisReset && (
+                <div role="status" aria-live="polite" className="flex items-start gap-2 text-sm text-encre bg-papier border border-filet rounded-champ p-3">
+                  <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <span>{avisReset}</span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={busy}
+                className="w-full justify-center min-h-[44px] px-6 rounded-pilule bg-encre text-papier font-medium hover:bg-encre-2 transition-colors flex items-center gap-2 disabled:opacity-50"
+              >
+                {mode === 'signup' ? t.btnSignup : t.btnSignin}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+
+            <button
+              type="button"
+              onClick={reinitialiser}
+              disabled={busy}
+              className="w-full mt-4 text-xs text-gris hover:text-encre transition-colors min-h-[32px]"
+            >
+              {t.forgot}
+            </button>
+          </div>
+
+          <p className="mt-6 text-center text-xs text-gris">{t.confidentialite}</p>
+        </Reveal>
       </div>
-
-      <p className="max-w-[1400px] mx-auto relative z-10 mt-16 text-center text-xs text-slate-500">{t.confidentialite}</p>
     </div>
   );
 };
