@@ -175,6 +175,7 @@ const Contact: React.FC<ContactProps> = ({ lang, contact }) => {
             >
               {attente ? L.envoi : L.envoyer}
             </button>
+          </form>
           </Reveal>
         </div>
 
