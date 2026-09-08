@@ -95,13 +95,7 @@ export const Paiement: React.FC<PaiementProps> = ({ lang, value, onChange }) => 
             min="0"
             step="0.01"
             value={prixDollars}
-            onChange={(e) => {
-              const dollars = parseFloat(e.target.value);
-              onChange({
-                prixCents: Number.isFinite(dollars) && e.target.value !== '' ? Math.round(dollars * 100) : undefined,
-                devise: 'CAD',
-              });
-            }}
+            onChange={(e) => onChange({ prixCents: Math.round(parseFloat(e.target.value) * 100), devise: 'CAD' })}
           />
 
           <div
