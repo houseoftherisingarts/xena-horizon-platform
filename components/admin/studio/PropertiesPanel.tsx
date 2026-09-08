@@ -53,20 +53,16 @@ export const PropertiesPanel: React.FC<Props> = ({ calque, onChange, onDelete, o
   return (
     <div className="space-y-6">
       <Panneau titre={t.ajouter}>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
           <button type="button" onClick={onAddTexte} className="flex flex-col items-center gap-1 p-2.5 rounded-champ border border-filet text-gris hover:border-encre hover:text-encre text-xs font-medium">
             <Type className="w-4 h-4" /> {t.texte}
           </button>
           <button type="button" onClick={() => setChoixImage((v) => !v)} className="flex flex-col items-center gap-1 p-2.5 rounded-champ border border-filet text-gris hover:border-encre hover:text-encre text-xs font-medium">
             <ImagePlus className="w-4 h-4" /> {t.image}
           </button>
-          <div className="relative group">
-            <button type="button" onClick={() => onAddForme('rectangle')} className="w-full flex flex-col items-center gap-1 p-2.5 rounded-champ border border-filet text-gris hover:border-encre hover:text-encre text-xs font-medium">
-              <Square className="w-4 h-4" /> {t.forme}
-            </button>
-          </div>
         </div>
-        <div className="flex gap-2 mt-2">
+        <p className="text-xs text-gris mb-1.5">{t.forme}</p>
+        <div className="flex gap-2">
           <button type="button" onClick={() => onAddForme('rectangle')} className="flex-1 flex items-center justify-center p-2 rounded-champ border border-filet text-gris hover:text-encre hover:border-encre"><Square className="w-3.5 h-3.5" /></button>
           <button type="button" onClick={() => onAddForme('cercle')} className="flex-1 flex items-center justify-center p-2 rounded-champ border border-filet text-gris hover:text-encre hover:border-encre"><Circle className="w-3.5 h-3.5" /></button>
           <button type="button" onClick={() => onAddForme('ligne')} className="flex-1 flex items-center justify-center p-2 rounded-champ border border-filet text-gris hover:text-encre hover:border-encre"><Minus className="w-3.5 h-3.5" /></button>
