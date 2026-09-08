@@ -4,7 +4,7 @@
 // calmement plutôt que d'afficher une erreur technique. Suit le canon v2 (components/admin/CANON-ADMIN.md).
 import React, { useEffect, useState } from 'react';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { Calendar, Check, RefreshCw, Unlink } from 'lucide-react';
+import { Calendar, Check, Unlink } from 'lucide-react';
 import { app } from '../../../firebase';
 import { Bouton, Panneau, Selection } from '../ui';
 import { useTextes } from '../../../lib/textes';
