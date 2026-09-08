@@ -33,7 +33,12 @@ export const PRODUITS_DEMO: Product[] = [
     category: 'Service',
     status: 'Active',
     isPublic: true,
-    clientTypes: ['Artist', 'Entrepreneur']
+    clientTypes: ['Artist', 'Entrepreneur'],
+    paiement: 'stripe',
+    prixCents: 6500,
+    devise: 'CAD',
+    stripePriceId: 'price_demo_atelier',
+    stripeEtat: 'synchronise'
   },
   {
     id: 'demo-strategie',
@@ -43,7 +48,8 @@ export const PRODUITS_DEMO: Product[] = [
     type: 'Consulting',
     category: 'Service',
     status: 'Active',
-    isPublic: true
+    isPublic: true,
+    paiement: 'inscription'
   },
   {
     id: 'demo-accompagnement',
