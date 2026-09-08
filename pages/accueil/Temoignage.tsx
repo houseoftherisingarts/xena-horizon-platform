@@ -27,7 +27,7 @@ const Temoignage: React.FC<TemoignageProps> = ({ lang }) => {
     <Feuille z={3} className="bg-papier">
       <div className="grid grid-cols-12 gap-x-col gap-y-10 px-gut pt-feuille">
         <div className="col-span-12 sm:col-span-9 sm:col-start-2">
-          <TexteRevele texte={extrait} as="p" par="mot" className="text-display font-serif text-encre" />
+          <TexteRevele texte={extrait} as="p" par="mot" className="text-h3 font-serif text-encre sm:text-display" />
         </div>
 
         <Reveal as="div" className="col-span-12 sm:col-span-6 sm:col-start-2">
