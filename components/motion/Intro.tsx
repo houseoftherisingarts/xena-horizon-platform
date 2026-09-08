@@ -94,12 +94,19 @@ export const Intro: React.FC<IntroProps> = ({
     );
   }
 
-  const { filetS, tenueS, leveS } = phases(dureeMs);
+  const { filetS, tenueS, leveS, fonduS } = phases(dureeMs);
   const lettres = Array.from(marque);
   const staggerLettre = Math.min(0.03, filetS / Math.max(1, lettres.length) / 2);
+  // Le voyage de la marque vers la barre de navigation (layoutId partagé) : 0,6 s, l'easing
+  // maison. Posé ici pour que l'intro et Nav.tsx portent exactement la même transition.
+  const TRANSITION_VOYAGE = { layout: { duration: 0.6, ease: EASE_FILET } };
 
   return (
-    <div className="fixed inset-0 z-[200] pointer-events-none">
+    // `exit` donne à AnimatePresence (PublicHome.tsx) le temps de tenir ce sous-arbre monté
+    // pendant que framer-motion raccorde le FLIP du layoutId vers la barre ; sans lui, React
+    // retire l'intro du DOM dans le même rendu que `introVisible = false` et les deux marques
+    // ne coexistent jamais assez longtemps pour que le voyage se produise.
+    <motion.div className="fixed inset-0 z-[200] pointer-events-none" exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>
       <motion.div
         className="absolute inset-0"
         style={{ background: 'var(--xh-papier, #0f172a)' }}
@@ -107,7 +114,12 @@ export const Intro: React.FC<IntroProps> = ({
         animate={{ clipPath: 'inset(100% 0% 0% 0%)' }}
         transition={{ duration: leveS, ease: EASE_RIDEAU, delay: filetS + tenueS }}
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: fonduS, delay: filetS + tenueS - fonduS, ease: EASE_FILET }}
+        >
           <motion.span
             aria-hidden
             className="absolute left-1/2 top-[42%] h-px -translate-x-1/2 -translate-y-1/2"
@@ -125,6 +137,7 @@ export const Intro: React.FC<IntroProps> = ({
             style={{ color: 'var(--xh-encre, currentColor)' }}
             initial="cache"
             animate="visible"
+            transition={TRANSITION_VOYAGE}
             variants={{
               cache: {},
               visible: { transition: { staggerChildren: staggerLettre, delayChildren: filetS * 0.25 } },
@@ -154,9 +167,9 @@ export const Intro: React.FC<IntroProps> = ({
           >
             {signature}
           </motion.p>
-        </div>
+        </motion.div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
