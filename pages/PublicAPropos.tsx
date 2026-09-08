@@ -48,14 +48,12 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
           </Reveal>
         </div>
         <Reveal delay={0.2} className="lg:col-span-4 lg:col-start-9 relative aspect-[3/4] overflow-hidden">
-          <Parallax speed={0.1} className="absolute inset-0">
-            <KenBurns
-              src="/images/laurie-apropos.jpg"
-              alt="Laurie Belhumeur"
-              position="50% 25%"
-              className="w-full h-full"
-            />
-          </Parallax>
+          <KenBurns
+            src="/images/laurie-apropos.jpg"
+            alt="Laurie Belhumeur"
+            position="50% 25%"
+            className="absolute inset-0"
+          />
           <div
             aria-hidden
             className="absolute inset-y-0 left-0 w-1/5 pointer-events-none"
