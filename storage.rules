@@ -4,7 +4,7 @@ service firebase.storage {
   match /b/{bucket}/o {
     function isAdmin() {
       return request.auth != null
-        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2']
+        && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2', 'yDFO0AuJeyV3ssTowc1Mp1dlMag1']
             || (request.auth.token.email_verified == true
                 && request.auth.token.email in ['houseoftherisingarts@gmail.com', 'laurie.belhumeur@gmail.com']));
     }
