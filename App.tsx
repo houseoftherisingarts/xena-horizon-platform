@@ -31,6 +31,7 @@ const AdminDossiers = lazy(() => import('./pages/AdminDossiers'));
 const AdminVexel = lazy(() => import('./pages/AdminVexel'));
 const AdminTemoignages = lazy(() => import('./pages/AdminTemoignages'));
 const EspaceClient = lazy(() => import('./pages/EspaceClient'));
+const FacturePublique = lazy(() => import('./pages/FacturePublique'));
 const PublicProjets = lazy(() => import('./pages/PublicProjets'));
 const PublicAPropos = lazy(() => import('./pages/PublicAPropos'));
 
