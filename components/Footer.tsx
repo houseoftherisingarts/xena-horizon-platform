@@ -1,4 +1,5 @@
 import React from 'react';
+import BadgeVexel from './BadgeVexel';
 import { Mail, Phone } from 'lucide-react';
 import { Language, ViewState } from '../types';
 import { COORDONNEES, CREDITS } from '../lib/contenu';
@@ -25,7 +26,6 @@ const TEXTES = {
     coord: 'Coordonnées',
     credits: 'Crédit photo',
     rights: 'Tous droits réservés.',
-    platform: 'Site créé par Vexel Webstudio',
     admin: 'Admin',
   },
   EN: {
@@ -40,7 +40,6 @@ const TEXTES = {
     coord: 'Contact',
     credits: 'Photo credit',
     rights: 'All rights reserved.',
-    platform: 'Site by Vexel Webstudio',
     admin: 'Admin',
   },
 };
@@ -119,16 +118,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
         <div className="md:col-span-3">
           <p className="kicker text-gris mb-4">{t.credits}</p>
           <p className="text-petit text-gris mb-6">{CREDITS.photographes.join(' · ')}</p>
-          <p className="text-xs text-gris">
-            <a
-              href="https://vexelwebstudio.com"
-              target="_blank"
-              rel="noopener"
-              className="underline decoration-filet underline-offset-4 hover:text-encre transition-colors"
-            >
-              {t.platform}
-            </a>
-          </p>
+          <BadgeVexel lang={lang} className="mb-4" />
           <p className="text-xs text-gris mt-1">
             © {new Date().getFullYear()} Laurie Belhumeur · Xena Horizon. {t.rights}
           </p>
