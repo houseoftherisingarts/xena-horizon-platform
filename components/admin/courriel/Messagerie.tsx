@@ -20,7 +20,7 @@ const TEXTES = {
     chargement: 'Chargement…',
     select: 'Choisis une conversation dans la liste.',
     voirDossier: 'Voir son dossier',
-    profilKicker: 'Profil',
+    retour: 'Retour à la liste',
   },
   EN: {
     search: 'Search a name, an email…',
@@ -29,7 +29,7 @@ const TEXTES = {
     chargement: 'Loading…',
     select: 'Pick a conversation from the list.',
     voirDossier: 'View their file',
-    profilKicker: 'Profile',
+    retour: 'Back to list',
   },
 };
 

@@ -29,16 +29,6 @@
       ]
     },
     {
-      "collectionGroup": "leads",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "rendezvous",
       "queryScope": "COLLECTION",
       "fields": [
