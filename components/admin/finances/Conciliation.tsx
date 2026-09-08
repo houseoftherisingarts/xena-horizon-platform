@@ -29,6 +29,7 @@ const TEXTES = {
     ecart: 'Gap', ecartNul: 'Everything matches.', ecartTexte: 'Difference between the expected closing balance and the statement.',
     soldeCalcule: 'Calculated balance', date: 'Date', description: 'Description', montant: 'Amount', tout: 'Check all', rien: 'Uncheck all',
     vide: 'No transactions this month', videTexte: 'Choose another month, or add transactions.',
+    dejaConcilie: 'already reconciled', marquerN: (n: number) => `Mark ${n} transaction${n > 1 ? 's' : ''} reconciled`,
   },
 };
 
