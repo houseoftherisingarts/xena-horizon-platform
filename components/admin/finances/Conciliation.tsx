@@ -114,7 +114,7 @@ const Conciliation: React.FC<Props> = ({ lang }) => {
               </table>
             </div>
             <div className="mt-6">
-              <Bouton onClick={marquerConcilie} disabled={coches.size === 0}>{t.tout === t.tout ? (lang === 'FR' ? `Marquer ${coches.size} transaction(s) conciliée(s)` : `Mark ${coches.size} transaction(s) reconciled`) : ''}</Bouton>
+              <Bouton onClick={marquerConcilie} disabled={coches.size === 0}>{t.marquerN(coches.size)}</Bouton>
             </div>
           </>
         )}
