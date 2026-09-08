@@ -92,6 +92,19 @@ export const PALETTE_COULEURS: { nom: string; valeur: string }[] = [
   { nom: 'Rose Xena (encre)', valeur: '#A8104A' },
 ];
 
+/** Les vraies photos publiques déjà sur le site, offertes comme source de calque image. */
+export const IMAGES_PUBLIQUES: string[] = [
+  '/images/laurie-portrait-1.jpg',
+  '/images/laurie-portrait-2.jpg',
+  '/images/laurie-portrait-nb.jpg',
+  '/images/laurie-apropos.jpg',
+  '/images/laurie-scene.jpg',
+  '/images/livre-couverture.jpg',
+  '/images/banniere-defaut.jpg',
+  '/images/balado.jpg',
+  '/images/logo-laurie.png',
+];
+
 let compteur = 0;
 export const idCalque = (): string => `c${Date.now().toString(36)}${(compteur++).toString(36)}`;
 
