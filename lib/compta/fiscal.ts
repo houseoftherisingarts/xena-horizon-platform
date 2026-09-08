@@ -2,20 +2,21 @@
 // Fonctions pures, sans Firestore. Voir docs/FISCAL-2026.md pour les sources des constantes.
 import type { Transaction, ReglagesCompta, Periode } from './types';
 import type { ParametresFiscaux, Palier } from './fiscal-2026';
+import { periodesDe } from './periodes';
 
 // --- Utilitaires de dates ---
 
 const iso = (d: Date): string => d.toISOString().slice(0, 10);
 
-const dansPeriode = (date: string, debut: string, fin: string): boolean => date >= debut && date <= fin;
-
-// Bornes de l'exercice courant à partir des réglages (anneeFiscale + exerciceDebut 'MM-JJ').
-function bornesExercice(reglages: ReglagesCompta): { debut: Date; fin: Date } {
-  const [mm, jj] = reglages.exerciceDebut.split('-').map(Number);
-  const debut = new Date(reglages.anneeFiscale, mm - 1, jj);
-  const finExclusive = new Date(reglages.anneeFiscale + 1, mm - 1, jj);
-  const fin = new Date(finExclusive.getTime() - 86400000);
-  return { debut, fin };
+// L'exercice (au sens de periodesDe) qui contient la date donnée, quelle que soit l'année civile.
+function exerciceContenant(reglages: ReglagesCompta, aujourdhui: Date): Periode {
+  const dateStr = iso(aujourdhui);
+  const anneeCivile = aujourdhui.getFullYear();
+  for (const decalage of [0, -1, 1]) {
+    const { exercice } = periodesDe(reglages, anneeCivile + decalage);
+    if (dateStr >= exercice.debut && dateStr <= exercice.fin) return exercice;
+  }
+  return periodesDe(reglages, anneeCivile).exercice;
 }
 
 // --- Paliers d'imposition ---
