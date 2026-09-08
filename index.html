@@ -18,9 +18,11 @@
     <meta name="twitter:title" content="Xena Horizon | Laurie Belhumeur, consultante en carrière" />
     <meta name="twitter:description" content="Xena Horizon accompagne les artistes, les créateurs et les organismes culturels : stratégie de communication, identité artistique, événements et rédaction." />
     <meta name="twitter:image" content="https://xenahorizon.com/images/og-1200x630.jpg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <!-- Fontes hébergées dans public/fonts/ (plus de Google Fonts, plus de flash de police au
+         chargement) : les deux fichiers critiques du hero se préchargent ici. Détail : index.css
+         (bloc @font-face) et docs/CHARGEMENT-2026-09-08.md. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/figtree-latin-variable.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/playfair-display-latin-variable.woff2" crossorigin />
     <script>try{if(localStorage.getItem('xena.skin')==='encre')document.documentElement.setAttribute('data-skin','encre');var n=localStorage.getItem('xena.nuit');if(n==='1'||(n===null&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-nuit','')}catch(e){}</script>
 
 </head>
