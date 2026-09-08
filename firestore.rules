@@ -200,7 +200,13 @@ service cloud.firestore {
                     || (request.auth != null && get(/databases/$(database)/documents/rendezvous/$(rdvId)).data.uid == request.auth.uid);
       allow update: if isAdmin();
     }
+    // occupations/{id} peut aussi porter source == 'google' (plage tirée de son agenda Google, écrite par
+    // agendaGoogleSync) et rendezvous/{id} un champ googleEventId : les deux sont posés par les Cloud
+    // Functions via l'Admin SDK, qui ignore ces règles. Rien n'y touche depuis le client, admin compris.
 
+    // Le jeton Google de Laurie (functions/src/agenda/google.ts) : aucune règle client, admin exclu aussi.
+    // Seules les Cloud Functions (Admin SDK) lisent et écrivent ce document.
+    match /prive/{docId} { allow read, write: if false; }
 
     // Le coffre pour Vexel : les informations que Laurie dépose pour Alex, chiffrées dans le navigateur avec la clé
     // publique de Vexel (lib/coffre.ts). Firestore ne voit qu'un texte chiffré et un résumé (nom, quatre derniers chiffres).
