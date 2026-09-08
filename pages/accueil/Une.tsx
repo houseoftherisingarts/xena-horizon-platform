@@ -84,8 +84,9 @@ const Une: React.FC<UneProps> = ({
 
       {/* La photo : bande pleine largeur sous le texte sur mobile (pas de masque, rien à
           protéger en dessous) ; déborde à droite et en bas, masquée à gauche, dès sm. */}
-      <div
-        className="relative h-[36svh] w-full shrink-0 [mask-image:none] sm:absolute sm:right-[-3%] sm:top-0 sm:h-[112%] sm:w-[42%] sm:shrink sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)]"
+      <motion.div
+        className="relative h-[var(--photo-h)] w-full shrink-0 [mask-image:none] sm:absolute sm:right-[-3%] sm:top-0 sm:h-[112%] sm:w-[42%] sm:shrink sm:[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)] sm:[mask-image:linear-gradient(to_right,transparent_0%,black_18%,black_100%)]"
+        style={{ '--photo-h': hauteurPhoto ?? '36svh' } as unknown as React.CSSProperties}
       >
         <motion.div className="h-full w-full" style={filtre ? { filter: filtre, willChange: 'filter' } : undefined}>
           <KenBurns src={imageUrl} alt="Laurie Belhumeur" position="50% 22%" className="h-full w-full" />
