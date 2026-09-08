@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { useCollection } from '../lib/firestore';
 import { PROFILS_REELS, SERVICES_PAGE, SERVICES_REELS, SIGNATURE, ServiceReel } from '../lib/contenu';
 import { ETAPES_PAR_DEFAUT } from '../lib/dossier';
-import { Feuille, KenBurns, Reveal, RevealStagger, TexteRevele } from '../components/motion';
+import { Feuille, KenBurns, Reveal, TexteRevele } from '../components/motion';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
 
 interface PublicServicesProps {
@@ -42,6 +42,9 @@ const pourQui = (offer: Product, lang: Language): string => {
     .join(' · ');
 };
 
+const OFFSET_PROFIL = ['', 'lg:mt-[6vh]', 'lg:mt-[12vh]'];
+const SPAN_PROFIL = ['lg:col-span-5', 'lg:col-span-4', 'lg:col-span-3'];
+
 const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) => {
   const { data: produitsFirestore } = useCollection<Product>('products');
 
@@ -49,16 +52,15 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
     FR: {
       pricesLabel: 'Prix de départ',
       book: 'Prendre rendez-vous',
-      pillA: 'À partir d\'un prix de départ',
+      pillA: "À partir d'un prix de départ",
       pillB: 'Sur demande',
       howTitle: 'Comment ça\nse passe',
       howSubtitle: 'Le même parcours pour chaque personne accompagnée, du premier appel au suivi.',
       spaceTitle: 'Un dossier déjà commencé ?',
       spaceText: 'Retrouve ton parcours, tes pièces et tes échanges avec Laurie dans ton espace client.',
       spaceCta: 'Ouvrir mon espace',
-      rdvTitle: 'Prendre rendez-vous',
       rdvText: "Écris-moi et je te reviens rapidement. Regardons ensemble si nous sommes faites pour travailler ensemble.",
-      profilsKicker: 'Trois profils',
+      voirOffres: 'Voir les offres',
       subheadline: 'Trois profils, une même écoute : artiste, entrepreneur créatif ou organisme.',
     },
     EN: {
@@ -71,13 +73,13 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       spaceTitle: 'Already have a file open?',
       spaceText: 'Find your path, your documents and your exchanges with Laurie in your client space.',
       spaceCta: 'Open my space',
-      rdvTitle: 'Book an appointment',
       rdvText: "Write to me and I'll get back to you quickly. Let's see together if we're a good fit to work together.",
-      profilsKicker: 'Three profiles',
+      voirOffres: 'View services',
       subheadline: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
     },
   }[lang];
 
+  const book = t.book;
   const titre = lang === 'EN' ? SERVICES_PAGE.titreEN : SERVICES_PAGE.titreFR;
   const email = 'laurie.belhumeur@gmail.com';
 
@@ -103,7 +105,10 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   };
 
   const RangeeOffre: React.FC<{ offer: Product; delay: number }> = ({ offer, delay }) => (
-    <Reveal delay={delay} className="border-b border-filet py-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-6 items-baseline">
+    <Reveal
+      delay={delay}
+      className="border-b border-filet py-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-6 items-baseline"
+    >
       <div>
         <h3 className="font-serif text-h3">{nomOffre(offer, lang)}</h3>
         <p className="text-petit text-gris mt-1">{pourQui(offer, lang)}</p>
@@ -115,14 +120,14 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           onClick={goToContact}
           className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-encre hover:text-papier"
         >
-          {t.book} <ArrowRight className="w-3.5 h-3.5" />
+          {book} <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
     </Reveal>
   );
 
   return (
-    <div className="pb-0">
+    <div>
       {/* --- OUVERTURE : manchette + prix de départ --- */}
       <section className="px-gut pt-[calc(var(--nav)+3.5rem)] pb-bloc grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10">
         <div className="lg:col-span-7">
@@ -135,7 +140,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
               onClick={goToContact}
               className="pilule mt-8 inline-flex items-center gap-2 rounded-pilule bg-encre text-papier px-7 py-3.5 font-medium hover:bg-encre-2 transition-colors"
             >
-              {t.rdvTitle} <ArrowRight className="w-4 h-4" />
+              {book} <ArrowRight className="w-4 h-4" />
             </button>
           </Reveal>
         </div>
@@ -163,16 +168,13 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       </div>
 
       {/* --- TROIS PROFILS --- */}
-      <Feuille z={1} tone="papier" className="bg-papier px-gut py-feuille">
+      <Feuille z={1} className="bg-papier px-gut py-feuille">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-12">
           {PROFILS_REELS.map((profil, i) => (
             <Reveal
               key={profil.id}
               delay={i * 0.1}
-              className={`border-t border-filet pt-6 ${
-                i === 0 ? 'lg:col-span-5' : i === 1 ? 'lg:col-span-4' : 'lg:col-span-3'
-              }`}
-              style={{ marginTop: i === 1 ? '6vh' : i === 2 ? '12vh' : 0 } as React.CSSProperties}
+              className={`border-t border-filet pt-6 ${SPAN_PROFIL[i]} ${OFFSET_PROFIL[i]}`}
             >
               <p className="text-petit text-gris mb-2">{lang === 'EN' ? profil.taglineEN : profil.taglineFR}</p>
               <h2 className="font-serif text-h2">{lang === 'EN' ? profil.titleEN : profil.titleFR}</h2>
@@ -186,7 +188,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
                 }}
                 className="inline-flex items-center gap-2 mt-5 text-petit font-medium hover:text-rose transition-colors"
               >
-                {lang === 'EN' ? 'View services' : 'Voir les offres'} <ArrowRight className="w-3.5 h-3.5" />
+                {t.voirOffres} <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </Reveal>
           ))}
@@ -194,61 +196,63 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       </Feuille>
 
       {/* --- LA CARTE DES OFFRES --- */}
-      <Feuille z={2} tone="papier-2" id="offres" className="bg-papier-2 px-gut py-feuille">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col">
-          <Reveal as="h2" className="font-serif text-h2 lg:col-span-4">
-            {t.pillA}
-          </Reveal>
-          <div className="lg:col-span-8 lg:col-start-5 mt-8 lg:mt-0">
-            {chapitreA.map((offer, i) => (
-              <RangeeOffre key={offer.id} offer={offer} delay={i * 0.08} />
-            ))}
+      <div id="offres">
+        <Feuille z={2} className="bg-papier-2 px-gut py-feuille">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col">
+            <Reveal as="h2" className="font-serif text-h2 lg:col-span-4">
+              {t.pillA}
+            </Reveal>
+            <div className="lg:col-span-8 lg:col-start-5 mt-8 lg:mt-0">
+              {chapitreA.map((offer, i) => (
+                <RangeeOffre key={offer.id} offer={offer} delay={i * 0.08} />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col mt-16">
-          <Reveal as="h2" className="font-serif text-h2 lg:col-span-4">
-            {t.pillB}
-          </Reveal>
-          <div className="lg:col-span-8 lg:col-start-5 mt-8 lg:mt-0">
-            {chapitreB.map((offer, i) => (
-              <RangeeOffre key={offer.id} offer={offer} delay={i * 0.08} />
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col mt-16">
+            <Reveal as="h2" className="font-serif text-h2 lg:col-span-4">
+              {t.pillB}
+            </Reveal>
+            <div className="lg:col-span-8 lg:col-start-5 mt-8 lg:mt-0">
+              {chapitreB.map((offer, i) => (
+                <RangeeOffre key={offer.id} offer={offer} delay={i * 0.08} />
+              ))}
+            </div>
           </div>
-        </div>
-      </Feuille>
+        </Feuille>
+      </div>
 
       {/* --- INTERLUDE : la signature --- */}
-      <Feuille z={3} tone="papier" className="bg-papier px-gut py-bloc">
+      <Feuille z={3} className="bg-papier px-gut py-bloc">
         <TexteRevele
           texte={lang === 'EN' ? SIGNATURE.texteEN : SIGNATURE.texteFR}
           as="p"
           par="mot"
-          className="font-serif text-display max-w-[11ch] lg:max-w-none lg:col-span-11"
+          className="font-serif text-display lg:max-w-[85%]"
         />
         <div className="h-[2px] bg-rose w-24 mt-8" />
       </Feuille>
 
       {/* --- COMMENT ÇA SE PASSE --- */}
-      <Feuille z={4} tone="papier-2" className="bg-papier-2 px-gut py-feuille">
+      <Feuille z={4} className="bg-papier-2 px-gut py-feuille">
         <Reveal as="p" className="text-lede text-gris mb-3">
           {t.howSubtitle}
         </Reveal>
         <TexteRevele texte={t.howTitle} as="h2" par="mot" className="font-serif text-h2 mb-12" />
-        <RevealStagger stagger={0.08}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-col gap-y-10">
-            {ETAPES_PAR_DEFAUT.map((etape, i) => (
-              <div key={etape.id} className="border-t border-filet pt-5">
-                <p className="font-serif text-h3 text-rose">{String(i + 1).padStart(2, '0')}</p>
-                <h3 className="font-serif text-[1.1rem] mt-2">{lang === 'EN' ? etape.titreEn ?? etape.titre : etape.titre}</h3>
-                <p className="text-petit text-gris mt-2">{lang === 'EN' ? etape.sousEn ?? etape.sous : etape.sous}</p>
-              </div>
-            ))}
-          </div>
-        </RevealStagger>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-col gap-y-10">
+          {ETAPES_PAR_DEFAUT.map((etape, i) => (
+            <Reveal key={etape.id} delay={i * 0.08} className="border-t border-filet pt-5">
+              <p className="font-serif text-h3 text-rose">{String(i + 1).padStart(2, '0')}</p>
+              <h3 className="font-serif text-[1.1rem] mt-2">
+                {lang === 'EN' ? etape.titreEn ?? etape.titre : etape.titre}
+              </h3>
+              <p className="text-petit text-gris mt-2">{lang === 'EN' ? etape.sousEn ?? etape.sous : etape.sous}</p>
+            </Reveal>
+          ))}
+        </div>
       </Feuille>
 
       {/* --- OUVRIR SON ESPACE --- */}
-      <Feuille z={5} tone="papier" className="bg-papier px-gut py-bloc">
+      <Feuille z={5} className="bg-papier px-gut py-bloc">
         <Reveal className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <h2 className="font-serif text-h3">{t.spaceTitle}</h2>
@@ -273,14 +277,19 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       </Feuille>
 
       {/* --- PRENDRE RENDEZ-VOUS --- */}
-      <Feuille z={6} tone="papier-2" className="bg-papier-2 px-gut py-bloc min-h-[60svh] flex items-center">
+      <Feuille z={6} className="bg-papier-2 px-gut py-bloc min-h-[60svh] flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-8 w-full">
           <div className="lg:col-span-6">
             <Reveal as="h2" className="font-serif text-h2">
-              {t.rdvTitle}
+              {book}
             </Reveal>
-            <Reveal delay={0.15} as="button" onClick={goToContact} className="pilule mt-6 inline-flex items-center gap-2 rounded-pilule bg-encre text-papier px-7 py-3.5 font-medium hover:bg-encre-2 transition-colors">
-              {t.rdvTitle} <ArrowRight className="w-4 h-4" />
+            <Reveal delay={0.15}>
+              <button
+                onClick={goToContact}
+                className="pilule mt-6 inline-flex items-center gap-2 rounded-pilule bg-encre text-papier px-7 py-3.5 font-medium hover:bg-encre-2 transition-colors"
+              >
+                {book} <ArrowRight className="w-4 h-4" />
+              </button>
             </Reveal>
           </div>
           <Reveal delay={0.1} className="lg:col-span-6">
