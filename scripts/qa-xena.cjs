@@ -9,10 +9,10 @@ const OUT = process.argv[3] || 'captures';
 fs.mkdirSync(OUT, { recursive: true });
 const comptes = fs.readFileSync(process.env.HOME + '/.config/xena/compte-temoin.txt', 'utf8').trim().split('\n');
 const [clientEmail, clientPw] = comptes[0].split(' / ').map((s) => s.trim());
-const [adminEmail, adminPw] = comptes[1].split(' / ').map((s) => s.trim());
+const [adminEmail, adminPw] = (comptes[1] || ' / ').split(' / ').map((s) => s.trim());
 
 const VUES = [
-  { nom: 'accueil', path: '/', scrolls: [0, 0.25, 0.5, 0.75, 1] },
+  { nom: 'accueil', path: '/', scrolls: [0, 0.12, 0.25, 0.4, 0.55, 0.7, 0.85, 1] },
   { nom: 'services', path: '/services', scrolls: [0, 0.5, 1] },
   { nom: 'projets', path: '/projets', scrolls: [0, 0.5, 1] },
   { nom: 'a-propos', path: '/a-propos', scrolls: [0, 0.5, 1] },
@@ -88,13 +88,17 @@ async function connecter(page, email, pw) {
       await capturer(page, v.nom, largeur, v.scrolls);
     }
     // Pages publiques en anglais : bascule FR/EN puis mêmes captures
-    for (const v of VUES.slice(0, 4)) {
-      await page.goto(BASE + v.path, { waitUntil: 'load', timeout: 60000 });
-      await page.waitForTimeout(1500);
-      const bascule = page.locator('button').filter({ hasText: /^\s*FR\s*\/\s*EN\s*$/ }).first();
-      if (await bascule.count()) { await bascule.click(); await page.waitForTimeout(800); }
-      await mesurer(page, `${v.nom}-en`, largeur);
-      await capturer(page, `${v.nom}-en`, largeur, [0, 0.5, 1]);
+    if (largeur > 600) {
+      for (const v of VUES.slice(0, 4)) {
+        try {
+          await page.goto(BASE + v.path, { waitUntil: 'load', timeout: 60000 });
+          await page.waitForTimeout(1500);
+          const bascule = page.locator('button').filter({ hasText: /FR\s*\/\s*EN|^EN$/ }).first();
+          if (await bascule.count()) { await bascule.click({ timeout: 5000 }); await page.waitForTimeout(800); }
+          await mesurer(page, `${v.nom}-en`, largeur);
+          await capturer(page, `${v.nom}-en`, largeur, [0, 0.5, 1]);
+        } catch (e) { rapport.erreurs.push(`${largeur} EN ${v.nom}: ${e.message.slice(0, 160)}`); }
+      }
     }
 
     // Espace client connecté
@@ -120,7 +124,8 @@ async function connecter(page, email, pw) {
     }
     await ctx.close();
 
-    // Back-office : admin témoin
+    // Back-office : admin témoin (seulement si un compte admin est fourni)
+    if (!adminEmail) continue;
     const adm = await ouvrir(browser, largeur);
     await adm.page.goto(BASE + '/espace', { waitUntil: 'load', timeout: 60000 });
     await adm.page.waitForTimeout(2000);

@@ -120,7 +120,7 @@ const APropos: React.FC<AProposProps> = ({
               </Reveal>
             ))}
           </div>
-          <TexteRevele texte={mission} as="p" par="mot" className="mt-8 max-w-mesure text-display font-serif text-rose" />
+          <TexteRevele texte={mission} as="p" par="mot" className="mt-8 max-w-mesure text-h2 font-serif text-rose" />
 
           <div className="-mb-3 mt-auto pt-10 text-right">
             <a
