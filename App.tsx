@@ -169,9 +169,9 @@ const App: React.FC = () => {
       case 'ADMIN_AGENDA':
         return <AdminAgenda lang={lang} />;
       case 'ADMIN_EMAIL':
-        return <AdminEmail lang={lang} />;
+        return <AdminCourriel lang={lang} onglet="courriels" onChangeView={setCurrentView} />;
       case 'ADMIN_MESSENGER':
-        return <AdminMessenger lang={lang} />;
+        return <AdminCourriel lang={lang} onglet="messagerie" onChangeView={setCurrentView} />;
       default:
         return <PublicHome blocks={homeBlocks} lang={lang} onChangeView={setCurrentView} />;
     }
