@@ -1,4 +1,4 @@
-// PublicHome — l'accueil v2 « Manchette », section par section (DIRECTION-v2.md §6.1).
+// PublicHome : l'accueil v2 « Manchette », section par section (DIRECTION-v2.md §6.1).
 // L'intro joue une fois par session puis sa marque voyage vers la barre de navigation
 // (layoutId partagé) ; le hero s'allume au premier scroll ; les six feuilles suivantes
 // s'empilent, la dernière d'encre.

@@ -1,4 +1,4 @@
-// Une — la manchette de l'accueil. À partir de sm, le h1 traverse les douze colonnes
+// Une : la manchette de l'accueil. À partir de sm, le h1 traverse les douze colonnes
 // et la photo déborde sur les colonnes 8 à 12, masquée sur son bord gauche comme
 // imprimée sur la page. Sur mobile, la grille asymétrique retombe en une colonne :
 // le texte occupe le haut, la photo une bande pleine largeur en dessous, jamais

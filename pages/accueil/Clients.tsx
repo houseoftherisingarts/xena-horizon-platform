@@ -1,4 +1,4 @@
-// Clients — le colophon : une seule bande défilante (le seul marquee de la page),
+// Clients, le colophon : une seule bande défilante (le seul marquee de la page),
 // dupliquée pour la boucle, en pause au survol. Sans contenant Feuille propre : ce
 // composant se rend au pied de Temoignage, dans la même feuille (canon du storyboard).
 

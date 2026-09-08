@@ -1,4 +1,4 @@
-// Sommaire — les trois profils, en rangées à filet plutôt qu'en cartes de verre.
+// Sommaire : les trois profils, en rangées à filet plutôt qu'en cartes de verre.
 // Au survol, au focus ou au toucher, la rangée s'ouvre et révèle son détail.
 // Première feuille du pile (aucun coin, aucune ombre : rien à recouvrir en dessous).
 

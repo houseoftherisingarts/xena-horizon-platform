@@ -1,4 +1,4 @@
-// Contact — dernière feuille. Le courriel en display, cliquable, puis le formulaire
+// Contact : dernière feuille. Le courriel en display, cliquable, puis le formulaire
 // à filets. Le seul morceau de logique porté depuis la v1 : l'écriture dans `leads`
 // avec ses champs exacts, l'état d'attente et l'erreur visible.
 

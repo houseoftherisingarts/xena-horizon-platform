@@ -1,4 +1,4 @@
-// Projets — la seule feuille d'encre de l'accueil (la rupture Von Restorff). Triptyque
+// Projets : la seule feuille d'encre de l'accueil (la rupture Von Restorff). Triptyque
 // décalé : le livre, le balado, la photo de modèle, chacun à sa propre profondeur de
 // parallaxe pour que l'encre ne soit jamais un panneau plat.
 

@@ -1,4 +1,4 @@
-// Allumage — la une épinglée dans un conteneur de 240vh : la photo passe du noir et blanc
+// Allumage : la une épinglée dans un conteneur de 240vh : la photo passe du noir et blanc
 // à la couleur, le filet rose sous le titre s'étire, le titre et le sous-titre s'effacent
 // et une strophe se met au point à leur place. Progression lue par rAF (usePinProgress),
 // jamais useScroll({ target }). Sous prefers-reduced-motion : pas d'épinglage, photo en

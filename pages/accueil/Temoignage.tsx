@@ -1,4 +1,4 @@
-// Temoignage — l'extrait d'Alexis Sénécal en display, révélé mot par mot, décalé d'une
+// Temoignage : l'extrait d'Alexis Sénécal en display, révélé mot par mot, décalé d'une
 // colonne pour casser l'alignement. Le texte intégral en dessous, le nom et le rôle en marge.
 
 import React from 'react';

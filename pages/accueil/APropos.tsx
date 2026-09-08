@@ -1,4 +1,4 @@
-// APropos — brève histoire d'un tout. Photo à gauche au format 2:3, texte à droite,
+// APropos : brève histoire d'un tout. Photo à gauche au format 2:3, texte à droite,
 // les trois statistiques empilées sous la photo. Le « 15 » compte de 0 à 15 à l'entrée,
 // seul compteur du site.
 

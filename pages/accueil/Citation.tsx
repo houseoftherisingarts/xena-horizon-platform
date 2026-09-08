@@ -1,4 +1,4 @@
-// Citation — révélée par un masque radial pendant que la feuille monte, puis les mots
+// Citation : révélée par un masque radial pendant que la feuille monte, puis les mots
 // se posent. Le filet rose se trace sous la citation.
 
 import React from 'react';
