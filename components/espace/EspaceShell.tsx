@@ -22,7 +22,7 @@ interface EspaceShellProps {
   lang: Language;
 }
 
-type Onglet = 'dossier' | 'pieces' | 'parcours' | 'rendezvous' | 'messages' | 'ressources' | 'profil';
+type Onglet = 'pieces' | 'parcours' | 'rendezvous' | 'messages' | 'ressources' | 'profil';
 
 const EASE_MAISON = [0.16, 0.8, 0.24, 1] as const;
 const BANNIERE_DEFAUT = '/images/banniere-defaut.jpg';
