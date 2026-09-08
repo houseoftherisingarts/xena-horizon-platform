@@ -52,7 +52,8 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
       setTimeout(() => {
         const el = document.getElementById(sectionId);
         if (!el) return;
-        if (lenis) lenis.scrollTo(el, { offset: -72 });
+        // Lenis lit déjà `scroll-margin-top` sur la cible (index.css, `[id]`) : pas de second offset.
+        if (lenis) lenis.scrollTo(el);
         else el.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
