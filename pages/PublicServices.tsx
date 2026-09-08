@@ -196,7 +196,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
                 href="#offres"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById('offres')?.scrollIntoView({ behavior: 'smooth' });
+                  allerA('offres');
                 }}
                 className="inline-flex items-center gap-2 mt-5 text-petit font-medium hover:text-rose transition-colors"
               >
