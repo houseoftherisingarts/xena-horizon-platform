@@ -59,14 +59,16 @@ const Pastille: React.FC<{ etat: EtatPiece; t: TexteCarte }> = ({ etat, t }) => 
   return <span className={`text-[10px] font-sans font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pilule ${styles[etat]}`}>{label}</span>;
 };
 
-const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatPiece; note?: string; uid: string; t: TexteCarte }> = ({
+const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatPiece; note?: string; uid: string; t: TexteCarte; lang: Language }> = ({
   piece,
   deposee,
   etat,
   note,
   uid,
   t,
+  lang,
 }) => {
+  const { nom, aide } = libellesPiece(piece, lang);
   const [progres, setProgres] = useState<number | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [survole, setSurvole] = useState(false);
