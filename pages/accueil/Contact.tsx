@@ -99,8 +99,8 @@ const Contact: React.FC<ContactProps> = ({ lang, contact }) => {
             >
               {COORDONNEES.courriel}
             </a>
-            <p className="mt-4 text-lede font-sans font-light text-encre/80">
-              <a href={COORDONNEES.telephoneHref} className="hover:text-rose">
+            <p className="-mt-3 text-lede font-sans font-light text-encre/80">
+              <a href={COORDONNEES.telephoneHref} className="inline-block py-3 pt-7 hover:text-rose">
                 {COORDONNEES.telephone}
               </a>
             </p>
