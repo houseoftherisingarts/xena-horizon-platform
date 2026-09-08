@@ -81,10 +81,8 @@ const APropos: React.FC<AProposProps> = ({
   stat3Label,
   onChangeView,
 }) => {
-  const L = t[lang];
-  const titre = A_PROPOS_ACCUEIL.titre[lang];
-  const paragraphes = A_PROPOS_ACCUEIL.paragraphes[lang];
-  const mission = A_PROPOS_ACCUEIL.mission[lang];
+  const t = useTextes('accueilAPropos', TEXTES, lang);
+  const paragraphes = [t.p0, t.p1];
 
   const chiffre1 = Number.parseInt(stat1Value, 10) || 15;
   const unite1 = stat1Value.replace(/^\d+\s*/, '');

@@ -6,18 +6,25 @@ import React from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { CLIENTS_CONFIANCE } from '../../lib/contenu';
 import { CLIENTS_TITRE } from './textes';
+import { useTextes } from '../../lib/textes';
 import type { Language } from '../../types';
 
 export interface ClientsProps {
   lang: Language;
 }
 
+const TEXTES = {
+  FR: { titre: CLIENTS_TITRE.FR },
+  EN: { titre: CLIENTS_TITRE.EN },
+};
+
 const Clients: React.FC<ClientsProps> = ({ lang }) => {
   const reduce = useReducedMotion();
+  const t = useTextes('accueilCitation', TEXTES, lang);
 
   return (
-    <div className="mt-16 border-t border-filet pb-feuille pt-10 sm:mt-20">
-      <p className="kicker px-gut text-gris">{CLIENTS_TITRE[lang]}</p>
+    <div data-tx-scope="accueilCitation" className="mt-16 border-t border-filet pb-feuille pt-10 sm:mt-20">
+      <p className="kicker px-gut text-gris">{t.titre}</p>
 
       {reduce ? (
         <ul className="mt-6 flex flex-wrap gap-x-10 gap-y-3 px-gut">
