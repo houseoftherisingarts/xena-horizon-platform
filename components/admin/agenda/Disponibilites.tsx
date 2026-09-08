@@ -166,7 +166,7 @@ const Disponibilites: React.FC<Props> = ({ lang }) => {
   };
 
   const rangeePlage = (p: PlageHoraire, onDe: (v: string) => void, onA: (v: string) => void, onRetirer: () => void, cle: string) => (
-    <div key={cle} className="flex items-center gap-2">
+    <div key={cle} className="flex items-center gap-2 min-w-0">
       <input type="time" value={p.de} onChange={(e) => onDe(e.target.value)} aria-label={t.de} className={CHAMP_PETIT} />
       <span className="text-gris text-sm">{t.aChamp}</span>
       <input type="time" value={p.a} onChange={(e) => onA(e.target.value)} aria-label={t.aChamp} className={CHAMP_PETIT} />
