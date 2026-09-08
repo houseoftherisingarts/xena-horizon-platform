@@ -138,7 +138,7 @@ const Abonnes: React.FC<{ lang: Language }> = ({ lang }) => {
         await createDoc<Partial<Subscriber>>('subscribers', { email, name: name || undefined, status: 'active', source: 'import', lang: langue === 'en' ? 'en' : 'fr' });
         ajoutes++;
       }
-      setImportResultat(t.importerResultat(ajoutes, doublons, invalides));
+      setImportResultat(t.importerResultat.replace('{n}', String(ajoutes)).replace('{doublons}', String(doublons)).replace('{invalides}', String(invalides)));
       setCsv('');
     } finally {
       setBusy(false);
