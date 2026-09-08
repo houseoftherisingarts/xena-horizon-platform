@@ -59,12 +59,6 @@ const TEXTES = {
   },
 };
 
-// Une fonction absente (pas déployée, projet Spark) rend 'not-found' ou 'internal', ou échoue en réseau.
-const fonctionAbsente = (e: any): boolean => {
-  const code = String(e?.code || '');
-  return code.endsWith('/not-found') || code.endsWith('/internal') || /fetch|network|offline/i.test(String(e?.message || ''));
-};
-
 // États de démonstration pour la capture d'écran, actifs seulement en build --mode verif : le panneau
 // n'appelle jamais de fonction distante dans ce mode-là, il rend l'état demandé par l'adresse.
 const etatDemo = (): EtatConnexion | 'indisponible' | null => {
