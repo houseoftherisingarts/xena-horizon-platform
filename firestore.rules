@@ -229,6 +229,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Capsules vidéo (accueil, mode éducatif) : publiques quand publiées, gérées par Laurie.
+    match /videos/{videoId} {
+      allow read: if resource.data.publie == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
     // Ressources partagées avec les personnes accompagnées (guides, gabarits).
     match /ressources/{resId} {
       allow read: if request.auth != null && (resource.data.visibleClients == true || isAdmin());
