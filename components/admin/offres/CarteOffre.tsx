@@ -106,7 +106,10 @@ export const CarteOffre: React.FC<CarteOffreProps> = ({ produit, lang, t, compac
       )}
 
       <div className="flex justify-between items-center pt-3 border-t border-filet">
-        <span className="font-serif text-lg text-encre tabular-nums">{prixTexte}</span>
+        <span className="flex items-center gap-2">
+          <span className="font-serif text-lg text-encre tabular-nums">{prixTexte}</span>
+          <PastillePaiement produit={produit} lang={lang} />
+        </span>
 
         <button
           onClick={(e) => onTogglePublish(e, produit)}
