@@ -49,7 +49,12 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
     if (!onChangeView) return;
     onChangeView(view);
     if (sectionId) {
-      setTimeout(() => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' }), 100);
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (!el) return;
+        if (lenis) lenis.scrollTo(el, { offset: -72 });
+        else el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
   };
 
