@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, MessageCircle, MoreHorizontal, Phone, Video, Image as ImageIcon, ThumbsUp, Send, Plus, X } from 'lucide-react';
+import { Search, MoreHorizontal, Phone, Video, Image as ImageIcon, ThumbsUp, Send, Plus, X } from 'lucide-react';
 import { orderBy, serverTimestamp } from 'firebase/firestore';
 import { Language, Conversation, ChatMessage } from '../types';
 import { useCollection, createDoc, patchDoc } from '../lib/firestore';
