@@ -41,3 +41,18 @@ export function nomCompte(compte: Compte | undefined, lang: 'FR' | 'EN'): string
   if (!compte) return lang === 'FR' ? 'Sans catégorie' : 'Uncategorized';
   return lang === 'FR' ? compte.nom : compte.nomEn;
 }
+
+/** Le plan comptable actif : la surcharge de Laurie (settings/plan_comptable) si elle existe, sinon le plan par défaut. */
+export function usePlanComptable() {
+  const { data, loading } = useDocument<{ comptes: Compte[] }>('settings/plan_comptable');
+  const comptes = useMemo(() => {
+    if (data?.comptes?.length) return [...data.comptes].sort((a, b) => a.ordre - b.ordre);
+    return PLAN_COMPTABLE_DEFAUT;
+  }, [data]);
+  return { comptes, loading };
+}
+
+/** Enregistre le plan comptable complet (ajout, renommage, désactivation, réordonnancement). */
+export async function enregistrerPlanComptable(comptes: Compte[]): Promise<void> {
+  await writeDoc('settings/plan_comptable', { comptes });
+}
