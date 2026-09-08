@@ -75,7 +75,7 @@ const Projets: React.FC<ProjetsProps> = ({ lang, onChangeView }) => {
           <a
             href="/projets"
             onClick={aller}
-            className="inline-flex items-center gap-2 text-petit font-semibold text-papier/80 transition-colors duration-200 hover:text-rose-clair"
+            className="-my-3 inline-flex items-center gap-2 py-3 text-petit font-semibold text-papier/80 transition-colors duration-200 hover:text-rose-clair"
           >
             {L.lien}
             <ArrowUpRight className="h-4 w-4" aria-hidden />
