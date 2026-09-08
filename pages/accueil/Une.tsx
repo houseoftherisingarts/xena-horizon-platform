@@ -64,7 +64,19 @@ const Une: React.FC<UneProps> = ({
             className="col-span-12 sm:col-span-10 lg:col-span-9"
             style={opaciteTitre || decalageTitre ? { opacity: opaciteTitre, y: decalageTitre } : undefined}
           >
-            <TexteRevele texte={headline} as="h1" par="mot" className="text-h1 font-serif text-encre" />
+            {demarrer ? (
+              <TexteRevele
+                key={lang}
+                texte={headline}
+                as="h1"
+                par="mot"
+                className="text-h1 font-serif text-encre"
+              />
+            ) : (
+              <h1 className="text-h1 font-serif text-encre opacity-0" aria-hidden="true">
+                {headline}
+              </h1>
+            )}
             <motion.span
               aria-hidden
               className="mt-4 block h-[2px] w-full origin-left bg-rose sm:mt-7"
@@ -73,7 +85,9 @@ const Une: React.FC<UneProps> = ({
           </motion.div>
 
           <motion.div
-            className="in col-span-12 mt-6 flex flex-col items-start gap-4 sm:col-span-7 sm:mt-10 sm:gap-5 lg:col-span-6"
+            className={`col-span-12 mt-6 flex flex-col items-start gap-4 sm:col-span-7 sm:mt-10 sm:gap-5 lg:col-span-6 ${
+              demarrer ? 'in' : 'opacity-0'
+            }`}
             style={opaciteSousTitre ? { opacity: opaciteSousTitre } : undefined}
           >
             <p className="kicker text-rose">{tagline}</p>
