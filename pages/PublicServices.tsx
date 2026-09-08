@@ -100,39 +100,10 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
     else el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const t = {
-    FR: {
-      pricesLabel: 'Prix de départ',
-      book: 'Prendre rendez-vous',
-      pillA: "À partir d'un prix de départ",
-      pillB: 'Sur demande',
-      howTitle: 'Comment ça\nse passe',
-      howSubtitle: 'Le même parcours pour chaque personne accompagnée, du premier appel au suivi.',
-      spaceTitle: 'Un dossier déjà commencé ?',
-      spaceText: 'Retrouve ton parcours, tes pièces et tes échanges avec Laurie dans ton espace client.',
-      spaceCta: 'Ouvrir mon espace',
-      rdvText: "Écris-moi et je te reviens rapidement. Regardons ensemble si nous sommes faites pour travailler ensemble.",
-      voirOffres: 'Voir les offres',
-      subheadline: 'Trois profils, une même écoute : artiste, entrepreneur créatif ou organisme.',
-    },
-    EN: {
-      pricesLabel: 'Starting price',
-      book: 'Book a call',
-      pillA: 'From a starting price',
-      pillB: 'On request',
-      howTitle: 'How it\nworks',
-      howSubtitle: 'The same path for every person, from the first call to the follow-up.',
-      spaceTitle: 'Already have a file open?',
-      spaceText: 'Find your path, your documents and your exchanges with Laurie in your client space.',
-      spaceCta: 'Open my space',
-      rdvText: "Write to me and I'll get back to you quickly. Let's see together if we're a good fit to work together.",
-      voirOffres: 'View services',
-      subheadline: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
-    },
-  }[lang];
+  const t = useTextes('services', TEXTES, lang);
 
   const book = t.book;
-  const titre = lang === 'EN' ? SERVICES_PAGE.titreEN : SERVICES_PAGE.titreFR;
+  const titre = t.heroTitre;
   const email = 'laurie.belhumeur@gmail.com';
 
   const catalogue: Product[] = useMemo(() => {
