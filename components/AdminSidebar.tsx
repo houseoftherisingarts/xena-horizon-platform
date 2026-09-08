@@ -178,7 +178,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
           </button>
         </div>
 
-        <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto overflow-x-hidden">
+        {/* overflow-y seul : en rail replié, l'info-bulle sort du rail par la droite (left-full) et ne doit
+            pas être rognée par un overflow-x caché. Rien ne déborde à l'horizontale en usage normal. */}
+        <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
           {menuItems.map((item) => {
             const actif = currentView === item.id;
             const Icone = item.icon;
