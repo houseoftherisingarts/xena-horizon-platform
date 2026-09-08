@@ -34,7 +34,7 @@ async function shot(page, nom) {
     await shot(page, '01-desktop-ajustee-ciel');
 
     // Vue Défilement
-    await page.getByRole('tab', { name: /^(Défilement|Scroll)$/ }).click();
+    await page.getByRole('button', { name: /^(Défilement|Scroll)$/ }).click();
     await page.waitForTimeout(400);
     await shot(page, '02-desktop-defilement-ciel');
 
@@ -71,12 +71,12 @@ async function shot(page, nom) {
     await shot(page, '06-desktop-defilement-redimensionne-ciel');
 
     // Vue Compacte
-    await page.getByRole('tab', { name: /^(Compacte|Compact)$/ }).click();
+    await page.getByRole('button', { name: /^(Compacte|Compact)$/ }).click();
     await page.waitForTimeout(400);
     await shot(page, '07-desktop-compacte-ciel');
 
     // Vue Ajustée + mode nuit
-    await page.getByRole('tab', { name: /^(Ajustée|Fitted)$/ }).click();
+    await page.getByRole('button', { name: /^(Ajustée|Fitted)$/ }).click();
     await page.evaluate(() => localStorage.setItem('xena.nuit', '1'));
     await page.reload({ waitUntil: 'load' });
     await page.waitForTimeout(600);

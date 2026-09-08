@@ -140,3 +140,52 @@ chaque facture (ou une poignée de liens à montants ronds), tant que le chemin 
 au lieu du lien de paiement statique : ce dernier raccord (quelques lignes dans
 `pages/FacturePublique.tsx`) se fait au moment où Alex active le chemin B, pour ne pas préparer un
 appel à une fonction qui n'existe pas encore côté serveur.
+
+## Stripe (produits vendus en ligne, échelle de valeur)
+
+Ce que ça fait : chaque offre du catalogue (Admin › Produits) réglée en « Paiement en ligne » se relie
+à un Product et un Price Stripe. Sur `/services`, le bouton de la carte devient « Acheter » et ouvre une
+session Stripe Checkout au montant exact. Le module vit dans `lib/produits.ts`,
+`components/admin/offres/Paiement.tsx`, `pages/PublicServices.tsx` et, côté serveur,
+`functions/src/produits/stripe.ts`.
+
+**Deux chemins, un seul actif à la fois, comme pour les factures.**
+
+**Chemin A (actif dès maintenant, sans clé ni fonction) : un lien de paiement Stripe.** Laurie crée un
+lien de paiement dans son compte Stripe (Stripe › Paiements › Liens de paiement) au montant de l'offre,
+et le colle dans le formulaire de l'offre, bloc « Paiement », champ « Lien de paiement Stripe ». Le
+bouton « Acheter » l'ouvre dans un nouvel onglet. Un lien de paiement est à montant fixe : une offre à
+prix variable reste en « Sur demande » ou « Inscription ».
+
+**Chemin B (montant exact, automatique, demande le forfait Blaze) : Stripe Checkout.**
+
+1. **Le compte Stripe de Laurie.** Même clé secrète que le chemin B des factures ci-dessus
+   (`STRIPE_SECRET_KEY_XENA`) : si elle est déjà posée, rien à refaire ici.
+2. **Le secret de webhook, propre à ce point de terminaison** (une fois le plan Blaze actif, voir
+   point 4) :
+
+   ```bash
+   firebase functions:secrets:set STRIPE_WEBHOOK_SECRET_PRODUITS_XENA --project xena-70977
+   ```
+
+3. **Le point de terminaison webhook.** Une fois la fonction déployée (point 4), Stripe › Développeurs
+   › Webhooks › « Ajouter un point de terminaison », adresse :
+
+   ```
+   https://northamerica-northeast1-xena-70977.cloudfunctions.net/webhookStripeProduits
+   ```
+
+   Événement à cocher : `checkout.session.completed`. Stripe rend alors une clé de signature
+   (`whsec_...`), à poser avec la commande de l'étape 2.
+
+4. **Le plan Blaze.** Comme pour l'infolettre, l'agenda Google et les factures, aucune fonction ne se
+   déploie tant que le projet reste sur Spark. Une fois Blaze actif :
+
+   ```bash
+   firebase deploy --only functions:synchroniserProduitStripe,functions:creerPaiementProduit,functions:webhookStripeProduits --project xena-70977
+   ```
+
+**Une fois branché**, chaque offre publiée et réglée « Paiement en ligne » se synchronise seule dès
+qu'elle est enregistrée (pastille « Reliée à Stripe » dans le formulaire); les paiements reçus
+s'accumulent dans la collection `commandes`, lisible par Laurie dans la console Firebase en attendant
+un onglet dédié.
