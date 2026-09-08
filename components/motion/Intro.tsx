@@ -34,6 +34,9 @@ export interface IntroProps {
   signature?: string;
   /** Durée totale de la séquence, en millisecondes. */
   dureeMs?: number;
+  /** Identifiant de transition partagée (framer-motion) : la marque voyage vers l'élément
+   * de la barre de navigation qui porte le même `layoutId`, au lieu de disparaître puis réapparaître. */
+  layoutId?: string;
 }
 
 export const Intro: React.FC<IntroProps> = ({
@@ -41,6 +44,7 @@ export const Intro: React.FC<IntroProps> = ({
   marque = 'Xena Horizon',
   signature = 'par Laurie Belhumeur',
   dureeMs = 1100,
+  layoutId,
 }) => {
   const reduce = useReducedMotion();
   const [dejaVue] = useState(() => {
