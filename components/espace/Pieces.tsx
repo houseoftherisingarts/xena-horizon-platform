@@ -98,7 +98,7 @@ const Pastille: React.FC<{ etat: EtatPiece; t: TexteCarte }> = ({ etat, t }) => 
   };
   const label = { deposee: '', valide: t.validee, a_refaire: t.aRefaire, redeposee: t.nouveauDepot }[etat];
   if (!label) return null;
-  return <span className={`text-[10px] font-sans font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pilule ${styles[etat]}`}>{label}</span>;
+  return <span className={`text-xs font-sans font-semibold uppercase tracking-widest px-2 py-0.5 rounded-pilule ${styles[etat]}`}>{label}</span>;
 };
 
 const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatPiece; note?: string; uid: string; t: TexteCarte; lang: Language }> = ({

@@ -32,7 +32,7 @@ type Mode = 'signin' | 'signup';
 
 const TEXTES = {
   FR: {
-    hLeft: 'Une ligne claire,\net du temps pour créer.',
+    hLeft: 'Ta tête claire\nt\'attend.',
     pLeft:
       "Je suis Laurie. Tu déposes ici ce que tu as, même en vrac, et tu repars avec une direction et les bons mots pour la porter. Tu sais toujours où en est ton projet sans courir après un courriel, et quand une question te vient, je te réponds au même endroit.",
     etapesTitre: 'Comment ça se déroule',
@@ -52,7 +52,7 @@ const TEXTES = {
     confidentialite: 'Ce que tu déposes ici vit dans un dossier privé : Laurie Belhumeur, seule, peut le lire.',
   },
   EN: {
-    hLeft: 'A clear line,\nand time to create.',
+    hLeft: 'A clear head\nis waiting.',
     pLeft:
       "I'm Laurie. Drop off what you have here, even in rough shape, and you leave with a direction and the right words to carry it. You always know where your project stands without chasing an email, and when a question comes up, I answer you in the same place.",
     etapesTitre: 'How it unfolds',
@@ -168,7 +168,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-14 items-start">
         {/* Colonne gauche : accueil de Laurie + les cinq étapes */}
         <div className="lg:col-span-6">
-          <Reveal as="h1" className="font-serif text-h1 text-encre mb-6">
+          <Reveal as="h1" className="font-serif text-display text-encre mb-6">
             {t.hLeft.split('\n').map((ligne, i, arr) => (
               <span key={i} className="block">
                 {ligne}

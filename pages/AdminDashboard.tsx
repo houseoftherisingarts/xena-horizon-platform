@@ -22,8 +22,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ lang }) => {
 
   const t = {
     FR: {
-      hello: 'Bonjour, Xena',
-      subtitle: 'Voici ce qui se passe dans votre univers aujourd\'hui.',
+      hello: 'Tableau de bord',
+      subtitle: 'Ce qui bouge aujourd\'hui.',
       sales: 'Ventes (ce mois)',
       orders: 'Factures à recevoir',
       leadsLabel: 'Demandes en attente',
@@ -39,8 +39,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ lang }) => {
       videCommandes: 'Aucune commande pour le moment',
     },
     EN: {
-      hello: 'Hello, Xena',
-      subtitle: 'Here is what is happening in your universe today.',
+      hello: 'Dashboard',
+      subtitle: 'What is moving today.',
       sales: 'Sales (this month)',
       orders: 'Invoices outstanding',
       leadsLabel: 'Pending requests',
@@ -192,8 +192,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ lang }) => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} barGap={8}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#DDD7CD" vertical={false} />
-                <XAxis dataKey="name" stroke="#5E5850" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} dy={10} />
-                <YAxis stroke="#5E5850" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}$`} />
+                <XAxis dataKey="name" stroke="#5E5850" tick={{ fontSize: 13 }} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="#5E5850" tick={{ fontSize: 13 }} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}$`} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#FAF7F0', borderColor: '#DDD7CD', borderRadius: '6px', color: '#1A1A1E' }}
                   cursor={{ fill: 'rgba(26,26,30,0.04)' }}

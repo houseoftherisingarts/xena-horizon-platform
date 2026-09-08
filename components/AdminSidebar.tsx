@@ -155,7 +155,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
                 <span className="flex-1 text-left">{item.label}</span>
                 {!!item.badge && (
                   <span
-                    className="min-w-[1.25rem] h-5 px-1.5 rounded-pilule bg-rose text-papier text-[11px] font-semibold flex items-center justify-center tabular-nums"
+                    className="min-w-[1.25rem] h-5 px-1.5 rounded-pilule bg-rose text-papier text-xs font-semibold flex items-center justify-center tabular-nums"
                     aria-label={`${item.badge} ${t.nonLus}`}
                   >
                     {item.badge}

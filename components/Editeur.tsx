@@ -120,7 +120,10 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
         const liste = index.get(n);
         if (!liste) continue;
         const scopeProche = el.closest('[data-tx-scope]')?.getAttribute('data-tx-scope') ?? null;
-        const choix = liste.find((k) => k.scope === scopeProche) ?? liste[0];
+        // Sous une racine de scope, seule une clé de ce scope compte : la marque de la barre (scope nav)
+        // ne se fait pas baliser par le kicker « Xena Horizon » de l'accueil.
+        const choix = scopeProche ? liste.find((k) => k.scope === scopeProche) : liste[0];
+        if (!choix) continue;
         const etiquette = `${choix.scope}|${choix.cle}`;
         // Un descendant porte déjà cette clé (titre révélé mot par mot, lignes en <span>) : l'ancêtre s'efface.
         if (el.querySelector(`[data-tx="${etiquette}"]`)) continue;

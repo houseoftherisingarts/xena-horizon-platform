@@ -83,7 +83,7 @@ const NotesPrivees: React.FC<NotesPriveesProps> = ({ notes, lang, onAdd, onDelet
           <div key={n.id} className="group flex items-start gap-2 bg-papier-2 rounded-champ p-3 border border-filet">
             <div className="flex-1 min-w-0">
               <p className="text-sm text-encre whitespace-pre-wrap break-words">{n.texte}</p>
-              <p className="text-[10px] text-gris mt-1">{dateCourte(n.createdAt)}</p>
+              <p className="text-xs text-gris mt-1">{dateCourte(n.createdAt)}</p>
             </div>
             <button
               type="button"

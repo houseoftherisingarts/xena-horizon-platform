@@ -16,7 +16,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
 
   const t = {
     FR: {
-      title: 'Échelle de Valeur',
+      title: 'Échelle de valeur',
       subtitle: 'Gérez vos offres, de la gratuité à l\'exclusivité.',
       newOffer: 'Nouvelle Offre',
       empty: 'Vide',

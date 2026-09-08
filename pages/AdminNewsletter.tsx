@@ -112,10 +112,10 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
   const t = {
     FR: {
       kicker: 'Infolettres',
-      title: 'Générateur d\'Infolettre',
-      assistant: 'Assistant Rédaction',
-      copy: 'Copier HTML',
-      blocks: 'Blocs Email',
+      title: 'Infolettres',
+      assistant: 'Assistant de rédaction',
+      copy: 'Copier le HTML',
+      blocks: 'Blocs du courriel',
       header: 'En-tête',
       text: 'Texte',
       image: 'Image',
@@ -135,7 +135,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
       composer: 'Composer',
       subscribers: 'Abonnés',
       campaigns: 'Campagnes',
-      saveDraft: 'Enregistrer brouillon',
+      saveDraft: 'Enregistrer le brouillon',
       send: 'Envoyer',
       newDraft: 'Nouveau brouillon',
       subjectLabel: 'Sujet',
@@ -443,7 +443,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
     'p-3 rounded-champ border border-filet text-gris hover:text-encre hover:border-encre flex flex-col items-center gap-2 text-xs transition-colors min-h-[44px]';
 
   return (
-    <div className="px-6 md:px-10 py-10 h-screen flex flex-col">
+    <div className="px-6 md:px-10 py-10 lg:h-screen flex flex-col">
       <EnTete
         kicker={t.kicker}
         titre={t.title}
@@ -488,10 +488,10 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
       </div>
 
       {tab === 'composer' && (
-        <div className="flex-1 min-h-0 flex gap-6 overflow-hidden">
+        <div className="flex flex-col gap-6 lg:flex-1 lg:min-h-0 lg:flex-row lg:overflow-hidden">
 
            {/* SIDEBAR */}
-           <div className="w-64 flex flex-col gap-4 overflow-y-auto pr-2 flex-shrink-0">
+           <div className="w-full lg:w-64 flex flex-col gap-4 lg:overflow-y-auto lg:pr-2 flex-shrink-0">
               <Panneau>
                 <Champ label={t.subjectLabel} value={subject} onChange={(e) => setSubject(e.target.value)} placeholder={t.subjectPlaceholder} />
               </Panneau>
@@ -526,7 +526,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
               <Panneau
                 titre={t.campaigns}
                 actions={
-                  <button type="button" onClick={newDraft} className="inline-flex items-center gap-1 text-[11px] text-gris hover:text-encre">
+                  <button type="button" onClick={newDraft} className="inline-flex items-center gap-1 text-xs text-gris hover:text-encre">
                      <Plus className="w-3 h-3" aria-hidden="true" /> {t.newDraft}
                   </button>
                 }
@@ -567,8 +567,8 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
            </div>
 
            {/* MAIN PREVIEW AREA (Email Context) */}
-           <div className="flex-1 bg-papier-2 border border-filet rounded-champ overflow-y-auto flex justify-center py-8">
-              <div className="w-[600px] min-h-[800px] bg-papier shadow-panneau relative text-encre">
+           <div className="flex-1 bg-papier-2 border border-filet rounded-champ overflow-y-auto flex justify-center py-8 px-4">
+              <div className="w-full max-w-[600px] min-h-[600px] lg:min-h-[800px] bg-papier shadow-panneau relative text-encre">
                  {blocks.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center">
                        <Vide titre={t.preview} texte="600 px" />
@@ -649,7 +649,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
                        {/* SPACER RENDER */}
                        {block.type === 'SPACER' && (
                            <div style={{ height: (block as SpacerBlock).height }} className="bg-papier flex items-center justify-center relative group/spacer">
-                               <span className="text-[10px] text-gris opacity-0 group-hover/spacer:opacity-100">Espace {(block as SpacerBlock).height}px</span>
+                               <span className="text-xs text-gris opacity-0 group-hover/spacer:opacity-100">Espace {(block as SpacerBlock).height}px</span>
                                <input
                                  type="range" min="10" max="100"
                                  value={(block as SpacerBlock).height}

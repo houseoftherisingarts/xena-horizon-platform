@@ -71,7 +71,7 @@ const FilAdmin: React.FC<FilAdminProps> = ({ messages, dossierNom, lang, onSend 
               }`}
             >
               <p className="whitespace-pre-wrap break-words">{m.texte}</p>
-              <p className={`text-[10px] mt-1 ${m.de === 'admin' ? 'text-papier/70' : 'text-gris'}`}>
+              <p className={`text-xs mt-1 ${m.de === 'admin' ? 'text-papier/70' : 'text-gris'}`}>
                 {m.de === 'admin' ? (lang === 'FR' ? 'Toi' : 'You') : dossierNom} · {dateCourte(m.createdAt)}
               </p>
             </div>

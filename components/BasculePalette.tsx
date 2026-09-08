@@ -22,7 +22,7 @@ const BasculePalette: React.FC<{ lang: Language; className?: string }> = ({ lang
       onClick={() => poserSkin(ciel ? 'encre' : 'ciel')}
       className={`group flex items-center gap-2 min-h-[44px] px-1 text-encre ${className}`}
     >
-      <span className={`kicker text-[0.65rem] transition-opacity ${ciel ? 'opacity-45' : 'opacity-100'}`}>
+      <span className={`kicker transition-opacity ${ciel ? 'opacity-45' : 'opacity-100'}`}>
         {lang === 'FR' ? 'Encre' : 'Ink'}
       </span>
       <span
@@ -34,7 +34,7 @@ const BasculePalette: React.FC<{ lang: Language; className?: string }> = ({ lang
           style={{ transform: ciel ? 'translateX(18px)' : 'translateX(0)' }}
         />
       </span>
-      <span className={`kicker text-[0.65rem] transition-opacity ${ciel ? 'opacity-100' : 'opacity-45'}`}>
+      <span className={`kicker transition-opacity ${ciel ? 'opacity-100' : 'opacity-45'}`}>
         {lang === 'FR' ? 'Ciel' : 'Sky'}
       </span>
     </button>

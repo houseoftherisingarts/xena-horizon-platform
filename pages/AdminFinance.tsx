@@ -315,8 +315,8 @@ const AdminFinance: React.FC<AdminFinanceProps> = ({ lang }) => {
                       <stop offset="95%" stopColor={ROSE} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="name" stroke={GRIS} tickLine={false} axisLine={false} fontSize={12} />
-                  <YAxis stroke={GRIS} tickLine={false} axisLine={false} fontSize={12} tickFormatter={(value) => `${value / 1000}k`} />
+                  <XAxis dataKey="name" stroke={GRIS} tickLine={false} axisLine={false} fontSize={13} />
+                  <YAxis stroke={GRIS} tickLine={false} axisLine={false} fontSize={13} tickFormatter={(value) => `${value / 1000}k`} />
                   <CartesianGrid strokeDasharray="3 3" stroke={FILET} vertical={false} />
                   <Tooltip
                     contentStyle={{ backgroundColor: '#FBF9F4', borderColor: FILET, borderRadius: '6px', color: ENCRE }}

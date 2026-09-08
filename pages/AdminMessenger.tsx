@@ -130,7 +130,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
   };
 
   return (
-    <div className="px-6 md:px-10 py-10 h-screen flex flex-col">
+    <div className="px-6 md:px-10 py-10 md:h-screen flex flex-col">
       <EnTete
         kicker={t.kicker}
         titre={t.titre}
@@ -141,9 +141,9 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
         }
       />
 
-      <div className="flex-1 min-h-0 mt-8 bg-papier-2 border border-filet rounded-champ overflow-hidden flex">
+      <div className="flex-1 min-h-0 mt-8 bg-papier-2 border border-filet rounded-champ overflow-hidden flex flex-col md:flex-row">
         {/* LISTE DES CONVERSATIONS */}
-        <div className="w-80 flex-shrink-0 border-r border-filet flex flex-col">
+        <div className="w-full md:w-80 flex-shrink-0 border-b md:border-b-0 md:border-r border-filet flex flex-col max-h-[50vh] md:max-h-none">
           <div className="p-4 border-b border-filet">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gris" aria-hidden="true" />
@@ -195,7 +195,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
         </div>
 
         {/* ZONE DE CONVERSATION */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 min-h-[18rem]">
           {activeChat ? (
             <>
               <div className="p-4 border-b border-filet flex justify-between items-center">
@@ -233,7 +233,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
                         }`}
                       >
                         <p className="text-sm">{msg.body}</p>
-                        {time && <p className={`text-[10px] mt-1 ${isMe ? 'text-papier/70' : 'text-gris'}`}>{time}</p>}
+                        {time && <p className={`text-xs mt-1 ${isMe ? 'text-papier/70' : 'text-gris'}`}>{time}</p>}
                       </div>
                     </div>
                   );

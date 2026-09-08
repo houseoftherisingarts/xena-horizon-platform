@@ -246,7 +246,7 @@ async function connecter(page, email, pw) {
               await page.locator('[data-editeur] button').filter({ hasText: /Appliquer|Apply/ }).click();
               await page.waitForTimeout(600);
               await page.screenshot({ path: path.join(OUT, 'editeur-applique-1440.png') });
-              const applique = (await page.locator('body').innerText()).includes(avant + ' (essai)');
+              const applique = ((await page.evaluate(() => document.body.textContent || '')).toLowerCase()).includes((avant + ' (essai)').toLowerCase());
               // On annule : rien ne s'écrit dans Firestore pendant la vérification.
               await page.locator('[data-editeur] button[aria-label]').filter({ has: page.locator('svg') }).last().click().catch(() => {});
               await page.waitForTimeout(500);

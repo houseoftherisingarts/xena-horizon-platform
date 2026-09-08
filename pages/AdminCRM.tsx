@@ -18,11 +18,11 @@ const AdminCRM: React.FC<AdminCRMProps> = ({ lang }) => {
 
   const t = {
     FR: {
-      title: 'CRM Clients',
+      title: 'Clients',
       subtitle: 'Gérez vos relations et suivis.',
       import: 'Importer CSV',
       export: 'Exporter CSV',
-      newClient: 'Nouveau Client',
+      newClient: 'Nouveau client',
       search: 'Rechercher un client...',
       type: 'Type',
       lastContact: 'Dernier Contact',
@@ -170,7 +170,7 @@ const AdminCRM: React.FC<AdminCRMProps> = ({ lang }) => {
   const handleAddClient = async (e: React.FormEvent) => {
     e.preventDefault();
     const clientData: Omit<Client, 'id'> = {
-      name: newClient.name || 'Nouveau Client',
+      name: newClient.name || 'Nouveau client',
       organization: newClient.organization || '',
       email: newClient.email || '',
       status: newClient.status || ClientStatus.LEAD,
