@@ -10,3 +10,5 @@ export { MasqueRadial, type MasqueRadialProps } from './MasqueRadial';
 export { Portail } from './Portail';
 export { DefilementDoux, useLenis } from './DefilementDoux';
 export { Intro, type IntroProps } from './Intro';
+export { MotsTournants, type MotsTournantsProps } from './MotsTournants';
+export { CarteProjecteur, type CarteProjecteurProps } from './CarteProjecteur';
