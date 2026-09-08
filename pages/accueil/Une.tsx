@@ -4,9 +4,10 @@
 // le texte occupe le haut, la photo une bande pleine largeur en dessous, jamais
 // l'un sur l'autre (règle des deux bords, DIRECTION-v2.md §5).
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion, type MotionValue } from 'framer-motion';
-import { KenBurns, TexteRevele } from '../../components/motion';
+import { KenBurns, MotsTournants, TexteRevele } from '../../components/motion';
+import { PROFILS_REELS } from '../../lib/contenu';
 import type { Language } from '../../types';
 import { allerAuRendezVous } from '../../lib/rendezvous';
 
