@@ -223,8 +223,9 @@ const App: React.FC = () => {
             lang={lang}
             open={menuAdminOuvert}
             onClose={() => setMenuAdminOuvert(false)}
+            onReplieChange={setMenuAdminReplie}
           />
-          <main className="flex-1 min-w-0 md:ml-64 min-h-screen overflow-x-clip">
+          <main className={`flex-1 min-w-0 ${menuAdminReplie ? 'md:ml-16' : 'md:ml-64'} min-h-screen overflow-x-clip transition-[margin] duration-300 md:duration-[220ms] md:ease-maison`}>
             <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-papier/90 backdrop-blur-md border-b border-filet">
               <button
                 type="button"
