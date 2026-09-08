@@ -4,6 +4,7 @@ import { MessageCircle, Send, X } from 'lucide-react';
 import { repondreAssistant, SUGGESTIONS_ASSISTANT } from '../../lib/assistant';
 import { Dossier, DossierConfig, Language } from '../../types';
 import { Portail } from '../motion';
+import { useTextes } from '../../lib/textes';
 
 interface AssistantProps {
   config: DossierConfig;
@@ -18,6 +19,29 @@ interface Bulle {
 
 const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
 
+const TEXTES = {
+  FR: {
+    ouvrir: "Ouvrir l'assistant",
+    fermer: "Fermer l'assistant",
+    titre: "L'assistant",
+    sous: 'Répond sur tes pièces, ton parcours et mes services',
+    bonjour:
+      'Bonjour. Je peux te dire quelles pièces déposer, où tu en es dans ton parcours, ce que ça coûte et comment me joindre. Pose ta question.',
+    placeholder: 'Ta question',
+    envoyer: 'Envoyer',
+  },
+  EN: {
+    ouvrir: 'Open the assistant',
+    fermer: 'Close the assistant',
+    titre: 'The assistant',
+    sous: 'Answers about your files, your journey and my services',
+    bonjour:
+      'Hello. I can tell you which files to send, where you stand in your journey, what things cost and how to reach me. Ask away.',
+    placeholder: 'Your question',
+    envoyer: 'Send',
+  },
+};
+
 const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
   const [ouvert, setOuvert] = useState(false);
   const [fil, setFil] = useState<Bulle[]>([]);
@@ -25,28 +49,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
   const filRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  const t = {
-    FR: {
-      ouvrir: "Ouvrir l'assistant",
-      fermer: "Fermer l'assistant",
-      titre: "L'assistant",
-      sous: 'Répond sur tes pièces, ton parcours et mes services',
-      bonjour:
-        'Bonjour. Je peux te dire quelles pièces déposer, où tu en es dans ton parcours, ce que ça coûte et comment me joindre. Pose ta question.',
-      placeholder: 'Ta question',
-      envoyer: 'Envoyer',
-    },
-    EN: {
-      ouvrir: 'Open the assistant',
-      fermer: 'Close the assistant',
-      titre: 'The assistant',
-      sous: 'Answers about your files, your journey and my services',
-      bonjour:
-        'Hello. I can tell you which files to send, where you stand in your journey, what things cost and how to reach me. Ask away.',
-      placeholder: 'Your question',
-      envoyer: 'Send',
-    },
-  }[lang];
+  const t = useTextes('espaceAssistant', TEXTES, lang);
 
   const faireDefiler = () => {
     const el = filRef.current;
