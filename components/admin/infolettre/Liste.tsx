@@ -35,6 +35,7 @@ const TEXTES = {
     sujet: 'Subject',
     statut: 'Status',
     langue: 'Language',
+    envois: 'Sent',
     maj: 'Updated',
     brouillon: 'Draft',
     envoyee: 'Sent',
