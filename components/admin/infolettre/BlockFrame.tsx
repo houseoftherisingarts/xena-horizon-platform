@@ -77,6 +77,10 @@ export const BlockFrame: React.FC<{
           {block.type === 'image' && (
             <>
               <button className={`${iconBtn} w-auto px-3 gap-1.5 text-xs font-semibold`} onClick={onPickImage}><ImageIcon className="w-3.5 h-3.5" aria-hidden="true" /> Image</button>
+              <select value={c.taille === 'logo' ? 'logo' : 'pleine'} onChange={(e) => onPatch({ taille: e.target.value })} className={selectCls} title="Taille de l'image">
+                <option value="pleine">Pleine largeur</option>
+                <option value="logo">Logo, petit et centré</option>
+              </select>
               <input value={c.alt || ''} onChange={(e) => onPatch({ alt: e.target.value })} placeholder="Alt" className={`${selectCls} w-28`} />
               <input value={c.href || ''} onChange={(e) => onPatch({ href: e.target.value })} placeholder="https://…" className={`${selectCls} w-40`} />
             </>
