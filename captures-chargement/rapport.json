@@ -1,0 +1,92 @@
+{
+  "volA_chargementFroid": [
+    {
+      "page": "accueil",
+      "lcpMs": 1100,
+      "cls": 0,
+      "erreursConsole": [],
+      "erreursPage": []
+    },
+    {
+      "page": "services",
+      "lcpMs": 1132,
+      "cls": 0,
+      "erreursConsole": [],
+      "erreursPage": []
+    },
+    {
+      "page": "projets",
+      "lcpMs": 1956,
+      "cls": 0.3,
+      "erreursConsole": [],
+      "erreursPage": []
+    },
+    {
+      "page": "a-propos",
+      "lcpMs": 1028,
+      "cls": 0.3,
+      "erreursConsole": [],
+      "erreursPage": []
+    },
+    {
+      "page": "espace",
+      "lcpMs": 1020,
+      "cls": 0.108,
+      "erreursConsole": [],
+      "erreursPage": []
+    }
+  ],
+  "volB_flashPolice": [
+    {
+      "taille": 1440,
+      "etats": [
+        {
+          "instantMs": 150,
+          "figtreeChargee": false,
+          "playfairChargee": false,
+          "pretes": "inconnu"
+        },
+        {
+          "instantMs": 400,
+          "figtreeChargee": false,
+          "playfairChargee": false,
+          "pretes": "loaded"
+        },
+        {
+          "instantMs": 1500,
+          "figtreeChargee": false,
+          "playfairChargee": false,
+          "pretes": "loaded"
+        }
+      ]
+    },
+    {
+      "taille": 390,
+      "etats": [
+        {
+          "instantMs": 150,
+          "figtreeChargee": false,
+          "playfairChargee": false,
+          "pretes": "inconnu"
+        },
+        {
+          "instantMs": 400,
+          "figtreeChargee": false,
+          "playfairChargee": false,
+          "pretes": "loaded"
+        },
+        {
+          "instantMs": 1500,
+          "figtreeChargee": false,
+          "playfairChargee": false,
+          "pretes": "loaded"
+        }
+      ]
+    }
+  ],
+  "volC_fragmentDisparu": {
+    "rechargementsDetectes": 4,
+    "ecranDeRecoursVisible": false,
+    "extraitTexte": "Xena Horizon\nPAR LAURIE BELHUMEUR\nAccueil\nServices\nProjets\nÀ propos\nContact\nFR\nEN\nMon espace\nPrendre rendez-vous\nVivre de son art\nsans perdre sa voix\n\nXENA HORIZON\n\nQuinze ans à accompagner les artist"
+  }
+}

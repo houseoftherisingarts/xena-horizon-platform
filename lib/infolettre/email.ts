@@ -42,7 +42,9 @@ function blockToEmail(block: NewsletterBlock): string {
       const caption = c.caption
         ? `<tr><td align="center" style="padding:8px 0;font-family:${BRAND.sans};font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:${BRAND.muted};">${esc(c.caption)}</td></tr>`
         : '';
-      return `<tr><td style="padding:16px 0;"><img src="${esc(c.url)}" alt="${esc(c.alt || '')}" style="display:block;width:100%;max-width:560px;" /></td></tr>${caption}`;
+      // Un logo carré reste petit et centré : pleine largeur l'écraserait sur l'écran comme dans la boîte de réception.
+      const largeur = c.taille === 'logo' ? '112px' : '100%';
+      return `<tr><td align="center" style="padding:16px 0;"><img src="${esc(c.url)}" alt="${esc(c.alt || '')}" style="display:block;width:${largeur};max-width:560px;" /></td></tr>${caption}`;
     }
     case 'button': {
       const primaire = c.variant !== 'secondaire';
