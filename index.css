@@ -1,22 +1,121 @@
+/* Fontes chargées par <link> dans index.html (Playfair Display 400/500, Figtree 300 à 600). */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --papier: #F7F4EE;
+  --papier-2: #EFEBE3;
+  --encre: #1A1A1E;
+  --encre-2: #26262B;
+  --gris: #5E5850;
+  --gris-clair: #B8B2A8;
+  --filet: #DDD7CD;
+  --filet-encre: rgba(247, 244, 238, 0.14);
+  --accent: #A8104A;          /* rose */
+  --accent-vif: #E0206E;      /* rose-vif, aplats seulement */
+  --accent-sur-encre: #F2789F; /* rose-clair */
+  --ombre-feuille: 0 -30px 80px rgba(26, 26, 30, 0.18);
+  --ombre-feuille-encre: 0 -30px 80px rgba(26, 26, 30, 0.45);
+  --ease-maison: cubic-bezier(0.16, 0.8, 0.24, 1);
+  --ease-sortie: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav: 4.5rem;
+  /* Variante bleue, dormante : --accent: #0B6BA8; --accent-sur-encre: #7CC6F5; */
+}
+
+/* Le sticky des feuilles casse avec overflow-x: hidden. Toujours clip. */
+html, body { overflow-x: clip; }
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
-  background-color: #0f172a;
-  color: #e2e8f0;
-  overflow-x: clip;
+  background-color: var(--papier);
+  color: var(--encre);
+  font-family: 'Figtree', 'Avenir Next', Avenir, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
-/* Laptops 13-15 pouces : l'échelle descend d'un cran, comme un zoom à 87,5 % */
-@media (min-width: 1024px) and (max-width: 1536px) {
-  html { font-size: 14px; }
+/* Aucun italique nulle part, jamais. */
+em, i, .italic, cite, q, blockquote, address, dfn, var { font-style: normal !important; }
+
+/* Le serif display ne porte jamais le gras. */
+h1, h2, h3, .font-serif { font-family: 'Playfair Display', Georgia, serif; font-weight: 400; }
+h2, h3 { font-weight: 500; }
+strong, b { font-weight: 600; }
+
+img, video { display: block; max-width: 100%; height: auto; }
+
+p { max-width: 62ch; }
+
+::selection { background: var(--accent-vif); color: var(--papier); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+button:focus-visible, a:focus-visible { outline-offset: 4px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(168, 16, 74, 0.35);
 }
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #0f172a; }
-::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%); border-radius: 4px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--papier-2); }
+::-webkit-scrollbar-thumb { background: var(--gris-clair); border-radius: 5px; border: 2px solid var(--papier-2); }
 
+/* Tout ce qui se presse répond sous le doigt. */
+button, [role='button'], a.pilule {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out;
+  touch-action: manipulation;
+}
+button:active, [role='button']:active, a.pilule:active { transform: scale(0.97); }
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover { color: var(--accent); }
+}
+
+/* Classes partagées */
+.kicker { font-size: 0.75rem; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 600; line-height: 1.2; }
+.filet-h { border-top: 1px solid var(--filet); }
+.mesure { max-width: 62ch; }
+.encre .filet-h { border-top-color: var(--filet-encre); }
+.encre ::selection { background: var(--accent-sur-encre); color: var(--encre); }
+
+/* Cascade d'entrée (recette B2) */
+.in > * { opacity: 0; transform: translateY(22px); animation: rise 1.1s var(--ease-sortie) forwards; }
+.in > *:nth-child(1) { animation-delay: 0.20s; }
+.in > *:nth-child(2) { animation-delay: 0.38s; }
+.in > *:nth-child(3) { animation-delay: 0.56s; }
+.in > *:nth-child(4) { animation-delay: 0.74s; }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+/* Grain de la feuille d'encre (recette D3), sur un pseudo-élément fixe et inerte, jamais sur un conteneur qui défile. */
+.grain::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  mix-blend-mode: overlay; opacity: 0.04;
+}
+
+/* Filet de sécurité : la vraie politique est une branche de rendu séparée (useReducedMotion). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .in > * { opacity: 1; transform: none; animation: none; }
+}
+
+/* Back-office (sombre, v1) : classe conservée tant qu'il n'est pas rhabillé. */
 .text-iridescent {
   background: linear-gradient(135deg, #22d3ee 0%, #34d399 50%, #3b82f6 100%);
   background-size: 200% 200%;
@@ -24,10 +123,6 @@ body {
   background-clip: text;
   color: transparent;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .text-iridescent { animation: iridescent-shift 12s ease-in-out infinite; }
-}
-@keyframes iridescent-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
+.admin-sombre { color-scheme: dark; }
+.admin-sombre p { max-width: none; }
+.admin-sombre h1, .admin-sombre h2, .admin-sombre h3 { font-weight: 600; }

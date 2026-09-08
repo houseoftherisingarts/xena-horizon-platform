@@ -6,6 +6,7 @@ import { useDocument, writeDoc } from './lib/firestore';
 import { viewFromPath, pathFromView } from './lib/routes';
 import { BLOCS_ACCUEIL } from './lib/contenu';
 import Consentement from './components/Consentement';
+import { DefilementDoux } from './components/motion';
 import NotFound, { cheminInconnu } from './pages/NotFound';
 import Nav from './components/Nav';
 import AdminSidebar from './components/AdminSidebar';
@@ -29,6 +30,7 @@ const SocialCreator = lazy(() => import('./pages/SocialCreator'));
 const AdminDossiers = lazy(() => import('./pages/AdminDossiers'));
 const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 const PublicProjets = lazy(() => import('./pages/PublicProjets'));
+const PublicAPropos = lazy(() => import('./pages/PublicAPropos'));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
@@ -64,6 +66,7 @@ const App: React.FC = () => {
       SERVICES: 'Services et tarifs | Xena Horizon',
       PROJETS: 'Projets : balado, livre, modèle | Xena Horizon',
       ESPACE_CLIENT: 'Mon espace | Xena Horizon',
+      A_PROPOS: 'À propos de Laurie Belhumeur | Xena Horizon',
     };
     document.title = notFound ? 'Page introuvable | Xena Horizon' : (titres[currentView] ?? (currentView.startsWith('ADMIN') ? 'Admin | Xena Horizon' : titres.HOME!));
   }, [currentView, notFound]);
@@ -142,6 +145,8 @@ const App: React.FC = () => {
         return <PublicServices lang={lang} onChangeView={setCurrentView} />;
       case 'PROJETS':
         return <PublicProjets lang={lang} />;
+      case 'A_PROPOS':
+        return <PublicAPropos lang={lang} />;
       case 'ESPACE_CLIENT':
         return <EspaceClient user={user} lang={lang} />;
       case 'ADMIN_DOSSIERS':
@@ -179,7 +184,7 @@ const App: React.FC = () => {
 
   if (isAdminView && userIsAdmin) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex">
+      <div className="admin-sombre min-h-screen bg-slate-950 text-slate-100 font-sans flex">
         <AdminSidebar
           currentView={currentView}
           onChangeView={setCurrentView}
@@ -207,7 +212,8 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500/30 font-sans">
+    <DefilementDoux>
+    <div className="min-h-screen bg-papier text-encre font-sans">
       <Nav
         currentView={currentView}
         onChangeView={setCurrentView}
