@@ -255,6 +255,15 @@ async function main() {
   await verifie('occupation aux mauvaises heures (refus attendu)', assertFails(lotB.commit()));
   await verifie("occupation lue par un autre compte (ok)", assertSucceeds(getDoc(doc(dbB, 'occupations', 'rdv-e'))));
   await verifie('occupation lue sans compte (refus attendu)', assertFails(getDoc(doc(dbAnon, 'occupations', 'rdv-e'))));
+  // 11b. Le jeton Google de Laurie (prive/agenda_google) : seules les Cloud Functions y touchent, personne côté client.
+  await verifie('prive/agenda_google lu par Laurie (refus attendu)', assertFails(getDoc(doc(dbAdmin, 'prive', 'agenda_google'))));
+  await verifie('prive/agenda_google lu par la personne (refus attendu)', assertFails(getDoc(doc(dbA, 'prive', 'agenda_google'))));
+  await verifie('prive/agenda_google écrit par Laurie (refus attendu)', assertFails(setDoc(doc(dbAdmin, 'prive', 'agenda_google'), { refreshToken: 'x' })));
+  // Une occupation avec `source` (réservée aux Cloud Functions, plage tirée de Google) : le client ne peut pas se l'attribuer.
+  await verifie(
+    'occupation avec source google posée par un client (refus attendu)',
+    assertFails(setDoc(doc(dbA, 'occupations', 'google-test'), { debut: dans3Jours, fin: fin3Jours, source: 'google' }))
+  );
   // 12. Profil : bannière, bio et liens dans les bornes (ok), bio trop longue (refus)
   await verifie('profil : bannière, bio et liens (ok)', assertSucceeds(updateDoc(doc(dbA, 'dossiers', UID_A), { banniereURL: 'https://firebasestorage.googleapis.com/b', bio: 'Artiste.', liens: { site: 'https://a.example.com' }, updatedAt: serverTimestamp() })));
   await verifie('profil : bio trop longue (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { bio: 'x'.repeat(1200), updatedAt: serverTimestamp() })));
