@@ -311,7 +311,7 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10" data-tx-scope="espacePieces">
       <section className="border-t border-filet pt-8">
         <h2 className="font-serif text-h3 text-encre mb-1">{t.titre}</h2>
         <p className="text-gris text-sm mb-6 mesure">{t.sous}</p>
