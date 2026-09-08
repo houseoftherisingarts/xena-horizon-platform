@@ -5,6 +5,7 @@ export const VIEW_PATHS: Record<ViewState, string> = {
   HOME: '/',
   SERVICES: '/services',
   PROJETS: '/projets',
+  A_PROPOS: '/a-propos',
   ESPACE_CLIENT: '/espace',
   ADMIN_DOSSIERS: '/admin/dossiers',
   ADMIN_DASHBOARD: '/admin',
@@ -26,9 +27,16 @@ const PATH_VIEWS: Record<string, ViewState> = Object.fromEntries(
   Object.entries(VIEW_PATHS).map(([view, path]) => [path, view as ViewState])
 );
 
+/** Préfixe de déploiement (vide en production, `/history/v1` pour une version archivée). */
+const PREFIX = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
+
 export const viewFromPath = (pathname: string): ViewState => {
-  const clean = pathname.replace(/\/+$/, '') || '/';
+  const sansPrefixe = PREFIX && pathname.startsWith(PREFIX) ? pathname.slice(PREFIX.length) : pathname;
+  const clean = sansPrefixe.replace(/\/+$/, '') || '/';
   return PATH_VIEWS[clean] ?? 'HOME';
 };
 
-export const pathFromView = (view: ViewState): string => VIEW_PATHS[view] ?? '/';
+export const pathFromView = (view: ViewState): string => {
+  const chemin = VIEW_PATHS[view] ?? '/';
+  return PREFIX ? `${PREFIX}${chemin === '/' ? '/' : chemin}` : chemin;
+};

@@ -16,7 +16,9 @@ interface NotFoundProps {
  * puisque `viewFromPath` retombe elle-même sur 'HOME' pour toute adresse non reconnue.
  */
 export function cheminInconnu(pathname: string): boolean {
-  const clean = pathname.replace(/\/+$/, '') || '/';
+  const prefixe = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
+  const sansPrefixe = prefixe && pathname.startsWith(prefixe) ? pathname.slice(prefixe.length) : pathname;
+  const clean = sansPrefixe.replace(/\/+$/, '') || '/';
   return !Object.values(VIEW_PATHS).includes(clean);
 }
 
