@@ -1,6 +1,11 @@
 // Découpage du temps comptable : exercice, trimestres, mois, à partir de la date de début d'exercice
 // choisie dans les réglages (settings/compta). Fonctions pures, aucun accès Firestore ici.
-import type { Periode, ReglagesCompta } from './types';
+import { useMemo } from 'react';
+import { arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useDocument } from '../firestore';
+import { REGLAGES_DEFAUT, type Periode, type ReglagesCompta, type RegleCategorisation } from './types';
 
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
