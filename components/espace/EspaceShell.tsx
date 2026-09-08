@@ -114,13 +114,12 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const sousLigne = [lang === 'EN' ? profilDef?.nomEn : profilDef?.nom, dossier.discipline, dossier.ville].filter(Boolean).join(' · ');
 
   const onglets: { id: Onglet; label: string; labelCourt: string }[] = [
-    { id: 'dossier', label: t.ongletDossier, labelCourt: t.ongletCourtDossier },
+    { id: 'profil', label: t.ongletProfil, labelCourt: t.ongletCourtProfil },
     { id: 'pieces', label: t.ongletPieces, labelCourt: t.ongletCourtPieces },
     { id: 'parcours', label: t.ongletParcours, labelCourt: t.ongletCourtParcours },
     { id: 'rendezvous', label: t.ongletRendezvous, labelCourt: t.ongletCourtRendezvous },
     { id: 'messages', label: t.ongletMessages, labelCourt: t.ongletCourtMessages },
     { id: 'ressources', label: t.ongletRessources, labelCourt: t.ongletCourtRessources },
-    { id: 'profil', label: t.ongletProfil, labelCourt: t.ongletCourtProfil },
   ];
 
   return (
