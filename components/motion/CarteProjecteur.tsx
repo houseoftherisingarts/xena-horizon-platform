@@ -64,7 +64,7 @@ export const CarteProjecteur: React.FC<CarteProjecteurProps> = ({ children, clas
           background:
             'radial-gradient(200px circle at var(--proj-x, -9999px) var(--proj-y, -9999px), rgb(var(--c-bouton) / 0.4), transparent 80%)',
           backgroundAttachment: 'fixed',
-          WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+          WebkitMask: 'linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
         }}
