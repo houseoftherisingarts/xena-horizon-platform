@@ -63,7 +63,7 @@ const TEXTES = {
     styleBouton: 'Plein', styleContour: 'Contour', numero: 'Numéros', puce: 'Puces',
     petit: 'Petit', moyen: 'Moyen', grand: 'Grand',
     gabaritTitre: 'Partir d’un gabarit', gabaritLede: 'Choisissez un point de départ déjà rempli dans votre charte, ou une page blanche.',
-    gabaritCommencer: 'Commencer', gabaritApercu: 'Bureau', gabaritApercuMobile: 'Téléphone',
+    gabaritCommencer: 'Commencer',
   },
   EN: {
     retour: 'Back', brouillon: 'Draft', envoyee: 'Sent',
