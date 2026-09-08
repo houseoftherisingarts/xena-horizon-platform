@@ -348,13 +348,15 @@ export interface RendezVous {
   creePar: 'client' | 'admin';
   createdAt?: any;
   updatedAt?: any;
+  googleEventId?: string;   // id de l'événement jumeau dans l'agenda Google de Laurie (functions/src/agenda/google.ts)
 }
 
 /** Miroir public (personnes connectées) d'un créneau pris, sans aucune donnée personnelle. */
 export interface Occupation {
-  id: string;        // = id du rendez-vous
+  id: string;         // = id du rendez-vous, ou 'google-<hachage>' pour une plage venue de Google
   debut: any;
   fin: any;
+  source?: 'google';   // absent = un rendez-vous du site; 'google' = une plage occupée dans son agenda Google
 }
 
 export interface PlageHoraire {
