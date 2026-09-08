@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { where } from 'firebase/firestore';
 import { ArrowRight } from 'lucide-react';
 import { useCollection } from '../lib/firestore';
@@ -8,6 +8,7 @@ import { CarteProjecteur, Feuille, KenBurns, Reveal, TexteRevele, useLenis } fro
 import Faq from '../components/Faq';
 import { useTextes } from '../lib/textes';
 import { allerAuRendezVous } from '../lib/rendezvous';
+import { cheminPaiement, demarrerCheckoutStripe } from '../lib/produits';
 import { ClientArchetype, Language, Product, ViewState } from '../types';
 
 interface PublicServicesProps {
