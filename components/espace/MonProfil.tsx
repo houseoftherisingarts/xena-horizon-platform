@@ -214,8 +214,8 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
         await updateProfile(auth.currentUser, { displayName: nom.trim() || null, photoURL: photoURL || null });
       }
       setOk(true);
-    } catch (err) {
-      console.error('DEBUG MonProfil save', err);
+    } catch (err: any) {
+      console.error('DEBUG MonProfil save', err?.code, err?.message, JSON.stringify(payload));
       setError(t.echec);
     } finally {
       setBusy(false);
