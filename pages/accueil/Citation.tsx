@@ -28,7 +28,7 @@ const Citation: React.FC<CitationProps> = ({ lang }) => {
   const t = useTextes('accueilCitation', TEXTES, lang);
 
   return (
-    <Feuille z={5} className="bg-papier">
+    <Feuille z={6} className="bg-papier">
       <div data-tx-scope="accueilCitation" className="grid grid-cols-12 gap-x-col gap-y-8 px-gut py-feuille">
         <div className="col-span-12 flex gap-5 sm:col-span-8 sm:col-start-1">
           <motion.span
