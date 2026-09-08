@@ -8,7 +8,8 @@
 // aucune promesse qui n'existe pas déjà ailleurs sur le site.
 
 import React, { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import { ChevronDown } from 'lucide-react';
 import { useTextes } from '../lib/textes';
 import type { Language } from '../types';

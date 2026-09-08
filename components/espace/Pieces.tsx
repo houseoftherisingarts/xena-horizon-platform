@@ -1,3 +1,4 @@
+import { MOUVEMENT_REDUIT } from '@/lib/motion';
 import React, { useRef, useState } from 'react';
 import { deleteField, serverTimestamp, increment } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage';
@@ -306,7 +307,7 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
   const categories = piecesParCategorie(config.pieces);
 
   const allerA = (id: string) => {
-    const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduit = MOUVEMENT_REDUIT;
     document.getElementById(`piece-${id}`)?.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'center' });
   };
 

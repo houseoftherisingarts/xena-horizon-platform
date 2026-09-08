@@ -3,7 +3,8 @@
 // seul compteur du site.
 
 import React, { useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import { Feuille, Parallax, Reveal, TexteRevele } from '../../components/motion';
 import { ALT_PHOTO_APROPOS, A_PROPOS_ACCUEIL } from './textes';
 import { useTextes } from '../../lib/textes';
@@ -63,7 +64,7 @@ const Compteur: React.FC<{ valeur: number; className?: string }> = ({ valeur, cl
   return (
     <motion.span
       onViewportEnter={demarrer}
-      viewport={{ once: true, amount: 0.6 }}
+      viewport={{ once: true, amount: 0.2 }}
       className={className}
     >
       {n}

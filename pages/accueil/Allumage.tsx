@@ -5,7 +5,8 @@
 // couleur, strophe imprimée sous le hero.
 
 import React, { useRef } from 'react';
-import { motion, useMotionTemplate, useReducedMotion, useTransform } from 'framer-motion';
+import { motion, useMotionTemplate, useTransform } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import Une from './Une';
 import { usePinProgress } from '../../lib/useProgression';
 import { useIntroTerminee } from '../../lib/intro';

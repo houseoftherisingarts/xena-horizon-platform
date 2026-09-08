@@ -132,7 +132,6 @@ export const LecteurAudio: React.FC<LecteurAudioProps> = ({ src, nom, lang, onLe
         .xh-onde-barre{height:100%;transform:scaleY(.42);transform-origin:bottom;opacity:.45;transition:opacity .3s}
         .xh-onde-barre--joue{opacity:1;animation-name:xh-ondule;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
         @keyframes xh-ondule{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
-        @media (prefers-reduced-motion: reduce){.xh-onde-barre--joue{animation:none;transform:scaleY(.7)}}
       `}</style>
     </div>
   );

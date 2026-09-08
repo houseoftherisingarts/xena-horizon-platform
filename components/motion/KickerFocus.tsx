@@ -3,7 +3,8 @@
 // jamais sur minuterie (porté de BodySections.tsx de Krystine).
 
 import React, { useRef } from 'react';
-import { motion, useReducedMotion, useTransform } from 'framer-motion';
+import { motion, useTransform } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import { useProgression } from '../../lib/useProgression';
 
 export interface KickerFocusProps {

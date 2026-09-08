@@ -36,7 +36,7 @@ const Citation: React.FC<CitationProps> = ({ lang }) => {
             className="mt-1 w-[2px] shrink-0 origin-top bg-rose"
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
-            viewport={{ once: true, amount: 0.6 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.9, ease: [0.16, 0.8, 0.24, 1] }}
           />
           <TexteRevele

@@ -5,7 +5,7 @@
 // En reduced motion, la liste seule.
 
 import React from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import { CLIENTS_CONFIANCE } from '../../lib/contenu';
 import { CLIENTS_TITRE } from './textes';
 import { useTextes } from '../../lib/textes';

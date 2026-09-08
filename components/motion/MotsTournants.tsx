@@ -5,7 +5,8 @@
 // Mot fixe sous prefers-reduced-motion.
 
 import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 export interface MotsTournantsProps {
   /** Le texte fixe avant le mot qui tourne (« Pour les », passé par useTextes côté appelant). */

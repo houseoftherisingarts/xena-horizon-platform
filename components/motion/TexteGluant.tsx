@@ -4,7 +4,7 @@
 // réserve la place pour que rien ne saute. Texte fixe sous prefers-reduced-motion.
 
 import React, { useEffect, useId, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 export interface TexteGluantProps {
   textes: string[];

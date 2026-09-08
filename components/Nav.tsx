@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import { Lock, Menu, X } from 'lucide-react';
 import { ViewState, Language } from '../types';
 import { useIntroTerminee } from '../lib/intro';

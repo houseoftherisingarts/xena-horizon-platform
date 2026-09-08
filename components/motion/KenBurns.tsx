@@ -4,7 +4,8 @@
 // zoom que personne ne regarde.
 
 import React, { useEffect, useRef } from 'react';
-import { motion, useAnimation, useReducedMotion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 export interface KenBurnsProps {
   src: string;

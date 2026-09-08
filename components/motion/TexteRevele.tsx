@@ -4,7 +4,8 @@
 // lecteurs d'écran ; le texte complet reste lisible via `aria-label`.
 
 import React, { useMemo } from 'react';
-import { motion, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 const EASE = [0.16, 0.8, 0.24, 1] as const;
 const DUREE = 0.75;

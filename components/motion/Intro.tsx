@@ -5,7 +5,8 @@
 // toujours appelé, même en reduced motion, même si l'intro a déjà joué.
 
 import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 // Constantes de rythme — le pacing de référence (filet 700 ms, tenue
 // 1 200 ms, levée 700 ms, soit 2,6 s) est mis à l'échelle sur `dureeMs` pour

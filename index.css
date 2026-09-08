@@ -162,16 +162,6 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   }
 }
 
-/* Filet de sécurité : la vraie politique est une branche de rendu séparée (useReducedMotion). */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .in > * { opacity: 1; transform: none; animation: none; }
-}
 
 /* Mode d'édition des textes (components/Editeur.tsx) : chaque texte déclaré porte un liseré et se clique. */
 .mode-edition [data-tx] { outline: 1px dashed rgb(var(--c-rose) / 0.55); outline-offset: 4px; cursor: text; border-radius: 2px; }

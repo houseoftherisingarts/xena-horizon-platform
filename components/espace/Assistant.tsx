@@ -1,5 +1,6 @@
+import { MOUVEMENT_REDUIT, useReducedMotion } from '@/lib/motion';
 import React, { useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { MessageCircle, Send, X } from 'lucide-react';
 import { repondreAssistant, SUGGESTIONS_ASSISTANT } from '../../lib/assistant';
 import { Dossier, DossierConfig, Language } from '../../types';
@@ -54,7 +55,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
   const faireDefiler = () => {
     const el = filRef.current;
     if (!el) return;
-    const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduit = MOUVEMENT_REDUIT;
     el.scrollTo({ top: el.scrollHeight, behavior: reduit ? 'auto' : 'smooth' });
   };
 

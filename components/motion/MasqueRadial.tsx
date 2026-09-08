@@ -3,7 +3,8 @@
 // Accepte le contenu via `enfant` ou via `children`.
 
 import React, { useRef } from 'react';
-import { motion, useMotionTemplate, useReducedMotion, useTransform } from 'framer-motion';
+import { motion, useMotionTemplate, useTransform } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 import { useProgression } from '../../lib/useProgression';
 
 export interface MasqueRadialProps {

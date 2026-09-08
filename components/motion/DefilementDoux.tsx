@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 const LenisContext = createContext<Lenis | null>(null);
 

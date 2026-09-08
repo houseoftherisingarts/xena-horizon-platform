@@ -1,3 +1,4 @@
+import { MOUVEMENT_REDUIT } from '@/lib/motion';
 // CarteProjecteur — porté du Spotlight card de jahed (21st.dev) : un seul écouteur
 // pointermove partagé (posé une fois pour toute la page) pousse la position du curseur
 // dans deux variables CSS sur la racine ; chaque carte peint un radial-gradient de 200 px
@@ -25,7 +26,7 @@ function poserEcouteur(): void {
 const supportePointeurFin = (): boolean =>
   typeof window !== 'undefined' &&
   window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
-  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  !MOUVEMENT_REDUIT;
 
 export interface CarteProjecteurProps {
   children: React.ReactNode;

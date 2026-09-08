@@ -3,7 +3,8 @@
 // canon L'Œuvre : cubic-bezier(0.16, 0.8, 0.24, 1), 1,05 s, jamais de rebond.
 
 import React, { Children, useMemo } from 'react';
-import { motion, useReducedMotion, type HTMLMotionProps, type Variants } from 'framer-motion';
+import { motion, type HTMLMotionProps, type Variants } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 const EASE = [0.16, 0.8, 0.24, 1] as const;
 const DUREE = 1.05;

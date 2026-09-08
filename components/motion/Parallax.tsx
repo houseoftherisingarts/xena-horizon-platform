@@ -4,7 +4,8 @@
 // rect que useScroll vient de lire).
 
 import React, { useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useReducedMotion } from '@/lib/motion';
 
 export interface ParallaxProps {
   children: React.ReactNode;
