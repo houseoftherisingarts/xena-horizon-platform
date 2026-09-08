@@ -33,8 +33,9 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
 
   const casquettes = lang === 'EN' ? A_PROPOS.casquettesEN : A_PROPOS.casquettesFR;
   const paragraphes = lang === 'EN' ? A_PROPOS.paragraphesEn : A_PROPOS.paragraphes;
-  const stat1Value = lang === 'EN' ? BLOCS_ACCUEIL_EN['stats-1'].stat1Value : (BLOCS_ACCUEIL.find((b) => b.id === 'stats-1') as any)?.stat1Value;
-  const stat2Label = lang === 'EN' ? BLOCS_ACCUEIL_EN['stats-1'].stat2Label : (BLOCS_ACCUEIL.find((b) => b.id === 'stats-1') as any)?.stat2Label;
+  const stats = BLOCS_ACCUEIL.find((b) => b.type === 'STATS') as HomeStatsBlock | undefined;
+  const stat1Value = lang === 'EN' ? BLOCS_ACCUEIL_EN['stats-1'].stat1Value : stats?.stat1Value;
+  const stat2Label = lang === 'EN' ? BLOCS_ACCUEIL_EN['stats-1'].stat2Label : stats?.stat2Label;
 
   return (
     <div>
