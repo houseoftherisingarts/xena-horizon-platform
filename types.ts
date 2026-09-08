@@ -107,6 +107,7 @@ export interface Document {
   status: DocumentStatus;
   terms: string;
   paymentLink?: string;
+  jetonPublic?: string; // adresse /facture/{jeton} une fois le document publié (voir lib/factures.ts)
   signed?: boolean;
   signatureDate?: string;
 }
