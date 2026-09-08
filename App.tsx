@@ -121,6 +121,15 @@ const App: React.FC = () => {
 
   const [user, setUser] = useState<User | null>(null);
   const [menuAdminOuvert, setMenuAdminOuvert] = useState(false);
+  // Repli du menu admin en rail d'icônes (components/AdminSidebar.tsx) : lu ici aussi pour que le
+  // contenu prenne tout de suite la bonne largeur, sans attendre le premier rendu de la barre.
+  const [menuAdminReplie, setMenuAdminReplie] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem('xena.admin.menu') === 'replie';
+    } catch {
+      return false;
+    }
+  });
   const [authReady, setAuthReady] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
