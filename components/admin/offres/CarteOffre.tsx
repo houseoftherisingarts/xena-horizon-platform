@@ -1,7 +1,7 @@
 // Une offre de l'échelle de valeur : carte complète (vues Ajustée et Défilement, mobile) ou ligne
 // compacte (vue Compacte). Prix en fr-CA, espace insécable posée par Intl.NumberFormat.
 import React from 'react';
-import { Check, Globe } from 'lucide-react';
+import { Check, Globe, HelpCircle, CalendarCheck, CreditCard } from 'lucide-react';
 import { Etiquette } from '../ui';
 import { PROFILS_REELS } from '../../../lib/contenu';
 import type { Product, Language } from '../../../types';
@@ -18,6 +18,33 @@ const libelleProfil = (id: string, lang: Language): string => {
   const profil = PROFILS_REELS.find((p) => p.id === id);
   if (!profil) return id;
   return lang === 'EN' ? profil.titleEN : profil.titleFR;
+};
+
+// Petite pastille du mode de paiement (bloc « Paiement » ajouté par le bâtisseur H) : une icône suffit
+// sur la carte, le détail se règle dans la fenêtre d'édition.
+const LIBELLE_PAIEMENT = {
+  FR: { sur_demande: 'Sur demande', inscription: 'Inscription', stripe: 'Paiement en ligne' },
+  EN: { sur_demande: 'On request', inscription: 'Registration', stripe: 'Online payment' },
+} as const;
+
+const PastillePaiement: React.FC<{ produit: Product; lang: Language }> = ({ produit, lang }) => {
+  if (!produit.paiement) return null;
+  const Icone = produit.paiement === 'stripe' ? CreditCard : produit.paiement === 'inscription' ? CalendarCheck : HelpCircle;
+  const titre = LIBELLE_PAIEMENT[lang][produit.paiement];
+  const relie = produit.paiement === 'stripe' && (produit.stripePriceId || produit.lienPaiement);
+  return (
+    <span className="relative inline-flex flex-shrink-0" title={titre}>
+      <Icone className="w-3.5 h-3.5 text-gris" aria-hidden="true" />
+      {produit.paiement === 'stripe' && (
+        <span
+          className={`absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-pilule ${
+            produit.stripeEtat === 'erreur' ? 'bg-rose' : relie ? 'bg-encre' : 'bg-gris'
+          }`}
+          aria-hidden="true"
+        />
+      )}
+    </span>
+  );
 };
 
 interface CarteOffreProps {
