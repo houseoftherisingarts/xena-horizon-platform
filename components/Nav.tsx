@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Lock, Menu, X } from 'lucide-react';
 import { ViewState, Language } from '../types';
 import { useIntroTerminee } from '../lib/intro';
-import { Portail } from './motion';
+import { Portail, useLenis } from './motion';
 
 interface NavProps {
   currentView: ViewState;
