@@ -99,6 +99,7 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
     racine.querySelectorAll('[data-tx]').forEach((el) => el.removeAttribute('data-tx'));
     if (!edition || index.size === 0) return;
     const valeurs = new WeakMap<Element, string>();
+    void valeurs;
     const tous = Array.from(racine.querySelectorAll<HTMLElement>('*'));
     // Parcours à rebours : un descendant est toujours vu avant son ancêtre, donc l'élément le plus
     // profond qui porte le texte gagne, et l'ancêtre qui contient le même texte s'efface.
@@ -118,14 +119,12 @@ const Editeur: React.FC<{ lang: Language }> = ({ lang }) => {
         if (!n || n.length > 2000) continue;
         const liste = index.get(n);
         if (!liste) continue;
-        let dejaPris = false;
-        el.querySelectorAll('[data-tx]').forEach((d) => {
-          if (valeurs.get(d) === n) dejaPris = true;
-        });
-        if (dejaPris) continue;
         const scopeProche = el.closest('[data-tx-scope]')?.getAttribute('data-tx-scope') ?? null;
         const choix = liste.find((k) => k.scope === scopeProche) ?? liste[0];
-        el.setAttribute('data-tx', `${choix.scope}|${choix.cle}`);
+        const etiquette = `${choix.scope}|${choix.cle}`;
+        // Un descendant porte déjà cette clé (titre révélé mot par mot, lignes en <span>) : l'ancêtre s'efface.
+        if (el.querySelector(`[data-tx="${etiquette}"]`)) continue;
+        el.setAttribute('data-tx', etiquette);
         valeurs.set(el, n);
         break;
       }

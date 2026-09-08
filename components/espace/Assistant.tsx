@@ -94,6 +94,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
           {ouvert && (
             <motion.section
               role="dialog"
+              data-tx-scope="espaceAssistant"
               aria-label={t.titre}
               initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
