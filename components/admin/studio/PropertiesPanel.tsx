@@ -121,8 +121,8 @@ export const PropertiesPanel: React.FC<Props> = ({ calque, onChange, onDelete, o
                 <label className="text-petit font-semibold text-encre mb-1.5 block">{t.graisse}</label>
                 <div className="grid grid-cols-4 gap-1">
                   {GRAISSES.map((g) => (
-                    <button key={g.valeur} type="button" onClick={() => onChange({ graisse: g.valeur })} className={`py-1.5 rounded-champ border text-xs ${calque.graisse === g.valeur ? 'border-rose text-rose bg-rose/10' : 'border-filet text-gris'}`}>
-                      {g.valeur}
+                    <button key={g} type="button" onClick={() => onChange({ graisse: g })} className={`py-1.5 rounded-champ border text-xs ${calque.graisse === g ? 'border-rose text-rose bg-rose/10' : 'border-filet text-gris'}`}>
+                      {g}
                     </button>
                   ))}
                 </div>
