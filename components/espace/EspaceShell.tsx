@@ -44,7 +44,7 @@ const TEXTES = {
     ongletCourtDossier: 'Dossier',
     ongletCourtPieces: 'Pièces',
     ongletCourtParcours: 'Parcours',
-    ongletCourtRendezvous: 'Rendez-vous',
+    ongletCourtRendezvous: 'RDV',
     ongletCourtMessages: 'Messages',
     ongletCourtRessources: 'Ressources',
     ongletCourtProfil: 'Profil',
