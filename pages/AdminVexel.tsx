@@ -3,10 +3,11 @@
 // la clé publique de Vexel (lib/coffre.ts) : Firestore ne garde que le texte chiffré et un résumé.
 import React, { useMemo, useState } from 'react';
 import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { deleteObject, ref as storageRef, uploadBytes } from 'firebase/storage';
 import { ExternalLink, ShieldCheck, Trash2 } from 'lucide-react';
-import { auth, db } from '../firebase';
+import { auth, db, storage } from '../firebase';
 import { useDocument } from '../lib/firestore';
-import { CHEMIN_COFFRE, luhnValide, numeroPropre, sceller, type CoffreScelle, type ContenuCoffre } from '../lib/coffre';
+import { CHEMIN_COFFRE, CHEMIN_SPECIMEN, SPECIMEN_TAILLE_MAX, luhnValide, numeroPropre, sceller, type CoffreScelle, type ContenuCoffre } from '../lib/coffre';
 import { useTextes } from '../lib/textes';
 import { Bouton, Champ, EnTete, Etiquette, Panneau, Zone } from '../components/admin/ui';
 import type { Language } from '../types';
