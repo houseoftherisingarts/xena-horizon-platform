@@ -25,17 +25,14 @@ const titreEtGlose = (titreEn: string): { nom: string; glose: string | null } =>
 };
 
 const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
-  const t = {
-    FR: { ecouter: 'Balado', livre: 'Livre', modele: 'Modèle et comédienne' },
-    EN: { ecouter: 'Podcast', livre: 'Book', modele: 'Model and actress' },
-  }[lang];
+  const t = useTextes('projets', TEXTES, lang);
 
-  const titre = lang === 'EN' ? PROJETS_PAGE.titreEn : PROJETS_PAGE.titre;
-  const lede = lang === 'EN' ? PROJETS_PAGE.ledeEn : PROJETS_PAGE.lede;
+  const titre = t.titre;
+  const lede = t.lede;
   const [balado, livre, modele] = PROJETS;
 
   return (
-    <div>
+    <div data-tx-scope="projets">
       {/* --- OUVERTURE TYPOGRAPHIQUE --- */}
       <section className="px-gut pt-[calc(var(--nav)+3.5rem)] pb-16 min-h-[70svh] flex items-end">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-6 w-full">
