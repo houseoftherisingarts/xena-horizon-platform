@@ -139,9 +139,9 @@ const Messagerie: React.FC<MessagerieProps> = ({ dossiers, loading, lang, onChan
             <button
               type="button"
               onClick={() => setSelectedUid(null)}
-              className="lg:hidden text-sm text-gris hover:text-encre self-start"
+              className="lg:hidden flex items-center gap-1.5 text-sm text-gris hover:text-encre self-start"
             >
-              ← {t.aucun.length > 0 ? '' : ''}
+              <ChevronLeft className="w-4 h-4" aria-hidden="true" /> {t.retour}
             </button>
             <EnTeteSocial dossier={selected} lang={lang} t={t} onChangeView={onChangeView} />
             <div className="min-h-[360px] flex-1">
