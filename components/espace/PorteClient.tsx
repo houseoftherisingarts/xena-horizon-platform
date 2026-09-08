@@ -92,7 +92,7 @@ const messageErreur = (err: unknown, t: { errInconnue: string }): string => {
     case 'auth/email-already-in-use':
       return 'Un compte existe déjà avec ce courriel. Essaie plutôt de te connecter.';
     case 'auth/weak-password':
-      return "Choisis un mot de passe d'au moins 6 caractères.";
+      return "Choisis un mot de passe d'au moins 8 caractères.";
     case 'auth/too-many-requests':
       return 'Trop de tentatives. Réessaie dans quelques minutes.';
     case 'auth/popup-closed-by-user':
@@ -297,7 +297,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={8}
                     autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                     className={`${CHAMP} pl-11 min-h-[44px]`}
                   />

@@ -185,13 +185,17 @@ service cloud.firestore {
     // Miroir sans donnée personnelle : les personnes connectées voient les créneaux déjà pris.
     match /occupations/{rdvId} {
       allow read: if request.auth != null;
+      // Le miroir n'existe que pour un rendez-vous réel écrit dans le même lot (getAfter voit l'état après le lot),
+      // au nom de la personne, aux mêmes heures : impossible de bloquer l'agenda avec une occupation fantôme.
       allow create: if isAdmin()
                     || (request.auth != null
                         && request.resource.data.debut is timestamp
                         && request.resource.data.fin is timestamp
                         && request.resource.data.fin > request.resource.data.debut
-                        && request.resource.data.fin.toMillis() - request.resource.data.debut.toMillis() <= 4 * 3600 * 1000
-                        && request.resource.data.keys().hasOnly(['debut','fin']));
+                        && request.resource.data.keys().hasOnly(['debut','fin'])
+                        && getAfter(/databases/$(database)/documents/rendezvous/$(rdvId)).data.uid == request.auth.uid
+                        && getAfter(/databases/$(database)/documents/rendezvous/$(rdvId)).data.debut == request.resource.data.debut
+                        && getAfter(/databases/$(database)/documents/rendezvous/$(rdvId)).data.fin == request.resource.data.fin);
       allow delete: if isAdmin()
                     || (request.auth != null && get(/databases/$(database)/documents/rendezvous/$(rdvId)).data.uid == request.auth.uid);
       allow update: if isAdmin();

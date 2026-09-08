@@ -1,4 +1,6 @@
 // Rendu HTML des infolettres composées dans l'admin (blocs). Aucune
+/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
+const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
 // dépendance React : ce fichier tourne dans une Cloud Function.
 // Port du moteur de Krystine (functions/src/newsletter/renderer.ts), avec la
 // marque Xena Horizon : papier chaud + encre, Playfair Display / Figtree,
@@ -155,7 +157,7 @@ function blockToEmail(block: NewsletterBlock, firstName?: string, pal: Palette =
         ? `background:${CHARTE.rose};color:#fff;`
         : `border:1px solid ${CHARTE.rose};color:${pal.accent};`;
       return `<tr><td style="padding:6px 0 22px;">
-        <a href="${esc(c.href || '#')}" target="_blank" style="display:inline-block;padding:15px 28px;border-radius:999px;font-family:${CHARTE.sans};font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;${style}">${esc(c.label || 'En savoir plus')}</a>
+        <a href="${esc(hrefSur(c.href))}" target="_blank" style="display:inline-block;padding:15px 28px;border-radius:999px;font-family:${CHARTE.sans};font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;${style}">${esc(c.label || 'En savoir plus')}</a>
       </td></tr>`;
     }
     case 'divider': {

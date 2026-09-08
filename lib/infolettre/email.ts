@@ -7,6 +7,9 @@
  */
 import { BRAND, richToHtml, stripRich, type BandeauInfolettre, type NewsletterBlock } from './renderer';
 
+/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
+const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
+
 export interface RenderEmailOptions {
   subject: string;
   preheader?: string;
@@ -46,7 +49,7 @@ function blockToEmail(block: NewsletterBlock): string {
       const fg = primaire ? '#FFFFFF' : BRAND.ink;
       const border = primaire ? BRAND.ink : 'rgba(26,26,30,0.2)';
       return `<tr><td align="center" style="padding:20px 0;">
-        <a href="${esc(c.href || '#')}" target="_blank"
+        <a href="${esc(hrefSur(c.href))}" target="_blank"
            style="display:inline-block;background:${bg};color:${fg};border:1px solid ${border};
                   font-family:${BRAND.sans};font-size:11px;font-weight:700;letter-spacing:0.25em;
                   text-transform:uppercase;text-decoration:none;padding:14px 28px;border-radius:999px;">

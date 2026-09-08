@@ -1,4 +1,6 @@
 /**
+/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
+const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
  * Le moteur de l'infolettre : les types de blocs, le rendu web (édition en place dans le composeur)
  * et le rendu courriel (HTML autonome, table-in-table, sans dépendance au CSS du site).
  *
@@ -276,7 +278,7 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
       if (edit) return <div className="my-6 text-center"><Inline className={className} value={c.label || ''} placeholder="Texte du bouton" onCommit={set('label')} /></div>;
       return (
         <div className="my-6 text-center">
-          <a href={c.href || '#'} target="_blank" rel="noopener noreferrer" className={className}>{c.label || 'En savoir plus'}</a>
+          <a href={hrefSur(c.href)} target="_blank" rel="noopener noreferrer" className={className}>{c.label || 'En savoir plus'}</a>
         </div>
       );
     }
@@ -345,7 +347,7 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
           {c.eyebrow && <span className={eyebrowClass}>{c.eyebrow}</span>}
           {c.title && <h3 className={titleClass}>{c.title}</h3>}
           {c.body && <p className={bodyClass}>{c.body}</p>}
-          {c.href && c.boutonTexte && <a href={c.href} target="_blank" rel="noopener noreferrer" className={btnClass}>{c.boutonTexte}</a>}
+          {c.href && c.boutonTexte && <a href={hrefSur(c.href)} target="_blank" rel="noopener noreferrer" className={btnClass}>{c.boutonTexte}</a>}
         </div>
       );
     }

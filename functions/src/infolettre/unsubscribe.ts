@@ -1,5 +1,6 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { timingSafeEqual } from 'node:crypto';
 import { REGION } from './mail';
 
 // Endpoint public visé par le lien de désabonnement (GET, sujet à un clic
@@ -27,7 +28,8 @@ export const desabonner = onRequest(
       const ref = getFirestore().doc(`subscribers/${s}`);
       const snap = await ref.get();
       const data = snap.data() as { unsubscribeToken?: string; email?: string } | undefined;
-      if (!snap.exists || !data?.unsubscribeToken || data.unsubscribeToken !== t) {
+      const memeJeton = (a: string, b: string): boolean => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
+      if (!snap.exists || !data?.unsubscribeToken || !memeJeton(data.unsubscribeToken, t)) {
         res.status(404).send(page('Lien invalide', 'Ce lien de désabonnement n’est plus valide.'));
         return;
       }

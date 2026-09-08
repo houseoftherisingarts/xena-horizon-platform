@@ -16,6 +16,7 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
+  writeBatch,
 } from 'firebase/firestore';
 
 const UID_A = 'user-a';
@@ -242,16 +243,25 @@ async function main() {
   await verifie('Laurie confirme (ok)', assertSucceeds(updateDoc(doc(dbAdmin, 'rendezvous', 'rdv-a'), { statut: 'confirme', updatedAt: serverTimestamp() })));
   await verifie('un autre lit le rendez-vous (refus attendu)', assertFails(getDoc(doc(dbB, 'rendezvous', 'rdv-a'))));
   await verifie('la personne annule (ok)', assertSucceeds(updateDoc(doc(dbA, 'rendezvous', 'rdv-a'), { statut: 'annule', updatedAt: serverTimestamp() })));
-  await verifie('occupation écrite par la personne (ok)', assertSucceeds(setDoc(doc(dbA, 'occupations', 'rdv-a'), { debut: dans3Jours, fin: fin3Jours })));
-  await verifie("occupation lue par un autre compte (ok)", assertSucceeds(getDoc(doc(dbB, 'occupations', 'rdv-a'))));
-  await verifie('occupation lue sans compte (refus attendu)', assertFails(getDoc(doc(dbAnon, 'occupations', 'rdv-a'))));
+  // Le miroir se crée dans le même lot que le rendez-vous (rdv-e), aux mêmes heures ; seul, il est refusé.
+  const lot = writeBatch(dbA);
+  lot.set(doc(dbA, 'rendezvous', 'rdv-e'), rdvValide(UID_A));
+  lot.set(doc(dbA, 'occupations', 'rdv-e'), { debut: dans3Jours, fin: fin3Jours });
+  await verifie('rendez-vous et occupation dans un même lot (ok)', assertSucceeds(lot.commit()));
+  await verifie('occupation seule sans rendez-vous (refus attendu)', assertFails(setDoc(doc(dbA, 'occupations', 'occ-fantome'), { debut: dans3Jours, fin: fin3Jours })));
+  const lotB = writeBatch(dbA);
+  lotB.set(doc(dbA, 'rendezvous', 'rdv-f'), rdvValide(UID_A));
+  lotB.set(doc(dbA, 'occupations', 'rdv-f'), { debut: dans3Jours, fin: new Date(fin3Jours.getTime() + 3600000) });
+  await verifie('occupation aux mauvaises heures (refus attendu)', assertFails(lotB.commit()));
+  await verifie("occupation lue par un autre compte (ok)", assertSucceeds(getDoc(doc(dbB, 'occupations', 'rdv-e'))));
+  await verifie('occupation lue sans compte (refus attendu)', assertFails(getDoc(doc(dbAnon, 'occupations', 'rdv-e'))));
   // 12. Profil : bannière, bio et liens dans les bornes (ok), bio trop longue (refus)
   await verifie('profil : bannière, bio et liens (ok)', assertSucceeds(updateDoc(doc(dbA, 'dossiers', UID_A), { banniereURL: 'https://firebasestorage.googleapis.com/b', bio: 'Artiste.', liens: { site: 'https://a.example.com' }, updatedAt: serverTimestamp() })));
   await verifie('profil : bio trop longue (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { bio: 'x'.repeat(1200), updatedAt: serverTimestamp() })));
 
   // 13. Audit des règles du 8 septembre : bornes et formats
   const fin100ans = new Date(dans3Jours.getTime() + 100 * 365 * 86400000);
-  await verifie('occupation de cent ans (refus attendu)', assertFails(setDoc(doc(dbA, 'occupations', 'occ-longue'), { debut: dans3Jours, fin: fin100ans })));
+
   await verifie('pieces avec 25 clés (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { pieces: Object.fromEntries(Array.from({ length: 25 }, (_, i) => [`p${i}`, { nom: 'x' }])), updatedAt: serverTimestamp() })));
   await verifie('liens avec une clé inconnue (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { liens: { spam: 'https://x.example' }, updatedAt: serverTimestamp() })));
   await verifie('profil hors liste (refus attendu)', assertFails(updateDoc(doc(dbA, 'dossiers', UID_A), { profil: 'pirate', updatedAt: serverTimestamp() })));

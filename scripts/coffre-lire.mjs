@@ -1,5 +1,6 @@
 // Lit le coffre de Laurie (coffre/laurie) avec la clé privée d'Alex et affiche le contenu dans le terminal.
-// Usage : node scripts/coffre-lire.mjs            (lire, et marquer « lu » pour que Laurie le voie)
+// Usage : node scripts/coffre-lire.mjs            (lire, numéro et CVV masqués, et marquer « lu »)
+//         node scripts/coffre-lire.mjs --complet  (tout en clair, à l'instant d'ouvrir les comptes)
 //         node scripts/coffre-lire.mjs --effacer  (supprimer le document une fois les comptes ouverts)
 import { readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
@@ -31,6 +32,9 @@ const dechiffreur = createDecipheriv('aes-256-gcm', cleAes, iv);
 dechiffreur.setAuthTag(etiquette);
 const clair = JSON.parse(Buffer.concat([dechiffreur.update(corps), dechiffreur.final()]).toString('utf8'));
 console.log(`Déposé par ${champ('parCourriel')} le ${doc.fields?.deposeLe?.timestampValue ?? '?'}`);
-for (const [k, v] of Object.entries(clair)) console.log(`${k.padEnd(20)} ${v}`);
+const complet = process.argv.includes('--complet');
+const masque = (k, v) => (!complet && k === 'numero' ? `•••• •••• •••• ${String(v).slice(-4)}` : !complet && k === 'cvv' ? '•••' : v);
+for (const [k, v] of Object.entries(clair)) console.log(`${k.padEnd(20)} ${masque(k, v)}`);
+if (!complet) console.log('\nNuméro et CVV masqués : --complet pour les voir.');
 await fetch(`${DOC}?updateMask.fieldPaths=luLe`, { method: 'PATCH', headers: entetes, body: JSON.stringify({ fields: { luLe: { timestampValue: new Date().toISOString() } } }) });
 console.log('\nMarqué comme lu. Une fois les comptes ouverts : node scripts/coffre-lire.mjs --effacer');

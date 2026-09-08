@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { orderBy, serverTimestamp, increment } from 'firebase/firestore';
+import { orderBy, serverTimestamp, increment, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import {
   ArrowLeft,
   Download,
@@ -14,7 +14,7 @@ import {
   Calendar,
   AlertCircle,
 } from 'lucide-react';
-import { auth } from '../../../firebase';
+import { auth, db } from '../../../firebase';
 import { Dossier, DossierConfig, DossierMessage, DossierNote, Language } from '../../../types';
 import { useCollection, createDoc, patchDoc, removeDoc } from '../../../lib/firestore';
 import { PROFILS, indexEtape, etapeSuivante, dossierMarkdown, telecharger } from '../../../lib/dossier';
@@ -184,6 +184,11 @@ const FicheDossier: React.FC<FicheDossierProps> = ({ dossier, config, lang, onBa
     setBusyDelete(true);
     setErreur(null);
     try {
+      // Firestore ne supprime jamais les sous-collections : on purge messages et notes avant le dossier.
+      for (const sous of ['messages', 'notes']) {
+        const docs = await getDocs(collection(db, `dossiers/${uid}/${sous}`));
+        await Promise.all(docs.docs.map((d) => deleteDoc(d.ref)));
+      }
       await removeDoc('dossiers', uid);
       setConfirmDelete(false);
       onBack();
