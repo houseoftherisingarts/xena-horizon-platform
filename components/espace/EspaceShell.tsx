@@ -140,8 +140,11 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
 
       <div className="px-gut">
         {/* L'avatar chevauche le bas de la bannière, à gauche, comme dans le profil de Krystine. */}
-        <div className="relative z-10 -mt-12 md:-mt-16 flex flex-col md:flex-row md:items-end gap-6 pb-6 border-b border-filet">
-          <Avatar url={dossier.photoURL} nom={nom} taille="lg" />
+        {/* Seul l'avatar chevauche la bannière : le nom reste sur le papier, lisible quelle que soit la photo. */}
+        <div className="relative z-10 flex flex-col md:flex-row md:items-end gap-6 pt-3 pb-6 border-b border-filet">
+          <div className="-mt-12 md:-mt-16 flex-shrink-0">
+            <Avatar url={dossier.photoURL} nom={nom} taille="lg" />
+          </div>
           <div className="flex-1 min-w-0 flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-1">
             <div className="min-w-0">
               <h1 className="font-serif text-h2 text-encre truncate">{nom}</h1>

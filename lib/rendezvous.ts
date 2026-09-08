@@ -94,12 +94,11 @@ export function joursDisponibles(config: AgendaConfig, occupations: Pick<Occupat
 export const nomSalle = (rdvId: string): string => `xena-${rdvId}`;
 export const salleUrl = (salle: string): string => `https://meet.jit.si/${salle}`;
 
-/** Le rendez-vous se rejoint 10 minutes avant et jusqu'à 30 minutes après l'heure de fin. */
+/** Un rendez-vous confirmé s'ouvre dans le site dès qu'on le veut (salle d'attente Jitsi), jusqu'à 30 minutes après l'heure de fin. */
 export function rencontreOuverte(rdv: Pick<RendezVous, 'debut' | 'fin' | 'statut'>, maintenant = new Date()): boolean {
   if (rdv.statut !== 'confirme') return false;
-  const debut = versDate(rdv.debut).getTime() - 10 * 60000;
   const fin = versDate(rdv.fin).getTime() + 30 * 60000;
-  return maintenant.getTime() >= debut && maintenant.getTime() <= fin;
+  return maintenant.getTime() <= fin;
 }
 
 /** Un rendez-vous neuf demandé par la personne connectée, avec son miroir. */

@@ -4,7 +4,8 @@ import { updateProfile } from 'firebase/auth';
 import { AlertCircle, CheckCircle, Save } from 'lucide-react';
 import { auth } from '../../firebase';
 import { deleteFile, patchDoc, uploadFile } from '../../lib/firestore';
-import { Dossier, Language } from '../../types';
+import { PROFILS } from '../../lib/dossier';
+import { Dossier, Language, ProfilClient } from '../../types';
 import { useTextes } from '../../lib/textes';
 import Avatar from './Avatar';
 
@@ -44,9 +45,11 @@ const TEXTES = {
     photoLabel: 'Photo de profil',
     changer: 'Changer',
     retirer: 'Retirer',
-    titreInfos: 'Tes informations',
+    titreQui: 'Qui tu es',
     nom: 'Nom complet',
+    telephone: 'Téléphone',
     ville: 'Ville',
+    profilLabel: 'Ton profil',
     discipline: 'Discipline',
     disciplineHolder: 'Danse, théâtre, écriture, musique…',
     bio: 'Présentation courte',
@@ -56,6 +59,11 @@ const TEXTES = {
     lienInstagram: 'Instagram',
     lienFacebook: 'Facebook',
     lienAutre: 'Autre lien',
+    titreProjet: 'Ton projet',
+    projetTitre: 'Titre du projet',
+    projetDesc: 'Description',
+    projetObjectif: 'Objectif',
+    echeance: 'Échéance',
     enregistrer: 'Enregistrer',
     enregistrement: 'Enregistrement…',
     succes: 'Profil enregistré.',
@@ -71,9 +79,11 @@ const TEXTES = {
     photoLabel: 'Profile photo',
     changer: 'Change',
     retirer: 'Remove',
-    titreInfos: 'Your information',
+    titreQui: 'Who you are',
     nom: 'Full name',
+    telephone: 'Phone',
     ville: 'City',
+    profilLabel: 'Your profile',
     discipline: 'Discipline',
     disciplineHolder: 'Dance, theatre, writing, music…',
     bio: 'Short bio',
@@ -83,6 +93,11 @@ const TEXTES = {
     lienInstagram: 'Instagram',
     lienFacebook: 'Facebook',
     lienAutre: 'Other link',
+    titreProjet: 'Your project',
+    projetTitre: 'Project title',
+    projetDesc: 'Description',
+    projetObjectif: 'Goal',
+    echeance: 'Deadline',
     enregistrer: 'Save',
     enregistrement: 'Saving…',
     succes: 'Profile saved.',
@@ -96,7 +111,9 @@ const TEXTES = {
 
 const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
   const [nom, setNom] = useState(dossier.nom ?? '');
+  const [telephone, setTelephone] = useState(dossier.telephone ?? '');
   const [ville, setVille] = useState(dossier.ville ?? '');
+  const [profil, setProfil] = useState<ProfilClient>(dossier.profil ?? 'artiste');
   const [discipline, setDiscipline] = useState(dossier.discipline ?? '');
   const [bio, setBio] = useState(dossier.bio ?? '');
   const [liens, setLiens] = useState<Liens>({
@@ -105,6 +122,10 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
     facebook: dossier.liens?.facebook ?? '',
     autre: dossier.liens?.autre ?? '',
   });
+  const [titre, setTitre] = useState(dossier.projet?.titre ?? '');
+  const [description, setDescription] = useState(dossier.projet?.description ?? '');
+  const [objectif, setObjectif] = useState(dossier.projet?.objectif ?? '');
+  const [echeance, setEcheance] = useState(dossier.projet?.echeance ?? '');
 
   const [photoURL, setPhotoURL] = useState(dossier.photoURL);
   const [photoChemin, setPhotoChemin] = useState<string | undefined>(undefined);
@@ -120,7 +141,7 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
   const photoInput = useRef<HTMLInputElement>(null);
   const banniereInput = useRef<HTMLInputElement>(null);
 
-  const t = useTextes('espaceMonProfil', TEXTES, lang);
+  const t = useTextes('espaceProfil', TEXTES, lang);
 
   const choisirImage = async (
     file: File,
@@ -199,12 +220,15 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
     setOk(false);
     const payload: Record<string, any> = {
       nom: nom.trim(),
+      telephone: telephone.trim(),
       ville: ville.trim(),
+      profil,
       discipline: discipline.trim(),
       bio: bio.trim(),
       liens: Object.fromEntries(lienEntries),
       photoURL: photoURL || deleteField(),
       banniereURL: banniereURL || deleteField(),
+      projet: { titre: titre.trim(), description: description.trim(), objectif: objectif.trim(), echeance },
       updatedAt: serverTimestamp(),
       derniereActiviteClient: serverTimestamp(),
     };
@@ -222,7 +246,7 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
   };
 
   return (
-    <form onSubmit={soumettre} data-tx-scope="espaceMonProfil" className="space-y-10">
+    <form onSubmit={soumettre} data-tx-scope="espaceProfil" className="space-y-10">
       <section className="border-t border-filet pt-8">
         <h2 className="font-serif text-h3 text-encre mb-6">{t.titrePhotos}</h2>
         <div className="space-y-6">
@@ -286,7 +310,7 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-col gap-y-10">
         <section className="border-t border-filet pt-8">
-          <h2 className="font-serif text-h3 text-encre mb-6">{t.titreInfos}</h2>
+          <h2 className="font-serif text-h3 text-encre mb-6">{t.titreQui}</h2>
           <div className="space-y-4">
             <div>
               <label htmlFor="mp-nom" className="block text-petit text-gris mb-1">
@@ -295,10 +319,36 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
               <input id="mp-nom" type="text" maxLength={120} value={nom} onChange={(e) => setNom(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
             </div>
             <div>
+              <label htmlFor="mp-tel" className="block text-petit text-gris mb-1">
+                {t.telephone}
+              </label>
+              <input id="mp-tel" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
+            </div>
+            <div>
               <label htmlFor="mp-ville" className="block text-petit text-gris mb-1">
                 {t.ville}
               </label>
               <input id="mp-ville" type="text" maxLength={80} value={ville} onChange={(e) => setVille(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
+            </div>
+            <div>
+              <label htmlFor="mp-profil" className="block text-petit text-gris mb-1">
+                {t.profilLabel}
+              </label>
+              <select
+                id="mp-profil"
+                value={profil}
+                onChange={(e) => setProfil(e.target.value as ProfilClient)}
+                className={`${CHAMP} min-h-[44px]`}
+              >
+                {PROFILS.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {lang === 'EN' ? p.nomEn : p.nom}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gris mt-2">
+                {lang === 'EN' ? PROFILS.find((p) => p.id === profil)?.aideEn : PROFILS.find((p) => p.id === profil)?.aide}
+              </p>
             </div>
             <div>
               <label htmlFor="mp-discipline" className="block text-petit text-gris mb-1">
@@ -359,6 +409,54 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
           </div>
         </section>
       </div>
+
+      <section className="border-t border-filet pt-8">
+        <h2 className="font-serif text-h3 text-encre mb-6">{t.titreProjet}</h2>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="mp-ptitre" className="block text-petit text-gris mb-1">
+              {t.projetTitre}
+            </label>
+            <input id="mp-ptitre" type="text" value={titre} onChange={(e) => setTitre(e.target.value)} className={`${CHAMP} min-h-[44px]`} />
+          </div>
+          <div>
+            <label htmlFor="mp-pdesc" className="block text-petit text-gris mb-1">
+              {t.projetDesc}
+            </label>
+            <textarea
+              id="mp-pdesc"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className={`${CHAMP} resize-none`}
+            />
+          </div>
+          <div>
+            <label htmlFor="mp-pobjectif" className="block text-petit text-gris mb-1">
+              {t.projetObjectif}
+            </label>
+            <textarea
+              id="mp-pobjectif"
+              value={objectif}
+              onChange={(e) => setObjectif(e.target.value)}
+              rows={2}
+              className={`${CHAMP} resize-none`}
+            />
+          </div>
+          <div>
+            <label htmlFor="mp-echeance" className="block text-petit text-gris mb-1">
+              {t.echeance}
+            </label>
+            <input
+              id="mp-echeance"
+              type="date"
+              value={echeance}
+              onChange={(e) => setEcheance(e.target.value)}
+              className={`${CHAMP} min-h-[44px]`}
+            />
+          </div>
+        </div>
+      </section>
 
       <div className="flex items-center gap-4 pt-2">
         <button

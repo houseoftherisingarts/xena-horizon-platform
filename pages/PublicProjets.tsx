@@ -4,6 +4,7 @@ import { PROJETS, PROJETS_PAGE } from '../lib/contenu';
 import { Atmosphere, Feuille, KenBurns, Parallax, Reveal, TexteRevele } from '../components/motion';
 import { Language } from '../types';
 import { useTextes } from '../lib/textes';
+import Balado from '../components/Balado';
 
 const [BALADO, LIVRE, MODELE] = PROJETS;
 const para = (liste: string[] | undefined, i: number): string => liste?.[i] ?? '';
@@ -135,6 +136,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
                 </a>
               ))}
             </div>
+            <Balado lang={lang} />
           </div>
         </div>
       </Feuille>

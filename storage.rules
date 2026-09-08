@@ -6,7 +6,7 @@ service firebase.storage {
       return request.auth != null
         && (request.auth.uid in ['O5qf5A3WdfV7daxkBKOIt0RnBUD2']
             || (request.auth.token.email_verified == true
-                && request.auth.token.email in ['houseoftherisingarts@gmail.com', 'laurie.belhumeur@gmail.com']));
+                && request.auth.token.email in ['houseoftherisingarts@gmail.com']));
     }
 
     // Public-readable assets (gallery, social outputs, document PDFs)
