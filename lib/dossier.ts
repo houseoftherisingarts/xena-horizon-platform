@@ -7,6 +7,7 @@ import type {
   DossierMessage,
   DossierNote,
   EtapeDef,
+  Language,
   PieceDef,
   ProfilClient,
 } from '../types';
