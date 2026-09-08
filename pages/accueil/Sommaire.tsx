@@ -56,8 +56,8 @@ const Sommaire: React.FC<SommaireProps> = ({ lang, title, subtitle, onChangeView
   const t = useTextes('accueilSommaire', TEXTES, lang);
 
   return (
-    <Feuille z={1} premiere className="bg-papier" data-tx-scope="accueilSommaire">
-      <div className="py-feuille">
+    <Feuille z={1} premiere className="bg-papier">
+      <div className="py-feuille" data-tx-scope="accueilSommaire">
         <div className="grid grid-cols-12 items-end gap-x-col gap-y-6 px-gut">
           <Reveal as="div" className="col-span-12 sm:col-span-7">
             <h2 className="whitespace-pre-line text-h2 font-serif text-encre">{title}</h2>
