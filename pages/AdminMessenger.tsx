@@ -36,6 +36,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
       placeholder: 'Écrivez un message...',
       select: 'Sélectionnez une conversation',
       empty: 'Aucune conversation',
+      choisir: 'Choisis une conversation dans la liste.',
       loading: 'Chargement...',
       newConv: 'Nouvelle conversation',
       participantName: 'Nom du participant',
@@ -55,6 +56,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
       placeholder: 'Write a message...',
       select: 'Select a conversation',
       empty: 'No conversations yet',
+      choisir: 'Pick a conversation from the list.',
       loading: 'Loading...',
       newConv: 'New conversation',
       participantName: 'Participant name',
@@ -274,7 +276,7 @@ const AdminMessenger: React.FC<AdminMessengerProps> = ({ lang }) => {
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              {conversations.length === 0 && !convLoading ? <Vide titre={t.empty} /> : <p className="text-gris text-sm">{t.select}</p>}
+              {conversations.length === 0 && !convLoading ? <Vide titre={t.choisir} /> : <p className="text-gris text-sm">{t.select}</p>}
             </div>
           )}
         </div>
