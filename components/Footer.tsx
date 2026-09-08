@@ -13,6 +13,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => {
   const lenis = useLenis();
+  const bandeauVisible = useConsentementVisible();
   const t = {
     FR: {
       tagline: 'Consultante en carrière artistique et en communication.',
