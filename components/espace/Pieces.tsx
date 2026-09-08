@@ -197,7 +197,7 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
 
       <div className="flex-1 min-w-0">
         <p className="text-encre font-semibold text-sm flex items-center gap-2 flex-wrap">
-          {piece.nom}
+          {nom}
           {piece.option && <span className="text-gris font-normal text-xs">({t.optionLabel})</span>}
           <Pastille etat={etat} t={t} />
         </p>
@@ -206,7 +206,7 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
             {deposee.nom} · {poids(deposee.taille)} · {t.deposeLe} {jour(deposee.deposeLe)}
           </p>
         ) : (
-          <p className="text-gris text-xs mt-1">{piece.aide || t.aideDefaut}</p>
+          <p className="text-gris text-xs mt-1">{aide || t.aideDefaut}</p>
         )}
         {etat === 'a_refaire' && note && (
           <p className="text-encre text-xs mt-2 bg-rose-clair/15 border border-rose-clair/30 rounded-champ px-3 py-2">{note}</p>
