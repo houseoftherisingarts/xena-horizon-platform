@@ -20,9 +20,11 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
       about: 'À propos',
       contact: 'Contact',
       mySpace: 'Mon espace',
+      coord: 'Coordonnées',
       credits: 'Crédit photo',
       rights: 'Tous droits réservés.',
       platform: 'Plateforme par Vexel Webstudio',
+      admin: 'Admin',
     },
     EN: {
       tagline: 'Artistic career and communication consultant.',
@@ -32,19 +34,20 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
       projets: 'Projects',
       about: 'About',
       contact: 'Contact',
-      mySpace: 'My Space',
+      mySpace: 'My space',
+      coord: 'Contact',
       credits: 'Photo credit',
       rights: 'All rights reserved.',
       platform: 'Platform by Vexel Webstudio',
+      admin: 'Admin',
     },
   }[lang];
 
   const goTo = (view: ViewState, sectionId?: string) => {
-    if (onChangeView) {
-      onChangeView(view);
-      if (sectionId) {
-        setTimeout(() => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' }), 100);
-      }
+    if (!onChangeView) return;
+    onChangeView(view);
+    if (sectionId) {
+      setTimeout(() => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' }), 100);
     }
   };
 
@@ -52,38 +55,27 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
     { label: t.home, view: 'HOME', href: '/' },
     { label: t.services, view: 'SERVICES', href: '/services' },
     { label: t.projets, view: 'PROJETS', href: '/projets' },
-    { label: t.about, view: 'HOME', sectionId: 'about', href: '/#about' },
+    { label: t.about, view: 'A_PROPOS', href: '/a-propos' },
     { label: t.contact, view: 'HOME', sectionId: 'contact', href: '/#contact' },
   ];
 
   return (
-    <footer className="w-full py-14 mt-20 border-t border-white/5 bg-slate-900">
-      <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div>
-          <h3 className="text-xl font-serif font-bold text-white mb-2">
-            <span className="text-iridescent">Xena Horizon</span>
-          </h3>
-          <p className="text-slate-400 text-sm mb-6">{t.tagline}</p>
-          <div className="space-y-2 text-sm">
-            <a href={COORDONNEES.telephoneHref} className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
-              <Phone className="w-4 h-4" /> {COORDONNEES.telephone}
-            </a>
-            <a href={`mailto:${COORDONNEES.courriel}`} className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
-              <Mail className="w-4 h-4" /> {COORDONNEES.courriel}
-            </a>
-            <p className="text-slate-500">{COORDONNEES.zones}</p>
-          </div>
+    <footer className="w-full bg-papier-2 border-t border-filet pt-16">
+      <div className="px-gut grid grid-cols-1 md:grid-cols-12 gap-x-col gap-y-10">
+        <div className="md:col-span-3">
+          <p className="font-serif text-h3 text-encre mb-2">Xena Horizon</p>
+          <p className="text-petit text-gris mesure">{t.tagline}</p>
         </div>
 
-        <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">{t.nav}</p>
+        <div className="md:col-span-3">
+          <p className="kicker text-gris mb-4">{t.nav}</p>
           <nav className="flex flex-col gap-2">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={onChangeView ? (e) => { e.preventDefault(); goTo(link.view, link.sectionId); } : undefined}
-                className="text-slate-300 hover:text-white transition-colors text-sm min-h-[32px] flex items-center"
+                className="text-encre hover:text-rose transition-colors text-sm min-h-[32px] flex items-center"
               >
                 {link.label}
               </a>
@@ -91,27 +83,46 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
             <a
               href="/espace"
               onClick={onChangeView ? (e) => { e.preventDefault(); goTo('ESPACE_CLIENT'); } : undefined}
-              className="text-cyan-300 hover:text-cyan-200 transition-colors text-sm font-medium min-h-[32px] flex items-center"
+              className="text-rose hover:text-encre transition-colors text-sm font-medium min-h-[32px] flex items-center"
             >
               {t.mySpace}
             </a>
           </nav>
         </div>
 
-        <div className="md:text-right">
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">{t.credits}</p>
-          <p className="text-slate-400 text-sm mb-6">{CREDITS.photographes.join(' · ')}</p>
-          <p className="text-slate-500 text-xs">
-            © {new Date().getFullYear()} Laurie Belhumeur · Xena Horizon. {t.rights}
-          </p>
-          <div className="flex md:justify-end items-center gap-4 mt-3">
-            <button onClick={onAdminLogin} className="text-xs text-slate-700 hover:text-slate-500 transition-colors">
-              Admin
-            </button>
-            <span className="text-xs text-slate-600">{t.platform}</span>
+        <div className="md:col-span-3">
+          <p className="kicker text-gris mb-4">{t.coord}</p>
+          <div className="space-y-2 text-sm">
+            <a href={COORDONNEES.telephoneHref} className="flex items-center gap-2 text-encre hover:text-rose transition-colors">
+              <Phone className="w-4 h-4" /> {COORDONNEES.telephone}
+            </a>
+            <a href={`mailto:${COORDONNEES.courriel}`} className="flex items-center gap-2 text-encre hover:text-rose transition-colors">
+              <Mail className="w-4 h-4" /> {COORDONNEES.courriel}
+            </a>
+            <p className="text-gris">{COORDONNEES.zones}</p>
           </div>
         </div>
+
+        <div className="md:col-span-3">
+          <p className="kicker text-gris mb-4">{t.credits}</p>
+          <p className="text-petit text-gris mb-6">{CREDITS.photographes.join(' · ')}</p>
+          <p className="text-xs text-gris">{t.platform}</p>
+          <p className="text-xs text-gris mt-1">
+            © {new Date().getFullYear()} Laurie Belhumeur · Xena Horizon. {t.rights}
+          </p>
+          <button type="button" onClick={onAdminLogin} className="text-xs text-gris hover:text-encre transition-colors mt-3">
+            {t.admin}
+          </button>
+        </div>
       </div>
+
+      <p
+        aria-hidden="true"
+        className="mt-14 px-gut font-serif text-chiffre text-encre leading-none whitespace-nowrap select-none overflow-hidden"
+        style={{ height: '0.6em', transform: 'translateY(18%)' }}
+      >
+        Xena Horizon
+      </p>
     </footer>
   );
 };
