@@ -10,6 +10,7 @@ import { BRAND, richToHtml, stripRich, type BandeauInfolettre, type NewsletterBl
 /** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
 const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
 
+
 export interface RenderEmailOptions {
   subject: string;
   preheader?: string;

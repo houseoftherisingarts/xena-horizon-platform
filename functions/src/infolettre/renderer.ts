@@ -1,6 +1,4 @@
 // Rendu HTML des infolettres composées dans l'admin (blocs). Aucune
-/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
-const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
 // dépendance React : ce fichier tourne dans une Cloud Function.
 // Port du moteur de Krystine (functions/src/newsletter/renderer.ts), avec la
 // marque Xena Horizon : papier chaud + encre, Playfair Display / Figtree,
@@ -88,6 +86,9 @@ export interface RenderEmailOptions {
   postalAddress: string;
   firstName?: string;
   /** En-tête : une image fournie par Laurie (couvertureUrl), ou rien (défaut). */
+
+/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
+const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
   couverture?: Couverture;
   couvertureUrl?: string | null;
   /** Signature texte « Laurie Belhumeur » au bas du corps. Défaut : vrai. */

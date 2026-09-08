@@ -13,6 +13,7 @@ import React, { useEffect, useRef, useState } from 'react';
 /** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
 const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
 
+
 // ─── Les blocs ──────────────────────────────────────────────────────────────
 export type Police = 'serif' | 'sans';
 export type Taille = 'sm' | 'md' | 'lg' | 'xl';
