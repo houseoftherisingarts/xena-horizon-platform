@@ -15,25 +15,27 @@ interface NavProps {
 
 const MARQUE = 'Xena Horizon';
 const EASE_RIDEAU = [0.22, 1, 0.36, 1] as const;
+const EASE_VOYAGE = [0.16, 0.8, 0.24, 1] as const;
 
 const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, lang, setLang }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // `useIntroTerminee` lit un store synchrone (lib/intro.ts) : la marque rend dans le MÊME
+  // commit que la fin de l'intro, ce qui laisse le FLIP du layoutId « xh-marque » se produire.
   const introTerminee = useIntroTerminee();
-  // La marque voyage depuis l'intro de l'accueil (chantier A). Filet de sécurité : si l'intro
-  // n'a pas prévenu au bout de 1,6 s (page intérieure sans intro, ou intro pas encore câblée),
-  // la marque s'affiche quand même — jamais une barre de navigation muette.
-  const [afficherMarque, setAfficherMarque] = useState(introTerminee);
+  // Filet de sécurité : si l'intro n'a pas prévenu au bout de 1,8 s (page intérieure sans
+  // intro, ou intro pas encore câblée), la marque se pose quand même — en fondu de 200 ms,
+  // jamais d'un coup — plutôt qu'une barre de navigation muette.
+  const [filetDeSecurite, setFiletDeSecurite] = useState(false);
+  const afficherMarque = introTerminee || filetDeSecurite;
   const reduceMotion = useReducedMotion();
+  const lenis = useLenis();
   const drawerRef = useRef<HTMLDivElement>(null);
   const boutonMenuRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (introTerminee) {
-      setAfficherMarque(true);
-      return;
-    }
-    const t = setTimeout(() => setAfficherMarque(true), 1600);
+    if (introTerminee) return;
+    const t = setTimeout(() => setFiletDeSecurite(true), 1800);
     return () => clearTimeout(t);
   }, [introTerminee]);
 
