@@ -95,7 +95,7 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
   };
 
   return (
-    <form onSubmit={soumettre} className="grid grid-cols-1 lg:grid-cols-2 gap-x-col gap-y-10">
+    <form onSubmit={soumettre} data-tx-scope="espaceProfil" className="grid grid-cols-1 lg:grid-cols-2 gap-x-col gap-y-10">
       <section className="border-t border-filet pt-8">
         <h2 className="font-serif text-h3 text-encre mb-6">{t.titreQui}</h2>
         <div className="space-y-4">
