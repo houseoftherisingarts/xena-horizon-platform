@@ -74,7 +74,10 @@ export const CarteOffre: React.FC<CarteOffreProps> = ({ produit, lang, t, compac
             {produit.status}
           </Etiquette>
         </div>
-        <span className="font-serif text-encre tabular-nums flex-shrink-0">{prixTexte}</span>
+        <span className="flex items-center gap-2 flex-shrink-0">
+          <PastillePaiement produit={produit} lang={lang} />
+          <span className="font-serif text-encre tabular-nums">{prixTexte}</span>
+        </span>
       </div>
     );
   }
