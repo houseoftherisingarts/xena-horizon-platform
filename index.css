@@ -182,7 +182,7 @@ html {
 body {
   background-color: var(--papier);
   color: var(--encre);
-  font-family: 'Figtree', 'Avenir Next', Avenir, system-ui, sans-serif;
+  font-family: 'Figtree', 'Figtree Repli', 'Avenir Next', Avenir, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.7;
 }
@@ -190,8 +190,11 @@ body {
 /* Aucun italique nulle part, jamais. */
 em, i, .italic, cite, q, blockquote, address, dfn, var { font-style: normal !important; }
 
-/* Le serif display ne porte jamais le gras. */
-h1, h2, h3, .font-serif { font-family: 'Playfair Display', Georgia, serif; font-weight: 400; }
+/* Le serif display ne porte jamais le gras. La police de repli passe aussi ici (spécificité égale
+   à l'utilitaire Tailwind `.font-serif`/`.font-sans`, mais posée plus loin dans la feuille : elle
+   l'emporte sans toucher à tailwind.config.js). */
+h1, h2, h3, .font-serif { font-family: 'Playfair Display', 'Playfair Display Repli', Georgia, 'Times New Roman', serif; font-weight: 400; }
+.font-sans { font-family: 'Figtree', 'Figtree Repli', 'Avenir Next', Avenir, system-ui, sans-serif; }
 h2, h3 { font-weight: 500; }
 strong, b { font-weight: 600; }
 
