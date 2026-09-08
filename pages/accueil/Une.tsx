@@ -25,11 +25,17 @@ export interface UneProps {
    * pour qu'elle remplisse l'espace laissé par le texte qui s'efface. `sm:h-[112%]` prend le
    * relais dès le format tablette et n'en tient jamais compte. */
   hauteurPhoto?: MotionValue<string>;
+  /** Quand la page ouvre sur l'intro (layoutId « xh-marque »), la cascade du hero (le mot par
+   * mot du titre, le `.in` du sous-titre) n'a pas à démarrer en même temps que le voile encore
+   * opaque par-dessus : `demarrer` vaut `true` par défaut (rien à attendre hors accueil) et
+   * n'attend le signal de fin d'intro que lorsqu'Allumage le pilote explicitement. */
+  demarrer?: boolean;
 }
 
 const NAV_PAD = 'pt-[calc(var(--nav)+1.75rem)] sm:pt-[calc(var(--nav)+2.75rem)] lg:pt-[calc(var(--nav)+4rem)]';
 
 const Une: React.FC<UneProps> = ({
+  lang,
   tagline,
   headline,
   subheadline,
@@ -41,6 +47,7 @@ const Une: React.FC<UneProps> = ({
   decalageTitre,
   opaciteSousTitre,
   hauteurPhoto,
+  demarrer = true,
 }) => {
   const allerAuContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
