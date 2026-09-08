@@ -30,27 +30,14 @@ const Ressources: React.FC<RessourcesProps> = ({ lang }) => {
     orderBy('ordre', 'asc'),
   ]);
 
-  const t = {
-    FR: {
-      titre: 'Ressources',
-      sous: 'Les guides et gabarits que Laurie partage avec toi.',
-      vide: 'Rien de partagé pour le moment.',
-      telecharger: 'Télécharger',
-    },
-    EN: {
-      titre: 'Resources',
-      sous: 'The guides and templates Laurie shares with you.',
-      vide: 'Nothing shared yet.',
-      telecharger: 'Download',
-    },
-  }[lang];
+  const t = useTextes('espaceParcours', TEXTES, lang);
 
   return (
-    <section className="border-t border-filet pt-8">
-      <h2 className="font-serif text-h3 text-encre mb-1">{t.titre}</h2>
-      <p className="text-gris text-sm mb-8 mesure">{t.sous}</p>
+    <section data-tx-scope="espaceParcours" className="border-t border-filet pt-8">
+      <h2 className="font-serif text-h3 text-encre mb-1">{t.ressourcesTitre}</h2>
+      <p className="text-gris text-sm mb-8 mesure">{t.ressourcesSous}</p>
 
-      {!loading && ressources.length === 0 && <p className="text-gris text-sm py-6">{t.vide}</p>}
+      {!loading && ressources.length === 0 && <p className="text-gris text-sm py-6">{t.ressourcesVide}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-col gap-y-3">
         {ressources.map((r) => (
