@@ -204,6 +204,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
                     onChangeView(item.id);
                     onClose?.();
                   }}
+                  onMouseEnter={(e) => montrerInfoBulle(e, item.label)}
+                  onMouseLeave={cacherInfoBulle}
+                  onFocus={(e) => montrerInfoBulle(e, item.label)}
+                  onBlur={cacherInfoBulle}
                   aria-current={actif ? 'page' : undefined}
                   aria-label={replie ? item.label : undefined}
                   className={`${LIEN} relative ${replie ? 'md:justify-center md:px-0' : ''} ${actif ? 'bg-papier text-encre' : 'text-gris hover:text-encre hover:bg-papier/60'}`}
