@@ -389,3 +389,31 @@ export interface TemoignageAudio {
   publie: boolean;
   createdAt?: any;
 }
+
+// --- CAPSULES VIDÉO (accueil, mode éducatif, porté du même principe que les témoignages audio) ---
+export interface VideoFichier {
+  chemin: string;       // chemin Storage : videos/{id}/fichier.<ext>
+  url: string;
+  contentType: string;  // video/mp4 ou video/webm
+  taille: number;
+}
+
+export interface VideoAffiche {
+  chemin: string;
+  url: string;
+}
+
+export interface VideoCapsule {
+  id: string;
+  titre: string;
+  titreEn?: string;
+  description?: string;
+  descriptionEn?: string;
+  fichier: VideoFichier;
+  affiche?: VideoAffiche;
+  sousTitres?: string;   // URL Storage d'un fichier .vtt, facultatif
+  ordre: number;
+  publie: boolean;
+  cree?: any;
+  modifie?: any;
+}
