@@ -1,6 +1,4 @@
 /**
-/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
-const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
  * Le moteur de l'infolettre : les types de blocs, le rendu web (édition en place dans le composeur)
  * et le rendu courriel (HTML autonome, table-in-table, sans dépendance au CSS du site).
  *
@@ -11,6 +9,9 @@ const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) 
  * tiret long, aucun dégradé de couleur.
  */
 import React, { useEffect, useRef, useState } from 'react';
+
+/** Seules les adresses https ou http passent dans un lien : jamais javascript:, data: ni autre schéma. */
+const hrefSur = (h?: string): string => (/^https?:\/\//i.test((h || '').trim()) ? (h as string).trim() : '#');
 
 // ─── Les blocs ──────────────────────────────────────────────────────────────
 export type Police = 'serif' | 'sans';
