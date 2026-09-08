@@ -39,6 +39,8 @@ const Temoignage: React.FC<TemoignageProps> = ({ lang }) => {
           <p className="mt-1 text-petit text-gris">{temoignage.role}</p>
         </Reveal>
       </div>
+
+      <Clients lang={lang} />
     </Feuille>
   );
 };
