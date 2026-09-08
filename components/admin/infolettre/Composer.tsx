@@ -7,42 +7,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { orderBy, serverTimestamp } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import {
-  ArrowLeft, ArrowUp, ArrowDown, Copy, Trash2, Plus, X, Save, Send, Eye, SlidersHorizontal, Clock,
-  RotateCcw, Bold, Italic, Underline, Link as LinkIcon, Mail, Heading as HeadingIcon, Type, Image as ImageIcon,
-  MousePointerClick, List as ListIcon, Quote as QuoteIcon, Star, Minus, MoveVertical, Upload,
-} from 'lucide-react';
+import { ArrowLeft, X, Save, Send, Eye, SlidersHorizontal, Clock, RotateCcw, Mail, Upload, Copy } from 'lucide-react';
 import { app } from '../../../firebase';
 import type { Language, GalleryImage } from '../../../types';
 import { useCollection, createDoc, patchDoc, readDoc, uploadFile, makeStoragePath } from '../../../lib/firestore';
 import {
-  RenderBlockWeb, POLICES, TAILLES, SEPARATEURS, FONDS_INFOLETTRE, estSombre, BRAND,
+  FONDS_INFOLETTRE, estSombre, BRAND,
   type NewsletterBlock, type BlockType, type NewsletterDoc, type NewsletterVersion, type NewsletterAudience,
-  type BandeauInfolettre, type Police, type Taille,
+  type BandeauInfolettre,
 } from '../../../lib/infolettre/renderer';
 import { renderEmailHtml } from '../../../lib/infolettre/email';
 import { COORDONNEES } from '../../../lib/contenu';
+import { BlockFrame, InsertPoint, BLOCK_PALETTE } from './BlockFrame';
 import Audience from './Audience';
 import Apercu from './Apercu';
-import { Bouton, Champ } from '../ui';
+import { Bouton } from '../ui';
 import { useTextes } from '../../../lib/textes';
 
 interface Props { id: string | null; onBack: () => void; lang: Language }
 
 const AUDIENCE_DEFAUT: NewsletterAudience = { mode: 'tous', tags: [], ids: [], langue: 'auto' };
 const FOND_DEFAUT = FONDS_INFOLETTRE[1].hex; // papier chaud
-
-const BLOCK_PALETTE: Array<{ type: BlockType; icone: typeof Type; label: string; gabarit: () => NewsletterBlock }> = [
-  { type: 'heading', icone: HeadingIcon, label: 'Titre', gabarit: () => ({ type: 'heading', content: { level: 2, text: '', align: 'left' } }) },
-  { type: 'paragraph', icone: Type, label: 'Paragraphe', gabarit: () => ({ type: 'paragraph', content: { text: '' } }) },
-  { type: 'image', icone: ImageIcon, label: 'Image', gabarit: () => ({ type: 'image', content: { url: '', caption: '' } }) },
-  { type: 'button', icone: MousePointerClick, label: 'Bouton', gabarit: () => ({ type: 'button', content: { label: 'Découvrir', href: BRAND.site, variant: 'primaire' } }) },
-  { type: 'list', icone: ListIcon, label: 'Puces', gabarit: () => ({ type: 'list', content: { text: '', style: 'puce' } }) },
-  { type: 'quote', icone: QuoteIcon, label: 'Citation', gabarit: () => ({ type: 'quote', content: { text: '', attribution: '' } }) },
-  { type: 'cta', icone: Star, label: 'Appel fort', gabarit: () => ({ type: 'cta', content: { eyebrow: '', title: '', body: '', href: BRAND.site, boutonTexte: 'En savoir plus' } }) },
-  { type: 'divider', icone: Minus, label: 'Séparateur', gabarit: () => ({ type: 'divider', content: { style: 'ligne' } }) },
-  { type: 'spacer', icone: MoveVertical, label: 'Espace', gabarit: () => ({ type: 'spacer', content: { taille: 'md' } }) },
-];
 
 const TEXTES = {
   FR: {
