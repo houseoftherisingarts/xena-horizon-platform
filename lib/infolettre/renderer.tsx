@@ -455,7 +455,7 @@ function blockToEmail(block: NewsletterBlock): string {
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
           <td style="border-left:2px solid ${BRAND.accent};padding-left:18px;font-family:${BRAND.serif};font-size:18px;line-height:1.5;color:${BRAND.ink};">
             «&nbsp;${richToHtml(c.text || '')}&nbsp;»
-            ${c.attribution ? `<div style="margin-top:10px;font-family:${BRAND.sans};font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:${BRAND.accent};">— ${esc(c.attribution)}</div>` : ''}
+            ${c.attribution ? `<div style="margin-top:10px;font-family:${BRAND.sans};font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:${BRAND.accent};">· ${esc(c.attribution)}</div>` : ''}
           </td>
         </tr></table>
       </td></tr>`;
