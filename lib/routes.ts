@@ -40,3 +40,12 @@ export const pathFromView = (view: ViewState): string => {
   const chemin = VIEW_PATHS[view] ?? '/';
   return PREFIX ? `${PREFIX}${chemin === '/' ? '/' : chemin}` : chemin;
 };
+
+/**
+ * La facture publique porte un jeton, pas une vue : hors du système ViewState, lue directement par
+ * App.tsx avant le routage habituel. Voir lib/factures.ts (jeton, miroir) et pages/FacturePublique.tsx.
+ */
+export const jetonFactureDepuisChemin = (pathname: string): string | null => {
+  const m = pathname.match(/^\/facture\/([\w-]+)/);
+  return m ? m[1] : null;
+};
