@@ -311,6 +311,37 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
         </div>
         <p className="text-xs text-gris mesure">{t.accesAide}</p>
       </div>
+      <div className="space-y-4">
+        <h3 className="font-sans font-semibold text-encre">{t.banqueTitre}</h3>
+        <p className="text-gris text-sm mesure">{t.banqueIntro}</p>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Champ label={t.titulaireCompte} autoComplete="off" maxLength={120} className="md:col-span-2" {...champ('titulaireCompte')} />
+          <Champ label={t.institution} inputMode="numeric" maxLength={10} {...champ('institution')} />
+          <Champ label={t.transit} inputMode="numeric" maxLength={10} {...champ('transit')} />
+          <Champ label={t.numeroCompte} inputMode="numeric" maxLength={20} className="md:col-span-2" {...champ('numeroCompte')} />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="coffre-specimen" className="text-petit font-semibold text-encre">
+            {t.specimenLabel}
+          </label>
+          <input
+            id="coffre-specimen"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,application/pdf"
+            onChange={choisirSpecimen}
+            className="text-sm text-gris file:mr-3 file:rounded-champ file:border-0 file:bg-encre file:px-4 file:py-2 file:text-xs file:text-papier"
+          />
+          <p className="text-xs text-gris">{t.specimenAide}</p>
+          {specimenFichier && (
+            <p className="text-sm text-encre mt-1">
+              {t.specimenDepose} {specimenFichier.name}{' '}
+              <button type="button" onClick={() => setSpecimenFichier(null)} className="text-rose underline underline-offset-2">
+                {t.specimenRetirer}
+              </button>
+            </p>
+          )}
+        </div>
+      </div>
       <Zone label={t.notes} aide={t.notesAide} maxLength={2000} {...champ('notes')} />
       <label className="flex items-start gap-3 text-sm text-encre">
         <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-4 w-4 accent-[rgb(var(--c-rose))]" />
