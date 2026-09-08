@@ -58,8 +58,8 @@ const Faq: React.FC<FaqProps> = ({ lang }) => {
   const reduit = useReducedMotion();
 
   const questions = [1, 2, 3, 4, 5, 6].map((i) => ({
-    q: t[`q${i}` as 'q1'],
-    a: t[`a${i}` as 'a1'],
+    q: t[`q${i}` as keyof typeof t],
+    a: t[`a${i}` as keyof typeof t],
   }));
 
   return (
