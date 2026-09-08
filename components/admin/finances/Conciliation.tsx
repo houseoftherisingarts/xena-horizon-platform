@@ -106,7 +106,7 @@ const Conciliation: React.FC<Props> = ({ lang }) => {
                         </span>
                       </td>
                       <td className="py-3 pr-3 text-sm text-gris whitespace-nowrap">{tr.date}</td>
-                      <td className="py-3 pr-3 text-sm text-encre">{tr.description} {tr.concilie && <span className="text-xs text-gris">({t.ecartNul === t.ecartNul ? '' : ''}✓)</span>}</td>
+                      <td className="py-3 pr-3 text-sm text-encre">{tr.description} {tr.concilie && <span className="text-xs text-gris">({t.dejaConcilie})</span>}</td>
                       <td className="py-3 text-sm text-right tabular-nums text-encre">{tr.sens === 'revenu' ? '+' : '−'}{formatMontant(tr.total)}</td>
                     </tr>
                   ))}
