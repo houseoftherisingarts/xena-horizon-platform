@@ -294,7 +294,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           </div>
           <Reveal delay={0.1} className="lg:col-span-6">
             <p className="text-corps text-gris mesure">{t.rdvText}</p>
-            <a href={`mailto:${email}`} className="font-serif text-display block mt-4 hover:text-rose transition-colors">
+            <a href={`mailto:${email}`} className="font-serif text-h3 break-all block mt-4 hover:text-rose transition-colors">
               {email}
             </a>
           </Reveal>
