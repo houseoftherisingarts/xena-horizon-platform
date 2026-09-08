@@ -1,4 +1,41 @@
-/* Fontes chargées par <link> dans index.html (Playfair Display 400/500, Figtree 300 à 600). */
+/* Fontes hébergées dans public/fonts/ (chantier chargement, 8 sept 2026 au soir) : deux fichiers
+   variables, subset latin (couvre les accents français, capture du endpoint css2 de Google Fonts),
+   Playfair Display 400-500 et Figtree 300-600. Polices de repli aux métriques ajustées juste en
+   dessous : le navigateur affiche Arial/Georgia (déjà sur le disque) à la même largeur et à la même
+   hauteur de ligne que la police finale pendant le chargement, donc aucun saut de texte quand la
+   vraie police arrive. Calcul et preuves : docs/CHARGEMENT-2026-09-08.md. */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/figtree-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/playfair-display-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree Repli';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('Segoe UI'), local('Roboto'), local('Liberation Sans');
+  ascent-override: 162.04%;
+  descent-override: 42.64%;
+  line-gap-override: 0%;
+  size-adjust: 58.63%;
+}
+@font-face {
+  font-family: 'Playfair Display Repli';
+  src: local('Georgia'), local('Times New Roman'), local('Times');
+  ascent-override: 168.37%;
+  descent-override: 39.06%;
+  line-gap-override: 0%;
+  size-adjust: 64.26%;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
