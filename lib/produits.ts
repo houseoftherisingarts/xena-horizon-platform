@@ -1,7 +1,10 @@
 /**
- * Aides autour du champ `paiement` d'une offre (types.ts) : formatage d'un montant en cents et
- * détermination du chemin de règlement pour le bouton de la carte publique (pages/PublicServices.tsx).
+ * Aides autour du champ `paiement` d'une offre (types.ts) : formatage d'un montant en cents,
+ * détermination du chemin de règlement pour le bouton de la carte publique (pages/PublicServices.tsx),
+ * et ouverture d'une session Stripe Checkout par la fonction serveur (functions/src/produits/stripe.ts).
  */
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { app } from '../firebase';
 import type { Language, Product } from '../types';
 
 /** Un montant en cents affiché en dollars, formaté fr-CA/en-CA (mille dès 1 000, deux décimales seulement si utiles). */
