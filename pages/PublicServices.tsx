@@ -184,7 +184,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
       <div className="relative h-[46vh] md:h-[58svh] overflow-hidden">
         <KenBurns
           src="/images/laurie-portrait-2.jpg"
-          alt="Laurie Belhumeur sur scène"
+          alt={t.photoAlt}
           position="45% 25%"
           className="absolute inset-0"
           loading="lazy"
