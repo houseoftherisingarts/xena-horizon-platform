@@ -62,7 +62,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
     lang === 'EN' ? HOME_EN[blockId]?.[field] ?? fallback : fallback;
 
   return (
-    <div className="relative bg-papier">
+    <div className="relative bg-papier" data-tx-scope="accueil">
       {/* AnimatePresence tient l'intro montée le temps de son `exit` (Intro.tsx) : c'est ce
           délai qui laisse framer-motion raccorder le FLIP du layoutId « xh-marque » vers la
           barre de navigation, au lieu de la faire disparaître dans le même rendu. */}
@@ -71,7 +71,7 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
           <Intro
             key="intro"
             marque="Xena Horizon"
-            signature="par Laurie Belhumeur"
+            signature={t.signature}
             layoutId="xh-marque"
             onComplete={() => {
               marquerIntroTerminee();

@@ -90,7 +90,7 @@ const APropos: React.FC<AProposProps> = ({
 
   return (
     <Feuille z={2} className="bg-papier-2">
-      <div className="grid grid-cols-12 gap-x-col gap-y-10 px-gut py-feuille">
+      <div data-tx-scope="accueilAPropos" className="grid grid-cols-12 gap-x-col gap-y-10 px-gut py-feuille">
         <div className="col-span-12 sm:col-span-5">
           <Parallax speed={0.14}>
             <img
@@ -122,7 +122,7 @@ const APropos: React.FC<AProposProps> = ({
 
         <div className="col-span-12 flex flex-col sm:col-span-6 sm:col-start-7">
           <Reveal as="h2" className="whitespace-pre-line text-h2 font-serif text-encre">
-            {titre}
+            {t.titre}
           </Reveal>
           <div className="mt-8 flex flex-col gap-5">
             {paragraphes.map((p, i) => (
@@ -131,7 +131,7 @@ const APropos: React.FC<AProposProps> = ({
               </Reveal>
             ))}
           </div>
-          <TexteRevele texte={mission} as="p" par="mot" className="mt-8 max-w-mesure text-h3 font-serif text-rose" />
+          <TexteRevele texte={t.mission} as="p" par="mot" className="mt-8 max-w-mesure text-h3 font-serif text-rose" />
 
           <div className="-mb-3 mt-auto pt-10 text-right">
             <a
@@ -144,7 +144,7 @@ const APropos: React.FC<AProposProps> = ({
               }}
               className="inline-flex items-center gap-2 py-3 text-petit font-semibold text-encre transition-colors duration-200 hover:text-rose"
             >
-              {L.lire}
+              {t.lire}
             </a>
           </div>
         </div>
