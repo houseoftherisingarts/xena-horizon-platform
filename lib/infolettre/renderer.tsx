@@ -25,7 +25,9 @@ export interface HeadingContent { level?: 1 | 2 | 3; text?: string; align?: 'lef
 // échappé (voir richToHtml). L'italique reste accessible ici : c'est le choix de rédaction de Laurie
 // pour un mot précis, pas un parti pris typographique du site.
 export interface ParagraphContent { text?: string; align?: 'left' | 'center'; police?: Police; taille?: Taille }
-export interface ImageContent { url?: string; caption?: string; alt?: string; href?: string }
+// `taille` : « pleine » (par défaut, une photo qui prend toute la largeur de la lettre) ou « logo »
+// (un petit format centré, pour un logo carré au haut d'une lettre sans qu'il domine l'écran).
+export interface ImageContent { url?: string; caption?: string; alt?: string; href?: string; taille?: 'pleine' | 'logo' }
 export interface ButtonContent { label?: string; href?: string; variant?: 'primaire' | 'secondaire' }
 export interface QuoteContent { text?: string; attribution?: string }
 export interface CTAContent { eyebrow?: string; title?: string; body?: string; href?: string; boutonTexte?: string }
