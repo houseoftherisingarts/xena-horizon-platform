@@ -76,18 +76,19 @@ async function voletA(browser) {
   }
 }
 
-// --- Volet B : le flash de police, réseau ralenti, trois instants ---
+// --- Volet B : le flash de police, polices ralenties seules, trois instants ---
+// Ralentir tout le réseau (première version) affamait aussi le HTML/CSS/JS : la page restait
+// blanche aux trois instants, donc aucune capture ne montrait jamais la bascule qu'on veut voir.
+// Seuls les deux fichiers de police sont retardés ici (400 ms de latence artificielle) : le reste
+// du chargement va à sa vitesse normale, la mise en page apparaît tout de suite dans la police de
+// repli aux métriques ajustées, et la bascule vers la vraie police reste observable aux trois instants.
 async function voletB(browser) {
   for (const taille of [1440, 390]) {
     const ctx = await browser.newContext({ viewport: { width: taille, height: taille === 1440 ? 900 : 844 } });
     const page = await ctx.newPage();
-    const cdp = await ctx.newCDPSession(page);
-    // Réseau ralenti (proche d'un "Slow 4G") pour que les trois instants montrent des états distincts.
-    await cdp.send('Network.emulateNetworkConditions', {
-      offline: false,
-      downloadThroughput: (400 * 1024) / 8,
-      uploadThroughput: (400 * 1024) / 8,
-      latency: 150,
+    await page.route('**/fonts/*.woff2', async (route) => {
+      await new Promise((r) => setTimeout(r, 400));
+      await route.continue();
     });
     const debut = Date.now();
     page.goto(BASE + '/', { waitUntil: 'load' }).catch(() => {});
