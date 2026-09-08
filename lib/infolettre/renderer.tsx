@@ -284,12 +284,12 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
       const st = (c.style as Separateur) || 'ligne';
       const g = SEPARATEURS[st]?.glyphe;
       if (st === 'ligne') return <div className="my-8 h-px w-16 bg-rose" />;
-      if (st === 'pleine') return <hr className="my-8 border-0 h-px bg-gradient-to-r from-transparent via-rose/60 to-transparent" />;
+      if (st === 'pleine') return <hr className="my-8 border-0 h-px bg-rose/40" />;
       return (
         <div className="my-8 flex items-center gap-4 text-rose">
-          <span className="flex-1 h-px bg-gradient-to-r from-transparent to-rose/50" />
+          <span className="flex-1 h-px bg-filet" />
           <span className="text-lg tracking-[0.3em] leading-none">{g}</span>
-          <span className="flex-1 h-px bg-gradient-to-l from-transparent to-rose/50" />
+          <span className="flex-1 h-px bg-filet" />
         </div>
       );
     }
