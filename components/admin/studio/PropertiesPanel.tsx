@@ -3,7 +3,7 @@
 import React from 'react';
 import { Type, ImagePlus, Square, Circle, Minus, Trash2, Copy, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { Panneau, Bouton, Etiquette } from '../ui';
-import { PALETTE_COULEURS, IMAGES_PUBLIQUES } from '../../../lib/studio/types';
+import { PALETTE_COULEURS } from '../../../lib/studio/types';
 import type { Calque, FormeType, Alignement } from '../../../lib/studio/types';
 
 const GRAISSES: { valeur: 400 | 500 | 600 | 700; label: string }[] = [
