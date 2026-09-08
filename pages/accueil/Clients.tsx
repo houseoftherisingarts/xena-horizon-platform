@@ -16,7 +16,7 @@ const Clients: React.FC<ClientsProps> = ({ lang }) => {
   const reduce = useReducedMotion();
 
   return (
-    <div className="mt-16 border-t border-filet pt-10 sm:mt-20">
+    <div className="mt-16 border-t border-filet pb-feuille pt-10 sm:mt-20">
       <p className="kicker px-gut text-gris">{CLIENTS_TITRE[lang]}</p>
 
       {reduce ? (
