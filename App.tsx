@@ -154,6 +154,10 @@ const App: React.FC = () => {
     }
   }, [authReady, isAdminView, userIsAdmin]);
 
+  // Adresse d'une facture publique (/facture/{jeton}) : une page à part, sans barre ni pied de page,
+  // lue directement dans l'adresse plutôt que par le système de vues (voir lib/routes.ts).
+  const jetonFacture = typeof window === 'undefined' ? null : jetonFactureDepuisChemin(window.location.pathname);
+
   const requestAdmin = () => {
     if (userIsAdmin) {
       setCurrentView('ADMIN_DASHBOARD');
