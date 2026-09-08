@@ -164,6 +164,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           alt="Laurie Belhumeur sur scène"
           position="45% 25%"
           className="absolute inset-0"
+          loading="lazy"
         />
       </div>
 
