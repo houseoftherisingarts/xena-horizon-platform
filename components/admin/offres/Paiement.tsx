@@ -62,7 +62,7 @@ export const Paiement: React.FC<PaiementProps> = ({ lang, value, onChange }) => 
     { id: 'stripe', Icone: CreditCard, label: t.stripe, aide: t.stripeAide },
   ];
 
-  const prixDollars = typeof value.prixCents === 'number' ? String(value.prixCents / 100) : '';
+  const prixDollars = Number.isFinite(value.prixCents) ? String((value.prixCents as number) / 100) : '';
   const cheminActif = value.stripePriceId ? 'auto' : value.lienPaiement ? 'lien' : null;
 
   return (

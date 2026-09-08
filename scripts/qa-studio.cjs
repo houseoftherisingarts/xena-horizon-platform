@@ -33,23 +33,20 @@ async function shot(page, nom) {
     await page.waitForTimeout(700);
     await shot(page, `studio-defaut-${largeur}`);
 
-    // Chaque gabarit : cliquer sa vignette (mobile : passer par l'onglet Gabarits d'abord).
-    if (largeur === 390) {
-      const ongletGabarits = page.getByRole('button', { name: /Gabarits|Templates/ }).first();
-      if (await ongletGabarits.count()) await ongletGabarits.click();
-      await page.waitForTimeout(300);
-    }
+    // Chaque gabarit : cliquer sa vignette (mobile : l'onglet Gabarits se réaffiche à chaque tour,
+    // puisque choisir un gabarit bascule l'écran sur l'onglet Toile).
     const panneauGabarits = page.locator('h2', { hasText: /^(Gabarits|Templates)$/ }).locator('xpath=ancestor::section[1]');
     const idsGabarits = ['citation', 'rendezvous', 'balado', 'temoignage', 'conseil', 'carrousel'];
-    const boutonsGabarit = await panneauGabarits.locator('div.grid > button').all();
     for (let i = 0; i < idsGabarits.length; i++) {
       try {
-        if (!boutonsGabarit[i]) throw new Error('vignette introuvable');
-        await boutonsGabarit[i].click();
         if (largeur === 390) {
-          const ongletToile = page.getByRole('button', { name: /Toile|Canvas/ }).first();
-          if (await ongletToile.count()) await ongletToile.click();
+          const ongletGabarits = page.getByRole('button', { name: /Gabarits|Templates/ }).first();
+          await ongletGabarits.click();
+          await page.waitForTimeout(300);
         }
+        const bouton = panneauGabarits.locator('div.grid > button').nth(i);
+        await bouton.waitFor({ state: 'visible', timeout: 10000 });
+        await bouton.click();
         await page.waitForTimeout(500);
         await shot(page, `studio-gabarit-${idsGabarits[i]}-${largeur}`);
       } catch (e) {
