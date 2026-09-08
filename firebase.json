@@ -1,4 +1,11 @@
 {
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "xena",
+      "runtime": "nodejs22"
+    }
+  ],
   "hosting": {
     "public": "dist",
     "ignore": [
