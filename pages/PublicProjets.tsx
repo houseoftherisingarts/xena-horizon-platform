@@ -120,7 +120,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
           src={modele.image}
           alt={lang === 'EN' ? modele.titreEn : modele.titre}
           position="50% 22%"
-          className="absolute inset-0 object-top"
+          className="absolute inset-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-encre/85 via-encre/25 to-transparent" />
         <div className="relative px-gut py-feuille min-h-[100svh] flex items-end">
