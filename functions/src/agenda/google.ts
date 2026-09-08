@@ -9,7 +9,7 @@ import { onCall, onRequest, HttpsError, type CallableRequest } from 'firebase-fu
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 import { defineSecret } from 'firebase-functions/params';
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { google, type calendar_v3 } from 'googleapis';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { actionPourRendezVous, evenementDepuisRendezVous, occupationsDepuisFreebusy, type RendezVousPourEvenement } from './sync';
