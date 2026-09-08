@@ -82,8 +82,8 @@ const Contact: React.FC<ContactProps> = ({ lang, contact }) => {
   };
 
   return (
-    <Feuille z={6} id="contact" className="bg-papier-2">
-      <div className="grid grid-cols-12 gap-x-col gap-y-10 px-gut py-feuille">
+    <Feuille z={6} className="bg-papier-2">
+      <div id="contact" className="grid grid-cols-12 gap-x-col gap-y-10 px-gut py-feuille">
         <div className="col-span-12 sm:col-span-6">
           <Reveal as="h2" className="whitespace-pre-line text-h2 font-serif text-encre">
             {titre}
