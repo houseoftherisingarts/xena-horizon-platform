@@ -104,7 +104,7 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
           texte={lang === 'EN' ? A_PROPOS.missionEn : A_PROPOS.mission}
           as="p"
           par="mot"
-          className="font-serif text-display lg:max-w-[80%]"
+          className="font-serif text-h2 lg:max-w-[90%]"
         />
         {stat2Label && (
           <Reveal delay={0.2} as="p" className="kicker text-gris mt-8">
