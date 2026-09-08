@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Users, DollarSign, FileText, Search } from 'lucide-react';
 import { Language, Client, Document, Lead, ClientStatus } from '../types';
 import { useCollection } from '../lib/firestore';
 import { EnTete, Panneau, Chiffre, Vide, Chargement } from '../components/admin/ui';
