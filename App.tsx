@@ -192,6 +192,10 @@ const App: React.FC = () => {
         return <AdminVexel lang={lang} />;
       case 'ADMIN_TEMOIGNAGES':
         return <AdminTemoignages lang={lang} />;
+      case 'ADMIN_VIDEOS':
+        return <AdminVideos lang={lang} />;
+      case 'ADMIN_SECTIONS':
+        return <AdminSections lang={lang} />;
       case 'ADMIN_DASHBOARD':
         return <AdminDashboard lang={lang} />;
       case 'ADMIN_CRM':
