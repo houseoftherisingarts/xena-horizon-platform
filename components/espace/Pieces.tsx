@@ -335,13 +335,13 @@ const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
 
       {categories.map(({ cat, pieces }) => (
         <section key={cat} className="border-t border-filet pt-8">
-          <h3 className="kicker text-gris mb-4">{cat}</h3>
+          <h3 className="kicker text-gris mb-4">{libelleCategorie(cat, config.pieces, lang)}</h3>
           <ul>
             {pieces.map((p) => {
               const etat = etatPiece(dossier, p.id);
               const note = etat === 'a_refaire' ? dossier.revue?.[p.id]?.note : undefined;
               return (
-                <PieceCard key={p.id} piece={p} deposee={dossier.pieces?.[p.id]} etat={etat} note={note} uid={uid} t={t} />
+                <PieceCard key={p.id} piece={p} deposee={dossier.pieces?.[p.id]} etat={etat} note={note} uid={uid} t={t} lang={lang} />
               );
             })}
           </ul>
