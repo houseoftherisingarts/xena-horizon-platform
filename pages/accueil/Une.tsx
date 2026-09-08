@@ -54,6 +54,10 @@ const Une: React.FC<UneProps> = ({
   hauteurPhoto,
   demarrer = true,
 }) => {
+  const motsPublics = useMemo(
+    () => PROFILS_REELS.map((profil) => (lang === 'EN' ? profil.titleEN : profil.titleFR)),
+    [lang]
+  );
 
   return (
     <div className="flex h-full w-full flex-col sm:block">
