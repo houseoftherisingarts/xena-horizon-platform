@@ -58,22 +58,24 @@ const Compteur: React.FC<{ valeur: number; className?: string }> = ({ valeur, cl
   );
 };
 
-const APropos: React.FC<AProposProps> = ({ lang, stats, onChangeView }) => {
+const APropos: React.FC<AProposProps> = ({
+  lang,
+  stat1Value,
+  stat1Label,
+  stat2Value,
+  stat2Label,
+  stat3Value,
+  stat3Label,
+  onChangeView,
+}) => {
   const L = t[lang];
   const titre = A_PROPOS_ACCUEIL.titre[lang];
   const paragraphes = A_PROPOS_ACCUEIL.paragraphes[lang];
   const mission = A_PROPOS_ACCUEIL.mission[lang];
 
-  const chiffre1 = stats ? Number.parseInt(stats.stat1Value, 10) || 15 : 15;
-  const unite1FR = stats?.stat1Value.replace(/^\d+\s*/, '') || 'ans';
-  const unite1 = lang === 'FR' ? unite1FR : 'years';
-  const label1 = lang === 'FR' ? stats?.stat1Label ?? "D'expérience" : 'Of experience';
-  const val2 = stats?.stat2Value ?? 'Toutes disciplines';
-  const label2 = stats?.stat2Label ?? '';
-  const val3 = stats?.stat3Value ?? 'Montréal · Montérégie · Estrie';
-  const label3 = stats?.stat3Label ?? '';
-
-  const kicker1 = lang === 'FR' ? `${unite1} d'expérience` : `${unite1} of experience`;
+  const chiffre1 = Number.parseInt(stat1Value, 10) || 15;
+  const unite1 = stat1Value.replace(/^\d+\s*/, '');
+  const kicker1 = `${unite1} ${stat1Label.replace(/^D'/, "d'").replace(/^Of /, 'of ')}`.trim();
 
   return (
     <Feuille z={2} className="bg-papier-2">
