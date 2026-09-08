@@ -49,6 +49,16 @@ const JETONS_MANCHETTE = {
 const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) => {
   const [introVisible, setIntroVisible] = useState(() => !introDejaJouee());
 
+  // Rien à faire défiler derrière le voile : le défilement se rouvre dès que l'intro cède la place.
+  useEffect(() => {
+    if (!introVisible) return;
+    const precedent = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.documentElement.style.overflow = precedent;
+    };
+  }, [introVisible]);
+
   const hero = blocks.find((b): b is HomeHeroBlock => b.type === 'HERO');
   const services = blocks.find((b): b is HomeServicesBlock => b.type === 'SERVICES_PREVIEW');
   const stats = blocks.find((b): b is HomeStatsBlock => b.type === 'STATS');
