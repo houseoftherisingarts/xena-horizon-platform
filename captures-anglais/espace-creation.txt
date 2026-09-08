@@ -1,0 +1,109 @@
+Xena Horizon
+BY LAURIE BELHUMEUR
+Home
+Services
+Projects
+About
+Contact
+SKY
+INK
+FR
+/
+EN
+My space
+Book a call
+A clear head
+
+is waiting.
+
+I'm Laurie. Drop off what you have here, even in rough shape, and you leave with a direction and the right words to carry it. You always know where your project stands without chasing an email, and when a question comes up, I answer you in the same place.
+
+HOW IT UNFOLDS
+1
+
+First contact
+
+You tell me about your project and we see if we are a good fit to work together.
+
+2
+
+Diagnostic
+
+Laurie reads your file and asks the right questions.
+
+3
+
+Action plan
+
+A clear guideline, written in black and white.
+
+4
+
+Implementation
+
+The texts, tools and actions that move your project forward.
+
+5
+
+Follow-up
+
+We measure what has changed and adjust our approach.
+
+SIGN IN
+CREATE MY ACCOUNT
+Continue with Google
+
+This button reads the Google account already signed in on this device, nothing else.
+
+OR
+Email
+Password
+Create my file
+Forgot your password?
+
+What you upload here lives in a private file: Laurie Belhumeur, and only her, can read it.
+
+Xena Horizon
+
+Artistic career and communication consultant.
+
+NAVIGATE
+
+Home
+Services
+Projects
+About
+Contact
+My space
+
+CONTACT
+
+514 821-8755
+laurie.belhumeur@gmail.com
+
+Montréal, Montérégie, Estrie
+
+PHOTO CREDIT
+
+Stéphanie Boisvert · @adramatk
+
+Site by Vexel Webstudio
+
+© 2026 Laurie Belhumeur · Xena Horizon. All rights reserved.
+
+Admin
+
+Xena Horizon
+
+This site measures its traffic with Firebase Analytics, and nothing else.
+
+I accept
+I decline
+Learn more
+
+--- attributs ---
+<button> aria-label="Site palette: sky blue, or ink and pink" title="Site palette: sky blue, or ink and pink"
+<button> aria-label="FR / EN"
+<button> aria-label="Admin area" title="Admin area"
+<button> aria-label="Open menu"
+<div> aria-label="Consent banner"

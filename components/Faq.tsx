@@ -1,9 +1,11 @@
-// Faq — questions fréquentes, une réponse ouverte à la fois. Monté au bas de /services,
-// avant le rendez-vous final. Contenu strictement tiré de SERVICES_REELS, PROFILS_REELS et
-// COORDONNEES (lib/contenu.ts), et du parcours de rendez-vous décrit dans CLAUDE.md : aucun
-// chiffre, aucun délai, aucune promesse qui n'existe pas déjà ailleurs sur le site.
-// Porté du FAQ accordion (faq-06) de hirael (21st.dev) : une réponse à la fois, hauteur
-// animée par framer-motion, chevron qui pivote, aria-expanded / aria-controls, cibles 44 px.
+// Faq — questions fréquentes au bas de /services, avant le rendez-vous final. Porté du
+// FAQ 06 de hirael (MIT, Mohammad Shehadeh) tel que fourni par Alex : badge qui s'ouvre au
+// défilement, titre révélé mot à mot en deux tons, lede, cartes qui montent l'une après
+// l'autre, plusieurs réponses ouvertes à la fois, révélation animée, état ouvert teinté.
+// Mise en page pleine largeur à gauche (canon du client, jamais de colonne centrée).
+// Contenu strictement tiré de SERVICES_REELS, PROFILS_REELS et COORDONNEES (lib/contenu.ts),
+// et du parcours de rendez-vous décrit dans CLAUDE.md : aucun chiffre, aucun délai,
+// aucune promesse qui n'existe pas déjà ailleurs sur le site.
 
 import React, { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
@@ -18,7 +20,8 @@ export interface FaqProps {
 const TEXTES = {
   FR: {
     kicker: 'Questions fréquentes',
-    titre: 'Avant de\nprendre rendez-vous',
+    titre: 'Avant de prendre rendez-vous',
+    lede: 'Les questions qui reviennent avant un premier rendez-vous.',
     q1: 'Comment se passe un rendez-vous avec Laurie ?',
     a1: 'Tu cliques sur Prendre rendez-vous, tu crées ton compte, puis tu choisis un moment parmi les disponibilités de Laurie. Elle confirme ta demande, et la rencontre vidéo se tient directement dans ton espace client, sur le site.',
     q2: "À qui s'adresse l'accompagnement de Laurie ?",
@@ -34,7 +37,8 @@ const TEXTES = {
   },
   EN: {
     kicker: 'Frequently asked questions',
-    titre: 'Before you\nbook a call',
+    titre: 'Before you book a call',
+    lede: 'The questions that come up before a first appointment.',
     q1: 'How does an appointment with Laurie work?',
     a1: "You click Book an appointment, you create your account, then you choose a time among Laurie's availabilities. She confirms your request, and the video meeting takes place right in your client space, on the site.",
     q2: 'Who is this support for?',
@@ -51,35 +55,76 @@ const TEXTES = {
 };
 
 const EASE = [0.16, 0.8, 0.24, 1] as const;
+const VUE = { once: true, amount: 0.3 } as const;
 
 const Faq: React.FC<FaqProps> = ({ lang }) => {
   const t = useTextes('faq', TEXTES, lang);
-  const [ouvert, setOuvert] = useState(0);
   const reduit = useReducedMotion();
+  const [ouvertes, setOuvertes] = useState<Set<number>>(() => new Set([0]));
+
+  const basculer = (i: number) =>
+    setOuvertes((prev) => {
+      const suivant = new Set(prev);
+      if (suivant.has(i)) suivant.delete(i);
+      else suivant.add(i);
+      return suivant;
+    });
 
   const questions = [1, 2, 3, 4, 5, 6].map((i) => ({
     q: t[`q${i}` as keyof typeof t],
     a: t[`a${i}` as keyof typeof t],
   }));
+  const mots = t.titre.split(/\s+/);
+  const moitie = Math.floor(mots.length / 2);
+  const depart = (delai: number, y = 20) =>
+    reduit ? {} : { initial: { opacity: 0, y }, whileInView: { opacity: 1, y: 0 }, viewport: VUE, transition: { duration: 0.5, ease: EASE, delay: delai } };
 
   return (
     <div data-tx-scope="faq" className="px-gut py-feuille">
-      <p className="kicker text-rose">{t.kicker}</p>
-      <h2 className="mt-4 whitespace-pre-line font-serif text-h2">{t.titre}</h2>
+      <motion.p
+        className="inline-flex rounded-pilule border border-filet bg-papier/70 px-4 py-1.5 font-sans text-[10px] uppercase tracking-[0.14em] text-gris backdrop-blur-sm"
+        {...(reduit
+          ? {}
+          : { initial: { opacity: 0, scale: 0.9 }, whileInView: { opacity: 1, scale: 1 }, viewport: VUE, transition: { duration: 0.5, ease: EASE, delay: 0.2 } })}
+      >
+        {t.kicker}
+      </motion.p>
 
-      <div className="mt-10 border-t border-filet">
+      <h2 className="mt-5 max-w-3xl font-serif text-h2 leading-[1.04] tracking-tight [text-wrap:balance]">
+        {mots.map((mot, i) => (
+          <motion.span
+            key={`${mot}-${i}`}
+            className={`mr-[0.25em] inline-block ${i < moitie ? 'text-gris' : 'text-encre'}`}
+            {...depart(0.2 + i * 0.08, 16)}
+          >
+            {mot}
+          </motion.span>
+        ))}
+      </h2>
+
+      <motion.p className="mesure mt-4 text-lede text-gris" {...depart(0.4)}>
+        {t.lede}
+      </motion.p>
+
+      <div className="mt-10 flex flex-col gap-3">
         {questions.map((item, i) => {
-          const estOuvert = ouvert === i;
+          const estOuvert = ouvertes.has(i);
           return (
-            <div key={i} className="border-b border-filet">
+            <motion.div
+              key={i}
+              {...(reduit
+                ? {}
+                : { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: VUE, transition: { duration: 0.45, ease: EASE, delay: i * 0.1 } })}
+              className={`rounded-champ border border-filet px-4 transition-colors md:px-6 ${estOuvert ? 'bg-papier-2' : 'bg-papier'}`}
+            >
               <button
                 type="button"
                 aria-expanded={estOuvert}
                 aria-controls={`faq-reponse-${i}`}
-                onClick={() => setOuvert((v) => (v === i ? -1 : i))}
-                className="flex min-h-[44px] w-full items-center justify-between gap-4 py-5 text-left"
+                onClick={() => basculer(i)}
+                className="flex min-h-[44px] w-full items-center justify-between gap-6 py-4 text-left"
               >
-                <span className="font-semibold text-encre">{item.q}</span>
+                <span className="font-sans text-base font-medium text-encre md:text-lg">{item.q}</span>
                 <motion.span
                   aria-hidden
                   animate={{ rotate: estOuvert ? 180 : 0 }}
@@ -100,11 +145,11 @@ const Faq: React.FC<FaqProps> = ({ lang }) => {
                     transition={{ duration: reduit ? 0 : 0.3, ease: EASE }}
                     className="overflow-hidden"
                   >
-                    <p className="mesure pb-6 text-corps text-gris">{item.a}</p>
+                    <p className="mesure pb-5 text-corps text-gris">{item.a}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           );
         })}
       </div>

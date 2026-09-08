@@ -1,0 +1,115 @@
+Xena Horizon
+BY LAURIE BELHUMEUR
+Home
+Services
+Projects
+About
+Contact
+SKY
+INK
+FR
+/
+EN
+My space
+Book a call
+LAURIE
+BELHUMEUR
+
+ARTISTIC CAREER AND COMMUNICATION CONSULTANT.
+
+Brief story of a whole
+
+I have always been driven by a deep desire to support artists from all disciplines (dance, writing, theater, music, singing, painting, photography, circus, etc.) as well as creative people to understand and be understood by the businessmen and businesswomen of this world. I aim to bring change to the artistic and cultural environment so that artists can make a living from their art.
+
+My approach is personalized and tailored to each artist I work with, drawing on my experience, insights, and skills acquired over the past fifteen years. My approach is a combination of the common needs artists face and the specific needs and goals of each artist.
+
+15
+
+years supporting artists
+
+An unusual amalgam
+
+Artistic career consultant, artist of words and speech
+
+Founder and president of the company Laurie Belhumeur
+
+Podcast creator of En quête de liberté
+
+Event host
+
+Writer of short stories
+
+Photographer
+
+Model for photo shoots
+
+Content creator
+
+Traveler, eager to discover new cultures
+
+Bringing out creativity wherever it exists is my mission.
+
+DANCE, WRITING, THEATRE, MUSIC, SINGING, PAINTING, PHOTOGRAPHY, CIRCUS
+
+On stage
+
+At an event
+
+Let's talk about
+your next step
+Book a call
+Photo credit : Stéphanie Boisvert, @adramatk
+
+Xena Horizon
+
+Artistic career and communication consultant.
+
+NAVIGATE
+
+Home
+Services
+Projects
+About
+Contact
+My space
+
+CONTACT
+
+514 821-8755
+laurie.belhumeur@gmail.com
+
+Montréal, Montérégie, Estrie
+
+PHOTO CREDIT
+
+Stéphanie Boisvert · @adramatk
+
+Site by Vexel Webstudio
+
+© 2026 Laurie Belhumeur · Xena Horizon. All rights reserved.
+
+Admin
+
+Xena Horizon
+
+This site measures its traffic with Firebase Analytics, and nothing else.
+
+I accept
+I decline
+Learn more
+
+--- attributs ---
+<button> aria-label="Site palette: sky blue, or ink and pink" title="Site palette: sky blue, or ink and pink"
+<button> aria-label="FR / EN"
+<button> aria-label="Admin area" title="Admin area"
+<button> aria-label="Open menu"
+<h1> aria-label="LAURIE
+BELHUMEUR"
+<img> alt="Laurie Belhumeur"
+<h2> aria-label="Brief story of a whole"
+<p> aria-label="Bringing out creativity wherever it exists is my mission."
+<img> alt="On stage"
+<img> alt="At an event"
+<h2> aria-label="Let's talk about
+your next step"
+<div> aria-label="Consent banner"

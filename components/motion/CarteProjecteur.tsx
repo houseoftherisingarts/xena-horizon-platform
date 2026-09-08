@@ -2,7 +2,8 @@
 // pointermove partagé (posé une fois pour toute la page) pousse la position du curseur
 // dans deux variables CSS sur la racine ; chaque carte peint un radial-gradient de 200 px
 // en `background-attachment: fixed`, si bien qu'il suit le pointeur sans recalcul par
-// carte. Enrobe ses enfants sans toucher leur mise en page ni leurs coins. Rien au toucher,
+// carte. Trois calques comme la source : fond (200 px), bordure (150 px) et reflet blanc (100 px).
+// Enrobe ses enfants sans toucher leur mise en page ni leurs coins. Rien au toucher,
 // rien en reduced motion (souris fine seulement, `pointer: fine`).
 
 import React, { useEffect, useRef } from 'react';
@@ -52,7 +53,7 @@ export const CarteProjecteur: React.FC<CarteProjecteurProps> = ({ children, clas
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0"
         style={{
-          background: 'radial-gradient(200px circle at var(--proj-x, -9999px) var(--proj-y, -9999px), rgb(var(--c-bouton) / 0.12), transparent 80%)',
+          background: 'radial-gradient(200px circle at var(--proj-x, -9999px) var(--proj-y, -9999px), rgb(var(--c-bouton) / 0.1), transparent 80%)',
           backgroundAttachment: 'fixed',
         }}
       />
@@ -62,7 +63,21 @@ export const CarteProjecteur: React.FC<CarteProjecteurProps> = ({ children, clas
         style={{
           padding: 1,
           background:
-            'radial-gradient(200px circle at var(--proj-x, -9999px) var(--proj-y, -9999px), rgb(var(--c-bouton) / 0.4), transparent 80%)',
+            'radial-gradient(150px circle at var(--proj-x, -9999px) var(--proj-y, -9999px), rgb(var(--c-bouton) / 0.55), transparent 100%)',
+          backgroundAttachment: 'fixed',
+          WebkitMask: 'linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+        }}
+      />
+      {/* Le reflet blanc de la source (::after) : un point plus petit, blanc, dans la même bordure. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          padding: 1,
+          background:
+            'radial-gradient(100px circle at var(--proj-x, -9999px) var(--proj-y, -9999px), rgb(255 255 255 / 0.9), transparent 100%)',
           backgroundAttachment: 'fixed',
           WebkitMask: 'linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0)',
           WebkitMaskComposite: 'xor',

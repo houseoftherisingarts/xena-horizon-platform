@@ -42,6 +42,7 @@ export const MotsTournants: React.FC<MotsTournantsProps> = ({
             key={mot}
             aria-hidden={index !== i}
             className="col-start-1 row-start-1 font-serif text-rose"
+            initial={reduit ? false : { opacity: 0, y: '-100%' }}
             animate={
               index === i
                 ? { y: 0, opacity: 1 }

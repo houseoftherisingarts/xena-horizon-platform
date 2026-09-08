@@ -78,14 +78,24 @@ const TEXTES = {
 
 const ARCHETYPES_ORDRE: ClientArchetype[] = ['Artist', 'Entrepreneur', 'NPO'];
 
-/** Nom/description d'une offre selon la langue, avec repli sur le français (produits Firestore sans champs anglais). */
+/** L'entrée du catalogue de référence (avec ses champs anglais) qui partage l'id de cette offre, si elle existe. */
+const repliCatalogue = (offer: Product): ServiceReel | undefined => SERVICES_REELS.find((s) => s.id === offer.id);
+
+/**
+ * Nom/description d'une offre selon la langue. Repli en deux temps pour l'anglais : les champs
+ * `nameEn`/`descriptionEn` de l'offre elle-même (produit Firestore déjà traduit par Laurie), puis
+ * ceux du catalogue de référence par id (produit Firestore réel mais semé sans ses champs anglais :
+ * les neuf offres connues restent traduites quand même), puis le français en dernier recours.
+ */
 const nomOffre = (offer: Product, lang: Language): string => {
+  if (lang !== 'EN') return offer.name;
   const svc = offer as Partial<ServiceReel>;
-  return lang === 'EN' && svc.nameEn ? svc.nameEn : offer.name;
+  return svc.nameEn ?? repliCatalogue(offer)?.nameEn ?? offer.name;
 };
 const descriptionOffre = (offer: Product, lang: Language): string => {
+  if (lang !== 'EN') return offer.description;
   const svc = offer as Partial<ServiceReel>;
-  return lang === 'EN' && svc.descriptionEn ? svc.descriptionEn : offer.description;
+  return svc.descriptionEn ?? repliCatalogue(offer)?.descriptionEn ?? offer.description;
 };
 
 /** Dès 3 500 $ / From $3,500, séparateur de milliers correct dans les deux langues (espace insécable en FR). */

@@ -5,6 +5,7 @@ import { ViewState, Language } from '../types';
 import { useIntroTerminee } from '../lib/intro';
 import { Portail, useLenis } from './motion';
 import BasculePalette from './BasculePalette';
+import BasculeLangue from './BasculeLangue';
 import { useTextes } from '../lib/textes';
 import { allerAuRendezVous } from '../lib/rendezvous';
 
@@ -136,20 +137,7 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
     setIsOpen(false);
   };
 
-  const toggleLang = () => setLang(lang === 'FR' ? 'EN' : 'FR');
-
-  const bascule = (
-    <button
-      type="button"
-      onClick={toggleLang}
-      className="flex items-center gap-1 text-xs font-sans font-semibold tracking-wide"
-      aria-label="FR / EN"
-    >
-      <span className={lang === 'FR' ? 'text-encre' : 'text-gris'}>FR</span>
-      <span className="text-filet">/</span>
-      <span className={lang === 'EN' ? 'text-encre' : 'text-gris'}>EN</span>
-    </button>
-  );
+  const bascule = <BasculeLangue lang={lang} setLang={setLang} />;
 
   return (
     <nav
