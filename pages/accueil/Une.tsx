@@ -43,6 +43,7 @@ const Une: React.FC<UneProps> = ({
   tagline,
   headline,
   subheadline,
+  pourLes,
   ctaText,
   imageUrl,
   filtre,
