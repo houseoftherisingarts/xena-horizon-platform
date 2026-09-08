@@ -300,46 +300,7 @@ const PieceCard: React.FC<{ piece: PieceDef; deposee?: PieceDeposee; etat: EtatP
 };
 
 const Pieces: React.FC<PiecesProps> = ({ dossier, config, uid, lang }) => {
-  const t = {
-    FR: {
-      titre: 'Mes pièces',
-      sous: 'Dépose ce que tu as, quand ça t\'adonne. Je vois chaque pièce arriver de mon côté.',
-      manquantesTitre: 'Ce qui manque encore',
-      manquantesVide: 'Tout est là. Je prends le relais.',
-      aideDefaut: '',
-      optionLabel: 'au besoin',
-      deposer: 'Déposer',
-      remplacer: 'Remplacer',
-      retirer: 'Retirer',
-      deposeLe: 'reçue le',
-      aRefaire: 'à refaire',
-      validee: 'validée',
-      nouveauDepot: 'nouveau dépôt, en attente',
-      erreurType: 'Format non accepté. Utilise un PDF, une image, un Word, un Excel ou un texte.',
-      erreurTaille: 'Fichier trop lourd. La limite est de 25 Mo.',
-      erreurEnvoi: "L'envoi a échoué. Réessaie dans un instant.",
-      erreurRetrait: 'Le retrait a échoué. Réessaie dans un instant.',
-    },
-    EN: {
-      titre: 'My documents',
-      sous: "Send what you have, whenever it suits you. I see each file as it arrives.",
-      manquantesTitre: 'Still missing',
-      manquantesVide: "That's everything. I take it from here.",
-      aideDefaut: '',
-      optionLabel: 'if applicable',
-      deposer: 'Upload',
-      remplacer: 'Replace',
-      retirer: 'Remove',
-      deposeLe: 'received on',
-      aRefaire: 'to redo',
-      validee: 'approved',
-      nouveauDepot: 'new upload, pending review',
-      erreurType: 'Format not accepted. Use a PDF, image, Word, Excel or text file.',
-      erreurTaille: 'File too large. The limit is 25 MB.',
-      erreurEnvoi: 'The upload failed. Try again in a moment.',
-      erreurRetrait: 'The removal failed. Try again in a moment.',
-    },
-  }[lang];
+  const t = useTextes('espacePieces', TEXTES, lang);
 
   const manquantes = piecesManquantes(dossier, config.pieces);
   const categories = piecesParCategorie(config.pieces);
