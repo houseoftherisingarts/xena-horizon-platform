@@ -100,12 +100,17 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
 
       {/* --- LA MISSION --- */}
       <Feuille z={3} className="bg-papier px-gut py-bloc">
-        <MasqueRadial>
-          <p className="font-serif text-display lg:max-w-[80%]">
-            {lang === 'EN' ? A_PROPOS.missionEn : A_PROPOS.mission}
-          </p>
-        </MasqueRadial>
-        {stat2Label && <KickerFocus texte={stat2Label} className="kicker text-gris mt-8" />}
+        <TexteRevele
+          texte={lang === 'EN' ? A_PROPOS.missionEn : A_PROPOS.mission}
+          as="p"
+          par="mot"
+          className="font-serif text-display lg:max-w-[80%]"
+        />
+        {stat2Label && (
+          <Reveal delay={0.2} as="p" className="kicker text-gris mt-8">
+            {stat2Label}
+          </Reveal>
+        )}
       </Feuille>
 
       {/* --- PLANCHE --- */}
