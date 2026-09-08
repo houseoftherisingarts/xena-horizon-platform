@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import {
   Download, LayoutTemplate, Image as ImageIcon, Link as LinkIcon,
-  Type, X, Plus, Trash2, ArrowUp, ArrowDown, Bot, Mail, Send, Save, Users, FileText
+  Type, X, Plus, Trash2, ArrowUp, ArrowDown, Bot, Send, Save, Users, FileText
 } from 'lucide-react';
 import { orderBy } from 'firebase/firestore';
 import { serverTimestamp } from 'firebase/firestore';
-import GlassCard from '../components/GlassCard';
-import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
 import { GalleryImage, Language, NewsletterCampaign, Subscriber } from '../types';
 import { useCollection, createDoc, patchDoc, removeDoc } from '../lib/firestore';
+import { EnTete, Panneau, Bouton, Champ, Etiquette, Vide, Chargement } from '../components/admin/ui';
 
 interface AdminNewsletterProps {
   lang: Language;
@@ -112,6 +111,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
 
   const t = {
     FR: {
+      kicker: 'Infolettres',
       title: 'Générateur d\'Infolettre',
       assistant: 'Assistant Rédaction',
       copy: 'Copier HTML',
@@ -138,6 +138,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
       saveDraft: 'Enregistrer brouillon',
       send: 'Envoyer',
       newDraft: 'Nouveau brouillon',
+      subjectLabel: 'Sujet',
       subjectPlaceholder: 'Sujet de l\'infolettre…',
       noCampaigns: 'Aucune campagne enregistrée.',
       draft: 'Brouillon',
@@ -155,6 +156,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
       subjectRequired: 'Veuillez saisir un sujet avant d\'enregistrer.',
     },
     EN: {
+      kicker: 'Newsletters',
       title: 'Newsletter Generator',
       assistant: 'Writing Assistant',
       copy: 'Copy HTML',
@@ -181,6 +183,7 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
       saveDraft: 'Save draft',
       send: 'Send',
       newDraft: 'New draft',
+      subjectLabel: 'Subject',
       subjectPlaceholder: 'Newsletter subject…',
       noCampaigns: 'No campaigns yet.',
       draft: 'Draft',
@@ -436,397 +439,393 @@ const AdminNewsletter: React.FC<AdminNewsletterProps> = ({ lang }) => {
     await removeDoc('subscribers', id);
   };
 
+  const BLOC_BOUTON =
+    'p-3 rounded-champ border border-filet text-gris hover:text-encre hover:border-encre flex flex-col items-center gap-2 text-xs transition-colors min-h-[44px]';
+
   return (
-    <div className="pt-24 px-6 pb-12 max-w-[1920px] mx-auto h-screen flex flex-col relative">
+    <div className="px-6 md:px-10 py-10 h-screen flex flex-col">
+      <EnTete
+        kicker={t.kicker}
+        titre={t.title}
+        actions={
+          <>
+            <Bouton variante="secondaire" icone={Bot} onClick={() => setIsWizardOpen(true)}>{t.assistant}</Bouton>
+            <Bouton variante="secondaire" icone={Save} onClick={handleSaveDraft} disabled={saving}>{t.saveDraft}</Bouton>
+            <Bouton variante="primaire" icone={Send} onClick={handleSend} disabled={saving}>{t.send}</Bouton>
+            <Bouton variante="discret" icone={Download} onClick={handleExport}>{t.copy}</Bouton>
+          </>
+        }
+      />
 
-       {/* HEADER */}
-       <div className="flex justify-between items-center mb-4 flex-shrink-0">
-         <div className="flex items-center gap-4">
-           <h1 className="text-3xl font-serif font-bold text-white">{t.title}</h1>
-           <button onClick={() => setIsWizardOpen(true)} className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-full text-sm font-bold flex items-center gap-2 shadow-lg transition-transform hover:scale-105">
-             <Bot className="w-4 h-4" /> {t.assistant}
-           </button>
-         </div>
+      {/* TABS + BANNER */}
+      <div className="flex items-center justify-between gap-4 mt-8 mb-6 flex-shrink-0">
          <div className="flex items-center gap-2">
-            <button onClick={handleSaveDraft} disabled={saving} className="px-4 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white rounded-full text-sm font-bold flex items-center gap-2 transition">
-                <Save className="w-4 h-4" /> {t.saveDraft}
+            <button
+               type="button"
+               onClick={() => setTab('composer')}
+               className={`inline-flex items-center gap-2 min-h-[36px] rounded-pilule px-4 text-xs font-semibold transition-colors ${
+                 tab === 'composer' ? 'bg-encre text-papier' : 'border border-filet text-gris hover:text-encre'
+               }`}
+            >
+               <FileText className="w-3.5 h-3.5" aria-hidden="true" /> {t.composer}
             </button>
-            <button onClick={handleSend} disabled={saving} className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-full text-sm font-bold flex items-center gap-2 shadow-lg transition">
-                <Send className="w-4 h-4" /> {t.send}
-            </button>
-            <button onClick={handleExport} className={ACTION_BUTTON_CLASSES}>
-                <Download className="w-4 h-4" /> {t.copy}
+            <button
+               type="button"
+               onClick={() => setTab('subscribers')}
+               className={`inline-flex items-center gap-2 min-h-[36px] rounded-pilule px-4 text-xs font-semibold transition-colors ${
+                 tab === 'subscribers' ? 'bg-encre text-papier' : 'border border-filet text-gris hover:text-encre'
+               }`}
+            >
+               <Users className="w-3.5 h-3.5" aria-hidden="true" /> {t.subscribers}
+               {!subscribersLoading && <Etiquette tone="neutre" className="ml-1">{subscribers.length}</Etiquette>}
             </button>
          </div>
-       </div>
+         {banner && (
+            <div className="px-4 py-2 rounded-pilule bg-rose/10 text-rose text-xs">
+               {banner}
+            </div>
+         )}
+      </div>
 
-       {/* TABS + BANNER */}
-       <div className="flex items-center justify-between gap-4 mb-4 flex-shrink-0">
-          <div className="flex items-center gap-2">
-             <button
-                onClick={() => setTab('composer')}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 transition ${tab === 'composer' ? 'bg-white text-slate-900' : 'bg-white/5 text-slate-300 hover:bg-white/10'}`}
-             >
-                <FileText className="w-3.5 h-3.5"/> {t.composer}
-             </button>
-             <button
-                onClick={() => setTab('subscribers')}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 transition ${tab === 'subscribers' ? 'bg-white text-slate-900' : 'bg-white/5 text-slate-300 hover:bg-white/10'}`}
-             >
-                <Users className="w-3.5 h-3.5"/> {t.subscribers}
-                {!subscribersLoading && (
-                   <span className="ml-1 px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px]">{subscribers.length}</span>
-                )}
-             </button>
-          </div>
-          {banner && (
-             <div className="px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 text-xs">
-                {banner}
-             </div>
-          )}
-       </div>
+      {tab === 'composer' && (
+        <div className="flex-1 min-h-0 flex gap-6 overflow-hidden">
 
-       {tab === 'composer' && (
-         <div className="flex flex-1 gap-6 overflow-hidden">
+           {/* SIDEBAR */}
+           <div className="w-64 flex flex-col gap-4 overflow-y-auto pr-2 flex-shrink-0">
+              <Panneau>
+                <Champ label={t.subjectLabel} value={subject} onChange={(e) => setSubject(e.target.value)} placeholder={t.subjectPlaceholder} />
+              </Panneau>
 
-            {/* SIDEBAR */}
-            <div className="w-64 flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-2 flex-shrink-0">
-               <GlassCard className="p-4">
-                  <input
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    placeholder={t.subjectPlaceholder}
-                    className={GLASS_INPUT_CLASSES}
-                  />
-               </GlassCard>
+              <Panneau titre={t.blocks}>
+                <div className="grid grid-cols-2 gap-2">
+                  <button type="button" onClick={() => addBlock('HEADER')} className={BLOC_BOUTON}><LayoutTemplate className="w-4 h-4" aria-hidden="true" /> {t.header}</button>
+                  <button type="button" onClick={() => addBlock('TEXT')} className={BLOC_BOUTON}><Type className="w-4 h-4" aria-hidden="true" /> {t.text}</button>
+                  <button type="button" onClick={() => addBlock('IMAGE')} className={BLOC_BOUTON}><ImageIcon className="w-4 h-4" aria-hidden="true" /> {t.image}</button>
+                  <button type="button" onClick={() => addBlock('BUTTON')} className={BLOC_BOUTON}><LinkIcon className="w-4 h-4" aria-hidden="true" /> {t.button}</button>
+                  <button type="button" onClick={() => addBlock('SPACER')} className={BLOC_BOUTON}><ArrowDown className="w-4 h-4" aria-hidden="true" /> {t.spacer}</button>
+                  <button type="button" onClick={() => addBlock('FOOTER')} className={BLOC_BOUTON}><LayoutTemplate className="w-4 h-4 rotate-180" aria-hidden="true" /> {t.footer}</button>
+                </div>
+              </Panneau>
 
-               <GlassCard className="p-4">
-                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">{t.blocks}</h3>
-                 <div className="grid grid-cols-2 gap-2">
-                   <button onClick={() => addBlock('HEADER')} className="p-3 bg-white/5 hover:bg-white/10 rounded-lg flex flex-col items-center gap-2 text-xs text-slate-300 transition-all border border-white/5"><LayoutTemplate className="w-4 h-4 text-blue-400"/> {t.header}</button>
-                   <button onClick={() => addBlock('TEXT')} className="p-3 bg-white/5 hover:bg-white/10 rounded-lg flex flex-col items-center gap-2 text-xs text-slate-300 transition-all border border-white/5"><Type className="w-4 h-4 text-slate-400"/> {t.text}</button>
-                   <button onClick={() => addBlock('IMAGE')} className="p-3 bg-white/5 hover:bg-white/10 rounded-lg flex flex-col items-center gap-2 text-xs text-slate-300 transition-all border border-white/5"><ImageIcon className="w-4 h-4 text-emerald-400"/> {t.image}</button>
-                   <button onClick={() => addBlock('BUTTON')} className="p-3 bg-white/5 hover:bg-white/10 rounded-lg flex flex-col items-center gap-2 text-xs text-slate-300 transition-all border border-white/5"><LinkIcon className="w-4 h-4 text-amber-400"/> {t.button}</button>
-                   <button onClick={() => addBlock('SPACER')} className="p-3 bg-white/5 hover:bg-white/10 rounded-lg flex flex-col items-center gap-2 text-xs text-slate-300 transition-all border border-white/5"><ArrowDown className="w-4 h-4 text-slate-500"/> {t.spacer}</button>
-                   <button onClick={() => addBlock('FOOTER')} className="p-3 bg-white/5 hover:bg-white/10 rounded-lg flex flex-col items-center gap-2 text-xs text-slate-300 transition-all border border-white/5"><LayoutTemplate className="w-4 h-4 text-slate-500 rotate-180"/> {t.footer}</button>
-                 </div>
-               </GlassCard>
+              <div className="space-y-2">
+                <h3 className="kicker text-gris mb-2">{t.structure}</h3>
+                {blocks.map((block, index) => (
+                   <div key={block.id} className="bg-papier-2 border border-filet rounded-champ p-3 flex items-center justify-between group">
+                      <span className="text-xs font-semibold text-encre">{block.type}</span>
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                         <button type="button" onClick={() => moveBlock(index, -1)} aria-label={lang === 'FR' ? 'Monter' : 'Move up'} className="p-1 rounded-champ text-gris hover:text-encre"><ArrowUp className="w-3 h-3" /></button>
+                         <button type="button" onClick={() => moveBlock(index, 1)} aria-label={lang === 'FR' ? 'Descendre' : 'Move down'} className="p-1 rounded-champ text-gris hover:text-encre"><ArrowDown className="w-3 h-3" /></button>
+                         <button type="button" onClick={() => deleteBlock(index)} aria-label={t.remove} className="p-1 rounded-champ text-gris hover:text-rose"><Trash2 className="w-3 h-3" /></button>
+                      </div>
+                   </div>
+                ))}
+                {blocks.length === 0 && <p className="text-xs text-gris text-center py-4">{t.empty}</p>}
+              </div>
 
-               <div className="space-y-2">
-                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{t.structure}</h3>
-                 {blocks.map((block, index) => (
-                    <div key={block.id} className="bg-slate-900 border border-white/10 p-3 rounded-lg flex items-center justify-between group">
-                       <span className="text-xs font-bold text-white">{block.type}</span>
-                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button onClick={() => moveBlock(index, -1)} className="p-1 hover:bg-white/10 rounded text-slate-400"><ArrowUp className="w-3 h-3"/></button>
-                          <button onClick={() => moveBlock(index, 1)} className="p-1 hover:bg-white/10 rounded text-slate-400"><ArrowDown className="w-3 h-3"/></button>
-                          <button onClick={() => deleteBlock(index)} className="p-1 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded"><Trash2 className="w-3 h-3"/></button>
-                       </div>
+              {/* CAMPAIGNS LIST */}
+              <Panneau
+                titre={t.campaigns}
+                actions={
+                  <button type="button" onClick={newDraft} className="inline-flex items-center gap-1 text-[11px] text-gris hover:text-encre">
+                     <Plus className="w-3 h-3" aria-hidden="true" /> {t.newDraft}
+                  </button>
+                }
+              >
+                 {campaignsLoading ? (
+                    <p className="text-xs text-gris">{t.loading}</p>
+                 ) : campaigns.length === 0 ? (
+                    <Vide titre={t.noCampaigns} />
+                 ) : (
+                    <ul className="space-y-1.5">
+                       {campaigns.map(c => (
+                          <li
+                             key={c.id}
+                             className={`group p-2 rounded-champ border cursor-pointer transition-colors ${
+                               currentCampaignId === c.id ? 'bg-papier border-encre' : 'border-filet hover:bg-papier'
+                             }`}
+                             onClick={() => loadCampaign(c)}
+                          >
+                             <div className="flex items-center justify-between gap-2">
+                                <span className="text-xs text-encre truncate flex-1">{c.subject || '(sans sujet)'}</span>
+                                <button
+                                   type="button"
+                                   onClick={(e) => { e.stopPropagation(); deleteCampaign(c.id); }}
+                                   aria-label={t.remove}
+                                   className="opacity-0 group-hover:opacity-100 p-1 rounded-champ text-gris hover:text-rose"
+                                >
+                                   <Trash2 className="w-3 h-3" />
+                                </button>
+                             </div>
+                             <Etiquette tone={c.status === 'sent' ? 'accent' : 'neutre'} className="mt-1">
+                                {c.status === 'sent' ? t.sent : t.draft}
+                             </Etiquette>
+                          </li>
+                       ))}
+                    </ul>
+                 )}
+              </Panneau>
+           </div>
+
+           {/* MAIN PREVIEW AREA (Email Context) */}
+           <div className="flex-1 bg-papier-2 border border-filet rounded-champ overflow-y-auto flex justify-center py-8">
+              <div className="w-[600px] min-h-[800px] bg-papier shadow-panneau relative text-encre">
+                 {blocks.length === 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                       <Vide titre={t.preview} texte="600 px" />
+                    </div>
+                 )}
+
+                 {blocks.map(block => (
+                    <div key={block.id} className="relative group border border-transparent hover:border-filet border-dashed transition-colors">
+                       {/* HEADER RENDER */}
+                       {block.type === 'HEADER' && (
+                          <div className="p-5 text-center">
+                             <input
+                                value={(block as HeaderBlock).title}
+                                onChange={(e) => updateBlock(block.id, 'title', e.target.value)}
+                                className="font-serif text-3xl text-encre text-center w-full focus:outline-none bg-transparent placeholder-gris"
+                                placeholder="Titre de votre infolettre"
+                             />
+                             <p className="text-xs text-gris mt-2">{(block as HeaderBlock).viewOnlineText}</p>
+                          </div>
+                       )}
+
+                       {/* TEXT RENDER */}
+                       {block.type === 'TEXT' && (
+                          <div className="p-5">
+                             <textarea
+                                value={(block as TextBlock).content.replace(/<br>/g, '\n')}
+                                onChange={(e) => updateBlock(block.id, 'content', e.target.value.replace(/\n/g, '<br>'))}
+                                className="w-full h-auto min-h-[100px] text-encre text-base resize-none focus:outline-none bg-transparent font-sans"
+                             />
+                             <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 bg-papier shadow-panneau border border-filet rounded-champ flex gap-1 z-10">
+                                <button type="button" onClick={() => updateBlock(block.id, 'align', 'left')} className="p-1 rounded-champ text-xs text-gris hover:text-encre">G</button>
+                                <button type="button" onClick={() => updateBlock(block.id, 'align', 'center')} className="p-1 rounded-champ text-xs text-gris hover:text-encre">C</button>
+                                <button type="button" onClick={() => updateBlock(block.id, 'align', 'right')} className="p-1 rounded-champ text-xs text-gris hover:text-encre">D</button>
+                             </div>
+                          </div>
+                       )}
+
+                       {/* IMAGE RENDER */}
+                       {block.type === 'IMAGE' && (
+                          <div className="p-2 text-center relative">
+                             <img
+                                src={(block as ImageBlock).imageUrl}
+                                alt={(block as ImageBlock).alt}
+                                className="max-w-full h-auto rounded-champ mx-auto cursor-pointer"
+                                onClick={() => { setIsGalleryOpen(true); setTargetImageBlockId(block.id); }}
+                             />
+                             <input
+                                value={(block as ImageBlock).link}
+                                onChange={(e) => updateBlock(block.id, 'link', e.target.value)}
+                                placeholder="Lien de destination..."
+                                className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-papier/90 px-3 py-1 rounded-champ text-xs w-64 text-center opacity-0 group-hover:opacity-100 shadow-panneau text-encre"
+                             />
+                          </div>
+                       )}
+
+                       {/* BUTTON RENDER */}
+                       {block.type === 'BUTTON' && (
+                          <div className="p-5 text-center">
+                             <button
+                                type="button"
+                                className="px-6 py-3 rounded-pilule font-semibold inline-block"
+                                style={{ backgroundColor: (block as ButtonBlock).color, color: (block as ButtonBlock).textColor }}
+                             >
+                                <input
+                                   value={(block as ButtonBlock).label}
+                                   onChange={(e) => updateBlock(block.id, 'label', e.target.value)}
+                                   className="bg-transparent text-center focus:outline-none w-auto font-sans"
+                                   style={{ color: 'inherit', width: '100%' }}
+                                />
+                             </button>
+                             <div className="mt-2 opacity-0 group-hover:opacity-100 flex justify-center items-center gap-2">
+                                <input type="color" value={(block as ButtonBlock).color} onChange={(e) => updateBlock(block.id, 'color', e.target.value)} className="w-6 h-6 p-0 border-0 rounded-champ cursor-pointer" />
+                                <input type="text" value={(block as ButtonBlock).link} onChange={(e) => updateBlock(block.id, 'link', e.target.value)} className="border border-filet rounded-champ px-2 py-1 text-xs text-encre bg-papier" placeholder="http://..." />
+                             </div>
+                          </div>
+                       )}
+
+                       {/* SPACER RENDER */}
+                       {block.type === 'SPACER' && (
+                           <div style={{ height: (block as SpacerBlock).height }} className="bg-papier flex items-center justify-center relative group/spacer">
+                               <span className="text-[10px] text-gris opacity-0 group-hover/spacer:opacity-100">Espace {(block as SpacerBlock).height}px</span>
+                               <input
+                                 type="range" min="10" max="100"
+                                 value={(block as SpacerBlock).height}
+                                 onChange={(e) => updateBlock(block.id, 'height', parseInt(e.target.value))}
+                                 className="absolute inset-x-4 opacity-0 group-hover/spacer:opacity-100 cursor-ns-resize"
+                               />
+                           </div>
+                       )}
+
+                       {/* FOOTER RENDER */}
+                       {block.type === 'FOOTER' && (
+                          <div className="p-8 border-t border-filet text-center text-xs text-gris">
+                             <input
+                                value={(block as FooterBlock).companyName}
+                                onChange={(e) => updateBlock(block.id, 'companyName', e.target.value)}
+                                className="font-semibold text-center w-full focus:outline-none bg-transparent text-encre"
+                             />
+                             <input
+                                value={(block as FooterBlock).address}
+                                onChange={(e) => updateBlock(block.id, 'address', e.target.value)}
+                                className="text-center w-full focus:outline-none bg-transparent mt-1"
+                             />
+                             <p className="mt-2 underline cursor-pointer">{(block as FooterBlock).unsubscribeText}</p>
+                          </div>
+                       )}
                     </div>
                  ))}
-                 {blocks.length === 0 && <p className="text-xs text-slate-500 text-center py-4">{t.empty}</p>}
-               </div>
-
-               {/* CAMPAIGNS LIST */}
-               <GlassCard className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                     <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t.campaigns}</h3>
-                     <button onClick={newDraft} className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1">
-                        <Plus className="w-3 h-3"/> {t.newDraft}
-                     </button>
-                  </div>
-                  {campaignsLoading ? (
-                     <p className="text-xs text-slate-500">{t.loading}</p>
-                  ) : campaigns.length === 0 ? (
-                     <p className="text-xs text-slate-500">{t.noCampaigns}</p>
-                  ) : (
-                     <ul className="space-y-1.5">
-                        {campaigns.map(c => (
-                           <li
-                              key={c.id}
-                              className={`group p-2 rounded-lg border cursor-pointer transition ${currentCampaignId === c.id ? 'bg-white/10 border-white/20' : 'bg-white/5 border-white/5 hover:bg-white/10'}`}
-                              onClick={() => loadCampaign(c)}
-                           >
-                              <div className="flex items-center justify-between gap-2">
-                                 <span className="text-xs text-white truncate flex-1">{c.subject || '(sans sujet)'}</span>
-                                 <button
-                                    onClick={(e) => { e.stopPropagation(); deleteCampaign(c.id); }}
-                                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded"
-                                 >
-                                    <Trash2 className="w-3 h-3"/>
-                                 </button>
-                              </div>
-                              <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${c.status === 'sent' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
-                                 {c.status === 'sent' ? t.sent : t.draft}
-                              </span>
-                           </li>
-                        ))}
-                     </ul>
-                  )}
-               </GlassCard>
-            </div>
-
-            {/* MAIN PREVIEW AREA (Email Context) */}
-            <div className="flex-1 bg-slate-950/50 rounded-[20px] border border-white/5 overflow-y-auto custom-scrollbar flex justify-center py-8">
-               <div className="w-[600px] bg-white min-h-[800px] shadow-2xl relative text-slate-900 selection:bg-slate-200 selection:text-slate-900">
-                  {blocks.length === 0 && (
-                     <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-                        <Mail className="w-16 h-16 mb-4 opacity-20" />
-                        <p>{t.preview} (600px)</p>
-                     </div>
-                  )}
-
-                  {blocks.map(block => (
-                     <div key={block.id} className="relative group border border-transparent hover:border-slate-200 border-dashed transition-all">
-                        {/* HEADER RENDER */}
-                        {block.type === 'HEADER' && (
-                           <div className="p-5 text-center">
-                              <input
-                                 value={(block as HeaderBlock).title}
-                                 onChange={(e) => updateBlock(block.id, 'title', e.target.value)}
-                                 className="text-3xl font-serif font-bold text-slate-900 text-center w-full focus:outline-none bg-transparent placeholder-slate-300"
-                                 placeholder="Titre de votre infolettre"
-                              />
-                              <p className="text-xs text-slate-400 mt-2">{(block as HeaderBlock).viewOnlineText}</p>
-                           </div>
-                        )}
-
-                        {/* TEXT RENDER */}
-                        {block.type === 'TEXT' && (
-                           <div className="p-5">
-                              <textarea
-                                 value={(block as TextBlock).content.replace(/<br>/g, '\n')}
-                                 onChange={(e) => updateBlock(block.id, 'content', e.target.value.replace(/\n/g, '<br>'))}
-                                 className="w-full h-auto min-h-[100px] text-slate-700 text-base resize-none focus:outline-none bg-transparent font-sans"
-                              />
-                              <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 bg-white shadow-md border rounded flex gap-1 z-10">
-                                 <button onClick={() => updateBlock(block.id, 'align', 'left')} className="p-1 hover:bg-slate-100 rounded text-xs">G</button>
-                                 <button onClick={() => updateBlock(block.id, 'align', 'center')} className="p-1 hover:bg-slate-100 rounded text-xs">C</button>
-                                 <button onClick={() => updateBlock(block.id, 'align', 'right')} className="p-1 hover:bg-slate-100 rounded text-xs">D</button>
-                              </div>
-                           </div>
-                        )}
-
-                        {/* IMAGE RENDER */}
-                        {block.type === 'IMAGE' && (
-                           <div className="p-2 text-center relative">
-                              <img
-                                 src={(block as ImageBlock).imageUrl}
-                                 className="max-w-full h-auto rounded-lg mx-auto cursor-pointer"
-                                 onClick={() => { setIsGalleryOpen(true); setTargetImageBlockId(block.id); }}
-                              />
-                              <input
-                                 value={(block as ImageBlock).link}
-                                 onChange={(e) => updateBlock(block.id, 'link', e.target.value)}
-                                 placeholder="Lien de destination..."
-                                 className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 px-3 py-1 rounded text-xs w-64 text-center opacity-0 group-hover:opacity-100 shadow-lg text-slate-800"
-                              />
-                           </div>
-                        )}
-
-                        {/* BUTTON RENDER */}
-                        {block.type === 'BUTTON' && (
-                           <div className="p-5 text-center">
-                              <button
-                                 className="px-6 py-3 rounded-full font-bold inline-block"
-                                 style={{ backgroundColor: (block as ButtonBlock).color, color: (block as ButtonBlock).textColor }}
-                              >
-                                 <input
-                                    value={(block as ButtonBlock).label}
-                                    onChange={(e) => updateBlock(block.id, 'label', e.target.value)}
-                                    className="bg-transparent text-center focus:outline-none w-auto font-sans"
-                                    style={{ color: 'inherit', width: '100%' }}
-                                 />
-                              </button>
-                              <div className="mt-2 opacity-0 group-hover:opacity-100 flex justify-center items-center gap-2">
-                                 <input type="color" value={(block as ButtonBlock).color} onChange={(e) => updateBlock(block.id, 'color', e.target.value)} className="w-6 h-6 p-0 border-0 rounded cursor-pointer" />
-                                 <input type="text" value={(block as ButtonBlock).link} onChange={(e) => updateBlock(block.id, 'link', e.target.value)} className="border rounded px-2 py-1 text-xs text-slate-600 bg-white" placeholder="http://..." />
-                              </div>
-                           </div>
-                        )}
-
-                        {/* SPACER RENDER */}
-                        {block.type === 'SPACER' && (
-                            <div style={{ height: (block as SpacerBlock).height }} className="bg-slate-50 flex items-center justify-center relative group/spacer">
-                                <span className="text-[10px] text-slate-400 opacity-0 group-hover/spacer:opacity-100">Espace {(block as SpacerBlock).height}px</span>
-                                <input
-                                  type="range" min="10" max="100"
-                                  value={(block as SpacerBlock).height}
-                                  onChange={(e) => updateBlock(block.id, 'height', parseInt(e.target.value))}
-                                  className="absolute inset-x-4 opacity-0 group-hover/spacer:opacity-100 cursor-ns-resize"
-                                />
-                            </div>
-                        )}
-
-                        {/* FOOTER RENDER */}
-                        {block.type === 'FOOTER' && (
-                           <div className="p-8 border-t border-slate-100 text-center text-xs text-slate-400">
-                              <input
-                                 value={(block as FooterBlock).companyName}
-                                 onChange={(e) => updateBlock(block.id, 'companyName', e.target.value)}
-                                 className="font-bold text-center w-full focus:outline-none bg-transparent text-slate-500"
-                              />
-                              <input
-                                 value={(block as FooterBlock).address}
-                                 onChange={(e) => updateBlock(block.id, 'address', e.target.value)}
-                                 className="text-center w-full focus:outline-none bg-transparent mt-1"
-                              />
-                              <p className="mt-2 underline cursor-pointer">{(block as FooterBlock).unsubscribeText}</p>
-                           </div>
-                        )}
-                     </div>
-                  ))}
-               </div>
-            </div>
-         </div>
-       )}
-
-       {tab === 'subscribers' && (
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
-             <GlassCard className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                      <Users className="w-5 h-5"/> {t.subscribers}
-                      <span className="ml-1 px-2 py-0.5 rounded-full bg-white/10 text-slate-300 text-xs">{subscribers.length}</span>
-                   </h2>
-                   <button onClick={() => setIsSubModalOpen(true)} className={ACTION_BUTTON_CLASSES}>
-                      <Plus className="w-4 h-4"/> {t.addSubscriber}
-                   </button>
-                </div>
-                {subscribersLoading ? (
-                   <p className="text-sm text-slate-400 py-8 text-center">{t.loading}</p>
-                ) : subscribers.length === 0 ? (
-                   <p className="text-sm text-slate-400 py-8 text-center">{t.noSubscribers}</p>
-                ) : (
-                   <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                         <thead>
-                            <tr className="text-left text-xs text-slate-500 uppercase tracking-wider border-b border-white/5">
-                               <th className="py-2 pr-4 font-bold">Email</th>
-                               <th className="py-2 pr-4 font-bold">Status</th>
-                               <th className="py-2 pr-4 font-bold">Tags</th>
-                               <th className="py-2 pr-4 font-bold"></th>
-                            </tr>
-                         </thead>
-                         <tbody>
-                            {subscribers.map(sub => (
-                               <tr key={sub.id} className="border-b border-white/5 hover:bg-white/5 transition">
-                                  <td className="py-3 pr-4 text-white">{sub.email}</td>
-                                  <td className="py-3 pr-4">
-                                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${sub.status === 'active' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-500/20 text-slate-300'}`}>
-                                        {sub.status}
-                                     </span>
-                                  </td>
-                                  <td className="py-3 pr-4 text-slate-400 text-xs">
-                                     {sub.tags && sub.tags.length > 0 ? sub.tags.join(', ') : '·'}
-                                  </td>
-                                  <td className="py-3 pr-4 text-right">
-                                     <button
-                                        onClick={() => handleRemoveSubscriber(sub.id)}
-                                        className="p-1.5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded transition"
-                                     >
-                                        <Trash2 className="w-4 h-4"/>
-                                     </button>
-                                  </td>
-                               </tr>
-                            ))}
-                         </tbody>
-                      </table>
-                   </div>
-                )}
-             </GlassCard>
-          </div>
-       )}
-
-       {/* WIZARD MODAL */}
-       {isWizardOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
-           <div className="bg-slate-900 border border-white/10 rounded-[20px] p-8 max-w-lg w-full">
-              <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><Bot className="w-5 h-5"/> {t.aiTitle}</h2>
-              <div className="space-y-4">
-                 <div>
-                    <label className="text-sm text-slate-400 block mb-1">{t.topic}</label>
-                    <input autoFocus className={GLASS_INPUT_CLASSES} value={wizardAnswers.topic} onChange={(e) => setWizardAnswers({...wizardAnswers, topic: e.target.value})} placeholder="Ex: Lancement nouvelle offre" />
-                 </div>
-                 <div>
-                    <label className="text-sm text-slate-400 block mb-1">{t.goal}</label>
-                    <input className={GLASS_INPUT_CLASSES} value={wizardAnswers.goal} onChange={(e) => setWizardAnswers({...wizardAnswers, goal: e.target.value})} placeholder="Ex: Faire cliquer sur le lien" />
-                 </div>
-                 <div className="pt-4 flex justify-end gap-2">
-                    <button onClick={() => setIsWizardOpen(false)} className="px-4 py-2 text-slate-400 hover:text-white">{t.cancel}</button>
-                    <button onClick={generateAiNewsletter} className={ACTION_BUTTON_CLASSES}>{t.generate}</button>
-                 </div>
-              </div>
-           </div>
-        </div>
-       )}
-
-       {/* SUBSCRIBER MODAL */}
-       {isSubModalOpen && (
-         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
-            <div className="bg-slate-900 border border-white/10 rounded-[20px] p-8 max-w-md w-full">
-               <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><Plus className="w-5 h-5"/> {t.addSubscriber}</h2>
-               <div className="space-y-4">
-                  <div>
-                     <label className="text-sm text-slate-400 block mb-1">{t.subscriberEmail}</label>
-                     <input
-                        autoFocus
-                        type="email"
-                        className={GLASS_INPUT_CLASSES}
-                        value={newSubEmail}
-                        onChange={(e) => setNewSubEmail(e.target.value)}
-                        placeholder="nom@exemple.com"
-                     />
-                  </div>
-                  <div>
-                     <label className="text-sm text-slate-400 block mb-1">{t.subscriberTags}</label>
-                     <input
-                        className={GLASS_INPUT_CLASSES}
-                        value={newSubTags}
-                        onChange={(e) => setNewSubTags(e.target.value)}
-                        placeholder="vip, mensuel"
-                     />
-                  </div>
-                  <div className="pt-4 flex justify-end gap-2">
-                     <button onClick={() => setIsSubModalOpen(false)} className="px-4 py-2 text-slate-400 hover:text-white">{t.cancel}</button>
-                     <button onClick={handleAddSubscriber} className={ACTION_BUTTON_CLASSES}>{t.add}</button>
-                  </div>
-               </div>
-            </div>
-         </div>
-       )}
-
-       {/* GALLERY MODAL (Reusable) */}
-       {isGalleryOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm">
-           <div className="bg-slate-900 border border-white/10 rounded-[20px] shadow-2xl w-full max-w-4xl max-h-[80vh] flex flex-col">
-              <div className="p-6 border-b border-white/5 flex justify-between items-center">
-                 <h2 className="text-xl font-bold text-white">{t.selectImg}</h2>
-                 <button onClick={() => setIsGalleryOpen(false)} className="text-slate-400 hover:text-white"><X className="w-5 h-5"/></button>
-              </div>
-              <div className="p-6 overflow-y-auto grid grid-cols-3 md:grid-cols-4 gap-4">
-                  {gallery.length === 0 && (
-                    <p className="col-span-3 md:col-span-4 text-sm text-slate-400 text-center py-8">{t.emptyGallery}</p>
-                  )}
-                  {gallery.map(img => (
-                    <button
-                      key={img.id}
-                      onClick={() => {
-                        if (targetImageBlockId) {
-                           updateBlock(targetImageBlockId, 'imageUrl', img.url);
-                        }
-                        setIsGalleryOpen(false);
-                        setTargetImageBlockId(null);
-                      }}
-                      className="aspect-square rounded-[10px] overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all relative group"
-                    >
-                       <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
-                    </button>
-                  ))}
               </div>
            </div>
         </div>
       )}
+
+      {tab === 'subscribers' && (
+         <div className="flex-1 min-h-0 overflow-y-auto">
+            <Panneau
+              titre={`${t.subscribers}${!subscribersLoading ? ` (${subscribers.length})` : ''}`}
+              actions={
+                <Bouton variante="secondaire" petit icone={Plus} onClick={() => setIsSubModalOpen(true)}>{t.addSubscriber}</Bouton>
+              }
+            >
+               {subscribersLoading ? (
+                  <Chargement texte={t.loading} />
+               ) : subscribers.length === 0 ? (
+                  <Vide titre={t.noSubscribers} />
+               ) : (
+                  <div className="overflow-x-auto">
+                     <table className="w-full text-sm">
+                        <thead>
+                           <tr className="text-left kicker text-gris border-b border-filet">
+                              <th className="py-2 pr-4">Email</th>
+                              <th className="py-2 pr-4">Status</th>
+                              <th className="py-2 pr-4">Tags</th>
+                              <th className="py-2 pr-4"></th>
+                           </tr>
+                        </thead>
+                        <tbody className="divide-y divide-filet">
+                           {subscribers.map(sub => (
+                              <tr key={sub.id} className="hover:bg-papier transition-colors">
+                                 <td className="py-3 pr-4 text-encre">{sub.email}</td>
+                                 <td className="py-3 pr-4">
+                                    <Etiquette tone={sub.status === 'active' ? 'accent' : 'neutre'}>{sub.status}</Etiquette>
+                                 </td>
+                                 <td className="py-3 pr-4 text-gris text-xs">
+                                    {sub.tags && sub.tags.length > 0 ? sub.tags.join(', ') : '·'}
+                                 </td>
+                                 <td className="py-3 pr-4 text-right">
+                                    <button
+                                       type="button"
+                                       onClick={() => handleRemoveSubscriber(sub.id)}
+                                       aria-label={t.remove}
+                                       className="p-1.5 rounded-champ text-gris hover:text-rose transition-colors"
+                                    >
+                                       <Trash2 className="w-4 h-4" />
+                                    </button>
+                                 </td>
+                              </tr>
+                           ))}
+                        </tbody>
+                     </table>
+                  </div>
+               )}
+            </Panneau>
+         </div>
+      )}
+
+      {/* WIZARD MODAL */}
+      {isWizardOpen && (
+       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-encre/60">
+          <div className="bg-papier-2 border border-filet shadow-panneau rounded-champ p-8 max-w-lg w-full">
+             <h2 className="font-serif text-h3 text-encre mb-6 flex items-center gap-2"><Bot className="w-5 h-5" aria-hidden="true" /> {t.aiTitle}</h2>
+             <div className="space-y-4">
+                <Champ
+                  label={t.topic}
+                  autoFocus
+                  value={wizardAnswers.topic}
+                  onChange={(e) => setWizardAnswers({ ...wizardAnswers, topic: e.target.value })}
+                  placeholder="Ex: Lancement nouvelle offre"
+                />
+                <Champ
+                  label={t.goal}
+                  value={wizardAnswers.goal}
+                  onChange={(e) => setWizardAnswers({ ...wizardAnswers, goal: e.target.value })}
+                  placeholder="Ex: Faire cliquer sur le lien"
+                />
+                <div className="pt-4 flex justify-end gap-2">
+                   <Bouton variante="discret" onClick={() => setIsWizardOpen(false)}>{t.cancel}</Bouton>
+                   <Bouton variante="primaire" onClick={generateAiNewsletter}>{t.generate}</Bouton>
+                </div>
+             </div>
+          </div>
+       </div>
+      )}
+
+      {/* SUBSCRIBER MODAL */}
+      {isSubModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-encre/60">
+           <div className="bg-papier-2 border border-filet shadow-panneau rounded-champ p-8 max-w-md w-full">
+              <h2 className="font-serif text-h3 text-encre mb-6 flex items-center gap-2"><Plus className="w-5 h-5" aria-hidden="true" /> {t.addSubscriber}</h2>
+              <div className="space-y-4">
+                 <Champ
+                   label={t.subscriberEmail}
+                   autoFocus
+                   type="email"
+                   value={newSubEmail}
+                   onChange={(e) => setNewSubEmail(e.target.value)}
+                   placeholder="nom@exemple.com"
+                 />
+                 <Champ
+                   label={t.subscriberTags}
+                   value={newSubTags}
+                   onChange={(e) => setNewSubTags(e.target.value)}
+                   placeholder="vip, mensuel"
+                 />
+                 <div className="pt-4 flex justify-end gap-2">
+                    <Bouton variante="discret" onClick={() => setIsSubModalOpen(false)}>{t.cancel}</Bouton>
+                    <Bouton variante="primaire" onClick={handleAddSubscriber}>{t.add}</Bouton>
+                 </div>
+              </div>
+           </div>
+        </div>
+      )}
+
+      {/* GALLERY MODAL (Reusable) */}
+      {isGalleryOpen && (
+       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-encre/60">
+          <div className="bg-papier-2 border border-filet shadow-panneau rounded-champ w-full max-w-4xl max-h-[80vh] flex flex-col">
+             <div className="p-6 border-b border-filet flex justify-between items-center">
+                <h2 className="font-serif text-h3 text-encre">{t.selectImg}</h2>
+                <button type="button" onClick={() => setIsGalleryOpen(false)} aria-label={t.cancel} className="text-gris hover:text-encre"><X className="w-5 h-5" /></button>
+             </div>
+             <div className="p-6 overflow-y-auto grid grid-cols-3 md:grid-cols-4 gap-4">
+                 {gallery.length === 0 && (
+                   <div className="col-span-3 md:col-span-4">
+                     <Vide titre={t.emptyGallery} />
+                   </div>
+                 )}
+                 {gallery.map(img => (
+                   <button
+                     key={img.id}
+                     type="button"
+                     onClick={() => {
+                       if (targetImageBlockId) {
+                          updateBlock(targetImageBlockId, 'imageUrl', img.url);
+                       }
+                       setIsGalleryOpen(false);
+                       setTargetImageBlockId(null);
+                     }}
+                     className="aspect-square rounded-champ overflow-hidden border-2 border-transparent hover:border-rose transition-colors relative group"
+                   >
+                      <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
+                   </button>
+                 ))}
+             </div>
+          </div>
+       </div>
+     )}
 
     </div>
   );
