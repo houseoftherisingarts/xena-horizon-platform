@@ -227,14 +227,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
                     <span aria-hidden="true" className="hidden md:block absolute top-1.5 right-1.5 w-2 h-2 rounded-pilule bg-rose" />
                   )}
                 </button>
-                {replie && (
-                  <span
-                    role="tooltip"
-                    className="hidden md:block pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2 whitespace-nowrap rounded-champ bg-encre text-papier text-xs px-2.5 py-1.5 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-10"
-                  >
-                    {item.label}
-                  </span>
-                )}
               </div>
             );
           })}
