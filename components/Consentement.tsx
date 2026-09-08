@@ -115,33 +115,7 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
   }, [valeur, pretAAfficher]);
 
   useEffect(() => () => definirVisibilite(false), []);
-
-  const t = {
-    FR: {
-      texte: 'Ce site mesure sa fréquentation avec Firebase Analytics, et rien d\'autre.',
-      accepter: "J'accepte",
-      refuser: 'Je refuse',
-      lien: 'En savoir plus',
-      titrePolitique: 'Confidentialité',
-      quoi: 'Ce qui est recueilli',
-      quoiTexte: 'Les pièces que vous déposez dans votre dossier client, hébergées par Firebase Storage au Canada ou aux États-Unis. Les courriels envoyés par les formulaires de contact. Et, si vous acceptez ci-dessous, la mesure d\'audience du site.',
-      qui: 'Qui y accède',
-      quiTexte: 'Laurie Belhumeur, seule.',
-      retrait: 'Comment retirer votre consentement',
-      retraitTexte: 'Écrivez à laurie.belhumeur@gmail.com.',
-      fermer: 'Fermer',
-    },
-    EN: {
-      texte: 'This site measures its traffic with Firebase Analytics, and nothing else.',
-      accepter: 'I accept',
-      refuser: 'I decline',
-      lien: 'Learn more',
-      titrePolitique: 'Privacy',
-      quoi: 'What is collected',
-      quoiTexte: 'The files you upload to your client file, hosted by Firebase Storage in Canada or the United States. Emails sent through the contact forms. And, if you accept below, the site\'s audience measurement.',
-      qui: 'Who has access',
-      quiTexte: 'Laurie Belhumeur, only.',
-      retrait: 'How to withdraw your consent',
+  const t = useTextes('consentement', TEXTES, lang);
       retraitTexte: 'Write to laurie.belhumeur@gmail.com.',
       fermer: 'Close',
     },

@@ -3,42 +3,72 @@ import { ArrowRight } from 'lucide-react';
 import { A_PROPOS, BLOCS_ACCUEIL, BLOCS_ACCUEIL_EN, CREDITS } from '../lib/contenu';
 import { Feuille, KenBurns, Parallax, Reveal, TexteRevele } from '../components/motion';
 import { HomeStatsBlock, Language } from '../types';
+import { useTextes } from '../lib/textes';
+
+const TEXTES = {
+  FR: {
+    nom1: 'LAURIE',
+    nom2: 'BELHUMEUR',
+    tagline: A_PROPOS.tagline,
+    titre: A_PROPOS.titre,
+    p0: A_PROPOS.paragraphes[0],
+    p1: A_PROPOS.paragraphes[1],
+    chiffreKicker: 'ans à accompagner les artistes',
+    amalgameKicker: 'Un amalgame inusité',
+    c0: A_PROPOS.casquettesFR[0],
+    c1: A_PROPOS.casquettesFR[1],
+    c2: A_PROPOS.casquettesFR[2],
+    c3: A_PROPOS.casquettesFR[3],
+    c4: A_PROPOS.casquettesFR[4],
+    c5: A_PROPOS.casquettesFR[5],
+    c6: A_PROPOS.casquettesFR[6],
+    c7: A_PROPOS.casquettesFR[7],
+    c8: A_PROPOS.casquettesFR[8],
+    mission: A_PROPOS.mission,
+    surScene: 'Sur scène',
+    enEvenement: 'En événement',
+    credit: 'Crédit photo',
+    rdvTitle: 'Discutons de\nta prochaine étape',
+    rdv: 'Prendre rendez-vous',
+  },
+  EN: {
+    nom1: 'LAURIE',
+    nom2: 'BELHUMEUR',
+    tagline: A_PROPOS.taglineEn,
+    titre: A_PROPOS.titreEn,
+    p0: A_PROPOS.paragraphesEn[0],
+    p1: A_PROPOS.paragraphesEn[1],
+    chiffreKicker: 'years supporting artists',
+    amalgameKicker: 'An unusual amalgam',
+    c0: A_PROPOS.casquettesEN[0],
+    c1: A_PROPOS.casquettesEN[1],
+    c2: A_PROPOS.casquettesEN[2],
+    c3: A_PROPOS.casquettesEN[3],
+    c4: A_PROPOS.casquettesEN[4],
+    c5: A_PROPOS.casquettesEN[5],
+    c6: A_PROPOS.casquettesEN[6],
+    c7: A_PROPOS.casquettesEN[7],
+    c8: A_PROPOS.casquettesEN[8],
+    mission: A_PROPOS.missionEn,
+    surScene: 'On stage',
+    enEvenement: 'At an event',
+    credit: 'Photo credit',
+    rdvTitle: "Let's talk about\nyour next step",
+    rdv: 'Book a call',
+  },
+};
 
 /** Gabarit provisoire retiré (chantier B) : voici la page À propos v2. */
 const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
-  const t = {
-    FR: {
-      nom1: 'LAURIE',
-      nom2: 'BELHUMEUR',
-      chiffreKicker: 'ans à accompagner les artistes',
-      amalgameKicker: 'Un amalgame inusité',
-      surScene: 'Sur scène',
-      enEvenement: 'En événement',
-      credit: 'Crédit photo',
-      rdvTitle: 'Discutons de\nta prochaine étape',
-      rdv: 'Prendre rendez-vous',
-    },
-    EN: {
-      nom1: 'LAURIE',
-      nom2: 'BELHUMEUR',
-      chiffreKicker: 'years supporting artists',
-      amalgameKicker: 'An unusual amalgam',
-      surScene: 'On stage',
-      enEvenement: 'At an event',
-      credit: 'Photo credit',
-      rdvTitle: "Let's talk about\nyour next step",
-      rdv: 'Book a call',
-    },
-  }[lang];
-
-  const casquettes = lang === 'EN' ? A_PROPOS.casquettesEN : A_PROPOS.casquettesFR;
-  const paragraphes = lang === 'EN' ? A_PROPOS.paragraphesEn : A_PROPOS.paragraphes;
+  const t = useTextes('aPropos', TEXTES, lang);
+  const paragraphes = [t.p0, t.p1];
+  const casquettes = [t.c0, t.c1, t.c2, t.c3, t.c4, t.c5, t.c6, t.c7, t.c8];
   const stats = BLOCS_ACCUEIL.find((b) => b.type === 'STATS') as HomeStatsBlock | undefined;
   const stat1Value = lang === 'EN' ? BLOCS_ACCUEIL_EN['stats-1'].stat1Value : stats?.stat1Value;
   const stat2Label = lang === 'EN' ? BLOCS_ACCUEIL_EN['stats-1'].stat2Label : stats?.stat2Label;
 
   return (
-    <div>
+    <div data-tx-scope="aPropos">
       {/* --- OUVERTURE : le nom --- */}
       <section className="px-gut pt-[calc(var(--nav)+2.5rem)] pb-16 grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10 items-start">
         <div className="lg:col-span-8">
