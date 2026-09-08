@@ -117,6 +117,14 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   mix-blend-mode: overlay; opacity: 0.04;
 }
 
+/* La barre translucide redevient un fond papier quasi opaque si le système refuse la transparence. */
+@media (prefers-reduced-transparency: reduce) {
+  .backdrop-blur-md {
+    backdrop-filter: none;
+    background-color: var(--papier);
+  }
+}
+
 /* Filet de sécurité : la vraie politique est une branche de rendu séparée (useReducedMotion). */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
