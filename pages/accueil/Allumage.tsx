@@ -30,6 +30,7 @@ const Allumage: React.FC<AllumageProps> = ({
   tagline,
   headline,
   subheadline,
+  pourLes,
   ctaText,
   imageUrl,
   strophe,
