@@ -20,6 +20,8 @@ interface EspaceShellProps {
 
 type Onglet = 'dossier' | 'pieces' | 'parcours' | 'messages' | 'ressources';
 
+const EASE_MAISON = [0.16, 0.8, 0.24, 1] as const;
+
 const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
   const uid = user.uid;
   const { data: dossier, loading } = useDocument<Dossier>(`dossiers/${uid}`);
