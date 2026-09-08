@@ -69,17 +69,23 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
 
   return (
     <div className="relative bg-papier" style={JETONS_MANCHETTE}>
-      {introVisible && (
-        <Intro
-          marque="Xena Horizon"
-          signature="par Laurie Belhumeur"
-          layoutId="xh-marque"
-          onComplete={() => {
-            marquerIntroTerminee();
-            setIntroVisible(false);
-          }}
-        />
-      )}
+      {/* AnimatePresence tient l'intro montée le temps de son `exit` (Intro.tsx) : c'est ce
+          délai qui laisse framer-motion raccorder le FLIP du layoutId « xh-marque » vers la
+          barre de navigation, au lieu de la faire disparaître dans le même rendu. */}
+      <AnimatePresence>
+        {introVisible && (
+          <Intro
+            key="intro"
+            marque="Xena Horizon"
+            signature="par Laurie Belhumeur"
+            layoutId="xh-marque"
+            onComplete={() => {
+              marquerIntroTerminee();
+              setIntroVisible(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {hero && (
         <Allumage
