@@ -17,6 +17,7 @@ const TEXTES = {
     sujet: 'Sujet',
     statut: 'Statut',
     langue: 'Langue',
+    envois: 'Envois',
     maj: 'Mise à jour',
     brouillon: 'Brouillon',
     envoyee: 'Envoyée',
