@@ -162,6 +162,18 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
 
   const t = useTextes('services', TEXTES, lang);
 
+  // Retour de Stripe Checkout : ?paiement=ok remercie, une seule fois, puis nettoie l'adresse.
+  const [paiementOk, setPaiementOk] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('paiement') !== 'ok') return;
+    setPaiementOk(true);
+    params.delete('paiement');
+    const reste = params.toString();
+    window.history.replaceState({}, '', window.location.pathname + (reste ? `?${reste}` : ''));
+  }, []);
+
   const book = t.book;
   const titre = t.heroTitre;
   const email = 'laurie.belhumeur@gmail.com';
