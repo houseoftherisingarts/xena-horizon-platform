@@ -289,6 +289,19 @@ async function main() {
   await verifie('un anonyme lit le coffre (refus attendu)', assertFails(getDoc(doc(dbAnon, 'coffre', 'laurie'))));
   await verifie('un client connecté écrit dans le coffre (refus attendu)', assertFails(setDoc(doc(dbA, 'coffre', 'laurie'), { v: 1 })));
 
+  // 14. Capsules vidéo (accueil) et interrupteurs de sections : publics en lecture seulement publiés, admin en écriture.
+  await testEnv.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'videos', 'vid-publiee'), { titre: 'Capsule publiée', ordre: 0, publie: true });
+    await setDoc(doc(ctx.firestore(), 'videos', 'vid-brouillon'), { titre: 'Capsule brouillon', ordre: 1, publie: false });
+  });
+  await verifie('un anonyme lit une capsule publiée (ok)', assertSucceeds(getDoc(doc(dbAnon, 'videos', 'vid-publiee'))));
+  await verifie('un anonyme lit une capsule non publiée (refus attendu)', assertFails(getDoc(doc(dbAnon, 'videos', 'vid-brouillon'))));
+  await verifie('un client connecté écrit une capsule (refus attendu)', assertFails(setDoc(doc(dbA, 'videos', 'vid-intrus'), { titre: 'x', ordre: 0, publie: true })));
+  await verifie('Laurie publie une capsule (ok)', assertSucceeds(updateDoc(doc(dbAdmin, 'videos', 'vid-brouillon'), { publie: true })));
+  await verifie('un anonyme lit settings/sections (ok, section publique)', assertSucceeds(getDoc(doc(dbAnon, 'settings', 'sections'))));
+  await verifie('un client connecté écrit settings/sections (refus attendu)', assertFails(setDoc(doc(dbA, 'settings', 'sections'), { capsules: true })));
+  await verifie('Laurie écrit settings/sections (ok)', assertSucceeds(setDoc(doc(dbAdmin, 'settings', 'sections'), { capsules: true }, { merge: true })));
+
   await testEnv.cleanup();
 
   console.log(resultats.join('\n'));
