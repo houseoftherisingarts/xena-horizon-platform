@@ -73,7 +73,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
   ];
 
   return (
-    <footer className={`w-full bg-papier-2 border-t border-filet pt-16 ${bandeauVisible ? 'pb-24 md:pb-28' : ''}`}>
+    <footer data-tx-scope="footer" className={`w-full bg-papier-2 border-t border-filet pt-16 ${bandeauVisible ? 'pb-24 md:pb-28' : ''}`}>
       <div className="px-gut grid grid-cols-1 md:grid-cols-12 gap-x-col gap-y-10">
         <div className="md:col-span-3">
           <p className="font-serif text-h3 text-encre mb-2">Xena Horizon</p>
