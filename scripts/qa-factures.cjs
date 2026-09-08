@@ -26,9 +26,9 @@ async function capturerFacturePublique(browser) {
   for (const { nom, width, height } of TAILLES) {
     for (const combo of [{ skin: 'ciel', nuit: false }, { skin: 'encre', nuit: false }, { skin: 'ciel', nuit: true }]) {
       const page = await browser.newPage({ viewport: { width, height } });
-      await page.goto(`${BASE}/facture/exemple`, { waitUntil: 'networkidle' });
+      await page.goto(`${BASE}/facture/exemple`, { waitUntil: 'load', timeout: 60000 });
       await poserPalette(page, combo.skin, combo.nuit);
-      await page.reload({ waitUntil: 'networkidle' });
+      await page.reload({ waitUntil: 'load', timeout: 60000 });
       await page.waitForTimeout(400);
       const suffixe = combo.nuit ? 'nuit' : combo.skin;
       await page.screenshot({ path: `${OUT}/facture-publique-${suffixe}-${nom}.png`, fullPage: true });
@@ -39,7 +39,7 @@ async function capturerFacturePublique(browser) {
 
 async function capturerPdf(browser) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto(`${BASE}/facture/exemple`, { waitUntil: 'networkidle' });
+  await page.goto(`${BASE}/facture/exemple`, { waitUntil: 'load', timeout: 60000 });
   await page.emulateMedia({ media: 'print' });
   await page.pdf({ path: `${OUT}/facture-exemple.pdf`, format: 'Letter', printBackground: true });
   await page.close();
@@ -48,7 +48,7 @@ async function capturerPdf(browser) {
 async function capturerAdmin(browser) {
   for (const { nom, width, height } of TAILLES) {
     const page = await browser.newPage({ viewport: { width, height } });
-    await page.goto(`${BASE}/admin/factures`, { waitUntil: 'networkidle' });
+    await page.goto(`${BASE}/admin/factures`, { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(500);
     await page.screenshot({ path: `${OUT}/admin-liste-${nom}.png`, fullPage: true });
 

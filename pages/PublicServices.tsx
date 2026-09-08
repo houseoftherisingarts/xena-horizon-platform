@@ -194,29 +194,61 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   // « Prendre rendez-vous » ouvre le compte de la personne, puis son onglet Rendez-vous.
   const goToContact = () => allerAuRendezVous();
 
-  const RangeeOffre: React.FC<{ offer: Product; delay: number }> = ({ offer, delay }) => (
-    <CarteProjecteur>
-      <Reveal
-        delay={delay}
-        className="border-b border-filet py-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-6 items-baseline"
-      >
-        <div>
-          <h3 className="font-serif text-h3">{nomOffre(offer, lang)}</h3>
-          <p className="text-petit text-gris mt-1">{pourQui(offer, lang)}</p>
-          <p className="text-corps text-gris mesure mt-2">{descriptionOffre(offer, lang)}</p>
-        </div>
-        <div className="flex md:flex-col items-center md:items-end gap-4 md:gap-3 justify-between md:justify-start">
-          <span className="font-sans font-semibold tabular-nums whitespace-nowrap">{prixAffiche(offer, lang)}</span>
-          <button
-            onClick={goToContact}
-            className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-bouton hover:text-sur-bouton"
-          >
-            {book} <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </Reveal>
-    </CarteProjecteur>
-  );
+  // Le bouton d'une offre suit son chemin de paiement (types.ts `paiement`, lib/produits.ts cheminPaiement) :
+  // S'inscrire et Sur demande ouvrent le rendez-vous comme avant, Acheter démarre Stripe (fonction serveur
+  // si l'offre est synchronisée, sinon le lien de paiement collé par Laurie).
+  const RangeeOffre: React.FC<{ offer: Product; delay: number }> = ({ offer, delay }) => {
+    const chemin = cheminPaiement(offer);
+    const surStripe = chemin === 'stripe_checkout' || chemin === 'stripe_lien';
+    const libelle = chemin === 'inscription' ? t.subscribe : surStripe ? t.buy : t.onRequestBtn;
+    const [enCours, setEnCours] = useState(false);
+    const [erreur, setErreur] = useState(false);
+
+    const agir = async () => {
+      if (chemin === 'stripe_lien') {
+        window.open(offer.lienPaiement, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (chemin !== 'stripe_checkout' || !offer.stripePriceId) {
+        goToContact();
+        return;
+      }
+      setErreur(false);
+      setEnCours(true);
+      try {
+        window.location.href = await demarrerCheckoutStripe(offer.stripePriceId);
+      } catch {
+        setErreur(true);
+        setEnCours(false);
+      }
+    };
+
+    return (
+      <CarteProjecteur>
+        <Reveal
+          delay={delay}
+          className="border-b border-filet py-6 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-6 items-baseline"
+        >
+          <div>
+            <h3 className="font-serif text-h3">{nomOffre(offer, lang)}</h3>
+            <p className="text-petit text-gris mt-1">{pourQui(offer, lang)}</p>
+            <p className="text-corps text-gris mesure mt-2">{descriptionOffre(offer, lang)}</p>
+          </div>
+          <div className="flex md:flex-col items-center md:items-end gap-4 md:gap-3 justify-between md:justify-start">
+            <span className="font-sans font-semibold tabular-nums whitespace-nowrap">{prixAffiche(offer, lang)}</span>
+            <button
+              onClick={agir}
+              disabled={enCours}
+              className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-bouton hover:text-sur-bouton disabled:opacity-50"
+            >
+              {enCours ? '…' : libelle} <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+            {erreur && <p className="text-xs text-rose">{t.erreurPaiement}</p>}
+          </div>
+        </Reveal>
+      </CarteProjecteur>
+    );
+  };
 
   return (
     <div data-tx-scope="services">
