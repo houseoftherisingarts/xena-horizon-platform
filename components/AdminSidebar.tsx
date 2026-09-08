@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Calendar,
   ChevronLeft,
@@ -12,7 +12,6 @@ import {
   PenTool,
   Mic,
   ShieldCheck,
-  PencilLine,
   PieChart,
   ShoppingBag,
   Users,
@@ -20,7 +19,6 @@ import {
 } from 'lucide-react';
 import { Dossier, ViewState, Language } from '../types';
 import { useCollection } from '../lib/firestore';
-import { useTextesCtx } from '../lib/textes';
 
 interface AdminSidebarProps {
   currentView: ViewState;
@@ -30,13 +28,40 @@ interface AdminSidebarProps {
   /** Sur téléphone, la barre devient un tiroir : ouvert ou fermé. */
   open?: boolean;
   onClose?: () => void;
+  /** Notifie le parent d'un repli, pour libérer la largeur au contenu (App.tsx). */
+  onReplieChange?: (replie: boolean) => void;
 }
 
-/** La barre du back-office v2 : papier-2, encre, un filet rose sur l'entrée active. */
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang, open = false, onClose }) => {
+const CLE_MENU_REPLIE = 'xena.admin.menu';
+
+/** La barre du back-office v2 : papier-2, encre, un filet rose sur l'entrée active. Se replie en rail d'icônes sur desktop. */
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang, open = false, onClose, onReplieChange }) => {
   const { data: dossiers } = useCollection<Dossier>('dossiers');
   const nonLusDossiers = dossiers.reduce((n, d) => n + (d.nonLusAdmin || 0), 0);
-  const textes = useTextesCtx();
+
+  const [replie, setReplieEtat] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem(CLE_MENU_REPLIE) === 'replie';
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    onReplieChange?.(replie);
+    // Averti au montage aussi : App.tsx doit connaître le choix mémorisé dès le premier rendu du contenu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [replie]);
+
+  const basculerReplie = () => {
+    const v = !replie;
+    setReplieEtat(v);
+    try {
+      window.localStorage.setItem(CLE_MENU_REPLIE, v ? 'replie' : 'ouvert');
+    } catch {
+      /* navigation privée ou stockage bloqué : le choix ne survit simplement pas à la session */
+    }
+  };
 
   const t = {
     FR: {
@@ -55,10 +80,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
       social: 'Studio social',
       temoignages: 'Témoignages audio',
       vexel: 'Pour Vexel',
-      textes: 'Textes du site',
       backToSite: 'Retour au site',
       signOut: 'Fermer la session',
       fermer: 'Fermer le menu',
+      replier: 'Replier le menu',
+      deplier: 'Déplier le menu',
       nonLus: 'messages non lus',
     },
     EN: {
@@ -77,10 +103,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
       social: 'Social studio',
       temoignages: 'Audio testimonials',
       vexel: 'For Vexel',
-      textes: 'Site texts',
       backToSite: 'Back to site',
       signOut: 'Sign out',
       fermer: 'Close menu',
+      replier: 'Collapse menu',
+      deplier: 'Expand menu',
       nonLus: 'unread messages',
     },
   }[lang];
@@ -101,12 +128,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
     { id: 'ADMIN_VEXEL', label: t.vexel, icon: ShieldCheck },
   ];
 
-  const modifierTextes = () => {
-    onChangeView('HOME');
-    textes?.basculerEdition(true);
-    onClose?.();
-  };
-
   const LIEN = 'w-full flex items-center gap-3 min-h-[44px] px-3 rounded-champ text-sm font-medium transition-colors';
 
   return (
@@ -120,15 +141,25 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
         />
       )}
       <aside
-        className={`print:hidden w-64 h-screen bg-papier-2 border-r border-filet flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${
+        className={`print:hidden w-64 ${replie ? 'md:w-16' : 'md:w-64'} h-screen bg-papier-2 border-r border-filet flex flex-col fixed left-0 top-0 z-50 transition-[width,transform] duration-300 md:duration-[220ms] md:ease-maison md:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="px-5 pt-6 pb-5 flex items-start justify-between gap-3 border-b border-filet">
-          <button type="button" onClick={() => onChangeView('HOME')} className="text-left">
+          <button type="button" onClick={() => onChangeView('HOME')} className={`text-left ${replie ? 'md:hidden' : ''}`}>
             <p className="font-serif text-[1.25rem] text-encre leading-none">{t.marque}</p>
             <p className="kicker text-gris mt-2">{t.sous}</p>
           </button>
+          {replie && (
+            <button
+              type="button"
+              onClick={() => onChangeView('HOME')}
+              aria-label={t.marque}
+              className="hidden md:flex w-9 h-9 items-center justify-center rounded-pilule bg-encre text-papier font-serif text-sm"
+            >
+              X
+            </button>
+          )}
           <button
             type="button"
             onClick={onClose}
@@ -139,49 +170,68 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
           </button>
         </div>
 
-        <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto overflow-x-hidden">
           {menuItems.map((item) => {
             const actif = currentView === item.id;
             const Icone = item.icon;
             return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => {
-                  onChangeView(item.id);
-                  onClose?.();
-                }}
-                aria-current={actif ? 'page' : undefined}
-                className={`${LIEN} relative ${actif ? 'bg-papier text-encre' : 'text-gris hover:text-encre hover:bg-papier/60'}`}
-              >
-                {actif && <span aria-hidden="true" className="absolute left-0 top-2 bottom-2 w-[2px] bg-rose" />}
-                <Icone className={`w-4 h-4 ${actif ? 'text-rose' : ''}`} aria-hidden="true" />
-                <span className="flex-1 text-left">{item.label}</span>
-                {!!item.badge && (
+              <div key={item.id} className="relative group">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChangeView(item.id);
+                    onClose?.();
+                  }}
+                  aria-current={actif ? 'page' : undefined}
+                  aria-label={replie ? item.label : undefined}
+                  className={`${LIEN} relative ${replie ? 'md:justify-center md:px-0' : ''} ${actif ? 'bg-papier text-encre' : 'text-gris hover:text-encre hover:bg-papier/60'}`}
+                >
+                  {actif && <span aria-hidden="true" className="absolute left-0 top-2 bottom-2 w-[2px] bg-rose" />}
+                  <Icone className={`w-4 h-4 flex-shrink-0 ${actif ? 'text-rose' : ''}`} aria-hidden="true" />
+                  <span className={`flex-1 text-left ${replie ? 'md:sr-only' : ''}`}>{item.label}</span>
+                  {!!item.badge && (
+                    <span
+                      className={`min-w-[1.25rem] h-5 px-1.5 rounded-pilule bg-rose text-papier text-xs font-semibold items-center justify-center tabular-nums ${replie ? 'md:hidden' : 'flex'}`}
+                      aria-label={`${item.badge} ${t.nonLus}`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                  {replie && !!item.badge && (
+                    <span aria-hidden="true" className="hidden md:block absolute top-1.5 right-1.5 w-2 h-2 rounded-pilule bg-rose" />
+                  )}
+                </button>
+                {replie && (
                   <span
-                    className="min-w-[1.25rem] h-5 px-1.5 rounded-pilule bg-rose text-papier text-xs font-semibold flex items-center justify-center tabular-nums"
-                    aria-label={`${item.badge} ${t.nonLus}`}
+                    role="tooltip"
+                    className="hidden md:block pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2 whitespace-nowrap rounded-champ bg-encre text-papier text-xs px-2.5 py-1.5 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-10"
                   >
-                    {item.badge}
+                    {item.label}
                   </span>
                 )}
-              </button>
+              </div>
             );
           })}
-          <button type="button" onClick={modifierTextes} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60 mt-3`}>
-            <PencilLine className="w-4 h-4" aria-hidden="true" />
-            <span className="flex-1 text-left">{t.textes}</span>
-          </button>
         </nav>
 
         <div className="p-3 border-t border-filet space-y-0.5">
-          <button type="button" onClick={() => onChangeView('HOME')} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60`}>
-            <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-            <span>{t.backToSite}</span>
+          <button
+            type="button"
+            onClick={basculerReplie}
+            aria-label={replie ? t.deplier : t.replier}
+            className={`hidden md:flex ${LIEN} text-gris hover:text-encre hover:bg-papier/60 ${replie ? 'justify-center px-0' : ''}`}
+          >
+            <ChevronLeft className={`w-4 h-4 flex-shrink-0 transition-transform duration-[220ms] ease-maison ${replie ? 'rotate-180' : ''}`} aria-hidden="true" />
+            {!replie && <span>{t.replier}</span>}
           </button>
-          <button type="button" onClick={onSignOut} className={`${LIEN} text-rose hover:bg-rose/10`}>
-            <LogOut className="w-4 h-4" aria-hidden="true" />
-            <span>{t.signOut}</span>
+          <button type="button" onClick={() => onChangeView('HOME')} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60 ${replie ? 'md:justify-center md:px-0' : ''}`}>
+            <ChevronLeft className="w-4 h-4 flex-shrink-0 md:hidden" aria-hidden="true" />
+            <LogOut className={`w-4 h-4 flex-shrink-0 hidden ${replie ? 'md:hidden' : ''}`} aria-hidden="true" />
+            <span className={replie ? 'md:sr-only' : ''}>{t.backToSite}</span>
+          </button>
+          <button type="button" onClick={onSignOut} aria-label={replie ? t.signOut : undefined} className={`${LIEN} text-rose hover:bg-rose/10 ${replie ? 'md:justify-center md:px-0' : ''}`}>
+            <LogOut className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+            <span className={replie ? 'md:sr-only' : ''}>{t.signOut}</span>
           </button>
         </div>
       </aside>
