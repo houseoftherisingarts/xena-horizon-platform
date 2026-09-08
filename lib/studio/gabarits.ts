@@ -83,12 +83,12 @@ const gabaritBaladoDefaut = (titre: string, image: string): Gabarit['calques'] =
   {
     id: 'g-balado-titre', type: 'texte', z: 2, xPct: 50, yPct: 78, wPct: 82, hPct: 18,
     texte: titre, police: 'serif', taillePct: 5, graisse: 500,
-    couleur: '#181818', ombre: false, align: 'center',
+    couleur: '#FFFFFF', ombre: true, align: 'center',
   },
   {
     id: 'g-balado-podcast', type: 'texte', z: 2, xPct: 50, yPct: 92, wPct: 60, hPct: 5,
     texte: 'En quête de liberté', police: 'sans', taillePct: 2.2, graisse: 600,
-    couleur: '#5E5850', ombre: false, align: 'center',
+    couleur: '#DDD7CD', ombre: false, align: 'center',
   },
 ];
 
