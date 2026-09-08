@@ -1,0 +1,124 @@
+{
+  "pages": [
+    {
+      "etat": "deconnecte",
+      "nuit": false,
+      "taille": "1440",
+      "fichier": "google-agenda_deconnecte_1440.png",
+      "trouve": true,
+      "top": 1212.671875,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "deconnecte",
+      "nuit": true,
+      "taille": "1440",
+      "fichier": "google-agenda_deconnecte_nuit_1440.png",
+      "trouve": true,
+      "top": 1212.671875,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "connecte",
+      "nuit": false,
+      "taille": "1440",
+      "fichier": "google-agenda_connecte_1440.png",
+      "trouve": true,
+      "top": 1212.671875,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "connecte",
+      "nuit": true,
+      "taille": "1440",
+      "fichier": "google-agenda_connecte_nuit_1440.png",
+      "trouve": true,
+      "top": 1212.671875,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "indisponible",
+      "nuit": false,
+      "taille": "1440",
+      "fichier": "google-agenda_indisponible_1440.png",
+      "trouve": true,
+      "top": 1212.671875,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "indisponible",
+      "nuit": true,
+      "taille": "1440",
+      "fichier": "google-agenda_indisponible_nuit_1440.png",
+      "trouve": true,
+      "top": 1212.671875,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "deconnecte",
+      "nuit": false,
+      "taille": "390",
+      "fichier": "google-agenda_deconnecte_390.png",
+      "trouve": true,
+      "top": 1551.28125,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "deconnecte",
+      "nuit": true,
+      "taille": "390",
+      "fichier": "google-agenda_deconnecte_nuit_390.png",
+      "trouve": true,
+      "top": 1551.28125,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "connecte",
+      "nuit": false,
+      "taille": "390",
+      "fichier": "google-agenda_connecte_390.png",
+      "trouve": true,
+      "top": 1551.28125,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "connecte",
+      "nuit": true,
+      "taille": "390",
+      "fichier": "google-agenda_connecte_nuit_390.png",
+      "trouve": true,
+      "top": 1551.28125,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "indisponible",
+      "nuit": false,
+      "taille": "390",
+      "fichier": "google-agenda_indisponible_390.png",
+      "trouve": true,
+      "top": 1551.28125,
+      "debordeH": false,
+      "italiques": false
+    },
+    {
+      "etat": "indisponible",
+      "nuit": true,
+      "taille": "390",
+      "fichier": "google-agenda_indisponible_nuit_390.png",
+      "trouve": true,
+      "top": 1551.28125,
+      "debordeH": false,
+      "italiques": false
+    }
+  ]
+}

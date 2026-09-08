@@ -232,7 +232,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
             onSelect={setSelectedId}
             onChange={setCalques}
             maquetteTelephone={format.id === 'story'}
-            className="max-h-[60vh] w-auto max-w-full rounded-champ border border-filet"
+            className="w-full max-w-[560px] rounded-champ border border-filet"
           />
           <p className="text-gris text-sm flex items-center gap-2 text-center">
             <Move className="w-4 h-4 flex-shrink-0" /> {t.hint}
