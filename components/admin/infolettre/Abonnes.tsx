@@ -26,8 +26,7 @@ const TEXTES = {
     importer: 'Importer un fichier CSV',
     importerAide: 'Une ligne par abonné : courriel;nom;langue (fr ou en). Collez le contenu ci-dessous.',
     importerBouton: 'Importer',
-    importerResultat: (n: number, doublons: number, invalides: number) =>
-      `${n} ajouté${n > 1 ? 's' : ''}, ${doublons} doublon${doublons > 1 ? 's' : ''} ignoré${doublons > 1 ? 's' : ''}, ${invalides} ligne${invalides > 1 ? 's' : ''} invalide${invalides > 1 ? 's' : ''}.`,
+    importerResultat: '{n} ajouté(s), {doublons} doublon(s) ignoré(s), {invalides} ligne(s) invalide(s).',
     exporter: 'Exporter CSV',
     vide: 'Aucun abonné pour l’instant.',
     chargement: 'Chargement…',
