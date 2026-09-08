@@ -3,8 +3,9 @@
 // (layoutId partagé) ; le hero s'allume au premier scroll ; les six feuilles suivantes
 // s'empilent, la dernière d'encre.
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Intro } from '../components/motion';
 import { introDejaJouee, marquerIntroTerminee } from '../lib/intro';
 import Allumage from './accueil/Allumage';
