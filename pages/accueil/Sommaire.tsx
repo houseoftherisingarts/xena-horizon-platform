@@ -7,6 +7,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { Feuille, Reveal } from '../../components/motion';
 import { PROFILS_REELS } from '../../lib/contenu';
 import type { Language, ViewState } from '../../types';
+import { useTextes } from '../../lib/textes';
 
 export interface SommaireProps {
   lang: Language;
@@ -15,17 +16,47 @@ export interface SommaireProps {
   onChangeView?: (v: ViewState) => void;
 }
 
-const t = {
-  FR: { lien: 'Voir les offres' },
-  EN: { lien: 'See the services' },
+const TEXTES = {
+  FR: {
+    lien: 'Voir les offres',
+    artistTagline: PROFILS_REELS[0].taglineFR,
+    artistTitre: PROFILS_REELS[0].titleFR,
+    artistDescription: PROFILS_REELS[0].descriptionFR,
+    artistDetails: PROFILS_REELS[0].detailsFR,
+    entrepreneurTagline: PROFILS_REELS[1].taglineFR,
+    entrepreneurTitre: PROFILS_REELS[1].titleFR,
+    entrepreneurDescription: PROFILS_REELS[1].descriptionFR,
+    entrepreneurDetails: PROFILS_REELS[1].detailsFR,
+    npoTagline: PROFILS_REELS[2].taglineFR,
+    npoTitre: PROFILS_REELS[2].titleFR,
+    npoDescription: PROFILS_REELS[2].descriptionFR,
+    npoDetails: PROFILS_REELS[2].detailsFR,
+  },
+  EN: {
+    lien: 'See the services',
+    artistTagline: PROFILS_REELS[0].taglineEN,
+    artistTitre: PROFILS_REELS[0].titleEN,
+    artistDescription: PROFILS_REELS[0].descriptionEN,
+    artistDetails: PROFILS_REELS[0].detailsEN,
+    entrepreneurTagline: PROFILS_REELS[1].taglineEN,
+    entrepreneurTitre: PROFILS_REELS[1].titleEN,
+    entrepreneurDescription: PROFILS_REELS[1].descriptionEN,
+    entrepreneurDetails: PROFILS_REELS[1].detailsEN,
+    npoTagline: PROFILS_REELS[2].taglineEN,
+    npoTitre: PROFILS_REELS[2].titleEN,
+    npoDescription: PROFILS_REELS[2].descriptionEN,
+    npoDetails: PROFILS_REELS[2].detailsEN,
+  },
 };
+
+const PREFIXES = ['artist', 'entrepreneur', 'npo'] as const;
 
 const Sommaire: React.FC<SommaireProps> = ({ lang, title, subtitle, onChangeView }) => {
   const [ouvert, setOuvert] = useState<number | null>(null);
-  const L = t[lang];
+  const t = useTextes('accueilSommaire', TEXTES, lang);
 
   return (
-    <Feuille z={1} premiere className="bg-papier">
+    <Feuille z={1} premiere className="bg-papier" data-tx-scope="accueilSommaire">
       <div className="py-feuille">
         <div className="grid grid-cols-12 items-end gap-x-col gap-y-6 px-gut">
           <Reveal as="div" className="col-span-12 sm:col-span-7">
@@ -38,10 +69,11 @@ const Sommaire: React.FC<SommaireProps> = ({ lang, title, subtitle, onChangeView
 
         <div className="mt-12 sm:mt-16">
           {PROFILS_REELS.map((profil, i) => {
-            const tagline = lang === 'FR' ? profil.taglineFR : profil.taglineEN;
-            const titre = lang === 'FR' ? profil.titleFR : profil.titleEN;
-            const description = lang === 'FR' ? profil.descriptionFR : profil.descriptionEN;
-            const details = lang === 'FR' ? profil.detailsFR : profil.detailsEN;
+            const p = PREFIXES[i];
+            const tagline = t[`${p}Tagline` as keyof typeof t];
+            const titre = t[`${p}Titre` as keyof typeof t];
+            const description = t[`${p}Description` as keyof typeof t];
+            const details = t[`${p}Details` as keyof typeof t];
             const estOuvert = ouvert === i;
 
             return (
