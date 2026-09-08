@@ -1,12 +1,12 @@
 // La messagerie du module « Courriel et messagerie » : le fil de dossier (FilAdmin, réutilisé tel
 // quel) précédé d'un en-tête social de la personne — bannière, avatar, profil, bio, liens.
 import React, { useMemo, useState } from 'react';
-import { orderBy } from 'firebase/firestore';
-import { ExternalLink, FolderOpen } from 'lucide-react';
+import { orderBy, serverTimestamp, increment } from 'firebase/firestore';
+import { ExternalLink, FolderOpen, ChevronLeft } from 'lucide-react';
 import { auth } from '../../../firebase';
 import { Dossier, DossierMessage, Language } from '../../../types';
 import { useCollection, createDoc, patchDoc } from '../../../lib/firestore';
-import { PROFILS, indexEtape } from '../../../lib/dossier';
+import { PROFILS } from '../../../lib/dossier';
 import { dateCourte } from '../dossiers/util';
 import { Bouton, Etiquette, Vide, Chargement } from '../ui';
 import FilAdmin from '../dossiers/FilAdmin';
