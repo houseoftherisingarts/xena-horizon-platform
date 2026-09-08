@@ -6,12 +6,7 @@ import { Panneau, Bouton, Etiquette } from '../ui';
 import { PALETTE_COULEURS } from '../../../lib/studio/types';
 import type { Calque, FormeType, Alignement } from '../../../lib/studio/types';
 
-const GRAISSES: { valeur: 400 | 500 | 600 | 700; label: string }[] = [
-  { valeur: 400, label: 'Normal' },
-  { valeur: 500, label: 'Medium' },
-  { valeur: 600, label: 'Semi-gras' },
-  { valeur: 700, label: 'Gras' },
-];
+const GRAISSES: (400 | 500 | 600 | 700)[] = [400, 500, 600, 700];
 
 interface Props {
   calque: Calque | null;
