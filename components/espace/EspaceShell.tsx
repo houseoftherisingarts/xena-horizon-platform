@@ -202,14 +202,22 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
         )}
       </div>
 
-      {/* Contenu de l'onglet */}
-      <div>
-        {onglet === 'dossier' && <Profil dossier={dossier} uid={uid} lang={lang} />}
-        {onglet === 'pieces' && <Pieces dossier={dossier} config={config} uid={uid} lang={lang} />}
-        {onglet === 'parcours' && <Parcours dossier={dossier} config={config} lang={lang} />}
-        {onglet === 'messages' && <Messages uid={uid} lang={lang} />}
-        {onglet === 'ressources' && <Ressources lang={lang} />}
-      </div>
+      {/* Contenu de l'onglet, en fondu croisé de 200 ms plutôt qu'un remplacement sec. */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={onglet}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: EASE_MAISON }}
+        >
+          {onglet === 'dossier' && <Profil dossier={dossier} uid={uid} lang={lang} />}
+          {onglet === 'pieces' && <Pieces dossier={dossier} config={config} uid={uid} lang={lang} />}
+          {onglet === 'parcours' && <Parcours dossier={dossier} config={config} lang={lang} />}
+          {onglet === 'messages' && <Messages uid={uid} lang={lang} />}
+          {onglet === 'ressources' && <Ressources lang={lang} />}
+        </motion.div>
+      </AnimatePresence>
 
       <Assistant config={config} dossier={dossier} lang={lang} />
     </div>
