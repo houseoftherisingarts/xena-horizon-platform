@@ -116,7 +116,12 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
     const changeDeVue = view !== currentView;
     if (changeDeVue) onChangeView(view);
     if (sectionId) {
-      const aller = () => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      const aller = () => {
+        const el = document.getElementById(sectionId);
+        if (!el) return;
+        if (lenis) lenis.scrollTo(el, { offset: -72 });
+        else el.scrollIntoView({ behavior: 'smooth' });
+      };
       if (changeDeVue) setTimeout(aller, 100);
       else aller();
     }
