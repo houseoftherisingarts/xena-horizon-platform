@@ -328,8 +328,13 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
         </Reveal>
       </Feuille>
 
+      {/* --- QUESTIONS FRÉQUENTES --- */}
+      <Feuille z={6} className="bg-papier-2">
+        <Faq lang={lang} />
+      </Feuille>
+
       {/* --- PRENDRE RENDEZ-VOUS --- */}
-      <Feuille z={6} className="bg-papier-2 px-gut py-bloc min-h-[60svh] flex items-center">
+      <Feuille z={7} className="bg-papier-2 px-gut py-bloc min-h-[60svh] flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-8 w-full">
           <div className="lg:col-span-6">
             <Reveal as="h2" className="font-serif text-h2">
