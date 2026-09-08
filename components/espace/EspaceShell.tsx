@@ -185,7 +185,11 @@ const EspaceShell: React.FC<EspaceShellProps> = ({ user, lang }) => {
               <span className="sm:hidden">{o.labelCourt}</span>
               <span className="hidden sm:inline">{o.label}</span>
               {onglet === o.id && (
-                <motion.span layoutId="espace-onglet" className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose" transition={{ duration: 0.2 }} />
+                <motion.span
+                  layoutId="espace-onglet"
+                  className="absolute left-0 right-0 -bottom-px h-[2px] bg-rose"
+                  transition={{ duration: 0.2, ease: EASE_MAISON }}
+                />
               )}
             </button>
           ))}
