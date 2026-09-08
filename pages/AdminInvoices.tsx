@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Plus, Search, FileText, Check, Download, Trash2, ArrowLeft, PenTool, CreditCard, Eye, Edit2 } from 'lucide-react';
-import GlassCard from '../components/GlassCard';
-import { ACTION_BUTTON_CLASSES, GLASS_INPUT_CLASSES } from '../constants';
+import { Plus, FileText, Check, Download, Trash2, ArrowLeft, PenTool, CreditCard, Eye, Edit2 } from 'lucide-react';
+import { EnTete, Panneau, Bouton, Champ, Zone, Selection, Etiquette, Vide, Chargement } from '../components/admin/ui';
 import { Client, Document, DocumentType, DocumentStatus, InvoiceItem, Language } from '../types';
 import { useCollection, createDoc, patchDoc, removeDoc } from '../lib/firestore';
 
@@ -10,6 +9,9 @@ interface AdminInvoicesProps {
 }
 
 const DEFAULT_TERMS = "1. Paiement: Un acompte de 50% est requis à la signature. La balance est due à la livraison finale.\n2. Validité: Ce devis est valide pour une période de 30 jours.\n3. Retard: Tout retard de paiement de plus de 30 jours entraînera des frais d'intérêt de 2% par mois.\n4. Propriété: Les livrables restent la propriété de Xena Horizon jusqu'au paiement complet.";
+
+const RANGEE_INPUT =
+  'w-full bg-papier border border-filet rounded-champ px-3 py-2 text-sm text-encre placeholder-gris outline-none transition-colors focus:border-rose';
 
 const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
   const { data: documents, loading } = useCollection<Document>('documents');
@@ -21,7 +23,7 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
     FR: {
       title: 'Facturation',
       subtitle: 'Gérez vos devis, factures et paiements.',
-      newDoc: 'Nouveau Document',
+      newDoc: 'Nouveau document',
       quote: 'Devis',
       invoice: 'Facture',
       editor: 'Éditeur',
@@ -30,7 +32,7 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
       selectClient: 'Sélectionner un client...',
       date: 'Date',
       dueDate: 'Échéance',
-      paymentLink: 'Lien de Paiement',
+      paymentLink: 'Lien de paiement',
       save: 'Enregistrer',
       description: 'Description',
       qty: 'Qté',
@@ -40,29 +42,36 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
       tax: 'Taxes',
       total: 'Total',
       terms: 'Conditions',
-      back: 'Retour au Dashboard',
+      back: 'Retour au tableau de bord',
       billedTo: 'Facturé à',
-      termsTitle: 'Termes et Conditions',
+      termsTitle: 'Termes et conditions',
       signature: 'Signature',
       signed: 'Devis accepté et signé',
       clickSign: 'Cliquer ici pour signer',
       payDeposit: 'Payer le dépôt',
       payInvoice: 'Payer la facture',
-      noLink: 'Aucun lien de paiement configuré.'
+      noLink: 'Aucun lien de paiement configuré.',
+      status: 'Statut',
+      edit: 'Modifier',
+      preview: 'Prévisualiser',
+      delete: 'Supprimer',
+      videTitre: 'Aucun document',
+      videTexte: 'Les devis et factures que vous créez apparaissent ici.',
+      loading: 'Chargement...',
     },
     EN: {
       title: 'Invoicing',
       subtitle: 'Manage quotes, invoices and payments.',
-      newDoc: 'New Document',
+      newDoc: 'New document',
       quote: 'Quote',
       invoice: 'Invoice',
       editor: 'Editor',
-      type: 'Document Type',
+      type: 'Document type',
       client: 'Client',
       selectClient: 'Select a client...',
       date: 'Date',
-      dueDate: 'Due Date',
-      paymentLink: 'Payment Link',
+      dueDate: 'Due date',
+      paymentLink: 'Payment link',
       save: 'Save',
       description: 'Description',
       qty: 'Qty',
@@ -72,16 +81,23 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
       tax: 'Tax',
       total: 'Total',
       terms: 'Terms',
-      back: 'Back to Dashboard',
-      billedTo: 'Billed To',
-      termsTitle: 'Terms & Conditions',
+      back: 'Back to dashboard',
+      billedTo: 'Billed to',
+      termsTitle: 'Terms & conditions',
       signature: 'Signature',
       signed: 'Quote accepted and signed',
       clickSign: 'Click here to sign',
-      payDeposit: 'Pay Deposit',
-      payInvoice: 'Pay Invoice',
-      noLink: 'No payment link configured.'
-    }
+      payDeposit: 'Pay deposit',
+      payInvoice: 'Pay invoice',
+      noLink: 'No payment link configured.',
+      status: 'Status',
+      edit: 'Edit',
+      preview: 'Preview',
+      delete: 'Delete',
+      videTitre: 'No documents',
+      videTexte: 'Quotes and invoices you create appear here.',
+      loading: 'Loading...',
+    },
   }[lang];
 
   // --- EDITOR STATE ---
@@ -164,6 +180,12 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
     return { subtotal, tax, total: subtotal + tax };
   };
 
+  const statusTone = (status: DocumentStatus): 'neutre' | 'accent' | 'encre' => {
+    if (status === 'Paid' || status === 'Accepted') return 'accent';
+    if (status === 'Sent') return 'encre';
+    return 'neutre';
+  };
+
   // --- PREVIEW SIGNATURE LOGIC ---
   const handleSign = async () => {
     if (!currentDoc || !currentDoc.id) return;
@@ -177,220 +199,237 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
 
   if (view === 'list') {
     return (
-      <div className="pt-24 px-6 pb-12 max-w-7xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-4">
-          <div>
-            <h1 className="text-3xl font-serif font-bold text-white">{t.title}</h1>
-            <p className="text-slate-400">{t.subtitle}</p>
-          </div>
-          <button onClick={handleNew} className={ACTION_BUTTON_CLASSES}>
-            <Plus className="w-4 h-4" /> {t.newDoc}
-          </button>
-        </div>
+      <div className="px-6 md:px-10 py-10 space-y-8">
+        <EnTete
+          kicker="Facturation"
+          titre={t.title}
+          lede={t.subtitle}
+          actions={
+            <Bouton variante="primaire" icone={Plus} onClick={handleNew}>
+              {t.newDoc}
+            </Bouton>
+          }
+        />
 
-        {loading && (
-          <p className="text-slate-400 text-sm">Loading...</p>
+        {loading && <Chargement texte={t.loading} />}
+
+        {!loading && documents.length === 0 && (
+          <Panneau>
+            <Vide titre={t.videTitre} texte={t.videTexte} />
+          </Panneau>
         )}
 
-        <div className="grid grid-cols-1 gap-4">
-          {documents.map(doc => (
-            <GlassCard key={doc.id} className="p-6 flex items-center justify-between group">
-               <div className="flex items-center gap-6">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border border-white/10 ${doc.type === 'Quote' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
-                    <FileText className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-3">
-                       <h3 className="font-bold text-white text-lg">{doc.number}</h3>
-                       <span className={`text-xs px-2 py-0.5 rounded-full border ${
-                         doc.status === 'Paid' || doc.status === 'Accepted' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 
-                         doc.status === 'Sent' ? 'border-blue-500/30 bg-blue-500/10 text-blue-400' : 
-                         'border-slate-500/30 bg-slate-500/10 text-slate-400'
-                       }`}>{doc.status}</span>
-                    </div>
-                    <p className="text-slate-400">{doc.clientName} • {doc.date}</p>
-                  </div>
-               </div>
-               <div className="flex items-center gap-4">
-                  <p className="font-bold text-white text-right hidden md:block">
-                    {calculateTotal(doc).total.toFixed(2)} $
-                  </p>
-                  <div className="flex gap-2">
-                    <button onClick={() => handleEdit(doc)} className="p-2 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors"><Edit2 className="w-4 h-4"/></button>
-                    <button onClick={() => handlePreview(doc)} className="p-2 hover:bg-white/10 rounded-lg text-slate-400 hover:text-blue-400 transition-colors"><Eye className="w-4 h-4"/></button>
-                    <button onClick={() => handleDelete(doc.id)} className="p-2 hover:bg-white/10 rounded-lg text-slate-400 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4"/></button>
-                  </div>
-               </div>
-            </GlassCard>
-          ))}
-        </div>
+        {!loading && documents.length > 0 && (
+          <Panneau>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-filet">
+                    <th className="kicker text-gris text-left py-3 pr-4">{t.title}</th>
+                    <th className="kicker text-gris text-left py-3 pr-4">{t.client}</th>
+                    <th className="kicker text-gris text-left py-3 pr-4">{t.date}</th>
+                    <th className="kicker text-gris text-left py-3 pr-4">{t.status}</th>
+                    <th className="kicker text-gris text-right py-3 pr-4">{t.total}</th>
+                    <th className="py-3" />
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-filet">
+                  {documents.map(doc => (
+                    <tr key={doc.id}>
+                      <td className="py-3 pr-4 text-sm text-encre">
+                        <div className="flex items-center gap-3">
+                          <FileText className={`w-4 h-4 flex-shrink-0 ${doc.type === 'Quote' ? 'text-rose' : 'text-encre'}`} aria-hidden="true" />
+                          <span className="font-medium">{doc.number}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 pr-4 text-sm text-encre">{doc.clientName}</td>
+                      <td className="py-3 pr-4 text-sm text-gris">{doc.date}</td>
+                      <td className="py-3 pr-4 text-sm">
+                        <Etiquette tone={statusTone(doc.status)}>{doc.status}</Etiquette>
+                      </td>
+                      <td className="py-3 pr-4 text-sm text-encre text-right tabular-nums">
+                        {calculateTotal(doc).total.toFixed(2)} $
+                      </td>
+                      <td className="py-3">
+                        <div className="flex items-center justify-end gap-1">
+                          <button onClick={() => handleEdit(doc)} aria-label={t.edit} className="w-11 h-11 flex items-center justify-center text-gris hover:text-encre transition-colors">
+                            <Edit2 className="w-4 h-4" aria-hidden="true" />
+                          </button>
+                          <button onClick={() => handlePreview(doc)} aria-label={t.preview} className="w-11 h-11 flex items-center justify-center text-gris hover:text-encre transition-colors">
+                            <Eye className="w-4 h-4" aria-hidden="true" />
+                          </button>
+                          <button onClick={() => handleDelete(doc.id)} aria-label={t.delete} className="w-11 h-11 flex items-center justify-center text-gris hover:text-rose transition-colors">
+                            <Trash2 className="w-4 h-4" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Panneau>
+        )}
       </div>
     );
   }
 
   if (view === 'edit' && currentDoc) {
      const totals = calculateTotal(currentDoc);
-     
+
      return (
-       <div className="pt-24 px-6 pb-12 max-w-5xl mx-auto space-y-6">
+       <div className="px-6 md:px-10 py-10 space-y-6">
          <div className="flex items-center justify-between">
-           <button onClick={() => setView('list')} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-             <ArrowLeft className="w-4 h-4" /> {t.back}
+           <button onClick={() => setView('list')} className="flex items-center gap-2 text-gris hover:text-encre transition-colors">
+             <ArrowLeft className="w-4 h-4" aria-hidden="true" /> {t.back}
            </button>
-           <h2 className="text-xl font-bold text-white">{t.editor}</h2>
+           <h2 className="font-serif text-h3 text-encre">{t.editor}</h2>
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
+
             {/* Left Col: Settings */}
-            <GlassCard className="p-6 space-y-6 h-fit">
+            <Panneau className="space-y-5 h-fit">
                <div>
-                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">{t.type}</label>
-                 <div className="flex bg-slate-900 rounded-lg p-1 border border-white/10">
-                    <button 
+                 <label className="text-petit font-semibold text-encre mb-1.5 block">{t.type}</label>
+                 <div className="flex bg-papier rounded-champ p-1 border border-filet">
+                    <button
                       onClick={() => setCurrentDoc({...currentDoc, type: 'Quote', number: currentDoc.number.replace('FAC', 'DEV')})}
-                      className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${currentDoc.type === 'Quote' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                      className={`flex-1 py-2 text-sm font-medium rounded-champ transition-colors ${currentDoc.type === 'Quote' ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
                     >{t.quote}</button>
-                    <button 
+                    <button
                       onClick={() => setCurrentDoc({...currentDoc, type: 'Invoice', number: currentDoc.number.replace('DEV', 'FAC')})}
-                      className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${currentDoc.type === 'Invoice' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                      className={`flex-1 py-2 text-sm font-medium rounded-champ transition-colors ${currentDoc.type === 'Invoice' ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}
                     >{t.invoice}</button>
                  </div>
                </div>
 
-               <div>
-                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">{t.client}</label>
-                 <select 
-                   className={GLASS_INPUT_CLASSES}
-                   value={currentDoc.clientId}
-                   onChange={(e) => {
-                     const client = clients.find(c => c.id === e.target.value);
-                     if(client) setCurrentDoc({...currentDoc, clientId: client.id, clientName: client.name, clientEmail: client.email});
-                   }}
-                 >
-                   <option value="">{t.selectClient}</option>
-                   {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                 </select>
-               </div>
+               <Selection
+                 label={t.client}
+                 value={currentDoc.clientId}
+                 onChange={(e) => {
+                   const client = clients.find(c => c.id === e.target.value);
+                   if (client) setCurrentDoc({...currentDoc, clientId: client.id, clientName: client.name, clientEmail: client.email});
+                 }}
+               >
+                 <option value="">{t.selectClient}</option>
+                 {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+               </Selection>
 
                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">{t.date}</label>
-                    <input type="date" className={GLASS_INPUT_CLASSES} value={currentDoc.date} onChange={e => setCurrentDoc({...currentDoc, date: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">{t.dueDate}</label>
-                    <input type="date" className={GLASS_INPUT_CLASSES} value={currentDoc.dueDate || ''} onChange={e => setCurrentDoc({...currentDoc, dueDate: e.target.value})} />
-                  </div>
+                  <Champ label={t.date} type="date" value={currentDoc.date} onChange={e => setCurrentDoc({...currentDoc, date: e.target.value})} />
+                  <Champ label={t.dueDate} type="date" value={currentDoc.dueDate || ''} onChange={e => setCurrentDoc({...currentDoc, dueDate: e.target.value})} />
                </div>
 
                <div>
-                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">{t.paymentLink} (Square)</label>
+                 <label className="text-petit font-semibold text-encre mb-1.5 block">{t.paymentLink} (Square)</label>
                  <div className="relative">
-                   <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                   <input 
-                      type="text" 
-                      className={`${GLASS_INPUT_CLASSES} pl-10`} 
+                   <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gris" aria-hidden="true" />
+                   <input
+                      type="text"
+                      className="w-full bg-papier border border-filet rounded-champ pl-10 pr-4 py-3 text-encre placeholder-gris outline-none transition-colors focus:border-rose"
                       placeholder="https://square.link/..."
                       value={currentDoc.paymentLink || ''}
-                      onChange={e => setCurrentDoc({...currentDoc, paymentLink: e.target.value})} 
+                      onChange={e => setCurrentDoc({...currentDoc, paymentLink: e.target.value})}
                    />
                  </div>
                </div>
 
-               <button onClick={handleSave} className={`${ACTION_BUTTON_CLASSES} w-full justify-center`}>
-                 <Check className="w-4 h-4" /> {t.save}
-               </button>
-            </GlassCard>
+               <Bouton variante="primaire" icone={Check} onClick={handleSave} className="w-full justify-center">
+                 {t.save}
+               </Bouton>
+            </Panneau>
 
             {/* Right Col: Content */}
-            <div className="lg:col-span-2 space-y-6">
-               <GlassCard className="p-8 min-h-[600px] flex flex-col">
-                  <div className="flex justify-between items-start mb-8 pb-8 border-b border-white/10">
+            <div className="lg:col-span-2">
+               <Panneau className="p-8 min-h-[600px] flex flex-col">
+                  <div className="flex justify-between items-start mb-8 pb-8 border-b border-filet">
                      <div>
-                       <h2 className="text-3xl font-serif font-bold text-white mb-1">{currentDoc.type === 'Quote' ? t.quote : t.invoice}</h2>
-                       <p className="text-slate-400">#{currentDoc.number}</p>
+                       <h2 className="font-serif text-h3 text-encre mb-1">{currentDoc.type === 'Quote' ? t.quote : t.invoice}</h2>
+                       <p className="text-gris">#{currentDoc.number}</p>
                      </div>
                      <div className="text-right">
-                       <h3 className="font-bold text-white">Xena Horizon</h3>
-                       <p className="text-sm text-slate-400">Consultante Stratégique</p>
+                       <h3 className="font-sans font-semibold text-encre">Xena Horizon</h3>
+                       <p className="text-sm text-gris">Consultante stratégique</p>
                      </div>
                   </div>
 
                   {/* Items */}
-                  <div className="space-y-4 mb-8 flex-1">
-                     <div className="grid grid-cols-12 gap-4 px-2 text-xs font-bold text-slate-500 uppercase">
+                  <div className="space-y-3 mb-8 flex-1">
+                     <div className="grid grid-cols-12 gap-4 px-2 kicker text-gris">
                        <div className="col-span-6">{t.description}</div>
                        <div className="col-span-2 text-center">{t.qty}</div>
                        <div className="col-span-3 text-right">{t.price}</div>
                        <div className="col-span-1"></div>
                      </div>
                      {currentDoc.items.map((item) => (
-                       <div key={item.id} className="grid grid-cols-12 gap-4 items-center bg-white/5 p-2 rounded-lg group">
+                       <div key={item.id} className="grid grid-cols-12 gap-4 items-center bg-papier border border-filet p-2 rounded-champ group">
                           <div className="col-span-6">
-                            <input 
-                              type="text" 
-                              className="bg-transparent text-white w-full focus:outline-none placeholder-slate-600" 
-                              placeholder="Description..."
+                            <input
+                              type="text"
+                              className={RANGEE_INPUT}
+                              placeholder={t.description}
                               value={item.description}
                               onChange={(e) => updateItem(item.id, 'description', e.target.value)}
                             />
                           </div>
                           <div className="col-span-2">
-                             <input 
-                              type="number" 
-                              className="bg-transparent text-white w-full text-center focus:outline-none" 
+                             <input
+                              type="number"
+                              className={`${RANGEE_INPUT} text-center`}
                               value={item.quantity}
                               onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value))}
                             />
                           </div>
                           <div className="col-span-3">
-                             <input 
-                              type="number" 
-                              className="bg-transparent text-white w-full text-right focus:outline-none" 
+                             <input
+                              type="number"
+                              className={`${RANGEE_INPUT} text-right`}
                               value={item.price}
                               onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value))}
                             />
                           </div>
                           <div className="col-span-1 text-right">
-                             <button onClick={() => removeItem(item.id)} className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4"/></button>
+                             <button onClick={() => removeItem(item.id)} aria-label={t.delete} className="w-9 h-9 flex items-center justify-center text-gris hover:text-rose transition-colors opacity-0 group-hover:opacity-100">
+                               <Trash2 className="w-4 h-4" aria-hidden="true" />
+                             </button>
                           </div>
                        </div>
                      ))}
-                     <button onClick={addItem} className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                       <Plus className="w-4 h-4" /> {t.addLine}
-                     </button>
+                     <Bouton variante="discret" icone={Plus} onClick={addItem}>
+                       {t.addLine}
+                     </Bouton>
                   </div>
 
                   {/* Totals */}
                   <div className="flex justify-end mb-8">
                      <div className="w-64 space-y-2">
-                        <div className="flex justify-between text-slate-400">
+                        <div className="flex justify-between text-gris text-sm">
                            <span>{t.subtotal}</span>
                            <span>{totals.subtotal.toFixed(2)} $</span>
                         </div>
-                        <div className="flex justify-between text-slate-400">
+                        <div className="flex justify-between text-gris text-sm">
                            <span>{t.tax} (14.975%)</span>
                            <span>{totals.tax.toFixed(2)} $</span>
                         </div>
-                        <div className="flex justify-between text-xl font-bold text-white pt-2 border-t border-white/10">
+                        <div className="flex justify-between font-serif text-h3 text-encre pt-2 border-t border-filet">
                            <span>{t.total}</span>
-                           <span>{totals.total.toFixed(2)} $</span>
+                           <span className="tabular-nums">{totals.total.toFixed(2)} $</span>
                         </div>
                      </div>
                   </div>
 
                   {/* Terms */}
-                  <div className="pt-8 border-t border-white/10">
-                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">{t.terms}</label>
-                     <textarea 
-                        className="w-full bg-transparent text-slate-400 text-sm h-24 resize-none focus:outline-none"
+                  <div className="pt-8 border-t border-filet">
+                     <Zone
+                        label={t.terms}
                         value={currentDoc.terms}
                         onChange={(e) => setCurrentDoc({...currentDoc, terms: e.target.value})}
+                        className="min-h-[6rem]"
                      />
                   </div>
 
-               </GlassCard>
+               </Panneau>
             </div>
          </div>
        </div>
@@ -400,118 +439,118 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
   // --- PREVIEW MODE ---
   if (view === 'preview' && currentDoc) {
      const totals = calculateTotal(currentDoc);
-     
+
      return (
-       <div className="min-h-screen bg-slate-950 flex flex-col items-center pt-10 pb-20 px-4">
-         
+       <div className="min-h-screen bg-papier flex flex-col items-center pt-10 pb-20 px-4">
+
          <div className="w-full max-w-4xl flex justify-between items-center mb-6">
-            <button onClick={() => setView('list')} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-               <ArrowLeft className="w-4 h-4" /> {t.back}
+            <button onClick={() => setView('list')} className="flex items-center gap-2 text-gris hover:text-encre transition-colors">
+               <ArrowLeft className="w-4 h-4" aria-hidden="true" /> {t.back}
             </button>
-            <div className="flex gap-4">
-               <button className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors">
-                  <Download className="w-4 h-4" /> PDF
-               </button>
-            </div>
+            <Bouton variante="secondaire" icone={Download} petit>
+               PDF
+            </Bouton>
          </div>
 
          {/* DOCUMENT PREVIEW (Paper Style) */}
-         <div className="w-full max-w-4xl bg-white text-slate-900 rounded-sm shadow-2xl p-12 md:p-16 relative">
-            
+         <div className="w-full max-w-4xl bg-papier-2 border border-filet rounded-champ shadow-panneau p-12 md:p-16 relative">
+
             {/* Header */}
             <div className="flex justify-between items-start mb-12">
                <div>
-                  <h1 className="text-4xl font-serif font-bold text-slate-900 mb-2">{currentDoc.type === 'Quote' ? t.quote : t.invoice}</h1>
-                  <p className="text-slate-500 font-medium text-lg">#{currentDoc.number}</p>
-                  <div className="mt-6 text-sm text-slate-600">
-                     <p><strong>{t.date}:</strong> {currentDoc.date}</p>
-                     {currentDoc.dueDate && <p><strong>{t.dueDate}:</strong> {currentDoc.dueDate}</p>}
+                  <h1 className="font-serif text-h2 text-encre mb-2">{currentDoc.type === 'Quote' ? t.quote : t.invoice}</h1>
+                  <p className="text-gris font-medium text-lg">#{currentDoc.number}</p>
+                  <div className="mt-6 text-sm text-gris space-y-1">
+                     <p><span className="text-encre font-medium">{t.date} :</span> {currentDoc.date}</p>
+                     {currentDoc.dueDate && <p><span className="text-encre font-medium">{t.dueDate} :</span> {currentDoc.dueDate}</p>}
                   </div>
                </div>
                <div className="text-right">
-                  <div className="w-16 h-16 bg-slate-900 text-white flex items-center justify-center font-serif font-bold text-xl mb-4 ml-auto">XH</div>
-                  <h2 className="font-bold text-xl">Xena Horizon</h2>
-                  <p className="text-slate-500">Consultante Stratégique</p>
-                  <p className="text-slate-500">laurie.belhumeur@gmail.com</p>
+                  <div className="w-16 h-16 rounded-champ bg-encre text-papier flex items-center justify-center font-serif font-medium text-xl mb-4 ml-auto">XH</div>
+                  <h2 className="font-sans font-semibold text-encre text-lg">Xena Horizon</h2>
+                  <p className="text-gris text-sm">Consultante stratégique</p>
+                  <p className="text-gris text-sm">laurie.belhumeur@gmail.com</p>
                </div>
             </div>
 
             {/* Client Info */}
-            <div className="mb-12 bg-slate-50 p-6 rounded-lg border border-slate-100">
-               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">{t.billedTo}</h3>
-               <p className="font-bold text-lg text-slate-900">{currentDoc.clientName}</p>
-               <p className="text-slate-600">{currentDoc.clientEmail}</p>
+            <div className="mb-12 bg-papier p-6 rounded-champ border border-filet">
+               <h3 className="kicker text-gris mb-2">{t.billedTo}</h3>
+               <p className="font-sans font-semibold text-lg text-encre">{currentDoc.clientName}</p>
+               <p className="text-gris">{currentDoc.clientEmail}</p>
             </div>
 
             {/* Table */}
-            <table className="w-full mb-12">
-               <thead>
-                  <tr className="border-b-2 border-slate-900">
-                     <th className="text-left py-4 font-bold text-slate-900">{t.description}</th>
-                     <th className="text-center py-4 font-bold text-slate-900 w-24">{t.qty}</th>
-                     <th className="text-right py-4 font-bold text-slate-900 w-32">{t.price}</th>
-                     <th className="text-right py-4 font-bold text-slate-900 w-32">{t.total}</th>
-                  </tr>
-               </thead>
-               <tbody className="text-slate-600">
-                  {currentDoc.items.map(item => (
-                     <tr key={item.id} className="border-b border-slate-100">
-                        <td className="py-4">{item.description}</td>
-                        <td className="py-4 text-center">{item.quantity}</td>
-                        <td className="py-4 text-right">{item.price.toFixed(2)} $</td>
-                        <td className="py-4 text-right font-medium">{(item.quantity * item.price).toFixed(2)} $</td>
-                     </tr>
-                  ))}
-               </tbody>
-            </table>
+            <div className="overflow-x-auto mb-12">
+              <table className="w-full">
+                 <thead>
+                    <tr className="border-b-2 border-encre">
+                       <th className="text-left py-4 kicker text-gris">{t.description}</th>
+                       <th className="text-center py-4 kicker text-gris w-24">{t.qty}</th>
+                       <th className="text-right py-4 kicker text-gris w-32">{t.price}</th>
+                       <th className="text-right py-4 kicker text-gris w-32">{t.total}</th>
+                    </tr>
+                 </thead>
+                 <tbody className="divide-y divide-filet">
+                    {currentDoc.items.map(item => (
+                       <tr key={item.id}>
+                          <td className="py-4 text-sm text-encre">{item.description}</td>
+                          <td className="py-4 text-sm text-encre text-center">{item.quantity}</td>
+                          <td className="py-4 text-sm text-gris text-right">{item.price.toFixed(2)} $</td>
+                          <td className="py-4 text-sm text-encre text-right font-medium tabular-nums">{(item.quantity * item.price).toFixed(2)} $</td>
+                       </tr>
+                    ))}
+                 </tbody>
+              </table>
+            </div>
 
             {/* Summary */}
             <div className="flex justify-end mb-16">
                <div className="w-72 space-y-3">
-                  <div className="flex justify-between text-slate-600">
+                  <div className="flex justify-between text-gris text-sm">
                      <span>{t.subtotal}</span>
                      <span>{totals.subtotal.toFixed(2)} $</span>
                   </div>
-                  <div className="flex justify-between text-slate-600">
+                  <div className="flex justify-between text-gris text-sm">
                      <span>{t.tax} (14.975%)</span>
                      <span>{totals.tax.toFixed(2)} $</span>
                   </div>
-                  <div className="flex justify-between text-2xl font-bold text-slate-900 pt-4 border-t-2 border-slate-900">
+                  <div className="flex justify-between font-serif text-h3 text-encre pt-4 border-t-2 border-encre">
                      <span>{t.total}</span>
-                     <span>{totals.total.toFixed(2)} $</span>
+                     <span className="tabular-nums">{totals.total.toFixed(2)} $</span>
                   </div>
                </div>
             </div>
 
             {/* Terms */}
             <div className="mb-12">
-               <h4 className="font-bold text-slate-900 mb-2">{t.termsTitle}</h4>
-               <p className="text-slate-600 text-sm whitespace-pre-line">{currentDoc.terms}</p>
+               <h4 className="font-sans font-semibold text-encre mb-2">{t.termsTitle}</h4>
+               <p className="text-gris text-sm whitespace-pre-line">{currentDoc.terms}</p>
             </div>
 
             {/* ACTION AREA (Quote Signature or Invoice Payment) */}
-            <div className="bg-slate-50 rounded-xl p-8 border border-slate-200">
-               
+            <div className="bg-papier rounded-champ p-8 border border-filet">
+
                {/* SIGNATURE SPOT FOR QUOTES */}
                {currentDoc.type === 'Quote' && (
                   <div className="mb-8">
-                     <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <PenTool className="w-5 h-5"/> {t.signature}
+                     <h4 className="font-sans font-semibold text-encre mb-4 flex items-center gap-2">
+                        <PenTool className="w-5 h-5" aria-hidden="true" /> {t.signature}
                      </h4>
                      {currentDoc.signed ? (
-                        <div className="border-2 border-emerald-500/20 bg-emerald-50 rounded-lg p-6 flex items-center gap-4 text-emerald-700">
-                           <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-                              <Check className="w-6 h-6" />
+                        <div className="border border-rose/30 bg-rose/10 rounded-champ p-6 flex items-center gap-4 text-rose">
+                           <div className="w-10 h-10 rounded-pilule bg-rose/10 flex items-center justify-center">
+                              <Check className="w-6 h-6" aria-hidden="true" />
                            </div>
                            <div>
-                              <p className="font-bold">{t.signed}</p>
-                              <p className="text-sm opacity-80">Le {currentDoc.signatureDate}</p>
+                              <p className="font-medium">{t.signed}</p>
+                              <p className="text-sm text-gris">Le {currentDoc.signatureDate}</p>
                            </div>
                         </div>
                      ) : (
-                        <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center bg-white cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group" onClick={handleSign}>
-                           <p className="text-slate-400 font-serif italic text-2xl mb-2 group-hover:text-blue-500">{t.clickSign}</p>
-                           <p className="text-xs text-slate-400 uppercase tracking-widest">Zone de signature numérique</p>
+                        <div className="border border-dashed border-filet rounded-champ p-8 text-center bg-papier-2 cursor-pointer hover:border-rose transition-colors group" onClick={handleSign}>
+                           <p className="font-serif text-h3 text-gris mb-2 group-hover:text-rose transition-colors">{t.clickSign}</p>
+                           <p className="kicker text-gris">Zone de signature numérique</p>
                         </div>
                      )}
                   </div>
@@ -520,17 +559,15 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                {/* PAYMENT BUTTON (Square) */}
                <div className="flex justify-end">
                   {currentDoc.paymentLink ? (
-                     <a 
-                        href={currentDoc.paymentLink} 
-                        target="_blank" 
+                     <a
+                        href={currentDoc.paymentLink}
+                        target="_blank"
                         rel="noreferrer"
-                        className={`
-                           flex items-center gap-3 px-8 py-4 rounded-lg text-lg font-bold text-white transition-all shadow-xl
-                           ${(!currentDoc.signed && currentDoc.type === 'Quote') 
-                              ? 'bg-slate-300 cursor-not-allowed' 
-                              : 'bg-slate-900 hover:bg-blue-600 transform hover:-translate-y-1'
-                           }
-                        `}
+                        className={`inline-flex items-center gap-3 min-h-[44px] px-8 rounded-pilule text-base font-medium transition-colors ${
+                           (!currentDoc.signed && currentDoc.type === 'Quote')
+                              ? 'bg-papier-2 border border-filet text-gris cursor-not-allowed'
+                              : 'bg-encre text-papier hover:bg-encre-2'
+                        }`}
                         onClick={(e) => {
                            if (!currentDoc.signed && currentDoc.type === 'Quote') {
                               e.preventDefault();
@@ -538,11 +575,11 @@ const AdminInvoices: React.FC<AdminInvoicesProps> = ({ lang }) => {
                            }
                         }}
                      >
-                        <CreditCard className="w-6 h-6" />
+                        <CreditCard className="w-5 h-5" aria-hidden="true" />
                         {currentDoc.type === 'Quote' ? t.payDeposit : t.payInvoice}
                      </a>
                   ) : (
-                     <p className="text-slate-400 italic text-sm">{t.noLink}</p>
+                     <p className="text-gris text-sm">{t.noLink}</p>
                   )}
                </div>
 
