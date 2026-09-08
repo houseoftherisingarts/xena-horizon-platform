@@ -79,7 +79,16 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
       save: 'Save',
       onlineStatus: 'Online on Services page',
       hiddenStatus: 'Hidden from public',
-      loading: 'Loading...'
+      loading: 'Loading...',
+      vueLabel: 'Ladder view',
+      vueAjustee: 'Fitted',
+      vueDefilement: 'Scroll',
+      vueCompacte: 'Compact',
+      zoomLabel: 'Zoom',
+      toutVoir: 'See all',
+      defilerGauche: 'Scroll to earlier tiers',
+      defilerDroite: 'Scroll to later tiers',
+      redimensionner: 'Resize columns'
     }
   }[lang];
 
