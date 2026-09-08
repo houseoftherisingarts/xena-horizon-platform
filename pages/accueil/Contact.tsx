@@ -107,7 +107,8 @@ const Contact: React.FC<ContactProps> = ({ lang, contact }) => {
             <p className="mt-1 text-petit text-gris">{COORDONNEES.zones}</p>
           </Reveal>
 
-          <Reveal as="form" delay={0.16} onSubmit={soumettre} className="mt-12 flex flex-col gap-6">
+          <Reveal as="div" delay={0.16} className="mt-12">
+          <form onSubmit={soumettre} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <label htmlFor="contact-name" className="text-petit font-semibold text-encre">
                 {L.nom}
