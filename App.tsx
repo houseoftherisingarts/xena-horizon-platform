@@ -217,6 +217,14 @@ const App: React.FC = () => {
     }
   };
 
+  if (jetonFacture) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <FacturePublique jeton={jetonFacture} lang={lang} />
+      </Suspense>
+    );
+  }
+
   if (isAdminView && userIsAdmin) {
     return (
       <TextesProvider><CadragesProvider>
