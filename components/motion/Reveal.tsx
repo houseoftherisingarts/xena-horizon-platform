@@ -78,7 +78,7 @@ export const RevealStagger: React.FC<RevealStaggerProps> = ({ children, stagger 
       initial="cache"
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
-      variants={{ ...conteneur, visible: { transition: { staggerChildren: stagger } } }}
+      variants={{ cache: {}, visible: { transition: { staggerChildren: stagger } } }}
     >
       {Children.map(children, (enfant, i) => (
         <motion.div key={i} variants={item}>
