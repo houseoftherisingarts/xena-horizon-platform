@@ -228,6 +228,10 @@ export interface PieceDef {
   nom: string;
   aide?: string;
   option?: boolean;
+  /** Pendants anglais, facultatifs : lib/dossier.ts replie sur le FR quand ils manquent (catalogue modifié par Laurie sans les remplir). */
+  catEn?: string;
+  nomEn?: string;
+  aideEn?: string;
 }
 
 /** Un temps du parcours d'accompagnement. */
