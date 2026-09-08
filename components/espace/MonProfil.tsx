@@ -197,25 +197,26 @@ const MonProfil: React.FC<MonProfilProps> = ({ dossier, uid, lang }) => {
     setBusy(true);
     setError(null);
     setOk(false);
+    const payload: Record<string, any> = {
+      nom: nom.trim(),
+      ville: ville.trim(),
+      discipline: discipline.trim(),
+      bio: bio.trim(),
+      liens: Object.fromEntries(lienEntries),
+      photoURL: photoURL || deleteField(),
+      banniereURL: banniereURL || deleteField(),
+      updatedAt: serverTimestamp(),
+      derniereActiviteClient: serverTimestamp(),
+    };
+    console.log('DEBUG payload', JSON.stringify(payload, (k, v) => (v && v._methodName ? `FieldValue:${v._methodName}` : v)));
     try {
-      const payload: Record<string, any> = {
-        nom: nom.trim(),
-        ville: ville.trim(),
-        discipline: discipline.trim(),
-        bio: bio.trim(),
-        liens: Object.fromEntries(lienEntries),
-        photoURL: photoURL || deleteField(),
-        banniereURL: banniereURL || deleteField(),
-        updatedAt: serverTimestamp(),
-        derniereActiviteClient: serverTimestamp(),
-      };
       await patchDoc<Record<string, any>>('dossiers', uid, payload);
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, { displayName: nom.trim() || null, photoURL: photoURL || null });
       }
       setOk(true);
     } catch (err: any) {
-      console.error('DEBUG MonProfil save', err?.code, err?.message, JSON.stringify(payload));
+      console.error('DEBUG MonProfil save', err?.code, err?.message);
       setError(t.echec);
     } finally {
       setBusy(false);
