@@ -66,15 +66,21 @@ const Allumage: React.FC<AllumageProps> = ({
 
   if (reduce) {
     return (
-      <section className="relative min-h-[100svh] bg-papier">
-        <Une
-          lang={lang}
-          tagline={tagline}
-          headline={headline}
-          subheadline={subheadline}
-          ctaText={ctaText}
-          imageUrl={imageUrl}
-        />
+      <section className="relative bg-papier">
+        {/* Le même gabarit à hauteur fixe que la branche animée (`relative h-[100svh]
+            overflow-hidden`, chantier B) : sans lui, le texte et la photo en `sm:absolute`
+            de Une n'ont pas d'ancêtre positionné de hauteur définie et s'écrasent sur la
+            strophe qui suit, dès 640 px. */}
+        <div className="relative h-[100svh] overflow-hidden">
+          <Une
+            lang={lang}
+            tagline={tagline}
+            headline={headline}
+            subheadline={subheadline}
+            ctaText={ctaText}
+            imageUrl={imageUrl}
+          />
+        </div>
         <div className={`px-gut pb-[10vh] pt-[8vh]`}>
           <p className="max-w-[18ch] text-display font-serif text-encre">{strophe}</p>
           <p className="kicker mt-4 text-gris">{strapline}</p>
