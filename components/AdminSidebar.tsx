@@ -253,6 +253,17 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
           </button>
         </div>
       </aside>
+      {infoBulle &&
+        createPortal(
+          <span
+            role="tooltip"
+            className="hidden md:block fixed pointer-events-none -translate-y-1/2 whitespace-nowrap rounded-champ bg-encre text-papier text-xs px-2.5 py-1.5 z-[60]"
+            style={{ top: infoBulle.top, left: infoBulle.left }}
+          >
+            {infoBulle.texte}
+          </span>,
+          document.body
+        )}
     </>
   );
 };
