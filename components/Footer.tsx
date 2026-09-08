@@ -3,6 +3,7 @@ import { Mail, Phone } from 'lucide-react';
 import { Language, ViewState } from '../types';
 import { COORDONNEES, CREDITS } from '../lib/contenu';
 import { useLenis } from './motion';
+import { useConsentementVisible } from './Consentement';
 
 interface FooterProps {
   onAdminLogin: () => void;
