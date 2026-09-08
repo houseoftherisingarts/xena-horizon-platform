@@ -177,7 +177,10 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
               className={`border-t border-filet pt-6 ${SPAN_PROFIL[i]} ${OFFSET_PROFIL[i]}`}
             >
               <p className="text-petit text-gris mb-2">{lang === 'EN' ? profil.taglineEN : profil.taglineFR}</p>
-              <h2 className="font-serif text-h2">{lang === 'EN' ? profil.titleEN : profil.titleFR}</h2>
+              {/* La colonne étroite (3/12, « Organisations et entreprises ») déborde en 3 lignes à text-h2 : h3 pour elle. */}
+              <h2 className={`font-serif ${i === 2 ? 'text-h3' : 'text-h2'}`}>
+                {lang === 'EN' ? profil.titleEN : profil.titleFR}
+              </h2>
               <p className="text-lede text-gris mt-4">{lang === 'EN' ? profil.descriptionEN : profil.descriptionFR}</p>
               <p className="text-corps text-gris mt-3">{lang === 'EN' ? profil.detailsEN : profil.detailsFR}</p>
               <a
