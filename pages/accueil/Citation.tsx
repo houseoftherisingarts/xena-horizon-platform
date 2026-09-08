@@ -18,7 +18,10 @@ const Citation: React.FC<CitationProps> = ({ lang }) => {
   return (
     <Feuille z={5} className="bg-papier">
       <div className="px-gut py-feuille">
-        <MasqueRadial className="col-span-12 block sm:col-span-11">
+        {/* arrivee dépasse largement 100 : un masque radial "closest-side" ne touche jamais
+            les coins d'un bloc plus large que haut avant ~141 % (√2 × 100). Sous 141, les
+            premiers et derniers mots d'un bloc de citation restent illisibles en permanence. */}
+        <MasqueRadial arrivee={170} className="col-span-12 block sm:col-span-11">
           <TexteRevele
             texte={`« ${texte} »`}
             as="p"
