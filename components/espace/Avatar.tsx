@@ -17,10 +17,10 @@ interface AvatarProps {
 /** Photo ronde de la personne, ou son initiale sur fond encre quand elle n'a pas encore de photo. */
 const Avatar: React.FC<AvatarProps> = ({ url, nom, taille = 'md', className = '' }) => {
   const { boite, texte } = TAILLES[taille];
-  const base = `${boite} rounded-full border-4 border-papier flex-shrink-0 overflow-hidden bg-papier-2`;
+  const base = `${boite} rounded-full border-4 border-papier flex-shrink-0 overflow-hidden`;
 
   if (url) {
-    return <img src={url} alt={nom} className={`${base} object-cover ${className}`} />;
+    return <img src={url} alt={nom} className={`${base} object-cover bg-papier-2 ${className}`} />;
   }
 
   const initiale = nom.trim().charAt(0).toUpperCase() || '?';
