@@ -9,7 +9,7 @@ import { Feuille, Reveal } from '../../components/motion';
 import { COORDONNEES } from '../../lib/contenu';
 import { useTextes } from '../../lib/textes';
 import { allerAuRendezVous } from '../../lib/rendezvous';
-import { LEGENDE_SCENE } from './textes';
+import { ALT_PHOTO_CONTACT, LEGENDE_SCENE } from './textes';
 import type { Language } from '../../types';
 
 export interface ContactProps {
