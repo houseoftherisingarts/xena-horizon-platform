@@ -162,7 +162,7 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
         <span className="font-sans font-semibold tabular-nums whitespace-nowrap">{prixAffiche(offer, lang)}</span>
         <button
           onClick={goToContact}
-          className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-encre hover:text-papier"
+          className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium transition-colors hover:bg-bouton hover:text-sur-bouton"
         >
           {book} <ArrowRight className="w-3.5 h-3.5" />
         </button>
@@ -309,14 +309,14 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
           {onChangeView ? (
             <button
               onClick={() => onChangeView('ESPACE_CLIENT')}
-              className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-6 py-3 font-medium hover:bg-encre hover:text-papier transition-colors flex-shrink-0"
+              className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-6 py-3 font-medium hover:bg-bouton hover:text-sur-bouton transition-colors flex-shrink-0"
             >
               {t.spaceCta} <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
             <a
               href="/espace"
-              className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-6 py-3 font-medium hover:bg-encre hover:text-papier transition-colors flex-shrink-0"
+              className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-6 py-3 font-medium hover:bg-bouton hover:text-sur-bouton transition-colors flex-shrink-0"
             >
               {t.spaceCta} <ArrowRight className="w-4 h-4" />
             </a>

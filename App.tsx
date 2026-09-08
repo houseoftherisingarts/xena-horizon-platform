@@ -189,7 +189,7 @@ const App: React.FC = () => {
             open={menuAdminOuvert}
             onClose={() => setMenuAdminOuvert(false)}
           />
-          <main className="flex-1 md:ml-64 min-h-screen overflow-x-clip">
+          <main className="flex-1 min-w-0 md:ml-64 min-h-screen overflow-x-clip">
             <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-papier/90 backdrop-blur-md border-b border-filet">
               <button
                 type="button"

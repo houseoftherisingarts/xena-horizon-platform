@@ -128,7 +128,7 @@ export const Etiquette: React.FC<{ tone?: 'neutre' | 'accent' | 'encre'; childre
   const tons = {
     neutre: 'border border-filet text-gris',
     accent: 'bg-rose/10 text-rose',
-    encre: 'bg-bouton text-sur-bouton',
+    encre: 'bg-encre text-papier',
   };
   return (
     <span className={`inline-flex items-center rounded-pilule px-2.5 py-0.5 text-xs font-medium ${tons[tone]} ${className}`}>

@@ -98,11 +98,11 @@ const onglet = (page, re) => page.locator('[role="tab"]').filter({ hasText: re }
       await mesurer(page, 'espace-rdv', 1440); await shot(page, 'espace-rdv', 1440, [0, 0.5]);
       const ongletActif = await page.locator('[role="tab"][aria-selected="true"]').first().innerText().catch(() => '');
       // Un jour disponible, un créneau, la demande
-      const jour = page.locator('[data-jour-libre], button[data-libre="1"], button.jour-libre').first();
+      const jour = page.locator('section[data-tx-scope="espaceRendezVous"] .grid-cols-7 button[class*="bg-rose"]:not([disabled])').first();
       let reserve = false;
       if (await jour.count()) {
         await jour.click(); await page.waitForTimeout(600);
-        const creneau = page.locator('[data-creneau], button.creneau').first();
+        const creneau = page.locator('section[data-tx-scope="espaceRendezVous"] button.rounded-pilule.border:not([disabled])').first();
         if (await creneau.count()) {
           await creneau.click(); await page.waitForTimeout(500);
           const note = page.locator('textarea').first(); if (await note.count()) await note.fill('Vérification : demande de rendez-vous.');

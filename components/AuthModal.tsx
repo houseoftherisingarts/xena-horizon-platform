@@ -117,7 +117,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onAdminSignIn, lan
           </button>
 
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-pilule bg-encre flex items-center justify-center">
+            <div className="w-10 h-10 rounded-pilule bg-bouton flex items-center justify-center">
               <Lock className="w-5 h-5 text-papier" />
             </div>
             <h2 className="font-serif text-h3 text-encre">{t.title}</h2>

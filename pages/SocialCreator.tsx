@@ -424,7 +424,7 @@ const SocialCreator: React.FC<SocialCreatorProps> = ({ lang }) => {
                   type="button"
                   onClick={() => setIsGrayscale(!isGrayscale)}
                   aria-pressed={isGrayscale}
-                  className={`w-12 h-6 rounded-pilule relative transition-colors ${isGrayscale ? 'bg-encre' : 'bg-filet'}`}
+                  className={`w-12 h-6 rounded-pilule relative transition-colors ${isGrayscale ? 'bg-bouton' : 'bg-filet'}`}
                 >
                   <span
                     className={`absolute top-1 left-1 w-4 h-4 bg-papier rounded-pilule transition-transform ${

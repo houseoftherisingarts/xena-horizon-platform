@@ -104,7 +104,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
               className="fixed z-[91] bottom-0 right-0 left-0 md:left-auto md:bottom-6 md:right-6 w-full md:w-[380px] h-[min(72dvh,560px)] md:h-[560px] flex flex-col rounded-t-champ md:rounded-champ overflow-hidden bg-papier border border-filet shadow-panneau"
             >
               <header className="flex items-center gap-3 px-5 py-4 border-b border-filet flex-shrink-0">
-                <span className="w-9 h-9 rounded-pilule bg-encre flex items-center justify-center text-xs font-sans font-bold text-papier flex-shrink-0">
+                <span className="w-9 h-9 rounded-pilule bg-bouton flex items-center justify-center text-xs font-sans font-bold text-sur-bouton flex-shrink-0">
                   LB
                 </span>
                 <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
                     key={i}
                     aria-live={i === fil.length - 1 ? 'polite' : undefined}
                     className={`max-w-[85%] rounded-champ px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
-                      b.de === 'moi' ? 'self-end bg-bouton text-sur-bouton rounded-br-[4px]' : 'self-start bg-papier-2 text-encre rounded-bl-[4px]'
+                      b.de === 'moi' ? 'self-end bg-encre text-papier rounded-br-[4px]' : 'self-start bg-papier-2 text-encre rounded-bl-[4px]'
                     }`}
                   >
                     {b.texte}

@@ -275,7 +275,7 @@ const Courriels: React.FC<CourrielsProps> = ({ leads, loading, dossiers, lang, t
               <div className="flex-1 overflow-y-auto p-6 md:p-8">
                 <h2 className="font-serif text-h3 text-encre mb-6">{getSubject(selectedLead)}</h2>
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-pilule bg-encre flex items-center justify-center text-lg font-semibold text-papier flex-shrink-0">
+                  <div className="w-12 h-12 rounded-pilule bg-bouton flex items-center justify-center text-lg font-semibold text-sur-bouton flex-shrink-0">
                     {(selectedLead.name || selectedLead.email || '?').charAt(0).toUpperCase()}
                   </div>
                   <div>

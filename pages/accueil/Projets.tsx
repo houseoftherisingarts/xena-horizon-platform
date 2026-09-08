@@ -88,7 +88,7 @@ const Projets: React.FC<ProjetsProps> = ({ lang, onChangeView }) => {
   };
 
   return (
-    <Feuille z={4} className="encre grain relative bg-bouton text-sur-bouton">
+    <Feuille z={4} className="encre grain relative bg-encre text-papier">
       <Atmosphere light="80% 10%" strength={0.7} />
       <div data-tx-scope="accueilProjets" className="relative px-gut py-feuille">
         <div className="mb-16 flex items-end justify-between gap-6 sm:mb-20">

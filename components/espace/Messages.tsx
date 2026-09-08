@@ -109,7 +109,7 @@ const Messages: React.FC<MessagesProps> = ({ uid, lang }) => {
               </p>
               <p
                 className={`rounded-champ px-4 py-2.5 text-sm leading-relaxed whitespace-pre-line font-sans ${
-                  m.de === 'client' ? 'bg-papier-2 text-encre rounded-br-[4px]' : 'bg-bouton text-sur-bouton rounded-bl-[4px]'
+                  m.de === 'client' ? 'bg-papier-2 text-encre rounded-br-[4px]' : 'bg-encre text-papier rounded-bl-[4px]'
                 }`}
               >
                 {m.texte}

@@ -307,7 +307,7 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
                 <span className="kicker text-gris">{t.langueLettre}</span>
                 <div className="inline-flex rounded-pilule border border-filet p-0.5">
                   {(['fr', 'en'] as const).map((l) => (
-                    <button key={l} type="button" disabled={isReadOnly} onClick={() => setLetterLang(l)} className={`px-3 py-1 rounded-pilule text-xs font-semibold transition-colors ${letterLang === l ? 'bg-encre text-papier' : 'text-gris hover:text-encre'}`}>{l === 'fr' ? 'FR' : 'EN'}</button>
+                    <button key={l} type="button" disabled={isReadOnly} onClick={() => setLetterLang(l)} className={`px-3 py-1 rounded-pilule text-xs font-semibold transition-colors ${letterLang === l ? 'bg-bouton text-sur-bouton' : 'text-gris hover:text-encre'}`}>{l === 'fr' ? 'FR' : 'EN'}</button>
                   ))}
                 </div>
               </div>
@@ -447,119 +447,5 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
   );
 };
 
-// ─── Un bloc sur la page : rendu éditable + petite barre d'outils ───────────
-const BlockFrame: React.FC<{
-  block: NewsletterBlock; selected: boolean; readOnly: boolean; first: boolean; last: boolean;
-  t: (typeof TEXTES)['FR'];
-  onSelect: () => void; onPatch: (p: Record<string, any>) => void; onMove: (d: -1 | 1) => void;
-  onRemove: () => void; onDuplicate: () => void; onPickImage: () => void;
-}> = ({ block, selected, readOnly, first, last, t, onSelect, onPatch, onMove, onRemove, onDuplicate, onPickImage }) => {
-  const c = (block.content || {}) as any;
-  const stop = (e: React.SyntheticEvent) => e.stopPropagation();
-  const exec = (cmd: string, arg?: string) => document.execCommand(cmd, false, arg);
-  const lier = () => { const url = window.prompt('https://…'); if (url && /^https?:\/\//.test(url)) exec('createLink', url); };
-  const policeSelect = (defaut: Police) => (
-    <select value={c.police || defaut} onChange={(e) => onPatch({ police: e.target.value })} className={selectCls}>
-      {Object.entries(POLICES).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-    </select>
-  );
-  const tailleSelect = () => (
-    <select value={c.taille || 'md'} onChange={(e) => onPatch({ taille: e.target.value })} className={selectCls}>
-      {Object.entries(TAILLES).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-    </select>
-  );
-
-  return (
-    <div onClick={(e) => { e.stopPropagation(); onSelect(); }} className={`group/bloc relative rounded-champ border-2 px-3 -mx-3 my-1 transition-colors ${selected ? 'border-rose/60' : 'border-transparent hover:border-rose/25'}`}>
-      {readOnly ? <RenderBlockWeb block={block} /> : <RenderBlockWeb block={block} edit={{ set: onPatch, pickImage: onPickImage }} />}
-      {!readOnly && (
-        <div onClick={stop} className={`${selected ? 'flex' : 'hidden group-hover/bloc:flex'} flex-wrap justify-end items-center gap-1.5 mt-2 lg:mt-0 lg:absolute lg:-top-11 lg:right-0 z-20 bg-papier rounded-pilule px-2 py-1 border border-filet w-fit ml-auto`}>
-          {block.type === 'heading' && (
-            <>
-              <select value={c.level || 2} onChange={(e) => onPatch({ level: Number(e.target.value) })} className={selectCls}>
-                <option value={1}>{t.niveauGrand}</option><option value={2}>{t.niveauTitre}</option><option value={3}>{t.niveauSousTitre}</option>
-              </select>
-              {policeSelect('serif')}
-              <button className={iconBtn} title={t.aligner} onClick={() => onPatch({ align: c.align === 'center' ? 'left' : 'center' })}><SlidersHorizontal className="w-3.5 h-3.5" aria-hidden="true" /></button>
-            </>
-          )}
-          {block.type === 'paragraph' && (
-            <>
-              {policeSelect('sans')}{tailleSelect()}
-              <button className={iconBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => exec('bold')} title="Gras"><Bold className="w-3.5 h-3.5" aria-hidden="true" /></button>
-              <button className={iconBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => exec('italic')} title="Italique"><Italic className="w-3.5 h-3.5" aria-hidden="true" /></button>
-              <button className={iconBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => exec('underline')} title="Souligné"><Underline className="w-3.5 h-3.5" aria-hidden="true" /></button>
-              <button className={iconBtn} onMouseDown={(e) => e.preventDefault()} onClick={lier} title={t.lien}><LinkIcon className="w-3.5 h-3.5" aria-hidden="true" /></button>
-              <button className={iconBtn} title={t.aligner} onClick={() => onPatch({ align: c.align === 'center' ? 'left' : 'center' })}><SlidersHorizontal className="w-3.5 h-3.5" aria-hidden="true" /></button>
-            </>
-          )}
-          {block.type === 'image' && (
-            <>
-              <button className={`${iconBtn} w-auto px-3 gap-1.5 text-xs font-semibold`} onClick={onPickImage}><ImageIcon className="w-3.5 h-3.5" aria-hidden="true" /> Image</button>
-              <input value={c.alt || ''} onChange={(e) => onPatch({ alt: e.target.value })} placeholder="Alt" className={`${selectCls} w-28`} />
-              <input value={c.href || ''} onChange={(e) => onPatch({ href: e.target.value })} placeholder="https://…" className={`${selectCls} w-40`} />
-            </>
-          )}
-          {(block.type === 'button' || block.type === 'cta') && (
-            <input value={c.href || ''} onChange={(e) => onPatch({ href: e.target.value })} placeholder="https://…" className={`${selectCls} w-48`} />
-          )}
-          {block.type === 'button' && (
-            <select value={c.variant || 'primaire'} onChange={(e) => onPatch({ variant: e.target.value })} className={selectCls}>
-              <option value="primaire">{t.styleBouton}</option><option value="secondaire">{t.styleContour}</option>
-            </select>
-          )}
-          {block.type === 'list' && (
-            <>
-              <select value={c.style || 'puce'} onChange={(e) => onPatch({ style: e.target.value })} className={selectCls}>
-                <option value="puce">{t.puce}</option><option value="numero">{t.numero}</option>
-              </select>
-              {policeSelect('sans')}
-              <button className={iconBtn} onMouseDown={(e) => e.preventDefault()} onClick={() => exec('bold')} title="Gras"><Bold className="w-3.5 h-3.5" aria-hidden="true" /></button>
-              <button className={iconBtn} onMouseDown={(e) => e.preventDefault()} onClick={lier} title={t.lien}><LinkIcon className="w-3.5 h-3.5" aria-hidden="true" /></button>
-            </>
-          )}
-          {block.type === 'divider' && (
-            <select value={c.style || 'ligne'} onChange={(e) => onPatch({ style: e.target.value })} className={selectCls}>
-              {Object.entries(SEPARATEURS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-            </select>
-          )}
-          {block.type === 'spacer' && (
-            <select value={c.taille || 'md'} onChange={(e) => onPatch({ taille: e.target.value })} className={selectCls}>
-              <option value="sm">{t.petit}</option><option value="md">{t.moyen}</option><option value="lg">{t.grand}</option>
-            </select>
-          )}
-          <span className="w-px h-5 bg-filet mx-0.5" />
-          <button className={iconBtn} onClick={() => onMove(-1)} disabled={first} title={t.monter}><ArrowUp className="w-3.5 h-3.5" aria-hidden="true" /></button>
-          <button className={iconBtn} onClick={() => onMove(1)} disabled={last} title={t.descendre}><ArrowDown className="w-3.5 h-3.5" aria-hidden="true" /></button>
-          <button className={iconBtn} onClick={onDuplicate} title={t.dupliquer}><Copy className="w-3.5 h-3.5" aria-hidden="true" /></button>
-          <button className={`${iconBtn} hover:text-rose hover:border-rose`} onClick={onRemove} title={t.supprimerBloc}><Trash2 className="w-3.5 h-3.5" aria-hidden="true" /></button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Le « + » entre deux blocs : un bloc s'insère là où l'on est.
-const InsertPoint: React.FC<{ onAdd: (t: BlockType) => void }> = ({ onAdd }) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="group/plus relative z-10 h-5 -my-2.5 flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-      <div className={`absolute inset-x-0 h-px transition-colors ${open ? 'bg-rose' : 'bg-transparent group-hover/plus:bg-rose/30'}`} />
-      <button type="button" onClick={() => setOpen((v) => !v)} title="+"
-        className={`relative z-10 w-6 h-6 rounded-pilule flex items-center justify-center border transition-all ${open ? 'bg-rose text-papier border-rose rotate-45' : 'bg-papier text-rose border-filet opacity-0 group-hover/plus:opacity-100 focus:opacity-100'}`}>
-        <Plus className="w-3.5 h-3.5" aria-hidden="true" />
-      </button>
-      {open && (
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 flex flex-wrap justify-center gap-1.5 max-w-[480px] bg-papier rounded-champ p-2 border border-filet shadow-panneau">
-          {BLOCK_PALETTE.map((b) => (
-            <button key={b.type} type="button" onClick={() => { onAdd(b.type); setOpen(false); }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pilule hover:bg-rose/10 border border-filet text-xs text-encre transition-colors">
-              <b.icone className="w-3.5 h-3.5 text-rose" aria-hidden="true" /> {b.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 export default Composer;

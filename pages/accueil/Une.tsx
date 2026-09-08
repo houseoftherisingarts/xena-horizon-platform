@@ -93,7 +93,7 @@ const Une: React.FC<UneProps> = ({
             <button
               type="button"
               onClick={allerAuRendezVous}
-              className="pilule inline-flex items-center rounded-pilule bg-encre px-8 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-papier"
+              className="pilule inline-flex items-center rounded-pilule bg-bouton px-8 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-sur-bouton"
             >
               {ctaText}
             </button>

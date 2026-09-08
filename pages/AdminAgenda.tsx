@@ -397,7 +397,7 @@ const AdminAgenda: React.FC<AdminAgendaProps> = ({ lang }) => {
           </div>
         )}
 
-        <div className="flex gap-2 border-b border-filet pb-2 mb-6 overflow-x-auto">
+        <div className="flex flex-wrap gap-2 border-b border-filet pb-2 mb-6">
           {ONGLETS.map((o) => (
             <button
               key={o.id}

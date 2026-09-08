@@ -219,7 +219,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
               </div>
             )}
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-pilule bg-encre flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-pilule bg-bouton flex items-center justify-center flex-shrink-0">
                 <Lock className="w-5 h-5 text-papier" />
               </div>
               <div className="relative flex flex-1 border-b border-filet">

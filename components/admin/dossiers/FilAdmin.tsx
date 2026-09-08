@@ -67,7 +67,7 @@ const FilAdmin: React.FC<FilAdminProps> = ({ messages, dossierNom, lang, onSend 
           <div key={m.id} className={`flex ${m.de === 'admin' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={`max-w-[85%] rounded-champ px-4 py-2.5 text-sm ${
-                m.de === 'admin' ? 'bg-bouton text-sur-bouton' : 'bg-papier-2 border border-filet text-encre'
+                m.de === 'admin' ? 'bg-encre text-papier' : 'bg-papier-2 border border-filet text-encre'
               }`}
             >
               <p className="whitespace-pre-wrap break-words">{m.texte}</p>

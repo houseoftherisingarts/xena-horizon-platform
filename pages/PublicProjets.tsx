@@ -129,7 +129,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
                   href={lien.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium hover:bg-encre hover:text-papier transition-colors"
+                  className="pilule inline-flex items-center gap-2 rounded-pilule border border-encre px-5 py-2.5 text-petit font-medium hover:bg-bouton hover:text-sur-bouton transition-colors"
                 >
                   {[t.baladoLien0, t.baladoLien1][i] || lien.label} <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
@@ -140,7 +140,7 @@ const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
       </Feuille>
 
       {/* --- LIVRE : la seule feuille d'encre --- */}
-      <Feuille z={2} className="relative bg-bouton text-sur-bouton px-gut py-feuille overflow-hidden">
+      <Feuille z={2} className="relative bg-encre text-papier px-gut py-feuille overflow-hidden">
         <Atmosphere light="82% 10%" strength={0.7} />
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-x-col gap-y-10 items-start">
           <div className="lg:col-span-6">

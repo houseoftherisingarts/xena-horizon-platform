@@ -399,7 +399,7 @@ const AdminCRM: React.FC<AdminCRMProps> = ({ lang }) => {
               {/* Detail Header */}
               <div className="p-6 border-b border-filet flex justify-between items-start">
                 <div className="flex items-start gap-4">
-                   <div className="w-16 h-16 rounded-pilule bg-encre flex items-center justify-center text-2xl font-serif text-papier flex-shrink-0">
+                   <div className="w-16 h-16 rounded-pilule bg-bouton flex items-center justify-center text-2xl font-serif text-sur-bouton flex-shrink-0">
                       {selectedClient.name.charAt(0)}
                    </div>
                    <div>

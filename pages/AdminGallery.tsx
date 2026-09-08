@@ -219,7 +219,7 @@ const AdminGallery: React.FC<AdminGalleryProps> = ({ currentProfileImage, onUpda
                   {onUpdateProfileImage && (
                     <button
                       onClick={() => onUpdateProfileImage(img.url)}
-                      className="w-11 h-11 flex items-center justify-center rounded-pilule bg-papier text-encre hover:bg-encre hover:text-papier transition-colors"
+                      className="w-11 h-11 flex items-center justify-center rounded-pilule bg-papier text-encre hover:bg-bouton hover:text-sur-bouton transition-colors"
                       title={t.setProfile}
                       aria-label={t.setProfile}
                     >
