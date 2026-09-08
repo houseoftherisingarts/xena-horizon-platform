@@ -124,6 +124,12 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
 
   const [side, setSide] = useState<'reglages' | 'apercu' | 'versions'>('reglages');
   const [pickFor, setPickFor] = useState<number | null>(null);
+  // Le choix d'un gabarit : seulement à la création d'une lettre neuve (id === null), jamais en
+  // rouvrant un brouillon existant. Les gabarits eux-mêmes se chargent au moment où l'écran s'ouvre
+  // (le gabarit balado dépend de public/balado.json, lu de façon paresseuse).
+  const [gabaritOuvert, setGabaritOuvert] = useState(id === null);
+  const [gabarits, setGabarits] = useState<Gabarit[] | null>(null);
+  useEffect(() => { if (gabaritOuvert && !gabarits) chargerGabarits().then(setGabarits); }, [gabaritOuvert, gabarits]);
   const [sendBusy, setSendBusy] = useState<'idle' | 'test' | 'live'>('idle');
   const [sendErr, setSendErr] = useState<string | null>(null);
   const [sendInfo, setSendInfo] = useState<string | null>(null);
