@@ -29,6 +29,18 @@ const TEXTES = {
     subheadline: 'Trois profils, une même écoute : artiste, entrepreneur créatif ou organisme.',
     photoAlt: 'Laurie Belhumeur sur scène',
     signature: SIGNATURE.texteFR,
+    artistTagline: PROFILS_REELS[0].taglineFR,
+    artistTitle: PROFILS_REELS[0].titleFR,
+    artistDescription: PROFILS_REELS[0].descriptionFR,
+    artistDetails: PROFILS_REELS[0].detailsFR,
+    entrepreneurTagline: PROFILS_REELS[1].taglineFR,
+    entrepreneurTitle: PROFILS_REELS[1].titleFR,
+    entrepreneurDescription: PROFILS_REELS[1].descriptionFR,
+    entrepreneurDetails: PROFILS_REELS[1].detailsFR,
+    npoTagline: PROFILS_REELS[2].taglineFR,
+    npoTitle: PROFILS_REELS[2].titleFR,
+    npoDescription: PROFILS_REELS[2].descriptionFR,
+    npoDetails: PROFILS_REELS[2].detailsFR,
   },
   EN: {
     heroTitre: SERVICES_PAGE.titreEN,
@@ -46,6 +58,18 @@ const TEXTES = {
     subheadline: 'Three profiles, the same listening ear: artist, creative entrepreneur or organization.',
     photoAlt: 'Laurie Belhumeur on stage',
     signature: SIGNATURE.texteEN,
+    artistTagline: PROFILS_REELS[0].taglineEN,
+    artistTitle: PROFILS_REELS[0].titleEN,
+    artistDescription: PROFILS_REELS[0].descriptionEN,
+    artistDetails: PROFILS_REELS[0].detailsEN,
+    entrepreneurTagline: PROFILS_REELS[1].taglineEN,
+    entrepreneurTitle: PROFILS_REELS[1].titleEN,
+    entrepreneurDescription: PROFILS_REELS[1].descriptionEN,
+    entrepreneurDetails: PROFILS_REELS[1].detailsEN,
+    npoTagline: PROFILS_REELS[2].taglineEN,
+    npoTitle: PROFILS_REELS[2].titleEN,
+    npoDescription: PROFILS_REELS[2].descriptionEN,
+    npoDetails: PROFILS_REELS[2].detailsEN,
   },
 };
 
@@ -86,6 +110,8 @@ const pourQui = (offer: Product, lang: Language): string => {
 };
 
 const OFFSET_PROFIL = ['', 'lg:mt-[6vh]', 'lg:mt-[12vh]'];
+const PREFIXE_PROFIL = ['artist', 'entrepreneur', 'npo'] as const;
+const texteProfil = (t: Record<string, string>, i: number, champ: 'Tagline' | 'Title' | 'Description' | 'Details'): string => t[`${PREFIXE_PROFIL[i]}${champ}`] ?? '';
 const SPAN_PROFIL = ['lg:col-span-5', 'lg:col-span-4', 'lg:col-span-3'];
 
 const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) => {
@@ -200,13 +226,13 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
               delay={i * 0.1}
               className={`border-t border-filet pt-6 ${SPAN_PROFIL[i]} ${OFFSET_PROFIL[i]}`}
             >
-              <p className="text-petit text-gris mb-2">{lang === 'EN' ? profil.taglineEN : profil.taglineFR}</p>
+              <p className="text-petit text-gris mb-2">{texteProfil(t, i, 'Tagline')}</p>
               {/* La colonne étroite (3/12, « Organisations et entreprises ») déborde en 3 lignes à text-h2 : h3 pour elle. */}
               <h2 className={`font-serif ${i === 2 ? 'text-h3' : 'text-h2'}`}>
-                {lang === 'EN' ? profil.titleEN : profil.titleFR}
+                {texteProfil(t, i, 'Title')}
               </h2>
-              <p className="text-lede text-gris mt-4">{lang === 'EN' ? profil.descriptionEN : profil.descriptionFR}</p>
-              <p className="text-corps text-gris mt-3">{lang === 'EN' ? profil.detailsEN : profil.detailsFR}</p>
+              <p className="text-lede text-gris mt-4">{texteProfil(t, i, 'Description')}</p>
+              <p className="text-corps text-gris mt-3">{texteProfil(t, i, 'Details')}</p>
               <a
                 href="#offres"
                 onClick={(e) => {
