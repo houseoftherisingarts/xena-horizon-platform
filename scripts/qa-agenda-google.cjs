@@ -44,10 +44,10 @@ async function mesurer(page) {
     for (const etat of ETATS) {
       for (const nuit of [false, true]) {
         const page = await context.newPage();
-        await page.goto(`${BASE}/admin/agenda?etatDemo=${etat}`, { waitUntil: 'networkidle' });
+        await page.goto(`${BASE}/admin/agenda?etatDemo=${etat}`, { waitUntil: 'load', timeout: 30000 });
         await preparer(page, nuit);
-        await page.reload({ waitUntil: 'networkidle' });
-        await page.waitForTimeout(300);
+        await page.reload({ waitUntil: 'load', timeout: 30000 });
+        await page.waitForTimeout(1200);
         const m = await mesurer(page);
         if (m.trouve) {
           await page.evaluate((top) => window.scrollTo(0, Math.max(0, top - 80)), m.top);
