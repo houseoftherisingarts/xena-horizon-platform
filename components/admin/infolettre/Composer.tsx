@@ -150,6 +150,13 @@ const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const appliquerGabarit = (g: Gabarit) => {
+    const c = g.construire(letterLang);
+    setSujet(c.sujet); setPreheader(c.preheader); setBlocs(c.blocs); setBandeau(c.bandeau); setFond(c.fond);
+    setSelectedIdx(null);
+    setGabaritOuvert(false);
+  };
+
   const addBlock = (type: BlockType, at: number = blocs.length) => {
     if (isReadOnly) return;
     const gabarit = BLOCK_PALETTE.find((b) => b.type === type)?.gabarit();
