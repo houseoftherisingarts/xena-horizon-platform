@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/balado.mjs; vite build && node scripts/prerender-meta.mjs",
+    "build": "node scripts/balado.mjs; vite build && node scripts/prerender-meta.mjs; node scripts/indexnow-ping.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
