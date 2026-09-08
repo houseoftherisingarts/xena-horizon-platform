@@ -62,7 +62,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
     setChamp('');
     requestAnimationFrame(faireDefiler);
     window.setTimeout(() => {
-      setFil((f) => [...f, { de: 'lui', texte: repondreAssistant(q, config, dossier) }]);
+      setFil((f) => [...f, { de: 'lui', texte: repondreAssistant(q, config, dossier, lang) }]);
       requestAnimationFrame(faireDefiler);
     }, 280);
   };
