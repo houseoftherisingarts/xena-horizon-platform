@@ -8,6 +8,7 @@ import React, { useRef } from 'react';
 import { motion, useMotionTemplate, useReducedMotion, useTransform } from 'framer-motion';
 import Une from './Une';
 import { usePinProgress } from '../../lib/useProgression';
+import { useIntroTerminee } from '../../lib/intro';
 import type { Language } from '../../types';
 
 export interface AllumageProps {
