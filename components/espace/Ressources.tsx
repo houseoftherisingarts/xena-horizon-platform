@@ -55,7 +55,7 @@ const Ressources: React.FC<RessourcesProps> = ({ lang }) => {
               <p className="text-encre font-semibold text-sm">{r.titre}</p>
               {r.description && <p className="text-gris text-xs mt-1">{r.description}</p>}
               <span className="inline-flex items-center gap-1.5 text-rose text-xs font-semibold mt-2 group-hover:gap-2.5 transition-all">
-                <Download className="w-3.5 h-3.5" /> {t.telecharger}
+                <Download className="w-3.5 h-3.5" /> {t.ressourcesTelecharger}
               </span>
             </div>
           </a>

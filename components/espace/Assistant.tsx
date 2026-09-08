@@ -81,6 +81,7 @@ const Assistant: React.FC<AssistantProps> = ({ config, dossier, lang }) => {
         {!ouvert && (
           <button
             type="button"
+            data-tx-scope="espaceAssistant"
             onClick={ouvrir}
             aria-label={t.ouvrir}
             className="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-pilule bg-encre shadow-panneau flex items-center justify-center text-papier hover:bg-encre-2 transition-colors"
