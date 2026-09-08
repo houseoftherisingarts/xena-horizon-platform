@@ -46,6 +46,7 @@ const TEXTES = {
     tagline: HERO.tagline,
     headline: HERO.headline,
     subheadline: HERO.subheadline,
+    pourLes: 'Pour les',
     ctaText: HERO.ctaText,
     strophe: STROPHE_ALLUMAGE.FR,
     servicesTitle: SERVICES.title,
