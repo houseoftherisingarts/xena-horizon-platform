@@ -67,44 +67,7 @@ const Profil: React.FC<ProfilProps> = ({ dossier, uid, lang }) => {
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState(false);
 
-  const t = {
-    FR: {
-      titreQui: 'Qui tu es',
-      titreProjet: 'Ton projet',
-      nom: 'Nom complet',
-      telephone: 'Téléphone',
-      ville: 'Ville',
-      profil: 'Ton profil',
-      discipline: 'Discipline',
-      disciplineHolder: 'Danse, théâtre, écriture, musique…',
-      projetTitre: 'Titre du projet',
-      projetDesc: 'Description',
-      projetObjectif: 'Objectif',
-      echeance: 'Échéance',
-      enregistrer: 'Enregistrer',
-      enregistrement: 'Enregistrement…',
-      succes: 'Profil enregistré.',
-      echec: "L'enregistrement a échoué. Réessaie dans un instant.",
-    },
-    EN: {
-      titreQui: 'Who you are',
-      titreProjet: 'Your project',
-      nom: 'Full name',
-      telephone: 'Phone',
-      ville: 'City',
-      profil: 'Your profile',
-      discipline: 'Discipline',
-      disciplineHolder: 'Dance, theatre, writing, music…',
-      projetTitre: 'Project title',
-      projetDesc: 'Description',
-      projetObjectif: 'Goal',
-      echeance: 'Deadline',
-      enregistrer: 'Save',
-      enregistrement: 'Saving…',
-      succes: 'Profile saved.',
-      echec: 'Saving failed. Try again in a moment.',
-    },
-  }[lang];
+  const t = useTextes('espaceProfil', TEXTES, lang);
 
   const soumettre = async (e: React.FormEvent) => {
     e.preventDefault();
