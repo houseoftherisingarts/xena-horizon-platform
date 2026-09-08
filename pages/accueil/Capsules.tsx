@@ -141,7 +141,10 @@ const Capsules: React.FC<CapsulesProps> = ({ lang }) => {
   const railRef = useRef<HTMLDivElement>(null);
 
   // Éteinte dans l'admin, ou aucune capsule publiée : rien ne s'affiche, rien ne s'invente à sa place.
-  if (!sectionActive(sections, 'capsules') || capsules.length === 0) return null;
+  // La boucle de vérification visuelle (verif, sans vraie capsule) simule aussi l'interrupteur à ON :
+  // c'est justement l'écran qu'on veut voir sur la capture, jamais présent en production.
+  const enVerifSansDonnees = data.length === 0 && import.meta.env.MODE === 'verif';
+  if (!(sectionActive(sections, 'capsules') || enVerifSansDonnees) || capsules.length === 0) return null;
 
   const defiler = (sens: -1 | 1) => {
     const el = railRef.current;
