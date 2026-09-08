@@ -96,8 +96,13 @@ const TEXTES = {
     aligner: 'Center / left-align', lien: 'Link on selection',
     styleBouton: 'Solid', styleContour: 'Outline', numero: 'Numbered', puce: 'Bulleted',
     petit: 'Small', moyen: 'Medium', grand: 'Large',
+    gabaritTitre: 'Start from a template', gabaritLede: 'Choose a starting point already filled in your brand, or a blank page.',
+    gabaritCommencer: 'Start',
   },
 };
+
+/** L'icône de chaque gabarit : pure décoration, tenue à part pour garder lib/infolettre/gabarits.ts sans lucide-react. */
+const ICONE_GABARIT: Record<string, typeof FileText> = { vierge: FileText, nouvelle: Sparkles, rendezvous: CalendarCheck, balado: Mic };
 
 const Composer: React.FC<Props> = ({ id, onBack, lang }) => {
   const t = useTextes('adminInfolettre_composer', TEXTES, lang);
