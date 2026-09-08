@@ -4,8 +4,50 @@ import { deleteObject, getDownloadURL, ref as storageRef, uploadBytesResumable }
 import { AlertCircle, Check, FileText, Upload, X } from 'lucide-react';
 import { storage } from '../../firebase';
 import { patchDoc } from '../../lib/firestore';
+import { useTextes } from '../../lib/textes';
 import { cheminPiece, etatPiece, EtatPiece, libellesPiece, libelleCategorie, piecesManquantes, piecesParCategorie, TAILLE_MAX, TYPES_ACCEPTES } from '../../lib/dossier';
 import { Dossier, DossierConfig, Language, PieceDef, PieceDeposee } from '../../types';
+
+const TEXTES = {
+  FR: {
+    titre: 'Mes pièces',
+    sous: 'Dépose ce que tu as, quand ça t\'adonne. Je vois chaque pièce arriver de mon côté.',
+    manquantesTitre: 'Ce qui manque encore',
+    manquantesVide: 'Tout est là. Je prends le relais.',
+    aideDefaut: '',
+    optionLabel: 'au besoin',
+    deposer: 'Déposer',
+    remplacer: 'Remplacer',
+    retirer: 'Retirer',
+    deposeLe: 'reçue le',
+    aRefaire: 'à refaire',
+    validee: 'validée',
+    nouveauDepot: 'nouveau dépôt, en attente',
+    erreurType: 'Format non accepté. Utilise un PDF, une image, un Word, un Excel ou un texte.',
+    erreurTaille: 'Fichier trop lourd. La limite est de 25 Mo.',
+    erreurEnvoi: "L'envoi a échoué. Réessaie dans un instant.",
+    erreurRetrait: 'Le retrait a échoué. Réessaie dans un instant.',
+  },
+  EN: {
+    titre: 'My documents',
+    sous: "Send what you have, whenever it suits you. I see each file as it arrives.",
+    manquantesTitre: 'Still missing',
+    manquantesVide: "That's everything. I take it from here.",
+    aideDefaut: '',
+    optionLabel: 'if applicable',
+    deposer: 'Upload',
+    remplacer: 'Replace',
+    retirer: 'Remove',
+    deposeLe: 'received on',
+    aRefaire: 'to redo',
+    validee: 'approved',
+    nouveauDepot: 'new upload, pending review',
+    erreurType: 'Format not accepted. Use a PDF, image, Word, Excel or text file.',
+    erreurTaille: 'File too large. The limit is 25 MB.',
+    erreurEnvoi: 'The upload failed. Try again in a moment.',
+    erreurRetrait: 'The removal failed. Try again in a moment.',
+  },
+};
 
 interface PiecesProps {
   dossier: Dossier;
