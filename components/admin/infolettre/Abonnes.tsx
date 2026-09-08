@@ -157,8 +157,16 @@ const Abonnes: React.FC<{ lang: Language }> = ({ lang }) => {
       email: s.email, nom: s.name || '', langue: s.lang || 'fr', statut: s.status, tags: (s.tags || []).join(','), source: s.source || '',
     })));
 
+  const actifsN = useMemo(() => subs.filter((s) => s.status === 'active').length, [subs]);
+  const desabonnesN = subs.length - actifsN;
+
   return (
-    <div data-tx-scope="adminInfolettre_abonnes" className="space-y-4">
+    <div data-tx-scope="adminInfolettre_abonnes" className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Panneau><Chiffre valeur={subs.length} libelle={t.total} /></Panneau>
+        <Panneau><Chiffre valeur={actifsN} libelle={t.statutActifs} /></Panneau>
+        <Panneau><Chiffre valeur={desabonnesN} libelle={t.statutDesabonnes} /></Panneau>
+      </div>
       <div className="flex flex-wrap items-center gap-3">
         <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.rechercher}
           className="flex-1 min-w-[220px] bg-papier border border-filet rounded-champ px-4 py-2.5 text-sm text-encre outline-none focus:border-rose" />
