@@ -74,7 +74,7 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
         <div className="lg:col-span-8">
           <TexteRevele texte={`${t.nom1}\n${t.nom2}`} as="h1" par="lettre" className="font-serif text-h1" />
           <Reveal delay={0.5} as="p" className="kicker text-rose mt-6">
-            {lang === 'EN' ? A_PROPOS.taglineEn : A_PROPOS.tagline}
+            {t.tagline}
           </Reveal>
         </div>
         <Reveal delay={0.2} className="lg:col-span-4 lg:col-start-9 relative aspect-[3/4] overflow-hidden">
@@ -96,7 +96,7 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
       <Feuille z={1} className="bg-papier px-gut py-feuille">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-col">
           <div className="lg:col-span-7 lg:col-start-2">
-            <TexteRevele texte={lang === 'EN' ? A_PROPOS.titreEn : A_PROPOS.titre} as="h2" par="mot" className="font-serif text-h2" />
+            <TexteRevele texte={t.titre} as="h2" par="mot" className="font-serif text-h2" />
             <div className="mt-6 space-y-4">
               {paragraphes.map((p, i) => (
                 <Reveal key={i} delay={i * 0.1} as="p" className="text-corps text-gris mesure">
@@ -133,7 +133,7 @@ const PublicAPropos: React.FC<{ lang: Language }> = ({ lang }) => {
         {/* Taille sur mesure : la phrase réelle (69 caractères) ne tient sur deux lignes ni en text-display
             ni en text-h2 à 390 ou 1440 ; on ne raccourcit pas la mission de Laurie, on ajuste le corps. */}
         <TexteRevele
-          texte={lang === 'EN' ? A_PROPOS.missionEn : A_PROPOS.mission}
+          texte={t.mission}
           as="p"
           par="mot"
           className="font-serif text-[clamp(1.15rem,0.85rem+2.4vw,2.75rem)] leading-[1.15] lg:max-w-[90%]"

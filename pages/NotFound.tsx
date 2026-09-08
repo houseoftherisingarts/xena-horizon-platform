@@ -3,11 +3,29 @@ import { ArrowLeft } from 'lucide-react';
 import { Language, ViewState } from '../types';
 import { VIEW_PATHS } from '../lib/routes';
 import { Reveal } from '../components/motion';
+import { useTextes } from '../lib/textes';
 
 interface NotFoundProps {
   lang: Language;
   onChangeView: (view: ViewState) => void;
 }
+
+const TEXTES = {
+  FR: {
+    code: '404',
+    title: "Cette page n'existe pas",
+    text: "Laurie n'a rien écrit à cette adresse. Retourne à l'accueil, ou continue vers ses services.",
+    cta: "Retour à l'accueil",
+    services: 'Voir les services',
+  },
+  EN: {
+    code: '404',
+    title: 'This page does not exist',
+    text: 'Laurie has written nothing at this address. Head back home, or carry on to her services.',
+    cta: 'Back to home',
+    services: 'See the services',
+  },
+};
 
 /**
  * Une adresse qui ne correspond à aucune vue connue tombe ici. La session principale la branche

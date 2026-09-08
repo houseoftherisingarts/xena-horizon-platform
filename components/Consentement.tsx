@@ -125,7 +125,7 @@ const Consentement: React.FC<ConsentementProps> = ({ lang }) => {
   return (
     <>
       {valeur === null && pretAAfficher && (
-        <div className="fixed z-[90] inset-x-4 bottom-4 sm:inset-x-auto sm:left-auto sm:right-6 sm:bottom-6 sm:w-[min(420px,calc(100vw-3rem))]">
+        <div data-tx-scope="consentement" className="fixed z-[90] inset-x-4 bottom-4 sm:inset-x-auto sm:left-auto sm:right-6 sm:bottom-6 sm:w-[min(420px,calc(100vw-3rem))]">
           <Reveal delay={0.3} y={20} amount={0.1}>
             <div
               role="dialog"
