@@ -165,6 +165,20 @@ const AdminProducts: React.FC<AdminProductsProps> = ({ lang }) => {
     await patchDoc<Product>('products', product.id, { isPublic: nextIsPublic, status: nextStatus });
   };
 
+  const openQuickAdd = (palier: PalierOffres) => {
+    setEditingProduct(null);
+    setFormData({
+      name: '',
+      price: palier.min === 0 ? 0 : Math.ceil(palier.min),
+      description: '',
+      type: 'Digital',
+      category: 'Product',
+      status: 'Concept',
+      isPublic: false
+    });
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="px-6 md:px-10 py-10 space-y-8">
       <EnTete
