@@ -16,10 +16,14 @@ const TEXTES = {
   FR: {
     extrait: 'créer une ligne directrice claire et précise',
     texte: TEMOIGNAGES[0]?.texteFR ?? '',
+    nom: TEMOIGNAGES[0]?.nom ?? '',
+    role: TEMOIGNAGES[0]?.role ?? '',
   },
   EN: {
     extrait: 'to create a clear and precise guideline',
     texte: TEMOIGNAGES[0]?.texteEN ?? '',
+    nom: TEMOIGNAGES[0]?.nom ?? '',
+    role: TEMOIGNAGES[0]?.role ?? '',
   },
 };
 
@@ -42,8 +46,8 @@ const Temoignage: React.FC<TemoignageProps> = ({ lang }) => {
         </Reveal>
 
         <Reveal as="div" delay={0.1} className="col-span-12 sm:col-span-3 sm:col-start-10">
-          <p className="font-sans text-lede font-semibold text-encre">{temoignage.nom}</p>
-          <p className="mt-1 text-petit text-gris">{temoignage.role}</p>
+          <p className="font-sans text-lede font-semibold text-encre">{t.nom}</p>
+          <p className="mt-1 text-petit text-gris">{t.role}</p>
         </Reveal>
       </div>
 
