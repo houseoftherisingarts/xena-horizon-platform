@@ -67,6 +67,7 @@ const TEXTES = {
     retirer: 'Remove',
     confirmRetirer: 'Remove this subscriber?',
     fermer: 'Close',
+    total: 'Total',
   },
 };
 
