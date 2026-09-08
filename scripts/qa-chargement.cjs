@@ -54,8 +54,10 @@ async function voletA(browser) {
       }
     });
 
-    await page.goto(BASE + p.chemin, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(1000); // laisse le LCP et l'intro se stabiliser
+    // 'networkidle' n'arrive jamais : Firestore garde un WebSocket ouvert en continu (useDocument/
+    // useCollection). 'load' + une pause fixe suffit à laisser le LCP et l'intro se stabiliser.
+    await page.goto(BASE + p.chemin, { waitUntil: 'load', timeout: 20000 });
+    await page.waitForTimeout(1500);
     const perf = await page.evaluate(() => window.__perf);
     await page.screenshot({ path: path.join(OUT, `froid-${p.nom}-1440.png`), fullPage: false });
 
