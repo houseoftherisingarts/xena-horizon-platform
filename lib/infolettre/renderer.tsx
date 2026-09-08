@@ -313,7 +313,7 @@ export const RenderBlockWeb: React.FC<{ block: NewsletterBlock; edit?: BlockEdit
         return (
           <blockquote className="my-8 border-l-2 border-rose pl-6 font-serif text-lede text-encre/80">
             <p>« <Inline value={c.text || ''} placeholder="La citation" multiline onCommit={set('text')} /> »</p>
-            <span className={citeClass}>— <Inline value={c.attribution || ''} placeholder="Qui l'a dit" onCommit={set('attribution')} /></span>
+            <span className={citeClass}>· <Inline value={c.attribution || ''} placeholder="Qui l'a dit" onCommit={set('attribution')} /></span>
           </blockquote>
         );
       }
