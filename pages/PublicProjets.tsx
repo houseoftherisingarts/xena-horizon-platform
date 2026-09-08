@@ -3,6 +3,12 @@ import { ArrowUpRight } from 'lucide-react';
 import { PROJETS, PROJETS_PAGE } from '../lib/contenu';
 import { Atmosphere, Feuille, KenBurns, Parallax, Reveal, TexteRevele } from '../components/motion';
 import { Language } from '../types';
+import { useTextes } from '../lib/textes';
+
+const TEXTES = {
+  FR: { ecouter: 'Balado', livre: 'Livre', titre: PROJETS_PAGE.titre, lede: PROJETS_PAGE.lede },
+  EN: { ecouter: 'Podcast', livre: 'Book', titre: PROJETS_PAGE.titreEn, lede: PROJETS_PAGE.ledeEn },
+};
 
 interface PublicProjetsProps {
   lang: Language;
