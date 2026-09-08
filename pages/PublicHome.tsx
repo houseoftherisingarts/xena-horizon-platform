@@ -19,6 +19,7 @@ import Contact from './accueil/Contact';
 import { HOME_EN, STROPHE_ALLUMAGE } from './accueil/textes';
 import { BLOCS_ACCUEIL } from '../lib/contenu';
 import { useTextes } from '../lib/textes';
+import { sectionActive, useSections } from '../lib/sections';
 import type {
   HomeBlock,
   HomeHeroBlock,
