@@ -386,7 +386,10 @@ const RendezVous: React.FC<RendezVousProps> = ({ user, dossier, lang }) => {
                         {peutAnnuler && !arme && (
                           <button
                             type="button"
-                            onClick={() => setAnnulationArmee(rdv.id)}
+                            onClick={() => {
+                              setErreurAnnulation(null);
+                              setAnnulationArmee(rdv.id);
+                            }}
                             className="min-h-[44px] px-5 rounded-pilule text-gris hover:text-rose text-sm font-medium transition-colors"
                           >
                             {t.annuler}
@@ -404,7 +407,10 @@ const RendezVous: React.FC<RendezVousProps> = ({ user, dossier, lang }) => {
                             </button>
                             <button
                               type="button"
-                              onClick={() => setAnnulationArmee(null)}
+                              onClick={() => {
+                                setErreurAnnulation(null);
+                                setAnnulationArmee(null);
+                              }}
                               disabled={enCours}
                               className="min-h-[44px] px-5 rounded-pilule text-gris hover:text-encre text-sm font-medium transition-colors"
                             >
