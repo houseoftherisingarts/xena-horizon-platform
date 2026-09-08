@@ -8,6 +8,16 @@ interface PublicProjetsProps {
   lang: Language;
 }
 
+/**
+ * Le titre anglais des œuvres garde le nom propre suivi d'une traduction entre parenthèses
+ * (« En quête de liberté (In Search of Freedom) »), trop long pour un h2 sur deux lignes.
+ * On sépare : le nom propre reste le titre affiché, la traduction devient une légende dessous.
+ */
+const titreEtGlose = (titreEn: string): { nom: string; glose: string | null } => {
+  const m = titreEn.match(/^(.*?)\s*\((.+)\)$/);
+  return m ? { nom: m[1], glose: m[2] } : { nom: titreEn, glose: null };
+};
+
 const PublicProjets: React.FC<PublicProjetsProps> = ({ lang }) => {
   const t = {
     FR: { ecouter: 'Balado', livre: 'Livre', modele: 'Modèle et comédienne' },
