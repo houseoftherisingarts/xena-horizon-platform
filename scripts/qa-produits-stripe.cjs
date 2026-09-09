@@ -80,7 +80,7 @@ async function ouvrir(browser, largeur, nuit) {
     for (const nuit of [false, true]) {
       const { ctx, page } = await ouvrir(browser, largeur, nuit);
       const suffixe = nuit ? '-nuit' : '';
-      await page.goto(BASE + '/services', { waitUntil: 'load', timeout: 60000 });
+      await page.goto(BASE + '/services?demo=paiement', { waitUntil: 'load', timeout: 60000 });
       await page.waitForTimeout(2500);
       const offresEl = page.locator('#offres');
       await offresEl.scrollIntoViewIfNeeded().catch(() => {});
