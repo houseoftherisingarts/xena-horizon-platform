@@ -10,6 +10,8 @@ import Conciliation from './components/admin/finances/Conciliation';
 import PlanComptable from './components/admin/finances/PlanComptable';
 import Tiers from './components/admin/finances/Tiers';
 import Recus from './components/admin/finances/Recus';
+import TaxesImpot from './components/admin/finances/TaxesImpot';
+import CartesFiscales from './components/admin/finances/CartesFiscales';
 import type { Language } from './types';
 import type { Transaction } from './lib/compta/types';
 
