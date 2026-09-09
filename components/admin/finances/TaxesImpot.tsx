@@ -166,8 +166,8 @@ const TaxesImpot: React.FC<Props> = ({ lang }) => {
   const montantParMois = formatMontant(projImpot.impotProjete.total / 12);
 
   return (
-    <div className="px-6 md:px-10 py-10 space-y-8">
-      <EnTete kicker={t.kicker} titre={t.titre} lede={t.lede} />
+    <div className="space-y-8">
+      <p className="text-gris text-sm mesure">{t.lede}</p>
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* --- Taxes à remettre --- */}
