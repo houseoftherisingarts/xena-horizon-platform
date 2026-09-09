@@ -59,11 +59,44 @@ const App: React.FC = () => {
     typeof window !== 'undefined' && cheminInconnu(window.location.pathname)
   );
 
-  // La vue et l'adresse restent synchronisées : lien direct, bouton Précédent, partage.
+  // La langue choisie survit au rechargement (clé xena.lang); français par défaut. Mais sur les
+  // quatre pages bilingues (langFromPath), l'ADRESSE gagne toujours sur le stockage — sinon un lien
+  // /en/services pourrait ouvrir en français le temps qu'un effet relise localStorage : ici la valeur
+  // initiale du state est déjà la bonne au tout premier rendu, pas de clignotement possible.
+  const [lang, setLangEtat] = useState<Language>(() => {
+    if (typeof window === 'undefined') return 'FR';
+    const depuisAdresse = langFromPath(window.location.pathname);
+    if (depuisAdresse) return depuisAdresse;
+    try {
+      return window.localStorage.getItem('xena.lang') === 'EN' ? 'EN' : 'FR';
+    } catch {
+      return 'FR';
+    }
+  });
+  // L'interrupteur change la langue ET l'adresse (de /services à /en/services et l'inverse) sur les
+  // pages bilingues ; ailleurs (espace, admin, facture) l'adresse ne bouge pas, seul le stockage compte.
+  const setLang = (l: Language) => {
+    setLangEtat(l);
+    try {
+      window.localStorage.setItem('xena.lang', l);
+    } catch {
+      // stockage bloqué : la langue tient pour la session
+    }
+    const path = pathFromView(currentView, l);
+    if (window.location.pathname !== path) {
+      window.history.pushState({ view: currentView, lang: l }, '', path);
+    }
+  };
+  useEffect(() => {
+    document.documentElement.lang = lang === 'EN' ? 'en' : 'fr';
+  }, [lang]);
+
+  // La vue et l'adresse restent synchronisées : lien direct, bouton Précédent, partage. La langue
+  // courante suit (pathFromView pose /en/... si la vue est bilingue et qu'on est en anglais).
   const setCurrentView = (view: ViewState) => {
     setNotFound(false);
     setCurrentViewState(view);
-    const path = pathFromView(view);
+    const path = pathFromView(view, lang);
     if (window.location.pathname !== path) {
       window.history.pushState({ view }, '', path);
     }
@@ -86,29 +119,14 @@ const App: React.FC = () => {
     const onPop = () => {
       setNotFound(cheminInconnu(window.location.pathname));
       setCurrentViewState(viewFromPath(window.location.pathname));
+      // Le bouton Précédent/Suivant peut traverser la frontière /en : l'adresse gagne, sans toucher
+      // au stockage (une navigation dans l'historique ne doit pas réécrire la préférence mémorisée).
+      const depuisAdresse = langFromPath(window.location.pathname);
+      if (depuisAdresse) setLangEtat(depuisAdresse);
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
-  // La langue choisie survit au rechargement (clé xena.lang); français par défaut.
-  const [lang, setLangEtat] = useState<Language>(() => {
-    try {
-      return window.localStorage.getItem('xena.lang') === 'EN' ? 'EN' : 'FR';
-    } catch {
-      return 'FR';
-    }
-  });
-  const setLang = (l: Language) => {
-    setLangEtat(l);
-    try {
-      window.localStorage.setItem('xena.lang', l);
-    } catch {
-      // stockage bloqué : la langue tient pour la session
-    }
-  };
-  useEffect(() => {
-    document.documentElement.lang = lang === 'EN' ? 'en' : 'fr';
-  }, [lang]);
 
   const { data: homeDoc } = useDocument<{ blocks: HomeBlock[] }>('settings/homeBlocks');
   const homeBlocks: HomeBlock[] = homeDoc?.blocks ?? BLOCS_ACCUEIL;
