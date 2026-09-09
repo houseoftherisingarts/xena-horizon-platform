@@ -95,7 +95,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
   const aujourdhui = new Date();
   const age = useMemo(() => ageDesComptesClients(documents, aujourdhui), [documents]);
 
-  const libellePeriode = periode.libelle || `${periode.debut} – ${periode.fin}`;
+  const libellePeriode = periode.libelle || `${periode.debut} au ${periode.fin}`;
 
   const ligneEtatCsv = (l: LigneEtatCompte, e: EtatDesResultats) => {
     const row: Record<string, string | number> = { [t.compte]: nomCompte(l.compte, lang) };
@@ -150,7 +150,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
         <Panneau
           titre={`${t.etatTitre}, ${exercice.libelle}`}
           actions={
-            <div className="flex items-center gap-2 no-imprime">
+            <div className="flex flex-wrap items-center gap-2 no-imprime">
               <select
                 aria-label={t.etatTitre}
                 value={granularite}
@@ -228,7 +228,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
           <Panneau
             titre={t.taxesTitre}
             actions={
-              <div className="flex items-center gap-2 no-imprime">
+              <div className="flex flex-wrap items-center gap-2 no-imprime">
                 <Bouton variante="secondaire" petit icone={Download} onClick={exporterTaxes}>{t.csv}</Bouton>
                 <Bouton variante="secondaire" petit icone={Printer} onClick={() => imprimerBloc('rapport-taxes')}>{t.imprimer}</Bouton>
               </div>
@@ -256,7 +256,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
           <Panneau
             titre={t.depensesTitre}
             actions={
-              <div className="flex items-center gap-2 no-imprime">
+              <div className="flex flex-wrap items-center gap-2 no-imprime">
                 <Bouton variante="secondaire" petit icone={Download} onClick={exporterDepenses}>{t.csv}</Bouton>
                 <Bouton variante="secondaire" petit icone={Printer} onClick={() => imprimerBloc('rapport-depenses')}>{t.imprimer}</Bouton>
               </div>
@@ -289,7 +289,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
           <Panneau
             titre={t.revenusTitre}
             actions={
-              <div className="flex items-center gap-2 no-imprime">
+              <div className="flex flex-wrap items-center gap-2 no-imprime">
                 <Bouton variante="secondaire" petit icone={Download} onClick={exporterRevenus}>{t.csv}</Bouton>
                 <Bouton variante="secondaire" petit icone={Printer} onClick={() => imprimerBloc('rapport-revenus')}>{t.imprimer}</Bouton>
               </div>
@@ -330,7 +330,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
           <Panneau
             titre={t.ageTitre}
             actions={
-              <div className="flex items-center gap-2 no-imprime">
+              <div className="flex flex-wrap items-center gap-2 no-imprime">
                 <Bouton variante="secondaire" petit icone={Download} onClick={exporterAge}>{t.csv}</Bouton>
                 <Bouton variante="secondaire" petit icone={Printer} onClick={() => imprimerBloc('rapport-age')}>{t.imprimer}</Bouton>
               </div>
