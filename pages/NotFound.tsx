@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Language, ViewState } from '../types';
-import { VIEW_PATHS } from '../lib/routes';
+import { VIEW_PATHS, cheminNettoye } from '../lib/routes';
 import { Reveal } from '../components/motion';
 import { useTextes } from '../lib/textes';
 
