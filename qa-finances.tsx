@@ -38,7 +38,7 @@ function Page() {
     const avecRecu = params.get('recu') === 'avec';
     return <Recus transaction={avecRecu ? TRANSACTION_EXEMPLE_AVEC : TRANSACTION_EXEMPLE_SANS} lang={lang} onFermer={() => {}} />;
   }
-  const Composant = { transactions: Transactions, import: Import, conciliation: Conciliation, 'plan-comptable': PlanComptable, tiers: Tiers, 'taxes-impot': TaxesImpot, 'cartes-fiscales': CartesFiscales }[cle] || Transactions;
+  const Composant = { transactions: Transactions, import: Import, conciliation: Conciliation, 'plan-comptable': PlanComptable, tiers: Tiers, 'taxes-impot': TaxesImpot, 'cartes-fiscales': CartesFiscales, apercu: Apercu, rapports: Rapports, reglages: Reglages }[cle] || Transactions;
   return (
     <div className="bg-papier min-h-screen px-6 md:px-10 py-10">
       <Composant lang={lang} />
