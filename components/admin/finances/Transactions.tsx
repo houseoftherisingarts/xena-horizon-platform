@@ -57,6 +57,7 @@ const Transactions: React.FC<Props> = ({ lang }) => {
   const [editionId, setEditionId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [recuOuvert, setRecuOuvert] = useState<Transaction | null>(null);
 
   const [nouvelle, setNouvelle] = useState({ date: new Date().toISOString().slice(0, 10), description: '', tiers: '', montant: '', sens: 'depense' as Sens, compteId: comptes[0]?.id || '' });
 
