@@ -4,8 +4,13 @@
 //
 // tsconfig.json n'est pas configuré pour l'exécution directe (moduleResolution: bundler, imports
 // sans extension) : ce fichier se lance à travers esbuild, qui résout les imports TypeScript comme
-// Vite le fait pour le reste du projet.
-//   npx esbuild scripts/verif-compta.ts --bundle --platform=node --format=esm --outfile=/tmp/verif-compta.mjs && node /tmp/verif-compta.mjs
+// Vite le fait pour le reste du projet. lib/compta/transactions.ts importe lib/firestore.ts, donc
+// firebase.ts (config Firebase lue dans import.meta.env) : --packages=external laisse react et
+// firebase au vrai node_modules (à lancer depuis la racine du dépôt, jamais /tmp), et --define
+// fournit un import.meta.env de secours (aucun appel Firestore n'a lieu dans les fonctions testées).
+//   npx esbuild scripts/verif-compta.ts --bundle --platform=node --format=esm --packages=external \
+//     --define:import.meta.env='{"VITE_FIREBASE_PROJECT_ID":"xena-test","MODE":"verif"}' \
+//     --outfile=.verif-compta-tmp.mjs && node .verif-compta-tmp.mjs; rm -f .verif-compta-tmp.mjs
 import assert from 'node:assert/strict';
 import { apercuCsv, parseOfx, lignesDepuisApercu, empreinte, calculerTaxes, parseDateSouple } from '../lib/compta/import';
 import { transactionsDepuisFactures } from '../lib/compta/transactions';
