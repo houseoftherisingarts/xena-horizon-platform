@@ -9,7 +9,7 @@ import { usePlanComptable, nomCompte } from '../../../lib/compta/plan-defaut';
 import { useReglagesCompta } from '../../../lib/compta/periodes';
 import {
   etatDesResultats, depensesParCompte, revenusParTiers, ageDesComptesClients,
-  exportCsv, telechargerCsv, totalDocumentTTC,
+  exportCsv, telechargerCsv,
   type EtatDesResultats, type LigneEtatCompte,
 } from '../../../lib/compta/rapports';
 import { taxesARemettre } from '../../../lib/compta/fiscal';
