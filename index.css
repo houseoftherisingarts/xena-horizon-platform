@@ -330,18 +330,12 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
 
 @media print {
   .no-imprime { display: none !important; }
-  body[data-mode-impression] * { visibility: hidden; }
-  body[data-mode-impression] [data-impression-active],
-  body[data-mode-impression] [data-impression-active] * { visibility: visible; }
-  /* `visibility: hidden` laisse sa place réservée dans le flux : les quatre AUTRES rapports (invisibles
-     mais toujours en place) ajoutaient des pages blanches derrière celui qu'on imprime (bogue trouvé
-     le 8 septembre). `display: none` les retire vraiment du flux ; seul le bloc actif garde sa place. */
-  body[data-mode-impression] [data-rapport-bloc]:not([data-impression-active]) { display: none !important; }
-  /* État des résultats : douze colonnes mensuelles ne tiennent pas en portrait, page dédiée en paysage. */
-  .imprime-paysage { page: paysage; }
-  /* Un rapport imprimé seul reprend toute la largeur de la page, même s'il vit dans une grille à deux
-     colonnes à l'écran (Résumé des taxes, Dépenses par compte, Revenus par client, Âge des comptes). */
-  body[data-mode-impression] [data-impression-active] { grid-column: 1 / -1; width: 100%; }
+  /* Un rapport s'imprime seul : imprimerBloc (Rapports.tsx) clone le bloc dans #impression-racine et
+     tout le reste de la page disparaît du flux (display:none, jamais visibility:hidden qui laisserait
+     des pages blanches pour l'espace réservé, bogue trouvé le 8 septembre). L'orientation vient d'une
+     règle @page posée par le même script (#impression-page), après celle-ci dans l'ordre des feuilles. */
+  body[data-mode-impression] > *:not(#impression-racine) { display: none !important; }
+  body[data-mode-impression] #impression-racine { display: block; width: 100%; }
 }
+#impression-racine { display: none; }
 @page { size: letter; margin: 0.5in; }
-@page paysage { size: letter landscape; margin: 0.5in; }

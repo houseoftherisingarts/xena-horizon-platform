@@ -52,26 +52,44 @@ const TEXTES = {
   },
 };
 
-// Isole un seul rapport à l'impression (voir @media print dans index.css) : jamais de scroll ni de
-// disparition inattendue ailleurs sur le site, l'attribut se retire dès l'impression terminée.
+// Isole un seul rapport à l'impression : le bloc est cloné dans une racine dédiée (#impression-racine)
+// et tout le reste de la page passe en display:none (voir @media print dans index.css). Le clone porte
+// sa propre règle @page (paysage pour l'état des résultats), parce que les pages nommées CSS ne sont
+// pas honorées par tous les moteurs d'impression. Tout se retire à afterprint.
 function imprimerBloc(id: string) {
-  document.body.setAttribute('data-mode-impression', '1');
-  document.querySelectorAll('[data-rapport-bloc]').forEach((el) => el.removeAttribute('data-impression-active'));
   const bloc = document.getElementById(id);
-  bloc?.setAttribute('data-impression-active', '1');
+  if (!bloc) return;
+  document.querySelectorAll('#impression-racine, #impression-page').forEach((el) => el.remove());
+
+  const clone = bloc.cloneNode(true) as HTMLElement;
+  clone.removeAttribute('id');
+  clone.setAttribute('data-impression-active', '1');
 
   // Un tableau plus large que la page (l'état des résultats, douze colonnes mensuelles) déborde hors
-  // impression sans le signaler : le débordement horizontal ne se paginate jamais, contrairement au
-  // vertical (bogue trouvé le 8 septembre, voir index.css). .impression-compacte resserre d'abord les
-  // cellules (posée AVANT la mesure, pour que scrollWidth porte sur la vraie taille imprimée) ; s'il en
-  // reste, une échelle réduit le reste, jamais sous 65 % (au-delà, illisible sur papier).
-  const table = bloc?.querySelector('table');
-  if (table) {
-    table.classList.add('impression-compacte');
-    const disponible = bloc!.classList.contains('imprime-paysage') ? 960 : 680;
-    const echelle = Math.max(0.65, Math.min(1, disponible / table.scrollWidth));
-    table.style.setProperty('--echelle-impression', String(echelle));
+  // impression sans le signaler : le débordement horizontal ne se pagine jamais. .impression-compacte
+  // resserre d'abord les cellules (mesure faite sur l'original, le clone n'a pas encore de boîte) ; s'il
+  // en reste, une échelle réduit le reste, jamais sous 65 % (au-delà, illisible sur papier).
+  const paysage = bloc.classList.contains('imprime-paysage');
+  const tableOrig = bloc.querySelector('table');
+  const tableClone = clone.querySelector('table');
+  if (tableOrig && tableClone) {
+    tableOrig.classList.add('impression-compacte');
+    const disponible = paysage ? 960 : 680;
+    const echelle = Math.max(0.65, Math.min(1, disponible / tableOrig.scrollWidth));
+    tableOrig.classList.remove('impression-compacte');
+    tableClone.classList.add('impression-compacte');
+    tableClone.style.setProperty('--echelle-impression', String(echelle));
   }
+
+  const racine = document.createElement('div');
+  racine.id = 'impression-racine';
+  racine.appendChild(clone);
+  const style = document.createElement('style');
+  style.id = 'impression-page';
+  style.textContent = paysage ? '@page { size: letter landscape; margin: 0.5in; }' : '@page { size: letter; margin: 0.5in; }';
+  document.head.appendChild(style);
+  document.body.appendChild(racine);
+  document.body.setAttribute('data-mode-impression', '1');
 
   window.print();
 }
@@ -95,6 +113,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
   useEffect(() => {
     const nettoyer = () => {
       document.body.removeAttribute('data-mode-impression');
+      document.querySelectorAll('#impression-racine, #impression-page').forEach((el) => el.remove());
       document.querySelectorAll('[data-rapport-bloc]').forEach((el) => el.removeAttribute('data-impression-active'));
       document.querySelectorAll('table.impression-compacte').forEach((el) => el.classList.remove('impression-compacte'));
     };
