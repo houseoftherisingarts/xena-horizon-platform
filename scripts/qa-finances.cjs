@@ -100,7 +100,7 @@ async function passe(browser, { largeur, hauteur, nuit, skin }) {
     await page.screenshot({ path: fichier, fullPage: true });
     rapport.ecrans.push({ ecran: ecran.nom, largeur, palette: nuit ? 'nuit' : skin, fichier, ...m });
 
-    if (ecran.nom === 'rapports' && largeur === 1440) {
+    if (ecran.nom === 'rapports' && largeur === 1440 && !nuit) {
       // Impression d'un seul rapport (État des résultats) : clique « Imprimer », capture le PDF rendu
       // (page.pdf, Lettre US) pour être regardé comme une capture normale. Une seule passe (desktop,
       // palette ciel de jour) suffit : la mise en page imprimée ne change pas avec la palette d'écran.
