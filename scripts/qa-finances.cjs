@@ -77,7 +77,7 @@ async function passe(browser, { largeur, hauteur, nuit, skin }) {
   });
 
   for (const ecran of ECRANS) {
-    await page.goto(ecran.url, { waitUntil: 'networkidle' });
+    await page.goto(ecran.url, { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(900); // laisse le temps à useTransactions() de basculer sur le jeu d'exemple
     const m = await mesurer(page);
     const suffixe = `${nuit ? 'nuit' : skin}-${largeur}`;
