@@ -32,15 +32,47 @@ const PATH_VIEWS: Record<string, ViewState> = Object.fromEntries(
 /** Préfixe de déploiement (vide en production, `/history/v1` pour une version archivée). */
 const PREFIX = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
 
-export const viewFromPath = (pathname: string): ViewState => {
-  const sansPrefixe = PREFIX && pathname.startsWith(PREFIX) ? pathname.slice(PREFIX.length) : pathname;
-  const clean = sansPrefixe.replace(/\/+$/, '') || '/';
-  return PATH_VIEWS[clean] ?? 'HOME';
+/** Préfixe d'adresse anglais (GEO, trouvaille 3 de l'audit du 8 sept) : `/en/services`, jamais un état sans adresse propre. */
+const LANG_PREFIX = '/en';
+
+/** Les seules vues qui portent une adresse anglaise distincte : les quatre pages publiques prérendues. */
+const VIEWS_BILINGUES: ViewState[] = ['HOME', 'SERVICES', 'PROJETS', 'A_PROPOS'];
+
+/** Retire le préfixe de déploiement puis le préfixe de langue, pour retomber sur le chemin de VIEW_PATHS. */
+const sansPrefixes = (pathname: string): string => {
+  const sansDeploiement = PREFIX && pathname.startsWith(PREFIX) ? pathname.slice(PREFIX.length) : pathname;
+  const enAnglais = sansDeploiement === LANG_PREFIX || sansDeploiement.startsWith(`${LANG_PREFIX}/`);
+  const reste = enAnglais ? sansDeploiement.slice(LANG_PREFIX.length) || '/' : sansDeploiement;
+  return reste.replace(/\/+$/, '') || '/';
 };
 
-export const pathFromView = (view: ViewState): string => {
+export const viewFromPath = (pathname: string): ViewState => {
+  return PATH_VIEWS[sansPrefixes(pathname)] ?? 'HOME';
+};
+
+/** Le chemin nettoyé (préfixes de déploiement et de langue retirés), pour reconnaître une adresse connue. */
+export const cheminNettoye = (pathname: string): string => sansPrefixes(pathname);
+
+/**
+ * La langue portée par l'adresse elle-même, pour les quatre pages bilingues seulement — `null` pour
+ * toute autre adresse (espace, admin, facture), où la langue reste celle de `localStorage`. Quand
+ * l'adresse et `localStorage` se contredisent, c'est TOUJOURS l'adresse qui gagne (App.tsx s'en sert
+ * à l'état initial ET au retour du bouton Précédent) : c'est ce qui garantit qu'un lien /en/... ouvre
+ * bien en anglais, sans clignoter en français le temps qu'un effet lise le stockage.
+ */
+export const langFromPath = (pathname: string): Language | null => {
+  const sansDeploiement = PREFIX && pathname.startsWith(PREFIX) ? pathname.slice(PREFIX.length) : pathname;
+  const enAnglais = sansDeploiement === LANG_PREFIX || sansDeploiement.startsWith(`${LANG_PREFIX}/`);
+  const view = PATH_VIEWS[sansPrefixes(pathname)];
+  if (!view || !VIEWS_BILINGUES.includes(view)) return null;
+  return enAnglais ? 'EN' : 'FR';
+};
+
+export const pathFromView = (view: ViewState, lang: Language = 'FR'): string => {
   const chemin = VIEW_PATHS[view] ?? '/';
-  return PREFIX ? `${PREFIX}${chemin === '/' ? '/' : chemin}` : chemin;
+  const avecLangue =
+    lang === 'EN' && VIEWS_BILINGUES.includes(view) ? (chemin === '/' ? LANG_PREFIX : `${LANG_PREFIX}${chemin}`) : chemin;
+  return PREFIX ? `${PREFIX}${avecLangue}` : avecLangue;
 };
 
 /**
