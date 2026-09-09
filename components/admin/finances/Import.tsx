@@ -20,7 +20,7 @@ const TEXTES = {
     titre: 'Importer un relevé', sous: 'Un fichier CSV ou OFX/QFX de votre institution bancaire.',
     deposer: 'Glissez un fichier ici, ou cliquez pour le choisir', formats: 'CSV, OFX ou QFX',
     apercuTitre: 'Aperçu avant import', colonneDate: 'Colonne date', colonneDesc: 'Colonne description', colonneDebit: 'Colonne débit', colonneCredit: 'Colonne crédit', colonneMontant: 'Colonne montant (signé)',
-    aucune: '— aucune —', lignes: (n: number) => `${n} ligne${n > 1 ? 's' : ''} détectée${n > 1 ? 's' : ''}.`,
+    aucune: '(aucune)', lignes: (n: number) => `${n} ligne${n > 1 ? 's' : ''} détectée${n > 1 ? 's' : ''}.`,
     date: 'Date', description: 'Description', montant: 'Montant', compte: 'Compte', deja: 'Déjà importée',
     importer: 'Importer', importerN: (n: number) => `Importer ${n} nouvelle${n > 1 ? 's' : ''} transaction${n > 1 ? 's' : ''}`,
     fait: (n: number) => `${n} transaction${n > 1 ? 's' : ''} importée${n > 1 ? 's' : ''}.`, recommencer: 'Importer un autre fichier',
