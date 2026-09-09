@@ -67,8 +67,8 @@ function imprimerBloc(id: string) {
   // (au-delà, illisible : mieux vaut nommer la limite que produire un rapport tronqué en silence).
   const table = bloc?.querySelector('table');
   if (table) {
-    const disponible = bloc!.classList.contains('imprime-paysage') ? 940 : 680;
-    const echelle = Math.max(0.6, Math.min(1, disponible / table.scrollWidth));
+    const disponible = bloc!.classList.contains('imprime-paysage') ? 960 : 680;
+    const echelle = Math.max(0.75, Math.min(1, disponible / table.scrollWidth));
     bloc!.style.setProperty('--echelle-impression', String(echelle));
   }
 
