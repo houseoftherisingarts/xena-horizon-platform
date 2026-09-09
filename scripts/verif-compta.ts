@@ -32,7 +32,7 @@ function verifie(nom: string, condition: boolean, detail?: string) {
     '2026-01-12;Frais mensuels;6,95;',
   ].join('\n');
   const apercu = apercuCsv(csv);
-  verifie('Desjardins : en-tête reconnue', apercu.colonnes.join('|') === 'Date;Description;Débit;Crédit'.split(';').join('|'));
+  verifie('Desjardins : en-tête reconnue', apercu.colonnes.join('|') === ['Date', 'Description', 'Débit', 'Crédit'].join('|'), apercu.colonnes.join('|'));
   verifie('Desjardins : 3 lignes détectées', apercu.lignes.length === 3, `${apercu.lignes.length}`);
   verifie('Desjardins : colonne date détectée', apercu.detection.date === 0);
   verifie('Desjardins : colonne débit détectée', apercu.detection.debit === 2);
