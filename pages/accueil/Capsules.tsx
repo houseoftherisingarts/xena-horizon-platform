@@ -144,8 +144,6 @@ const Capsules: React.FC<CapsulesProps> = ({ lang }) => {
   // La boucle de vérification visuelle (verif, sans vraie capsule) simule aussi l'interrupteur à ON :
   // c'est justement l'écran qu'on veut voir sur la capture, jamais présent en production.
   const enVerifSansDonnees = data.length === 0 && import.meta.env.MODE === 'verif';
-  // eslint-disable-next-line no-console
-  console.debug('[DEBUG capsules]', { mode: import.meta.env.MODE, dataLen: data.length, capsulesLen: capsules.length, sectionActive: sectionActive(sections, 'capsules'), enVerifSansDonnees });
   if (!(sectionActive(sections, 'capsules') || enVerifSansDonnees) || capsules.length === 0) return null;
 
   const defiler = (sens: -1 | 1) => {
