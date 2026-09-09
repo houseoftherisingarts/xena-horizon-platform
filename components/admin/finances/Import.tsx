@@ -30,7 +30,7 @@ const TEXTES = {
     titre: 'Import a statement', sous: 'A CSV or OFX/QFX file from your bank.',
     deposer: 'Drag a file here, or click to choose one', formats: 'CSV, OFX or QFX',
     apercuTitre: 'Preview before import', colonneDate: 'Date column', colonneDesc: 'Description column', colonneDebit: 'Debit column', colonneCredit: 'Credit column', colonneMontant: 'Amount column (signed)',
-    aucune: '— none —', lignes: (n: number) => `${n} row${n > 1 ? 's' : ''} detected.`,
+    aucune: '(none)', lignes: (n: number) => `${n} row${n > 1 ? 's' : ''} detected.`,
     date: 'Date', description: 'Description', montant: 'Amount', compte: 'Account', deja: 'Already imported',
     importer: 'Import', importerN: (n: number) => `Import ${n} new transaction${n > 1 ? 's' : ''}`,
     fait: (n: number) => `${n} transaction${n > 1 ? 's' : ''} imported.`, recommencer: 'Import another file',
