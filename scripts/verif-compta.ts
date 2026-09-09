@@ -139,10 +139,11 @@ OFXHEADER:100
   const facture = (partiel: Partial<DocumentFacture>): DocumentFacture => ({
     id: '', number: '', type: 'Invoice', clientId: '', clientName: '', clientEmail: '', date: '', items: [], status: 'Paid', terms: '', ...partiel,
   });
+  const poste = (price: number, quantity = 1) => ({ id: 'i1', description: 'Prestation', quantity, price });
   const documents: DocumentFacture[] = [
-    facture({ id: 'fact-1', date: '2026-02-01', number: 'F-001', clientName: 'Studio Ancrage', items: [{ quantity: 1, price: 500 }] }),
-    facture({ id: 'fact-2', date: '2026-02-05', number: 'F-002', clientName: 'Marie-Ève Boutin', status: 'Pending', items: [{ quantity: 2, price: 100 }] }),
-    facture({ id: 'fact-3', date: '2026-02-10', number: 'F-003', clientName: 'Festival des Cimes', items: [{ quantity: 1, price: 900 }] }),
+    facture({ id: 'fact-1', date: '2026-02-01', number: 'F-001', clientName: 'Studio Ancrage', items: [poste(500)] }),
+    facture({ id: 'fact-2', date: '2026-02-05', number: 'F-002', clientName: 'Marie-Ève Boutin', status: 'Pending', items: [poste(100, 2)] }),
+    facture({ id: 'fact-3', date: '2026-02-10', number: 'F-003', clientName: 'Festival des Cimes', items: [poste(900)] }),
   ];
   const premierePasse = transactionsDepuisFactures(documents);
   verifie('Idempotence : seules les factures payées sont dérivées (2 sur 3)', premierePasse.length === 2, `${premierePasse.length}`);
