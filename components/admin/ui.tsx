@@ -27,9 +27,9 @@ export const Panneau: React.FC<{
 }> = ({ titre, actions, className = '', children }) => (
   <section className={`bg-papier-2 border border-filet rounded-champ p-5 md:p-6 ${className}`}>
     {(titre || actions) && (
-      <div className="flex items-center justify-between gap-3 mb-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         {titre && <h2 className="font-sans font-semibold text-encre">{titre}</h2>}
-        {actions && <div className="flex items-center gap-2">{actions}</div>}
+        {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
     )}
     {children}
