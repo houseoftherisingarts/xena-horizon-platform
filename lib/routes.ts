@@ -1,4 +1,4 @@
-import { ViewState } from '../types';
+import { Language, ViewState } from '../types';
 
 /** Chaque vue porte une vraie adresse, pour les liens directs, le bouton Précédent et le référencement. */
 export const VIEW_PATHS: Record<ViewState, string> = {
