@@ -156,7 +156,7 @@ const Capsules: React.FC<CapsulesProps> = ({ lang }) => {
   };
 
   return (
-    <Feuille z={1.5} className="bg-papier">
+    <Feuille z={1} className="bg-papier">
       <div data-tx-scope="accueilCapsules" className="px-gut py-feuille">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-6 sm:mb-16">
           <div>
