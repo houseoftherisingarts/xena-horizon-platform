@@ -2,6 +2,7 @@
 // décimale. Réutilisé par Transactions, Import, Conciliation, PlanComptable, Tiers, Recus et les
 // rapports/fiscal des autres bâtisseurs de la vague. Un seul endroit, jamais de deuxième formatteur.
 const MONNAIE = new Intl.NumberFormat('fr-CA', { style: 'currency', currency: 'CAD' });
+const MONNAIE_RONDE = new Intl.NumberFormat('fr-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
 const NOMBRE = new Intl.NumberFormat('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const POURCENT = new Intl.NumberFormat('fr-CA', { minimumFractionDigits: 1, maximumFractionDigits: 3 });
 
