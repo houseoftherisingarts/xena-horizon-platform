@@ -178,11 +178,19 @@ const PublicServices: React.FC<PublicServicesProps> = ({ lang, onChangeView }) =
   const titre = t.heroTitre;
   const email = 'laurie.belhumeur@gmail.com';
 
+  // Forcer le catalogue d'exemple malgré des offres réelles déjà publiées (boucle verdict des trois
+  // chemins de paiement) : ?demo=paiement, actif seulement sous MODE=verif, jamais compilé en production.
+  const forcerDemo =
+    import.meta.env.MODE === 'verif' &&
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('demo') === 'paiement';
+
   const catalogue: Product[] = useMemo(() => {
+    if (forcerDemo) return DEMO_PAIEMENT;
     const publics = (produitsFirestore ?? []).filter((p) => p.isPublic && p.status === 'Active');
     if (publics.length > 0) return publics;
     return import.meta.env.MODE === 'verif' ? DEMO_PAIEMENT : SERVICES_REELS;
-  }, [produitsFirestore]);
+  }, [produitsFirestore, forcerDemo]);
 
   const prixVedettes = SERVICES_REELS.filter((s) =>
     ['strategie-communication', 'redaction', 'abonnement-mensuel'].includes(s.id)
