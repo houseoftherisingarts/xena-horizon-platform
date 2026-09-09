@@ -95,7 +95,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
   const aujourdhui = new Date();
   const age = useMemo(() => ageDesComptesClients(documents, aujourdhui), [documents]);
 
-  const libellePeriode = periode.libelle || `${periode.debut} au ${periode.fin}`;
+  const libellePeriode = periode.libelle || (lang === 'FR' ? `${periode.debut} au ${periode.fin}` : `${periode.debut} to ${periode.fin}`);
 
   const ligneEtatCsv = (l: LigneEtatCompte, e: EtatDesResultats) => {
     const row: Record<string, string | number> = { [t.compte]: nomCompte(l.compte, lang) };
