@@ -42,8 +42,6 @@ const AdminVideos = lazy(() => import('./pages/AdminVideos'));
 const AdminSections = lazy(() => import('./pages/AdminSections'));
 const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 const FacturePublique = lazy(() => import('./pages/FacturePublique'));
-const PublicProjets = lazy(() => import('./pages/PublicProjets'));
-const PublicAPropos = lazy(() => import('./pages/PublicAPropos'));
 
 const PageLoader: React.FC = () => (
   <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
