@@ -98,10 +98,10 @@ const FacturePublique: React.FC<FacturePubliqueProps> = ({ jeton, lang }) => {
     : '';
 
   return (
-    <div className="min-h-screen bg-papier flex flex-col items-center py-10 sm:py-16 px-4">
-      <div className="w-full max-w-4xl">
+    <div className="min-h-screen bg-papier flex flex-col items-center py-10 sm:py-16 px-4 print:p-0 print:min-h-0">
+      <div className="w-full max-w-4xl print:max-w-none">
         {(viensDePayer || dejaPayee) && (
-          <div className="mb-6 bg-rose/10 border border-rose/30 rounded-champ px-5 py-4 text-sm text-rose">
+          <div className="mb-6 bg-rose/10 border border-rose/30 rounded-champ px-5 py-4 text-sm text-rose print:hidden">
             {dejaPayee ? t.payee : t.confirmation}
           </div>
         )}
