@@ -20,11 +20,15 @@ fs.writeFileSync(
   ['Date;Description;Débit;Crédit', '2026-09-03;Stripe;45,50;', '2026-09-05;Nouveau client;;750,00'].join('\n')
 );
 
-// Les six composants de la mission; Recus se capture à part (sans/avec reçu) via ?c=recus&recu=.
+// Les composants de la mission; Recus se capture à part (sans/avec reçu) via ?c=recus&recu=.
+// apercu et rapports (xena4-L-finances, 8 septembre 2026) : Aperçu, Rapports, et l'impression d'un
+// rapport (voir la passe PDF plus bas, sur l'écran « rapports »).
 const ECRANS = [
+  { nom: 'apercu', url: `${BASE}/qa-finances.html?c=apercu` },
   { nom: 'transactions', url: `${BASE}/qa-finances.html?c=transactions` },
   { nom: 'import', url: `${BASE}/qa-finances.html?c=import` },
   { nom: 'conciliation', url: `${BASE}/qa-finances.html?c=conciliation` },
+  { nom: 'rapports', url: `${BASE}/qa-finances.html?c=rapports` },
   { nom: 'plan-comptable', url: `${BASE}/qa-finances.html?c=plan-comptable` },
   { nom: 'tiers', url: `${BASE}/qa-finances.html?c=tiers` },
   { nom: 'recus-sans', url: `${BASE}/qa-finances.html?c=recus&recu=sans` },
