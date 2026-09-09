@@ -57,7 +57,21 @@ const TEXTES = {
 function imprimerBloc(id: string) {
   document.body.setAttribute('data-mode-impression', '1');
   document.querySelectorAll('[data-rapport-bloc]').forEach((el) => el.removeAttribute('data-impression-active'));
-  document.getElementById(id)?.setAttribute('data-impression-active', '1');
+  const bloc = document.getElementById(id);
+  bloc?.setAttribute('data-impression-active', '1');
+
+  // Un tableau plus large que la page (l'état des résultats, douze colonnes mensuelles) déborde
+  // hors impression sans le signaler : le débordement horizontal ne se paginate jamais, contrairement
+  // au vertical (bogue trouvé le 8 septembre, voir index.css). On mesure sa vraie largeur et on le
+  // réduit d'un facteur pour qu'il tienne dans la largeur imprimable, jamais en dessous de 60 %
+  // (au-delà, illisible : mieux vaut nommer la limite que produire un rapport tronqué en silence).
+  const table = bloc?.querySelector('table');
+  if (table) {
+    const disponible = bloc!.classList.contains('imprime-paysage') ? 940 : 680;
+    const echelle = Math.max(0.6, Math.min(1, disponible / table.scrollWidth));
+    bloc!.style.setProperty('--echelle-impression', String(echelle));
+  }
+
   window.print();
 }
 
