@@ -3,9 +3,12 @@
 //
 // Placement : entre Sommaire et À propos. Les trois profils (Sommaire) disent à qui Laurie
 // s'adresse; les capsules la montrent tout de suite en train d'enseigner, dans sa propre voix,
-// avant même le récit de son parcours (À propos) — la preuve d'expertise précède la biographie.
-// z={1.5} plutôt qu'un entier : évite de renuméroter les six feuilles suivantes de la pile pour
-// une section qui reste éteinte tant qu'aucune capsule n'est publiée.
+// avant même le récit de son parcours (À propos) : la preuve d'expertise précède la biographie.
+// z={1} plutôt qu'un nombre entre Sommaire et À propos : z-index n'accepte que des entiers en CSS
+// (une valeur fractionnaire comme 1.5 est invalide et retombe silencieusement à « auto », ce qui
+// laissait Sommaire toujours au-dessus). Même z que Sommaire, mais Capsules vient après elle dans
+// l'arbre : à z égal, l'ordre du DOM tranche, donc elle se peint bien par-dessus, et À propos (z=2)
+// continue de la recouvrir normalement. Ça évite aussi de renuméroter les six feuilles suivantes.
 //
 // CapsuleCarte est exportée pour l'aperçu de l'admin (pages/AdminVideos.tsx) : la même carte,
 // telle qu'elle paraîtra sur l'accueil.
