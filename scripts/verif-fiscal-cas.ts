@@ -54,19 +54,22 @@ function transactionDepense(id: string, date: string, montant: number, tps: numb
     const label = `impotEstime(${c.profit})`;
     proche(r.federal, c.federal, c.tolerance, `${label} fédéral`);
     proche(r.quebec, c.quebec, c.tolerance, `${label} Québec`);
-    proche(r.rrq, c.rrq, 0.02, `${label} RRQ`);
-    proche(r.rqap, c.rqap, 0.02, `${label} RQAP`);
-    proche(r.total, c.total, c.tolerance * 2, `${label} total`);
-    proche(r.tauxMarginal, c.tauxMarginal, 0.003, `${label} taux marginal`);
+    proche(r.rrq, c.rrq, 0.01, `${label} RRQ`);
+    proche(r.rqap, c.rqap, 0.01, `${label} RQAP`);
+    proche(r.total, c.total, c.tolerance, `${label} total`);
+    proche(r.tauxMarginal, c.tauxMarginal, 0.001, `${label} taux marginal`);
     verifie(`${label} détail non vide`, r.detail.length > 0);
   }
-  // Le RRQ et le RQAP plafonnent : 100 000 $ et 150 000 $ dépassent tous deux le MGA supplémentaire
-  // et le maximum assurable, donc leurs cotisations doivent être identiques (contrôle croisé, pas
-  // seulement une coïncidence des chiffres écrits à la main ci-dessus).
+  // Contrôle croisé des plafonds, deux seuils distincts : le RRQ plafonne dès que le profit dépasse
+  // le MGA supplémentaire (85 000 $, donc 100k$ et 150k$ portent déjà la même cotisation RRQ); le
+  // RQAP ne plafonne qu'au maximum assurable (103 000 $, donc 150k$ et 250k$ portent la même
+  // cotisation RQAP, mais pas 100k$, encore en dessous).
   const r100 = impotEstime(100000, FISCAL_2026);
   const r150 = impotEstime(150000, FISCAL_2026);
-  proche(r100.rrq, r150.rrq, 0.001, 'RRQ plafonné identique à 100k$ et 150k$');
-  proche(r100.rqap, r150.rqap, 0.001, 'RQAP plafonné identique à 100k$ et 150k$');
+  const r250 = impotEstime(250000, FISCAL_2026);
+  proche(r100.rrq, r150.rrq, 0.001, 'RRQ déjà plafonné à 100k$ (identique à 150k$)');
+  proche(r150.rqap, r250.rqap, 0.001, 'RQAP plafonné à 150k$ et 250k$ (maximum assurable atteint)');
+  verifie('RQAP pas encore plafonné à 100k$', Math.abs(r100.rqap - r150.rqap) > 1, `${r100.rqap} vs ${r150.rqap}`);
 }
 
 // --- 7. Taxes à remettre sur un exercice de 12 mois, avec des CTI et des RTI ---
