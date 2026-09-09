@@ -102,27 +102,28 @@ export const SelecteurPeriode: React.FC<{
   masquerComparaison?: boolean;
 }> = ({ lang, etat, onChange, mois, trimestres, exercice, masquerComparaison }) => {
   const t = TEXTES_PERIODE[lang];
+  const champSelect = 'bg-papier border border-filet rounded-champ px-3 py-2 text-sm text-encre outline-none focus:border-rose min-h-[40px]';
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Selection label="" aria-label={t.exercice} value={etat.type} onChange={(e) => onChange({ ...etat, type: e.target.value as TypePeriode })} className="min-w-[9rem]">
+      <select aria-label={t.exercice} value={etat.type} onChange={(e) => onChange({ ...etat, type: e.target.value as TypePeriode })} className={`${champSelect} min-w-[9rem]`}>
         <option value="exercice">{t.exercice}</option>
         <option value="trimestre">{t.trimestre}</option>
         <option value="mois">{t.mois}</option>
         <option value="personnalisee">{t.personnalisee}</option>
-      </Selection>
+      </select>
       {etat.type === 'mois' && (
-        <Selection label="" aria-label={t.mois} value={etat.indexMois} onChange={(e) => onChange({ ...etat, indexMois: Number(e.target.value) })}>
+        <select aria-label={t.mois} value={etat.indexMois} onChange={(e) => onChange({ ...etat, indexMois: Number(e.target.value) })} className={champSelect}>
           {mois.map((m, i) => (
             <option key={m.debut} value={i}>{m.libelle}</option>
           ))}
-        </Selection>
+        </select>
       )}
       {etat.type === 'trimestre' && (
-        <Selection label="" aria-label={t.trimestre} value={etat.indexTrimestre} onChange={(e) => onChange({ ...etat, indexTrimestre: Number(e.target.value) })}>
+        <select aria-label={t.trimestre} value={etat.indexTrimestre} onChange={(e) => onChange({ ...etat, indexTrimestre: Number(e.target.value) })} className={champSelect}>
           {trimestres.map((tr, i) => (
             <option key={tr.debut} value={i}>{tr.libelle}</option>
           ))}
-        </Selection>
+        </select>
       )}
       {etat.type === 'personnalisee' && (
         <>
