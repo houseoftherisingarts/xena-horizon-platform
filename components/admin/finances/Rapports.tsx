@@ -64,7 +64,7 @@ function imprimerBloc(id: string) {
 const EnteteImpression: React.FC<{ titre: string; periodeLibelle: string }> = ({ titre, periodeLibelle }) => (
   <div className="hidden print:block mb-6">
     <p className="font-serif text-h3 text-encre">{TEXTES.FR.entrepriseNom}</p>
-    <p className="text-sm text-gris">{titre} — {periodeLibelle}</p>
+    <p className="text-sm text-gris">{titre}, {periodeLibelle}</p>
   </div>
 );
 
