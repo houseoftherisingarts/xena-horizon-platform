@@ -302,6 +302,19 @@ async function main() {
   await verifie('un client connecté écrit settings/sections (refus attendu)', assertFails(setDoc(doc(dbA, 'settings', 'sections'), { capsules: true })));
   await verifie('Laurie écrit settings/sections (ok)', assertSucceeds(setDoc(doc(dbAdmin, 'settings', 'sections'), { capsules: true }, { merge: true })));
 
+  // 15. Module comptable (lib/compta/) : transactions et tiers, admin seulement, comme clients/documents.
+  await verifie('Laurie lit les transactions (ok)', assertSucceeds(getDocs(collection(dbAdmin, 'transactions'))));
+  await verifie('Laurie écrit une transaction (ok)', assertSucceeds(setDoc(doc(dbAdmin, 'transactions', 'tr-admin'), { date: '2026-09-01', description: 'Test', sens: 'depense', montant: 10, tps: 0.5, tvq: 1, total: 11.5, compteId: 'dep-fournitures', source: 'manuel', concilie: false })));
+  await verifie('un client connecté lit les transactions (refus attendu)', assertFails(getDocs(collection(dbA, 'transactions'))));
+  await verifie('un client connecté écrit une transaction (refus attendu)', assertFails(setDoc(doc(dbA, 'transactions', 'tr-intrus'), { montant: 1 })));
+  await verifie('un anonyme lit les transactions (refus attendu)', assertFails(getDocs(collection(dbAnon, 'transactions'))));
+  await verifie('un anonyme écrit une transaction (refus attendu)', assertFails(setDoc(doc(dbAnon, 'transactions', 'tr-anon'), { montant: 1 })));
+  await verifie('Laurie lit les tiers (ok)', assertSucceeds(getDocs(collection(dbAdmin, 'tiers'))));
+  await verifie('Laurie écrit un tiers (ok)', assertSucceeds(setDoc(doc(dbAdmin, 'tiers', 'tier-admin'), { nom: 'Fournisseur test', type: 'fournisseur' })));
+  await verifie('un client connecté lit les tiers (refus attendu)', assertFails(getDocs(collection(dbA, 'tiers'))));
+  await verifie('un client connecté écrit un tiers (refus attendu)', assertFails(setDoc(doc(dbA, 'tiers', 'tier-intrus'), { nom: 'x', type: 'client' })));
+  await verifie('un anonyme lit les tiers (refus attendu)', assertFails(getDocs(collection(dbAnon, 'tiers'))));
+
   await testEnv.cleanup();
 
   console.log(resultats.join('\n'));
