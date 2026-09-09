@@ -3,7 +3,7 @@ import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { auth } from './firebase';
 import { isAdmin } from './lib/admins';
 import { useDocument, writeDoc } from './lib/firestore';
-import { viewFromPath, pathFromView, jetonFactureDepuisChemin } from './lib/routes';
+import { viewFromPath, pathFromView, langFromPath, jetonFactureDepuisChemin } from './lib/routes';
 import { BLOCS_ACCUEIL } from './lib/contenu';
 import Consentement from './components/Consentement';
 import { DefilementDoux } from './components/motion';
