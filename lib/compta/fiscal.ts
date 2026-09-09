@@ -52,6 +52,21 @@ function montantPersonnelFederal(revenu: number, federal: ParametresFiscaux['fed
 
 // --- Taxes à remettre ---
 
+/**
+ * La période de déclaration en cours selon la fréquence choisie (mensuelle, trimestrielle ou
+ * annuelle) : le mois, le trimestre ou l'exercice complet qui contient la date donnée. Utilisée pour
+ * afficher « à date » sur la bonne fenêtre, celle que Laurie doit vraiment remettre.
+ */
+export function periodeDeclarationCourante(reglages: ReglagesCompta, aujourdhui: Date): Periode {
+  const exercice = exerciceContenant(reglages, aujourdhui);
+  if (reglages.frequenceTaxes === 'annuelle') return exercice;
+  const dateStr = iso(aujourdhui);
+  const anneeExercice = new Date(exercice.debut).getUTCFullYear();
+  const { trimestres, mois } = periodesDe(reglages, anneeExercice);
+  const liste = reglages.frequenceTaxes === 'mensuelle' ? mois : trimestres;
+  return liste.find((p) => dateStr >= p.debut && dateStr <= p.fin) || exercice;
+}
+
 export interface TaxesARemettre {
   percu: { tps: number; tvq: number };
   credits: { cti: number; rti: number };
