@@ -28,6 +28,10 @@ function tr(id: string, date: string, sens: 'revenu' | 'depense', compteId: stri
   return { id, date, description: `Test ${id}`, sens, montant, tps: 0, tvq: 0, total: montant, compteId, source: 'manuel', concilie: false, cree: null, modifie: null };
 }
 
+function proche(a: number, b: number, nom: string, tolerance = 0.01) {
+  verifie(nom, Math.abs(a - b) <= tolerance, `attendu ${b}, obtenu ${a}`);
+}
+
 // --- 1. État des résultats : deux comptes de revenu, un compte de dépense, un compte inactif exclu ---
 {
   const comptes: Compte[] = [
