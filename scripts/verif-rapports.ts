@@ -88,11 +88,13 @@ function proche(a: number, b: number, nom: string, tolerance = 0.01) {
     { id: 'q1', number: 'q1', type: 'Quote', clientId: 'q1', clientName: 'q1', clientEmail: 'x', date: '2026-08-01', items: [{ id: '1', description: '', quantity: 1, price: 1000 }], status: 'Sent', terms: '' }, // devis : pas une facture
   ];
   const age = ageDesComptesClients(documents, aujourdhui);
-  verifie('Âge : tranche 0-30 = 100$', age.tranches[0].montant === 100, `${age.tranches[0].montant}`);
-  verifie('Âge : tranche 31-60 = 200$', age.tranches[1].montant === 200, `${age.tranches[1].montant}`);
-  verifie('Âge : tranche 61-90 = 300$', age.tranches[2].montant === 300, `${age.tranches[2].montant}`);
-  verifie('Âge : tranche 90+ = 400$', age.tranches[3].montant === 400, `${age.tranches[3].montant}`);
-  verifie('Âge : total = 1000$ (payée et devis exclus)', age.total === 1000, `${age.total}`);
+  // totalDocumentTTC applique les taxes (14,975 %, voir lib/compta/rapports.ts) : les montants
+  // avant taxes (100, 200, 300, 400) ressortent multipliés par 1,14975.
+  proche(age.tranches[0].montant, 114.975, 'Âge : tranche 0-30 = 100$ TTC');
+  proche(age.tranches[1].montant, 229.95, 'Âge : tranche 31-60 = 200$ TTC');
+  proche(age.tranches[2].montant, 344.925, 'Âge : tranche 61-90 = 300$ TTC');
+  proche(age.tranches[3].montant, 459.9, 'Âge : tranche 90+ = 400$ TTC');
+  proche(age.total, 1149.75, 'Âge : total = 1000$ TTC (payée et devis exclus)');
   verifie('Âge : 4 factures comptées', age.nombreTotal === 4, `${age.nombreTotal}`);
 }
 
