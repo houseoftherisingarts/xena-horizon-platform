@@ -47,14 +47,14 @@ const CartesFiscales: React.FC<Props> = ({ lang, className = '' }) => {
     <div className={`grid gap-4 sm:grid-cols-2 ${className}`}>
       <Panneau>
         <Chiffre
-          valeur={taxes.trojeune ? '—' : formatMontant(taxes.netProjete.total)}
+          valeur={taxes.trojeune ? '·' : formatMontant(taxes.netProjete.total)}
           libelle={t.taxes}
           note={taxes.trojeune ? t.taxesJeune : t.taxesNote}
         />
       </Panneau>
       <Panneau>
         <Chiffre
-          valeur={impot.trojeune ? '—' : formatMontant(impot.impotProjete.total)}
+          valeur={impot.trojeune ? '·' : formatMontant(impot.impotProjete.total)}
           libelle={t.impot}
           note={impot.trojeune ? t.taxesJeune : t.impotNote}
         />
