@@ -270,16 +270,16 @@ const Apercu: React.FC<Props> = ({ lang, onAllerA }) => {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Panneau>
-          <Chiffre valeur={formatMontant(totauxPeriode.revenus)} libelle={t.revenus} note={etat.comparer ? `${delta(totauxPeriode.revenus, totauxPrecedents.revenus)} ${t.versusPrecedente}` : undefined} />
+          <Chiffre valeur={formatMontantRond(totauxPeriode.revenus)} libelle={t.revenus} note={etat.comparer ? `${delta(totauxPeriode.revenus, totauxPrecedents.revenus)} ${t.versusPrecedente}` : undefined} />
         </Panneau>
         <Panneau>
-          <Chiffre valeur={formatMontant(totauxPeriode.depenses)} libelle={t.depenses} note={etat.comparer ? `${delta(totauxPeriode.depenses, totauxPrecedents.depenses)} ${t.versusPrecedente}` : undefined} />
+          <Chiffre valeur={formatMontantRond(totauxPeriode.depenses)} libelle={t.depenses} note={etat.comparer ? `${delta(totauxPeriode.depenses, totauxPrecedents.depenses)} ${t.versusPrecedente}` : undefined} />
         </Panneau>
         <Panneau>
-          <Chiffre valeur={formatMontant(totauxPeriode.profit)} libelle={t.profit} note={etat.comparer ? `${delta(totauxPeriode.profit, totauxPrecedents.profit)} ${t.versusPrecedente}` : undefined} />
+          <Chiffre valeur={formatMontantRond(totauxPeriode.profit)} libelle={t.profit} note={etat.comparer ? `${delta(totauxPeriode.profit, totauxPrecedents.profit)} ${t.versusPrecedente}` : undefined} />
         </Panneau>
         <Panneau>
-          <Chiffre valeur={formatMontant(ageComptes.total)} libelle={t.aRecevoir} note={t.facturesEnAttente(ageComptes.nombreTotal)} />
+          <Chiffre valeur={formatMontantRond(ageComptes.total)} libelle={t.aRecevoir} note={t.facturesEnAttente(ageComptes.nombreTotal)} />
         </Panneau>
       </div>
 
