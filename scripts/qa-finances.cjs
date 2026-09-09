@@ -12,6 +12,14 @@ const BASE = process.argv[2] || 'http://127.0.0.1:4190';
 const OUT = process.argv[3] || 'captures-verif/xena4-J-compta';
 fs.mkdirSync(OUT, { recursive: true });
 
+// Un vrai CSV pour simuler le dépôt et capturer l'écran d'aperçu d'Import.tsx (colonnes détectées,
+// doublons signalés), pas seulement la zone de dépôt vide.
+const CSV_TEMOIN = path.join(OUT, '..', 'releve-temoin.csv');
+fs.writeFileSync(
+  CSV_TEMOIN,
+  ['Date;Description;Débit;Crédit', '2026-09-03;Stripe;45,50;', '2026-09-05;Nouveau client;;750,00'].join('\n')
+);
+
 // Les six composants de la mission; Recus se capture à part (sans/avec reçu) via ?c=recus&recu=.
 const ECRANS = [
   { nom: 'transactions', url: `${BASE}/qa-finances.html?c=transactions` },
