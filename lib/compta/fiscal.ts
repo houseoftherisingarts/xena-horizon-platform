@@ -78,12 +78,16 @@ export interface TaxesARemettre {
 // après la fin de la période. Annuelle (le cas d'une personne en affaires) : production au 15 juin,
 // mais le solde reste exigible au 30 avril, donc c'est cette date qui compte comme échéance de paiement.
 function prochaineEcheanceTaxes(reglages: ReglagesCompta, periode: Periode): { date: string; libelle: string } {
+  // periode.fin est une date calendaire ('AAAA-MM-JJ'), analysée en UTC minuit par le moteur JS :
+  // les accesseurs doivent rester en UTC (getUTC*, Date.UTC), sinon un fuseau à l'ouest de l'UTC
+  // (Québec, UTC-4/-5) recule d'un jour la date obtenue (bogue trouvé le 8 septembre, voir
+  // scripts/verif-fiscal-cas.ts). Même convention que lib/compta/periodes.ts.
+  const fin = new Date(periode.fin);
   if (reglages.frequenceTaxes === 'annuelle') {
-    const anneeSuivante = new Date(periode.fin).getFullYear() + 1;
+    const anneeSuivante = fin.getUTCFullYear() + 1;
     return { date: `${anneeSuivante}-04-30`, libelle: 'Paiement du solde (déclaration due au 15 juin)' };
   }
-  const fin = new Date(periode.fin);
-  const echeance = new Date(fin.getFullYear(), fin.getMonth() + 1, fin.getDate());
+  const echeance = new Date(Date.UTC(fin.getUTCFullYear(), fin.getUTCMonth() + 1, fin.getUTCDate()));
   return { date: iso(echeance), libelle: 'Déclaration et paiement' };
 }
 
