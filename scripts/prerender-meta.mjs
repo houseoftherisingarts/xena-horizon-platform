@@ -68,6 +68,23 @@ const esc = (s) =>
 const p = (texte) => `<p>${esc(texte)}</p>`;
 const li = (texte) => `<li>${esc(texte)}</li>`;
 
+/** L'adresse anglaise d'un chemin français (trouvaille 3, audit GEO du 8 sept) : /en + le chemin,
+    /en tout court pour l'accueil — même règle que pathFromView(view, 'EN') dans lib/routes.ts. */
+const urlPourLangue = (lang, chemin) => {
+  if (lang !== 'EN') return `${ORIGIN}${chemin}`;
+  return chemin === '/' ? `${ORIGIN}/en` : `${ORIGIN}/en${chemin}`;
+};
+
+// --- Champs anglais manquants : jamais une traduction inventée, le français reste et se signale ici. ---
+const MANQUES_EN = [];
+const enOuFr = (valeurEN, valeurFR, etiquette) => {
+  if (valeurEN === undefined || valeurEN === null || valeurEN === '') {
+    MANQUES_EN.push(etiquette);
+    return valeurFR;
+  }
+  return valeurEN;
+};
+
 /** Dès X $ + taxes / Dès X $ / mois (abonnement) / Sur demande — même règle que prixAffiche() dans
     pages/PublicServices.tsx, pour que le prix statique dise exactement ce que dit la page réelle. */
 const prixAffiche = (service) => {
