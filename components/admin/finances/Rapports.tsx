@@ -148,7 +148,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
       {/* --- État des résultats : toujours l'exercice complet, en colonnes mois ou trimestre --- */}
       <div id="rapport-etat" data-rapport-bloc>
         <Panneau
-          titre={`${t.etatTitre} — ${exercice.libelle}`}
+          titre={`${t.etatTitre}, ${exercice.libelle}`}
           actions={
             <div className="flex items-center gap-2 no-imprime">
               <select
