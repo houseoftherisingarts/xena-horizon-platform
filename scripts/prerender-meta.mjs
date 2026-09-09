@@ -440,46 +440,102 @@ const PAGES_DESC_EN = {
     'A career and communication consultant for fifteen years, Laurie Belhumeur helps artists live from their art.',
 };
 
+// `frPath` marque les quatre pages bilingues (même valeur des deux côtés : sert à retrouver le
+// jumeau de l'autre langue pour hreflang et pour le sitemap). Absent = une seule langue (espace).
 const PAGES = [
   {
     path: '/',
     dir: '',
+    lang: 'FR',
+    frPath: '/',
     title: 'Xena Horizon | Laurie Belhumeur, consultante en carrière',
     desc: PAGES_DESC.home,
     noindex: false,
     contenu: contenuAccueil(),
-    jsonLdGraph: [serviceNode(true), personNode(true)],
+    jsonLdGraph: [serviceNode(true, 'FR'), personNode(true, 'FR')],
+  },
+  {
+    path: '/en',
+    dir: 'en',
+    lang: 'EN',
+    frPath: '/',
+    title: 'Xena Horizon | Laurie Belhumeur, career consultant',
+    desc: PAGES_DESC_EN.home,
+    noindex: false,
+    contenu: contenuAccueilEN(),
+    jsonLdGraph: [serviceNode(true, 'EN'), personNode(true, 'EN')],
   },
   {
     path: '/services',
     dir: 'services',
+    lang: 'FR',
+    frPath: '/services',
     title: 'Services et tarifs | Xena Horizon',
     desc: PAGES_DESC.services,
     noindex: false,
     contenu: contenuServices(),
-    jsonLdGraph: [serviceNode(false), itemListServicesNode(), breadcrumbNode('Services', '/services')],
+    jsonLdGraph: [serviceNode(false, 'FR'), itemListServicesNode('FR'), breadcrumbNode('Services', '/services', 'FR')],
+  },
+  {
+    path: '/en/services',
+    dir: 'en/services',
+    lang: 'EN',
+    frPath: '/services',
+    title: 'Services and rates | Xena Horizon',
+    desc: PAGES_DESC_EN.services,
+    noindex: false,
+    contenu: contenuServicesEN(),
+    jsonLdGraph: [serviceNode(false, 'EN'), itemListServicesNode('EN'), breadcrumbNode('Services', '/en/services', 'EN')],
   },
   {
     path: '/projets',
     dir: 'projets',
+    lang: 'FR',
+    frPath: '/projets',
     title: 'Projets : balado, livre, modèle | Xena Horizon',
     desc: PAGES_DESC.projets,
     noindex: false,
     contenu: contenuProjets(),
-    jsonLdGraph: [podcastNode(), bookNode(), breadcrumbNode('Projets', '/projets')],
+    jsonLdGraph: [podcastNode('FR'), bookNode('FR'), breadcrumbNode('Projets', '/projets', 'FR')],
+  },
+  {
+    path: '/en/projets',
+    dir: 'en/projets',
+    lang: 'EN',
+    frPath: '/projets',
+    title: 'Projects: podcast, book, model | Xena Horizon',
+    desc: PAGES_DESC_EN.projets,
+    noindex: false,
+    contenu: contenuProjetsEN(),
+    jsonLdGraph: [podcastNode('EN'), bookNode('EN'), breadcrumbNode('Projects', '/en/projets', 'EN')],
   },
   {
     path: '/a-propos',
     dir: 'a-propos',
+    lang: 'FR',
+    frPath: '/a-propos',
     title: 'À propos de Laurie Belhumeur | Xena Horizon',
     desc: PAGES_DESC.apropos,
     noindex: false,
     contenu: contenuAPropos(),
-    jsonLdGraph: [personNode(true), breadcrumbNode('À propos', '/a-propos')],
+    jsonLdGraph: [personNode(true, 'FR'), breadcrumbNode('À propos', '/a-propos', 'FR')],
+  },
+  {
+    path: '/en/a-propos',
+    dir: 'en/a-propos',
+    lang: 'EN',
+    frPath: '/a-propos',
+    title: 'About Laurie Belhumeur | Xena Horizon',
+    desc: PAGES_DESC_EN.apropos,
+    noindex: false,
+    contenu: contenuAProposEN(),
+    jsonLdGraph: [personNode(true, 'EN'), breadcrumbNode('About', '/en/a-propos', 'EN')],
   },
   {
     path: '/espace',
     dir: 'espace',
+    lang: 'FR',
+    frPath: null,
     title: 'Mon espace | Xena Horizon',
     desc: PAGES_DESC.espace,
     noindex: true,
@@ -489,6 +545,17 @@ const PAGES = [
 ];
 
 const escAttr = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+/** Les trois balises hreflang réciproques d'une page bilingue : fr-CA, en-CA, x-default sur le français. */
+const hreflangLinks = (frPath) => {
+  const frUrl = `${ORIGIN}${frPath}`;
+  const enUrl = urlPourLangue('EN', frPath);
+  return (
+    `  <link rel="alternate" hreflang="fr-CA" href="${escAttr(frUrl)}" />\n` +
+    `  <link rel="alternate" hreflang="en-CA" href="${escAttr(enUrl)}" />\n` +
+    `  <link rel="alternate" hreflang="x-default" href="${escAttr(frUrl)}" />\n`
+  );
+};
 
 const base = readFileSync(join(root, 'dist/index.html'), 'utf8');
 
@@ -501,13 +568,20 @@ for (const pg of PAGES) {
     .replace(/(<meta\s+property="og:description"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(pg.desc)}$2`)
     .replace(/(<meta\s+property="og:url"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(canonical)}$2`)
     .replace(/(<meta\s+property="og:image"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(OG_IMAGE)}$2`)
+    .replace(/(<meta\s+property="og:locale"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${pg.lang === 'EN' ? 'en_CA' : 'fr_CA'}$2`)
     .replace(/(<meta\s+name="twitter:title"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(pg.title)}$2`)
     .replace(/(<meta\s+name="twitter:description"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(pg.desc)}$2`)
     .replace(/(<meta\s+name="twitter:image"\s+content=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(OG_IMAGE)}$2`)
     .replace(/(<link\s+rel="canonical"\s+href=")[\s\S]*?("\s*\/?>)/, `$1${escAttr(canonical)}$2`);
 
+  if (pg.lang === 'EN') {
+    html = html.replace('<html lang="fr">', '<html lang="en">');
+  }
   if (pg.noindex) {
     html = html.replace('</head>', '  <meta name="robots" content="noindex, nofollow" />\n  </head>');
+  }
+  if (pg.frPath) {
+    html = html.replace('</head>', `${hreflangLinks(pg.frPath)}  </head>`);
   }
   if (pg.jsonLdGraph) {
     const doc = { '@context': 'https://schema.org', '@graph': pg.jsonLdGraph };
@@ -523,20 +597,26 @@ for (const pg of PAGES) {
   writeFileSync(join(dir, 'index.html'), html);
 }
 
-// --- Sitemap : routes publiques indexables seulement, /espace et /admin exclus. ---
+// --- Sitemap : routes publiques indexables seulement, /espace et /admin exclus — huit adresses
+// (quatre pages × deux langues) avec leurs alternates hreflang réciproques. ---
 const today = BUILD_DATE;
 const sitemapPages = PAGES.filter((pg) => !pg.noindex);
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${sitemapPages
-  .map(
-    (pg) => `  <url>
-    <loc>${ORIGIN}${pg.path}</loc>
+  .map((pg) => {
+    const alternates = pg.frPath
+      ? `\n    <xhtml:link rel="alternate" hreflang="fr-CA" href="${ORIGIN}${pg.frPath}" />` +
+        `\n    <xhtml:link rel="alternate" hreflang="en-CA" href="${urlPourLangue('EN', pg.frPath)}" />` +
+        `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}${pg.frPath}" />`
+      : '';
+    return `  <url>
+    <loc>${ORIGIN}${pg.path}</loc>${alternates}
     <lastmod>${today}</lastmod>
     <changefreq>${pg.path === '/' ? 'weekly' : 'monthly'}</changefreq>
     <priority>${pg.path === '/' ? '1.0' : '0.7'}</priority>
-  </url>`
-  )
+  </url>`;
+  })
   .join('\n')}
 </urlset>
 `;
