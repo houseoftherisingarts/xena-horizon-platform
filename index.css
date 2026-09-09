@@ -322,6 +322,9 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   body[data-mode-impression] [data-impression-active] * { visibility: visible; }
   /* État des résultats : douze colonnes mensuelles ne tiennent pas en portrait, page dédiée en paysage. */
   .imprime-paysage { page: paysage; }
+  /* Un rapport imprimé seul reprend toute la largeur de la page, même s'il vit dans une grille à deux
+     colonnes à l'écran (Résumé des taxes, Dépenses par compte, Revenus par client, Âge des comptes). */
+  body[data-mode-impression] [data-impression-active] { grid-column: 1 / -1; width: 100%; }
 }
 @page { size: letter; margin: 0.5in; }
 @page paysage { size: letter landscape; margin: 0.5in; }
