@@ -323,7 +323,10 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
    horizontal ne paginate jamais, contrairement au vertical (bogue trouvé le 8 septembre). */
 .impression-compacte th,
 .impression-compacte td { padding-top: 3px !important; padding-bottom: 3px !important; padding-left: 6px !important; padding-right: 6px !important; font-size: 9px !important; }
-.impression-compacte { transform: scale(var(--echelle-impression, 1)); transform-origin: top left; }
+/* zoom (pas transform: scale) : zoom recalcule la boîte de mise en page, donc la pagination d'impression
+   compte la vraie hauteur réduite ; un transform ne change que le rendu visuel et laisse Chromium
+   réserver des pages entières blanches pour la hauteur d'avant réduction (bogue trouvé le 8 septembre). */
+.impression-compacte { zoom: var(--echelle-impression, 1); }
 
 @media print {
   .no-imprime { display: none !important; }
