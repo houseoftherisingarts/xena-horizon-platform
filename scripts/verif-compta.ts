@@ -136,10 +136,13 @@ OFXHEADER:100
 
 // --- 8. Idempotence de transactionsDepuisFactures : deux passes sur les mêmes factures ne dupliquent rien ---
 {
+  const facture = (partiel: Partial<DocumentFacture>): DocumentFacture => ({
+    id: '', number: '', type: 'Invoice', clientId: '', clientName: '', clientEmail: '', date: '', items: [], status: 'Paid', terms: '', ...partiel,
+  });
   const documents: DocumentFacture[] = [
-    { id: 'fact-1', type: 'Invoice', status: 'Paid', date: '2026-02-01', number: 'F-001', clientName: 'Studio Ancrage', items: [{ quantity: 1, price: 500 }] } as DocumentFacture,
-    { id: 'fact-2', type: 'Invoice', status: 'Pending', date: '2026-02-05', number: 'F-002', clientName: 'Marie-Ève Boutin', items: [{ quantity: 2, price: 100 }] } as DocumentFacture,
-    { id: 'fact-3', type: 'Invoice', status: 'Paid', date: '2026-02-10', number: 'F-003', clientName: 'Festival des Cimes', items: [{ quantity: 1, price: 900 }] } as DocumentFacture,
+    facture({ id: 'fact-1', date: '2026-02-01', number: 'F-001', clientName: 'Studio Ancrage', items: [{ quantity: 1, price: 500 }] }),
+    facture({ id: 'fact-2', date: '2026-02-05', number: 'F-002', clientName: 'Marie-Ève Boutin', status: 'Pending', items: [{ quantity: 2, price: 100 }] }),
+    facture({ id: 'fact-3', date: '2026-02-10', number: 'F-003', clientName: 'Festival des Cimes', items: [{ quantity: 1, price: 900 }] }),
   ];
   const premierePasse = transactionsDepuisFactures(documents);
   verifie('Idempotence : seules les factures payées sont dérivées (2 sur 3)', premierePasse.length === 2, `${premierePasse.length}`);
