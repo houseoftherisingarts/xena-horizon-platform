@@ -6,6 +6,7 @@ import { COORDONNEES, CREDITS } from '../lib/contenu';
 import { useLenis } from './motion';
 import { useConsentementVisible } from './Consentement';
 import { useTextes } from '../lib/textes';
+import { pathFromView } from '../lib/routes';
 
 interface FooterProps {
   onAdminLogin: () => void;
@@ -63,12 +64,14 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
     }
   };
 
+  // Les adresses de secours (clic du milieu, Cmd-clic, robots) portent le préfixe de la langue lue,
+  // comme les liens de la barre : en anglais, elles mènent aux vraies pages /en/... et non au français.
   const navLinks: { label: string; view: ViewState; sectionId?: string; href: string }[] = [
-    { label: t.home, view: 'HOME', href: '/' },
-    { label: t.services, view: 'SERVICES', href: '/services' },
-    { label: t.projets, view: 'PROJETS', href: '/projets' },
-    { label: t.about, view: 'A_PROPOS', href: '/a-propos' },
-    { label: t.contact, view: 'HOME', sectionId: 'contact', href: '/#contact' },
+    { label: t.home, view: 'HOME', href: pathFromView('HOME', lang) },
+    { label: t.services, view: 'SERVICES', href: pathFromView('SERVICES', lang) },
+    { label: t.projets, view: 'PROJETS', href: pathFromView('PROJETS', lang) },
+    { label: t.about, view: 'A_PROPOS', href: pathFromView('A_PROPOS', lang) },
+    { label: t.contact, view: 'HOME', sectionId: 'contact', href: `${pathFromView('HOME', lang)}#contact` },
   ];
 
   return (
@@ -93,7 +96,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
               </a>
             ))}
             <a
-              href="/espace"
+              href={pathFromView('ESPACE_CLIENT', lang)}
               onClick={onChangeView ? (e) => { e.preventDefault(); goTo('ESPACE_CLIENT'); } : undefined}
               className="text-rose hover:text-encre transition-colors text-sm font-medium min-h-[32px] flex items-center"
             >
