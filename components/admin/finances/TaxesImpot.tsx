@@ -5,7 +5,7 @@
 // Calculs purs dans lib/compta/fiscal.ts et lib/compta/fiscal-2026.ts (sources dans docs/FISCAL-2026.md).
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { EnTete, Panneau, Chiffre, Etiquette, Selection, Champ, Zone, Bouton } from '../ui';
+import { Panneau, Chiffre, Etiquette, Selection, Champ, Zone, Bouton } from '../ui';
 import { useTransactions } from '../../../lib/compta/transactions';
 import { useReglagesCompta, enregistrerReglagesCompta } from '../../../lib/compta/periodes';
 import { useParametresFiscaux, enregistrerSurchargeFiscale, type ParametresFiscaux } from '../../../lib/compta/fiscal-2026';
