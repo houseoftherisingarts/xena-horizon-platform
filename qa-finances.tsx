@@ -12,6 +12,9 @@ import Tiers from './components/admin/finances/Tiers';
 import Recus from './components/admin/finances/Recus';
 import TaxesImpot from './components/admin/finances/TaxesImpot';
 import CartesFiscales from './components/admin/finances/CartesFiscales';
+import Apercu from './components/admin/finances/Apercu';
+import Rapports from './components/admin/finances/Rapports';
+import Reglages from './components/admin/finances/Reglages';
 import type { Language } from './types';
 import type { Transaction } from './lib/compta/types';
 
