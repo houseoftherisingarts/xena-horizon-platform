@@ -320,24 +320,26 @@ function contenuAProposEN() {
     </section>`;
 }
 
-// --- JSON-LD : @graph par page, @id partagés pour que le site se lise comme un seul graphe ---
-const offerNode = (service) => ({
+// --- JSON-LD : @graph par page, @id partagés pour que le site se lise comme un seul graphe. Chaque
+// nœud prend `lang` ('FR' par défaut) pour porter le même graphe sur l'adresse anglaise : les @id
+// restent identiques d'une langue à l'autre (même entité), seuls les champs de texte et les url changent. ---
+const offerNode = (service, lang = 'FR') => ({
   '@type': 'Offer',
-  name: service.name,
-  description: service.description,
-  url: `${ORIGIN}/services`,
+  name: lang === 'EN' ? service.nameEn : service.name,
+  description: lang === 'EN' ? service.descriptionEn : service.description,
+  url: urlPourLangue(lang, '/services'),
   priceSpecification:
     service.price > 0
       ? { '@type': 'UnitPriceSpecification', price: service.price, priceCurrency: 'CAD' }
-      : { '@type': 'UnitPriceSpecification', priceCurrency: 'CAD', description: 'Sur demande' },
+      : { '@type': 'UnitPriceSpecification', priceCurrency: 'CAD', description: lang === 'EN' ? 'On request' : 'Sur demande' },
 });
 
-const serviceNode = (complet) => {
+const serviceNode = (complet, lang = 'FR') => {
   const base = { '@type': 'ProfessionalService', '@id': `${ORIGIN}/#service`, name: 'Xena Horizon', url: ORIGIN };
   if (!complet) return base;
   return {
     ...base,
-    description: PAGES_DESC.home,
+    description: lang === 'EN' ? PAGES_DESC_EN.home : PAGES_DESC.home,
     telephone: TELEPHONE_E164,
     email: COORDONNEES.courriel,
     areaServed: COORDONNEES.zones.split(', '),
@@ -347,57 +349,57 @@ const serviceNode = (complet) => {
     founder: { '@id': `${ORIGIN}/#laurie-belhumeur` },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Services Xena Horizon',
-      itemListElement: SERVICES_REELS.map(offerNode),
+      name: lang === 'EN' ? 'Xena Horizon services' : 'Services Xena Horizon',
+      itemListElement: SERVICES_REELS.map((s) => offerNode(s, lang)),
     },
   };
 };
 
-const personNode = (complet) => {
+const personNode = (complet, lang = 'FR') => {
   const base = { '@type': 'Person', '@id': `${ORIGIN}/#laurie-belhumeur`, name: 'Laurie Belhumeur' };
   if (!complet) return base;
   return {
     ...base,
-    jobTitle: A_PROPOS.tagline,
-    description: A_PROPOS.mission,
+    jobTitle: lang === 'EN' ? A_PROPOS.taglineEn : A_PROPOS.tagline,
+    description: lang === 'EN' ? A_PROPOS.missionEn : A_PROPOS.mission,
     worksFor: { '@id': `${ORIGIN}/#service` },
     image: `${ORIGIN}/images/laurie-apropos.jpg`,
     sameAs: [SPOTIFY_URL, INSTAGRAM_URL],
-    url: `${ORIGIN}/a-propos`,
+    url: urlPourLangue(lang, '/a-propos'),
   };
 };
 
-const itemListServicesNode = () => ({
+const itemListServicesNode = (lang = 'FR') => ({
   '@type': 'ItemList',
-  name: 'Services Xena Horizon',
+  name: lang === 'EN' ? 'Xena Horizon services' : 'Services Xena Horizon',
   itemListElement: SERVICES_REELS.map((s, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    name: s.name,
-    url: `${ORIGIN}/services`,
+    name: lang === 'EN' ? s.nameEn : s.name,
+    url: urlPourLangue(lang, '/services'),
     item: {
       '@type': 'Service',
-      name: s.name,
-      description: s.description,
+      name: lang === 'EN' ? s.nameEn : s.name,
+      description: lang === 'EN' ? s.descriptionEn : s.description,
       provider: { '@id': `${ORIGIN}/#service` },
-      offers: offerNode(s),
+      offers: offerNode(s, lang),
     },
   })),
 });
 
-const podcastNode = () => ({
+const podcastNode = (lang = 'FR') => ({
   '@type': 'PodcastSeries',
-  name: BALADO.titre,
-  description: BALADO.description[0],
+  name: lang === 'EN' ? BALADO.titreEn : BALADO.titre,
+  description: lang === 'EN' ? BALADO.descriptionEn[0] : BALADO.description[0],
   url: BALADO_QUEBEC_URL,
   sameAs: [SPOTIFY_URL],
   image: `${ORIGIN}${BALADO.image}`,
 });
 
-const bookNode = () => ({
+const bookNode = (lang = 'FR') => ({
   '@type': 'Book',
-  name: LIVRE.titre,
-  description: LIVRE.description[0],
+  name: lang === 'EN' ? LIVRE.titreEn : LIVRE.titre,
+  description: lang === 'EN' ? LIVRE.descriptionEn[0] : LIVRE.description[0],
   author: { '@id': `${ORIGIN}/#laurie-belhumeur` },
   url: LIVRE.liens[0].url,
   image: `${ORIGIN}${LIVRE.image}`,
@@ -408,10 +410,10 @@ const bookNode = () => ({
   },
 });
 
-const breadcrumbNode = (nom, chemin) => ({
+const breadcrumbNode = (nom, chemin, lang = 'FR') => ({
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${ORIGIN}/` },
+    { '@type': 'ListItem', position: 1, name: lang === 'EN' ? 'Home' : 'Accueil', item: urlPourLangue(lang, '/') },
     { '@type': 'ListItem', position: 2, name: nom, item: `${ORIGIN}${chemin}` },
   ],
 });
@@ -426,6 +428,16 @@ const PAGES_DESC = {
   apropos:
     'Consultante en carrière artistique et en communication depuis quinze ans, Laurie Belhumeur accompagne les artistes pour qu’ils vivent de leur art.',
   espace: 'L’espace client de Xena Horizon : suivez votre dossier d’accompagnement avec Laurie Belhumeur.',
+};
+
+/** Mêmes faits, en anglais — jamais un chiffre ou une promesse ajoutés qui ne seraient pas dans PAGES_DESC. */
+const PAGES_DESC_EN = {
+  home: 'Xena Horizon supports artists, creators and cultural organizations: communication strategy, artistic identity, events and writing.',
+  services:
+    'Communication strategy, writing, artistic identity and events for artists, creatives and organizations, starting prices listed.',
+  projets: 'The podcast En quête de liberté, the book Je ne suis pas un robot and Laurie Belhumeur’s modelling and acting project.',
+  apropos:
+    'A career and communication consultant for fifteen years, Laurie Belhumeur helps artists live from their art.',
 };
 
 const PAGES = [
