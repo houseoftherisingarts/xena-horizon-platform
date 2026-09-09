@@ -314,6 +314,7 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
    de toute autre page du site. Lettre US, marges sûres (règle des marges de sécurité PDF). */
 @media print {
   @page { size: letter; margin: 0.5in; }
+  .no-imprime { display: none !important; }
   body[data-mode-impression] * { visibility: hidden; }
   body[data-mode-impression] [data-impression-active],
   body[data-mode-impression] [data-impression-active] * { visibility: visible; }
