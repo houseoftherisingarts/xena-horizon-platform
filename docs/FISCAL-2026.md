@@ -70,7 +70,7 @@ Source : [Revenu Québec, MGA et taux de cotisation RRQ](https://www.revenuquebe
 | Seuil minimal (aucune cotisation en dessous) | 2 000 $ |
 | Revenu maximal assurable | 103 000 $ |
 | Taux (part autonome, l'équivalent employé seulement) | 0,764 % |
-| Cotisation maximale | 787,12 $ |
+| Cotisation maximale | 786,92 $ |
 
 Une travailleuse autonome ne paie que la part « employée » du RQAP : la cotisation donne un crédit
 d'impôt non remboursable, pas une déduction.
