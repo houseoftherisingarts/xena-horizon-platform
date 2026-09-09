@@ -96,6 +96,7 @@ const Rapports: React.FC<Props> = ({ lang }) => {
     const nettoyer = () => {
       document.body.removeAttribute('data-mode-impression');
       document.querySelectorAll('[data-rapport-bloc]').forEach((el) => el.removeAttribute('data-impression-active'));
+      document.querySelectorAll('table.impression-compacte').forEach((el) => el.classList.remove('impression-compacte'));
     };
     window.addEventListener('afterprint', nettoyer);
     return () => window.removeEventListener('afterprint', nettoyer);
