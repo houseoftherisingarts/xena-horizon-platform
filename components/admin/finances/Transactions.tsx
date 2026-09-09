@@ -215,15 +215,16 @@ const Transactions: React.FC<Props> = ({ lang }) => {
           </>
         )}
       </Panneau>
+      {recuOuvert && <Recus transaction={recuOuvert} lang={lang} onFermer={() => setRecuOuvert(null)} />}
     </div>
   );
 };
 
 const LigneTransaction: React.FC<{
   tr: Transaction; lang: Language; comptes: ReturnType<typeof usePlanComptable>['comptes'];
-  compteNom: (id: string) => string; enEdition: boolean; onEditer: () => void; onFermer: () => void; onSupprimer: () => void;
+  compteNom: (id: string) => string; enEdition: boolean; onEditer: () => void; onFermer: () => void; onSupprimer: () => void; onOuvrirRecu: () => void;
   texteBoutons: typeof TEXTES['FR'];
-}> = ({ tr, lang, comptes, compteNom, enEdition, onEditer, onFermer, onSupprimer, texteBoutons }) => {
+}> = ({ tr, lang, comptes, compteNom, enEdition, onEditer, onFermer, onSupprimer, onOuvrirRecu, texteBoutons }) => {
   const [brouillon, setBrouillon] = useState(tr);
 
   if (enEdition) {
