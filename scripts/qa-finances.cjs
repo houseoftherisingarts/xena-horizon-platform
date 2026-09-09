@@ -141,8 +141,10 @@ async function passe(browser, { largeur, hauteur, nuit, skin }) {
 
   fs.writeFileSync(path.join(OUT, 'rapport.json'), JSON.stringify(rapport, null, 2));
 
+  // rapports-impression est un PDF (pas de mesure DOM, voir la passe page.pdf ci-dessus) : exclu du
+  // filtre de soucis, qui suppose une capture mesurée.
   const soucis = rapport.ecrans.filter(
-    (e) => e.scrollWidth > e.clientWidth + 1 || e.italiques > 0 || e.tirets > 0 || e.petits.length > 0 || e.lignesTitre > 2
+    (e) => e.petits && (e.scrollWidth > e.clientWidth + 1 || e.italiques > 0 || e.tirets > 0 || e.petits.length > 0 || e.lignesTitre > 2)
   );
   console.log(`${rapport.ecrans.length} captures écrites dans ${OUT}`);
   if (rapport.erreurs.length) console.log(`Erreurs console/page : ${rapport.erreurs.length}`, rapport.erreurs.slice(0, 5));
