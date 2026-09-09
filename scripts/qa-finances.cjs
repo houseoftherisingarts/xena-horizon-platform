@@ -1,5 +1,6 @@
-// Boucle verdict du module comptable (xena4-J-compta, 8 septembre 2026) : capture les six composants
-// de components/admin/finances/ à 1440 et 390, en palette ciel et en mode nuit, avec le jeu d'exemple
+// Boucle verdict du module comptable (xena4-J-compta, 8 septembre 2026; complété par xena4-L-finances
+// le même jour pour Aperçu, Rapports et l'impression) : capture les composants de
+// components/admin/finances/ à 1440 et 390, en palette ciel et en mode nuit, avec le jeu d'exemple
 // (une année de revenus et dépenses d'une consultante autonome). Sert http://127.0.0.1:4190 (dist-verif),
 // jamais un autre serveur : le harnais qa-finances.html y est déjà buildé (scripts/vite.qa.config.ts).
 // Mesures par capture : débordement horizontal, italiques, tiret cadratin, texte sous 13 px, lignes du h1/h2.
