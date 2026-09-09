@@ -9,7 +9,7 @@
 // firebase au vrai node_modules (à lancer depuis la racine du dépôt, jamais /tmp), et --define
 // fournit un import.meta.env de secours (aucun appel Firestore n'a lieu dans les fonctions testées).
 //   npx esbuild scripts/verif-compta.ts --bundle --platform=node --format=esm --packages=external \
-//     --define:import.meta.env='{"VITE_FIREBASE_PROJECT_ID":"xena-test","MODE":"verif"}' \
+//     --define:import.meta.env='{"VITE_FIREBASE_API_KEY":"test","VITE_FIREBASE_AUTH_DOMAIN":"test","VITE_FIREBASE_PROJECT_ID":"xena-test","VITE_FIREBASE_STORAGE_BUCKET":"test","VITE_FIREBASE_MESSAGING_SENDER_ID":"test","VITE_FIREBASE_APP_ID":"test","MODE":"verif"}' \
 //     --outfile=.verif-compta-tmp.mjs && node .verif-compta-tmp.mjs; rm -f .verif-compta-tmp.mjs
 import assert from 'node:assert/strict';
 import { apercuCsv, parseOfx, lignesDepuisApercu, empreinte, calculerTaxes, parseDateSouple } from '../lib/compta/import';
