@@ -323,8 +323,12 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   /* État des résultats : douze colonnes mensuelles ne tiennent pas en portrait, page dédiée en paysage. */
   .imprime-paysage { page: paysage; }
   /* Un tableau plus large que la page imprimable se réduit (voir imprimerBloc dans Rapports.tsx, qui
-     pose --echelle-impression juste avant window.print) : le débordement horizontal ne paginate pas. */
+     pose --echelle-impression juste avant window.print) : le débordement horizontal ne paginate pas.
+     Les cellules resserrent d'abord (état des résultats, douze colonnes) ; l'échelle n'intervient
+     qu'en dernier recours si ça ne suffit toujours pas. */
   [data-impression-active] table { transform: scale(var(--echelle-impression, 1)); transform-origin: top left; }
+  [data-impression-active] table th,
+  [data-impression-active] table td { padding-top: 3px !important; padding-bottom: 3px !important; padding-left: 6px !important; padding-right: 6px !important; font-size: 9px !important; }
   /* Un rapport imprimé seul reprend toute la largeur de la page, même s'il vit dans une grille à deux
      colonnes à l'écran (Résumé des taxes, Dépenses par compte, Revenus par client, Âge des comptes). */
   body[data-mode-impression] [data-impression-active] { grid-column: 1 / -1; width: 100%; }
