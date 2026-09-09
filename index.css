@@ -333,6 +333,10 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   body[data-mode-impression] * { visibility: hidden; }
   body[data-mode-impression] [data-impression-active],
   body[data-mode-impression] [data-impression-active] * { visibility: visible; }
+  /* `visibility: hidden` laisse sa place réservée dans le flux : les quatre AUTRES rapports (invisibles
+     mais toujours en place) ajoutaient des pages blanches derrière celui qu'on imprime (bogue trouvé
+     le 8 septembre). `display: none` les retire vraiment du flux ; seul le bloc actif garde sa place. */
+  body[data-mode-impression] [data-rapport-bloc]:not([data-impression-active]) { display: none !important; }
   /* État des résultats : douze colonnes mensuelles ne tiennent pas en portrait, page dédiée en paysage. */
   .imprime-paysage { page: paysage; }
   /* Un rapport imprimé seul reprend toute la largeur de la page, même s'il vit dans une grille à deux
