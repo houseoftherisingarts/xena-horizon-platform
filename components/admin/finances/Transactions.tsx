@@ -198,7 +198,7 @@ const Transactions: React.FC<Props> = ({ lang }) => {
                   {visibles.map((tr) => (
                     <LigneTransaction key={tr.id} tr={tr} lang={lang} comptes={comptes} compteNom={compteNom}
                       enEdition={editionId === tr.id} onEditer={() => setEditionId(tr.id)} onFermer={() => setEditionId(null)}
-                      onSupprimer={() => supprimer(tr.id)} texteBoutons={t} />
+                      onSupprimer={() => supprimer(tr.id)} onOuvrirRecu={() => setRecuOuvert(tr)} texteBoutons={t} />
                   ))}
                 </tbody>
               </table>
