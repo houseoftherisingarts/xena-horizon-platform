@@ -142,7 +142,7 @@ OFXHEADER:100
   const poste = (price: number, quantity = 1) => ({ id: 'i1', description: 'Prestation', quantity, price });
   const documents: DocumentFacture[] = [
     facture({ id: 'fact-1', date: '2026-02-01', number: 'F-001', clientName: 'Studio Ancrage', items: [poste(500)] }),
-    facture({ id: 'fact-2', date: '2026-02-05', number: 'F-002', clientName: 'Marie-Ève Boutin', status: 'Pending', items: [poste(100, 2)] }),
+    facture({ id: 'fact-2', date: '2026-02-05', number: 'F-002', clientName: 'Marie-Ève Boutin', status: 'Sent', items: [poste(100, 2)] }),
     facture({ id: 'fact-3', date: '2026-02-10', number: 'F-003', clientName: 'Festival des Cimes', items: [poste(900)] }),
   ];
   const premierePasse = transactionsDepuisFactures(documents);
