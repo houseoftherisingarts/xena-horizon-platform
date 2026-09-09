@@ -17,6 +17,14 @@ import { CadragesProvider } from './lib/cadrages';
 import AuthModal from './components/AuthModal';
 import PublicHome from './pages/PublicHome';
 import PublicServices from './pages/PublicServices';
+// Chargées avec les deux autres pages publiques, pas en lazy() : leur fragment est minuscule
+// (moins de 9 kB), donc rien à gagner au chargement, et le passage par le Suspense fallback
+// (PageLoader, ~60svh) puis le vrai contenu (bien plus haut) déplaçait le pied de page de plus
+// de 2000px après le premier rendu — la cause du CLS à 0,3 mesuré sur ces deux pages (corrigé
+// 9 sept 2026 : le pied de page ne bouge plus, il n'y a simplement plus de contenu de repli à
+// remplacer).
+import PublicProjets from './pages/PublicProjets';
+import PublicAPropos from './pages/PublicAPropos';
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminCRM = lazy(() => import('./pages/AdminCRM'));
 const AdminProducts = lazy(() => import('./pages/AdminProducts'));
