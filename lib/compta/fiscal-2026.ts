@@ -133,3 +133,21 @@ export function parametresFiscaux(surcharge?: Partial<ParametresFiscaux>): Param
     acomptes: { ...FISCAL_2026.acomptes, ...surcharge.acomptes },
   };
 }
+
+// --- Lecture et écriture de la surcharge (settings/fiscal), à part des fonctions pures ci-dessus ---
+import { useMemo } from 'react';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useDocument } from '../firestore';
+
+/** Les paramètres fiscaux effectifs : les constantes de l'année, fusionnées avec settings/fiscal. */
+export function useParametresFiscaux() {
+  const { data, loading } = useDocument<Partial<ParametresFiscaux>>('settings/fiscal');
+  const params = useMemo(() => parametresFiscaux(data || undefined), [data]);
+  return { params, surchargee: !!data, loading };
+}
+
+/** Écrit une surcharge partielle (fusion peu profonde par bloc, voir parametresFiscaux). */
+export async function enregistrerSurchargeFiscale(patch: Partial<ParametresFiscaux>): Promise<void> {
+  await setDoc(doc(db, 'settings/fiscal'), patch, { merge: true });
+}
