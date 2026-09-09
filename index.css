@@ -315,6 +315,16 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
    `visibility` (jamais `position: fixed`) garde le bloc actif dans le flux normal du document : un
    rapport sur plusieurs pages doit paginer ses lignes une seule fois, pas se répéter à chaque page
    (bogue trouvé le 8 septembre : un bloc en position fixed se réimprime identique sur chaque feuille). */
+
+/* Resserre les tableaux avant impression (posée par imprimerBloc dans Rapports.tsx, retirée à
+   afterprint) : classe active hors @media print pour que la mesure de largeur en JS (table.scrollWidth,
+   juste avant window.print) porte sur la VRAIE taille imprimée, pas sur la taille écran. Sans ça,
+   l'état des résultats (douze colonnes mensuelles) déborde hors page sans le signaler : le débordement
+   horizontal ne paginate jamais, contrairement au vertical (bogue trouvé le 8 septembre). */
+.impression-compacte th,
+.impression-compacte td { padding-top: 3px !important; padding-bottom: 3px !important; padding-left: 6px !important; padding-right: 6px !important; font-size: 9px !important; }
+.impression-compacte { transform: scale(var(--echelle-impression, 1)); transform-origin: top left; }
+
 @media print {
   .no-imprime { display: none !important; }
   body[data-mode-impression] * { visibility: hidden; }
@@ -322,13 +332,6 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   body[data-mode-impression] [data-impression-active] * { visibility: visible; }
   /* État des résultats : douze colonnes mensuelles ne tiennent pas en portrait, page dédiée en paysage. */
   .imprime-paysage { page: paysage; }
-  /* Un tableau plus large que la page imprimable se réduit (voir imprimerBloc dans Rapports.tsx, qui
-     pose --echelle-impression juste avant window.print) : le débordement horizontal ne paginate pas.
-     Les cellules resserrent d'abord (état des résultats, douze colonnes) ; l'échelle n'intervient
-     qu'en dernier recours si ça ne suffit toujours pas. */
-  [data-impression-active] table { transform: scale(var(--echelle-impression, 1)); transform-origin: top left; }
-  [data-impression-active] table th,
-  [data-impression-active] table td { padding-top: 3px !important; padding-bottom: 3px !important; padding-left: 6px !important; padding-right: 6px !important; font-size: 9px !important; }
   /* Un rapport imprimé seul reprend toute la largeur de la page, même s'il vit dans une grille à deux
      colonnes à l'écran (Résumé des taxes, Dépenses par compte, Revenus par client, Âge des comptes). */
   body[data-mode-impression] [data-impression-active] { grid-column: 1 / -1; width: 100%; }
