@@ -264,7 +264,11 @@ const LigneTransaction: React.FC<{
         {tr.sens === 'revenu' ? '+' : '−'}{formatMontant(tr.montant)}
       </td>
       <td className="py-3 pr-3 text-sm text-right text-gris tabular-nums">{formatNombre(tr.tps + tr.tvq)}</td>
-      <td className="py-3 pr-3 text-center">{tr.recu ? <Receipt className="w-4 h-4 text-rose inline" aria-hidden="true" /> : <span className="text-gris">–</span>}</td>
+      <td className="py-3 pr-3 text-center" onClick={(e) => e.stopPropagation()}>
+        <button type="button" onClick={onOuvrirRecu} aria-label={texteBoutons.recu} className="w-9 h-9 inline-flex items-center justify-center hover:text-encre">
+          {tr.recu ? <Receipt className="w-4 h-4 text-rose" aria-hidden="true" /> : <span className="text-gris">–</span>}
+        </button>
+      </td>
       <td className="py-3 pr-3 text-center">
         {tr.concilie ? <Etiquette tone="accent">✓</Etiquette> : <span className="text-gris">–</span>}
       </td>
