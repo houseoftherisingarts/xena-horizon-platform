@@ -651,7 +651,12 @@ if (existsSync(historyPath)) {
 }
 
 console.log(
-  `prerender-meta: ${PAGES.length} pages écrites (contenu statique sur /, /services, /projets, /a-propos), sitemap.xml (${sitemapPages.length} urls), robots.txt (${AGENTS.length} agents), 404.html${
+  `prerender-meta: ${PAGES.length} pages écrites (contenu statique FR+EN sur /, /services, /projets, /a-propos et leurs jumeaux /en/...), sitemap.xml (${sitemapPages.length} urls), robots.txt (${AGENTS.length} agents), 404.html${
     existsSync(historyPath) ? ', history/v1 refermée' : ''
   }.`
 );
+if (MANQUES_EN.length > 0) {
+  console.log(
+    `prerender-meta: ${MANQUES_EN.length} champ(s) anglais absent(s), français conservé sans traduction inventée — ${MANQUES_EN.join(', ')}.`
+  );
+}
