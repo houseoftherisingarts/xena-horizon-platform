@@ -38,11 +38,16 @@ function transactionDepense(id: string, date: string, montant: number, tps: numb
 {
   const cas: Array<{ profit: number; federal: number; quebec: number; rrq: number; rqap: number; total: number; tauxMarginal: number; tolerance: number }> = [
     { profit: 0, federal: 0, quebec: 0, rrq: 0, rqap: 0, total: 0, tauxMarginal: 0.2569, tolerance: 0.02 },
-    { profit: 25000, federal: 660.25, quebec: 440.72, rrq: 2709.0, rqap: 191.0, total: 4000.97, tauxMarginal: 0.2569, tolerance: 0.05 },
-    { profit: 60000, federal: 4204.86, quebec: 4762.41, rrq: 7119.0, rqap: 458.4, total: 16544.67, tauxMarginal: 0.3069, tolerance: 0.05 },
-    { profit: 100000, federal: 10457.23, quebec: 11850.71, rrq: 9790.6, rqap: 764.0, total: 32862.54, tauxMarginal: 0.3612, tolerance: 0.05 },
-    { profit: 150000, federal: 20250.16, quebec: 23317.68, rrq: 9790.6, rqap: 787.12, total: 54145.57, tauxMarginal: 0.4746, tolerance: 0.05 },
-    { profit: 250000, federal: 43680.74, quebec: 49067.68, rrq: 9790.6, rqap: 787.12, total: 103326.14, tauxMarginal: 0.4997, tolerance: 0.5 },
+    { profit: 25000, federal: 660.25, quebec: 440.72, rrq: 2709.0, rqap: 191.0, total: 4000.97, tauxMarginal: 0.2569, tolerance: 0.02 },
+    // RQAP non plafonné en dessous du maximum assurable (103 000 $) : 60 000 × 0,00764 = 458,40 $.
+    { profit: 60000, federal: 4204.96, quebec: 4762.41, rrq: 7119.0, rqap: 458.4, total: 16544.77, tauxMarginal: 0.3069, tolerance: 0.02 },
+    // RRQ plafonné dès que le profit dépasse le MGA supplémentaire (85 000 $) : 100 000 $ et 150 000 $
+    // ci-dessous portent donc la même cotisation RRQ (9 790,60 $). Le RQAP, lui, ne plafonne qu'à
+    // partir du maximum assurable (103 000 $) : 100 000 $ n'est pas encore plafonné (764 $),
+    // 150 000 $ l'est (786,92 $, voir docs/FISCAL-2026.md, corrigé le 8 septembre : 786,92 $, pas 787,12 $).
+    { profit: 100000, federal: 10457.23, quebec: 11850.71, rrq: 9790.6, rqap: 764.0, total: 32862.54, tauxMarginal: 0.3612, tolerance: 0.02 },
+    { profit: 150000, federal: 20250.19, quebec: 23317.71, rrq: 9790.6, rqap: 786.92, total: 54145.42, tauxMarginal: 0.4746, tolerance: 0.02 },
+    { profit: 250000, federal: 43680.77, quebec: 49067.71, rrq: 9790.6, rqap: 786.92, total: 103326.0, tauxMarginal: 0.49965, tolerance: 0.02 },
   ];
   for (const c of cas) {
     const r = impotEstime(c.profit, FISCAL_2026);
