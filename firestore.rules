@@ -114,6 +114,11 @@ service cloud.firestore {
     match /newsletters/{nlId}      { allow read, write: if isAdmin(); }
     match /newsletters/{nlId}/{document=**} { allow read, write: if isAdmin(); }
 
+    // Module comptable (lib/compta/) : grand livre et tiers, admin seulement. Les réglages
+    // (settings/compta, settings/plan_comptable, settings/fiscal) restent couverts par /settings ci-dessus.
+    match /transactions/{transactionId} { allow read, write: if isAdmin(); }
+    match /tiers/{tierId}               { allow read, write: if isAdmin(); }
+
     // Catalogue des pièces et des étapes du dossier (settings/dossier) : couvert par /settings ci-dessus.
 
     // Dossier client : un document par personne accompagnée, identifié par son uid.
