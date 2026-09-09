@@ -195,6 +195,131 @@ function contenuAPropos() {
     </section>`;
 }
 
+// --- Jumeaux anglais : mêmes sections, même ordre, contenu tiré des champs *EN de lib/contenu.ts et
+// pages/accueil/textes.ts (jamais une traduction inventée ici — enOuFr() retombe sur le français et
+// le signale dans MANQUES_EN quand un champ anglais n'existe pas). ---
+function contenuAccueilEN() {
+  const heroEN = BLOCS_ACCUEIL_EN['hero-1'] ?? {};
+  const servicesEN = BLOCS_ACCUEIL_EN['services-1'] ?? {};
+  const statsEN = BLOCS_ACCUEIL_EN['stats-1'] ?? {};
+  const contactEN = BLOCS_ACCUEIL_EN['contact-1'] ?? {};
+  const stat1Value = enOuFr(statsEN.stat1Value, STATS.stat1Value, 'accueil.stats.stat1Value');
+  const stat1Label = enOuFr(statsEN.stat1Label, STATS.stat1Label, 'accueil.stats.stat1Label');
+  const stat2Value = enOuFr(statsEN.stat2Value, STATS.stat2Value, 'accueil.stats.stat2Value');
+  const stat2Label = enOuFr(statsEN.stat2Label, STATS.stat2Label, 'accueil.stats.stat2Label');
+  // Les trois zones desservies (Montréal, Montérégie, Estrie) sont des noms de lieux : aucune version
+  // anglaise n'existe nulle part dans le site (même repli côté React, PublicHome.tsx `EN()`), donc pas
+  // un vrai manque à signaler — un nom de lieu ne se traduit pas.
+  const stat3Value = statsEN.stat3Value ?? STATS.stat3Value;
+  const stat3Label = enOuFr(statsEN.stat3Label, STATS.stat3Label, 'accueil.stats.stat3Label');
+  return `
+    <h1>${esc(enOuFr(heroEN.headline, HERO.headline, 'accueil.hero.headline'))}</h1>
+    ${p(enOuFr(heroEN.subheadline, HERO.subheadline, 'accueil.hero.subheadline'))}
+    <p><a href="/en/#contact">${esc(enOuFr(heroEN.ctaText, HERO.ctaText, 'accueil.hero.ctaText'))}</a></p>
+    <section>
+      <h2>${esc(enOuFr(servicesEN.title, SERVICES_BLOC.title, 'accueil.services.title'))}</h2>
+      ${p(enOuFr(servicesEN.subtitle, SERVICES_BLOC.subtitle, 'accueil.services.subtitle'))}
+      ${PROFILS_REELS.map(
+        (profil) => `
+      <article>
+        <h3>${esc(profil.titleEN)}</h3>
+        ${p(profil.descriptionEN)}
+        ${p(profil.detailsEN)}
+      </article>`
+      ).join('')}
+    </section>
+    <section>
+      <h2>${esc(enOuFr(A_PROPOS_ACCUEIL.titre.EN, A_PROPOS_ACCUEIL.titre.FR, 'accueil.apropos.titre'))}</h2>
+      ${A_PROPOS_ACCUEIL.paragraphes.EN.map(p).join('')}
+      ${p(A_PROPOS_ACCUEIL.mission.EN)}
+      <ul>
+        <li>${esc(stat1Value)} — ${esc(stat1Label)}</li>
+        <li>${esc(stat2Value)} — ${esc(stat2Label)}</li>
+        <li>${esc(stat3Value)} — ${esc(stat3Label)}</li>
+      </ul>
+    </section>
+    <section>
+      <!-- Extrait verbatim de pages/accueil/Temoignage.tsx (TEXTES.EN.extrait) -->
+      <h2>“to create a clear and precise guideline”</h2>
+      ${p(TEMOIGNAGES[0].texteEN)}
+      <!-- Le rôle du témoin (« Photographe boudoir ») n'a pas de version anglaise nulle part dans le
+           site — Temoignage.tsx lit TEMOIGNAGES[0].role pour les deux langues : même chose ici. -->
+      <p>${esc(TEMOIGNAGES[0].nom)} — ${esc(TEMOIGNAGES[0].role)}</p>
+    </section>
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        ${PROJETS.map((proj) => `<li><a href="/en/projets">${esc(proj.titreEn)}</a> — ${esc(proj.sousTitreEn)}</li>`).join('')}
+      </ul>
+    </section>
+    <section id="contact">
+      <h2>${esc(enOuFr(contactEN.title, CONTACT_BLOC.title, 'accueil.contact.title'))}</h2>
+      ${p(enOuFr(contactEN.text, CONTACT_BLOC.text, 'accueil.contact.text'))}
+      <p>
+        <a href="mailto:${esc(COORDONNEES.courriel)}">${esc(COORDONNEES.courriel)}</a> ·
+        <a href="${esc(COORDONNEES.telephoneHref)}">${esc(COORDONNEES.telephone)}</a> ·
+        ${esc(COORDONNEES.zones)}
+      </p>
+    </section>
+    <section>
+      <h2>${esc(CLIENTS_TITRE.EN)}</h2>
+      <ul>${CLIENTS_CONFIANCE.map(li).join('')}</ul>
+    </section>`;
+}
+
+/** Dès X $ + taxes / Dès X $ / mois → From $X + taxes / From $X / month, même règle que
+    prixAffiche(offer, 'EN') dans PublicServices.tsx. */
+const prixAfficheEN = (service) => {
+  if (service.price <= 0) return 'On request';
+  const montant = service.price.toLocaleString('en-CA');
+  if (service.id === 'abonnement-mensuel') return `From $${montant} / month`;
+  return `From $${montant} + taxes`;
+};
+
+function contenuServicesEN() {
+  return `
+    <h1>${esc(SERVICES_PAGE.titreEN)}</h1>
+    ${p(enOuFr(BLOCS_ACCUEIL_EN['services-1']?.subtitle, SERVICES_BLOC.subtitle, 'services.subtitle'))}
+    ${SERVICES_REELS.map(
+      (svc) => `
+    <section>
+      <h2>${esc(svc.nameEn)}</h2>
+      ${p(svc.descriptionEn)}
+      <p><strong>Price: </strong>${esc(prixAfficheEN(svc))}</p>
+    </section>`
+    ).join('')}`;
+}
+
+function contenuProjetsEN() {
+  return `
+    <h1>${esc(PROJETS_PAGE.titreEn)}</h1>
+    ${p(PROJETS_PAGE.ledeEn)}
+    ${PROJETS.map(
+      (proj) => `
+    <section>
+      <h2>${esc(proj.titreEn)}</h2>
+      <p>${esc(proj.sousTitreEn)}</p>
+      ${(proj.descriptionEn ?? proj.description).map(p).join('')}
+      ${proj.extraEn ? p(proj.extraEn) : proj.extra ? p(proj.extra) : ''}
+      <ul>${proj.liens.map((l) => `<li><a href="${esc(l.url)}">${esc(l.labelEn ?? l.label)}</a></li>`).join('')}</ul>
+    </section>`
+    ).join('')}`;
+}
+
+function contenuAProposEN() {
+  return `
+    <h1>Laurie Belhumeur</h1>
+    ${p(A_PROPOS.taglineEn)}
+    <section>
+      ${A_PROPOS.paragraphesEn.map(p).join('')}
+      ${p(A_PROPOS.missionEn)}
+    </section>
+    <section>
+      <h2>An unusual amalgam</h2>
+      <ul>${A_PROPOS.casquettesEN.map(li).join('')}</ul>
+    </section>`;
+}
+
 // --- JSON-LD : @graph par page, @id partagés pour que le site se lise comme un seul graphe ---
 const offerNode = (service) => ({
   '@type': 'Offer',
