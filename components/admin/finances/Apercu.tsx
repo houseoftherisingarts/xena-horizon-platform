@@ -12,7 +12,7 @@ import { useReglagesCompta } from '../../../lib/compta/periodes';
 import { periodesDe, dansPeriode } from '../../../lib/compta/periodes';
 import { etatDesResultats, depensesParCompte, ageDesComptesClients, totalDocumentTTC } from '../../../lib/compta/rapports';
 import { taxesARemettre, periodeDeclarationCourante } from '../../../lib/compta/fiscal';
-import { formatMontant } from '../../../lib/compta/format';
+import { formatMontant, formatMontantRond } from '../../../lib/compta/format';
 import { useCollection } from '../../../lib/firestore';
 import { EXEMPLE_FACTURES } from '../../../lib/compta/exemple';
 import type { Language, Document as DocumentFacture } from '../../../types';
