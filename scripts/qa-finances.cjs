@@ -90,6 +90,18 @@ async function passe(browser, { largeur, hauteur, nuit, skin }) {
   for (const ecran of ECRANS) {
     await page.goto(ecran.url, { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(900); // laisse le temps à useTransactions() de basculer sur le jeu d'exemple
+    if (ecran.nom === 'import') {
+      // Dépôt réel d'un CSV témoin : capture aussi l'écran d'aperçu (colonnes détectées, doublon signalé),
+      // pas seulement la zone de dépôt vide.
+      await page.setInputFiles('input[type="file"]', CSV_TEMOIN);
+      await page.waitForTimeout(400);
+      const mApercu = await mesurer(page);
+      const suffixeApercu = `${nuit ? 'nuit' : skin}-${largeur}`;
+      const fichierApercu = path.join(OUT, `import-apercu-${suffixeApercu}.png`);
+      await page.screenshot({ path: fichierApercu, fullPage: true });
+      rapport.ecrans.push({ ecran: 'import-apercu', largeur, palette: nuit ? 'nuit' : skin, fichier: fichierApercu, ...mApercu });
+      continue;
+    }
     const m = await mesurer(page);
     const suffixe = `${nuit ? 'nuit' : skin}-${largeur}`;
     const fichier = path.join(OUT, `${ecran.nom}-${suffixe}.png`);
