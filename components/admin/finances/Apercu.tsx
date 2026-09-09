@@ -4,7 +4,7 @@
 import React, { useMemo, useState } from 'react';
 import { AlertTriangle, Receipt, Tag, CalendarClock, ArrowRight } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Panneau, Chiffre, Selection, Bouton, Vide, Chargement, Etiquette } from '../ui';
+import { Panneau, Chiffre, Selection, Bouton, Vide, Chargement } from '../ui';
 import CartesFiscales from './CartesFiscales';
 import { useTransactions, totaux } from '../../../lib/compta/transactions';
 import { usePlanComptable, nomCompte } from '../../../lib/compta/plan-defaut';
