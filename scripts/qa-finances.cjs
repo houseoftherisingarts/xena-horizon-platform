@@ -46,7 +46,10 @@ async function mesurer(page) {
       lignesTitre = Math.round(h.getBoundingClientRect().height / lh);
     }
     return {
-      scrollWidth: document.documentElement.scrollWidth,
+      // body.scrollWidth aussi, pas seulement documentElement : une ligne d'actions qui déborde sans
+      // wrap peut élargir le body sans que documentElement le signale (trouvé sur Transactions.tsx,
+      // 8 sept, corrigé dans components/admin/ui.tsx).
+      scrollWidth: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
       clientWidth: document.documentElement.clientWidth,
       italiques,
       petits,
