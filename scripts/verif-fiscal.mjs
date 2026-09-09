@@ -8,9 +8,11 @@ import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const ICI = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.resolve(ICI, '..');
+const require = createRequire(import.meta.url); // .mjs (type: module) : require() n'existe pas nativement
 
 const BASE = process.argv[2] || 'http://127.0.0.1:4190';
 const OUT = process.argv[3] || 'captures-verif/xena4-K-fiscal';
