@@ -135,10 +135,11 @@ const PublicHome: React.FC<PublicHomeProps> = ({ blocks, lang, onChangeView }) =
         <Sommaire lang={lang} title={t.servicesTitle} subtitle={t.servicesSubtitle} onChangeView={onChangeView} />
       )}
 
-      {/* Entre Sommaire et À propos (voir le commentaire d'en-tête de Capsules.tsx) : ne se rend
-          que si Admin › Sections a la capsule à ON et qu'au moins une capsule est publiée
-          (Capsules.tsx applique elle-même ces deux conditions). */}
-      {on('capsules') && <Capsules lang={lang} />}
+      {/* Entre Sommaire et À propos (voir le commentaire d'en-tête de Capsules.tsx) : montée sans
+          condition ici, Capsules.tsx applique elle-même le double critère (section à ON dans
+          Admin › Sections et au moins une capsule publiée) et se rend nulle sinon. La gater ici
+          aussi la rendrait injoignable tant que settings/sections n'existe pas encore. */}
+      <Capsules lang={lang} />
 
       {on('apropos') && (
         <APropos
