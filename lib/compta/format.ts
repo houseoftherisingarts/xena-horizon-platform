@@ -11,6 +11,15 @@ export function formatMontant(v: number | undefined | null): string {
   return MONNAIE.format(v || 0);
 }
 
+/**
+ * 1234.5 → "1 235 $" (arrondi, sans décimale). Pour un gros chiffre en Playfair (Chiffre, ui.tsx) :
+ * ",00 $" en plus alourdit une police déjà large et déborde de sa carte dans une grille à quatre
+ * colonnes (bogue trouvé le 8 septembre sur Apercu.tsx, même convention que pages/AdminDashboard.tsx).
+ */
+export function formatMontantRond(v: number | undefined | null): string {
+  return MONNAIE_RONDE.format(v || 0);
+}
+
 /** 1234.5 → "1 234,50" (sans symbole, pour une cellule de tableau dense). */
 export function formatNombre(v: number | undefined | null): string {
   return NOMBRE.format(v || 0);
