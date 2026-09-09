@@ -10,6 +10,7 @@ import { usePlanComptable } from '../../../lib/compta/plan-defaut';
 import type { Language, Document as DocumentFacture } from '../../../types';
 import type { Sens, Transaction } from '../../../lib/compta/types';
 import { useCollection } from '../../../lib/firestore';
+import Recus from './Recus';
 
 interface Props {
   lang: Language;
