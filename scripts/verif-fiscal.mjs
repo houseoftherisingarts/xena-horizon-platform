@@ -26,10 +26,10 @@ try {
   execSync(
     `npx esbuild scripts/verif-fiscal-cas.ts --bundle --platform=node --format=esm --packages=external ` +
       `--define:import.meta.env='{"VITE_FIREBASE_API_KEY":"test","VITE_FIREBASE_AUTH_DOMAIN":"test","VITE_FIREBASE_PROJECT_ID":"xena-test","VITE_FIREBASE_STORAGE_BUCKET":"test","VITE_FIREBASE_MESSAGING_SENDER_ID":"test","VITE_FIREBASE_APP_ID":"test","MODE":"verif"}' ` +
-      `--outfile=${TEMP}`,
+      `--outfile="${TEMP}"`,
     { cwd: RACINE, stdio: 'inherit' }
   );
-  execSync(`node ${TEMP}`, { cwd: RACINE, stdio: 'inherit' });
+  execSync(`node "${TEMP}"`, { cwd: RACINE, stdio: 'inherit' });
 } catch (e) {
   testsOk = false;
   console.log(`Tests purs en échec : ${e.message}`);
