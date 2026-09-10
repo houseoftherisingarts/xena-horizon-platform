@@ -49,7 +49,7 @@ export const JOURNAL: EntreeJournal[] = [
   },
   {
     date: '2026-09-08',
-    titre: "La journée où votre site est devenu un outil de travail",
+    titre: "Le jour où votre site est devenu un outil",
     intro:
       "Vous vouliez pouvoir corriger vos textes vous-même, prendre vos rendez-vous sans Calendly et suivre vos dossiers sans sortir du site. Tout cela est arrivé dans la même journée.",
     etapes: [
