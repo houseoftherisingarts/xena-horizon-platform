@@ -57,7 +57,7 @@ const AdminChangelog: React.FC<AdminChangelogProps> = ({ lang }) => {
   const premiere = JOURNAL.length ? JOURNAL[JOURNAL.length - 1].date : '';
 
   return (
-    <div className="space-y-8">
+    <div className="px-6 md:px-10 py-10 space-y-8" data-tx-scope="adminChangelog">
       <EnTete kicker={t.kicker} titre={t.titre} lede={t.lede} />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -75,21 +75,26 @@ const AdminChangelog: React.FC<AdminChangelogProps> = ({ lang }) => {
         </Panneau>
       </div>
 
-      <ol className="relative border-l border-filet ml-2 space-y-8 pl-6 md:pl-8">
+      <ol className="relative border-l border-filet ml-2 space-y-10 pl-6 md:pl-8">
         {JOURNAL.map((entree, i) => (
-          <li key={entree.date} className="relative">
+          <li
+            key={entree.date}
+            className="relative grid grid-cols-1 gap-x-10 gap-y-3 md:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]"
+          >
             <span
               aria-hidden="true"
               className={`absolute -left-[calc(1.5rem+5px)] md:-left-[calc(2rem+5px)] top-[0.45rem] w-[9px] h-[9px] rounded-full ${
                 i === 0 ? 'bg-rose' : 'bg-filet'
               }`}
             />
-            <p className="kicker text-rose mb-1">{enClair(entree.date, lang)}</p>
-            <h2 className="font-serif text-h3 text-encre leading-tight">{entree.titre}</h2>
-            <p className="mt-2 text-gris text-sm mesure">{entree.intro}</p>
-            <ul className="mt-4 space-y-2">
+            <div>
+              <p className="kicker text-rose mb-1">{enClair(entree.date, lang)}</p>
+              <h2 className="font-serif text-h3 text-encre leading-tight">{entree.titre}</h2>
+              <p className="mt-2 text-gris text-sm">{entree.intro}</p>
+            </div>
+            <ul className="space-y-2 md:pt-1">
               {entree.etapes.map((etape, k) => (
-                <li key={k} className="flex gap-3 text-sm text-encre mesure">
+                <li key={k} className="flex gap-3 text-sm text-encre">
                   <span aria-hidden="true" className="mt-[0.55rem] w-1 h-1 rounded-full bg-rose flex-shrink-0" />
                   <span>{etape}</span>
                 </li>

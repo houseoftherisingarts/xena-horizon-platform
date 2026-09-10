@@ -19,6 +19,7 @@ import {
   ToggleLeft,
   Users,
   X,
+  History,
 } from 'lucide-react';
 import { Dossier, ViewState, Language } from '../types';
 import { useCollection } from '../lib/firestore';
@@ -95,6 +96,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
       temoignages: 'Témoignages audio',
       videos: 'Capsules',
       sections: 'Sections du site',
+      changelog: 'Journal des changements',
       vexel: 'Pour Vexel',
       backToSite: 'Retour au site',
       signOut: 'Fermer la session',
@@ -120,6 +122,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
       temoignages: 'Audio testimonials',
       videos: 'Capsules',
       sections: 'Site sections',
+      changelog: 'Change log',
       vexel: 'For Vexel',
       backToSite: 'Back to site',
       signOut: 'Sign out',
@@ -145,6 +148,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
     { id: 'ADMIN_TEMOIGNAGES', label: t.temoignages, icon: Mic },
     { id: 'ADMIN_VIDEOS', label: t.videos, icon: Film },
     { id: 'ADMIN_SECTIONS', label: t.sections, icon: ToggleLeft },
+    { id: 'ADMIN_CHANGELOG', label: t.changelog, icon: History },
     { id: 'ADMIN_VEXEL', label: t.vexel, icon: ShieldCheck },
   ];
 

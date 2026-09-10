@@ -37,6 +37,7 @@ const AdminCourriel = lazy(() => import('./pages/AdminCourriel'));
 const SocialCreator = lazy(() => import('./pages/SocialCreator'));
 const AdminDossiers = lazy(() => import('./pages/AdminDossiers'));
 const AdminVexel = lazy(() => import('./pages/AdminVexel'));
+const AdminChangelog = lazy(() => import('./pages/AdminChangelog'));
 const AdminTemoignages = lazy(() => import('./pages/AdminTemoignages'));
 const AdminVideos = lazy(() => import('./pages/AdminVideos'));
 const AdminSections = lazy(() => import('./pages/AdminSections'));
@@ -220,6 +221,8 @@ const App: React.FC = () => {
         return <AdminVideos lang={lang} />;
       case 'ADMIN_SECTIONS':
         return <AdminSections lang={lang} />;
+      case 'ADMIN_CHANGELOG':
+        return <AdminChangelog lang={lang} />;
       case 'ADMIN_DASHBOARD':
         return <AdminDashboard lang={lang} />;
       case 'ADMIN_CRM':

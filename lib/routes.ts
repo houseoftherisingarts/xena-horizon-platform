@@ -23,6 +23,7 @@ export const VIEW_PATHS: Record<ViewState, string> = {
   ADMIN_TEMOIGNAGES: '/admin/temoignages',
   ADMIN_VIDEOS: '/admin/capsules',
   ADMIN_SECTIONS: '/admin/sections',
+  ADMIN_CHANGELOG: '/admin/journal',
 } as Record<ViewState, string>;
 
 const PATH_VIEWS: Record<string, ViewState> = Object.fromEntries(
