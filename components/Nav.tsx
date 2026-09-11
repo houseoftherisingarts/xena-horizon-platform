@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useReducedMotion } from '@/lib/motion';
 import { Lock, Menu, X } from 'lucide-react';
+import { useNuit } from '../lib/skin';
 import { ViewState, Language } from '../types';
 import { useIntroTerminee } from '../lib/intro';
 import { Portail, useLenis } from './motion';
@@ -141,6 +142,11 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
 
   const bascule = <BasculeLangue lang={lang} setLang={setLang} />;
 
+  // La nuit, la barre transparente de l'accueil se pose sur la photo claire de Laurie : « Mon espace »
+  // et le cadenas passent en noir tant que la barre n'a pas pris son fond sombre au défilement.
+  const [nuit] = useNuit();
+  const surPhotoClaire = nuit && !scrolled && currentView === 'HOME';
+
   return (
     <nav
       data-tx-scope="nav"
@@ -199,14 +205,18 @@ const Nav: React.FC<NavProps> = ({ currentView, onChangeView, onRequestAdmin, la
           onClick={onRequestAdmin}
           aria-label={t.admin}
           title={t.admin}
-          className="w-11 h-11 flex items-center justify-center rounded-pilule text-gris opacity-50 hover:opacity-100 hover:text-encre transition-opacity"
+          className={`w-11 h-11 flex items-center justify-center rounded-pilule transition-opacity hover:opacity-100 ${
+            surPhotoClaire ? 'text-[#181818] opacity-90' : 'text-gris opacity-50 hover:text-encre'
+          }`}
         >
           <Lock className="w-4 h-4" />
         </button>
         <button
           type="button"
           onClick={() => handleNavClick('ESPACE_CLIENT')}
-          className="min-h-[44px] px-5 rounded-pilule border border-filet text-encre text-sm font-medium hover:border-encre transition-colors"
+          className={`min-h-[44px] px-5 rounded-pilule border text-sm font-medium transition-colors ${
+            surPhotoClaire ? 'border-[#181818]/60 text-[#181818] hover:border-[#181818]' : 'border-filet text-encre hover:border-encre'
+          }`}
         >
           {t.mySpace}
         </button>

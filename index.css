@@ -266,24 +266,27 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
 .mode-edition [data-cadre] { outline: 2px dashed rgb(var(--c-rose) / 0.7); outline-offset: -2px; cursor: move; }
 .mode-edition [data-cadre]:hover, .mode-edition [data-cadre-actif] { outline: 3px solid rgb(var(--c-rose)); }
 
-/* Autocollant foil « Site créé par Vexel Webstudio » (components/BadgeVexel.tsx) : liseré blanc
-   découpé, reflet holographique conique qui suit le pointeur (--mx, --my), basculement 3D (--rx, --ry). */
-.xh-foil {
+/* Autocollants foil du pied de page (components/BadgeVexel.tsx) : liseré blanc découpé, reflet
+   holographique conique qui suit le pointeur (--mx, --my), basculement 3D (--rx, --ry), posés droits.
+   .xh-foil-plat est la même surface sans liseré ni inclinaison, pour le volet de la carte. */
+.xh-foil, .xh-foil-plat {
   --mx: 30%; --my: 30%; --rx: 0deg; --ry: 0deg;
   color: #fff;
   background:
     radial-gradient(120% 120% at var(--mx) var(--my), rgb(255 255 255 / 0.18), transparent 55%),
     linear-gradient(135deg, #1b1b22 0%, #050505 60%, #14141a 100%);
+  overflow: hidden;
+  isolation: isolate;
+}
+.xh-foil {
   border: 2px solid #fff;
   box-shadow:
     0 0 0 1px rgb(0 0 0 / 0.35),
     0 10px 24px -10px rgb(0 0 0 / 0.55),
     inset 0 1px 0 rgb(255 255 255 / 0.25);
-  transform: perspective(600px) rotate(-1.5deg) rotateX(var(--rx)) rotateY(var(--ry));
+  transform: perspective(600px) rotateX(var(--rx)) rotateY(var(--ry));
   transition: transform 220ms var(--ease-sortie), box-shadow 220ms var(--ease-sortie);
   will-change: transform;
-  overflow: hidden;
-  isolation: isolate;
 }
 .xh-foil:hover { box-shadow: 0 0 0 1px rgb(0 0 0 / 0.35), 0 18px 34px -12px rgb(0 0 0 / 0.65), inset 0 1px 0 rgb(255 255 255 / 0.35); }
 .xh-foil-sheen {
@@ -299,6 +302,9 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   z-index: 0;
 }
 .xh-foil:hover .xh-foil-sheen { opacity: 0.32; }
+/* Sur le grand volet de la carte, le reflet devient un voile doux : les rayons nets d'un petit
+   sticker se liraient comme une roue arc-en-ciel à cette taille. */
+.xh-foil-plat .xh-foil-sheen { opacity: 0.12; filter: saturate(1.1) blur(28px); }
 .xh-foil-grain {
   position: absolute; inset: 0;
   pointer-events: none;
@@ -307,7 +313,8 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
   opacity: 0.35;
   z-index: 0;
 }
-.xh-foil > *:not(.xh-foil-sheen):not(.xh-foil-grain) { z-index: 1; }
+.xh-foil > *:not(.xh-foil-sheen):not(.xh-foil-grain),
+.xh-foil-plat > *:not(.xh-foil-sheen):not(.xh-foil-grain) { z-index: 1; }
 
 /* Impression d'un seul rapport (components/admin/finances/Rapports.tsx) : isolée derrière un attribut
    posé juste avant window.print() et retiré à l'événement afterprint, donc sans effet sur l'impression

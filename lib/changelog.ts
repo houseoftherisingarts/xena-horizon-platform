@@ -33,6 +33,8 @@ export const JOURNAL: EntreeJournal[] = [
       "Le renouvellement automatique de votre nom de domaine a été coupé avant qu'il ne se facture, et le domaine a été déverrouillé pour partir vers un registraire qui ne vend que des noms.",
       "Un document appelé « Où vit votre site » a été déposé dans vos ressources partagées : il dit sous quel compte chaque morceau est rangé, qui en est responsable et ce que tout cela coûte.",
       "Le journal que vous lisez a été bâti, et l'historique du projet y a été remonté depuis le premier jour.",
+      "Le collant « Site créé par Vexel Webstudio » au bas de vos pages a été posé droit avec le logo complet, un second collant carré « Affilié certifié » l'accompagne, et la fenêtre qui explique l'entente s'ouvre maintenant comme une carte plus large.",
+      "En mode nuit, le bouton « Mon espace » et le petit cadenas de votre admin se lisent en noir sur votre photo d'accueil, là où ils se perdaient dans le blanc.",
     ],
   },
   {
