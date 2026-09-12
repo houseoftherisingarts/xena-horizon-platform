@@ -6,11 +6,21 @@ import { deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { deleteObject, ref as storageRef, uploadBytes } from 'firebase/storage';
 import { ExternalLink, ShieldCheck, Trash2 } from 'lucide-react';
 import { auth, db, storage } from '../firebase';
-import { useDocument } from '../lib/firestore';
+import { useDocument, writeDoc } from '../lib/firestore';
 import { CHEMIN_COFFRE, CHEMIN_SPECIMEN, SPECIMEN_TAILLE_MAX, luhnValide, numeroPropre, sceller, type CoffreScelle, type ContenuCoffre } from '../lib/coffre';
 import { useTextes } from '../lib/textes';
 import { Bouton, Champ, EnTete, Etiquette, Panneau, Zone } from '../components/admin/ui';
+import { PartenaireVexelPanneau } from '../vexel/PartenaireVexelPanneau';
 import type { Language } from '../types';
+
+/** Le slug et la clé de ce site chez Vexel (vexel-integrations, clients/xena) : les mêmes qui
+ * serviraient à une boîte /demande/, réutilisés ici pour ouvrir la porte des partenaires. */
+const SLUG_VEXEL = 'xena';
+const CLE_VEXEL = 'jsV84Gj0KONwv-J82NDbcGSR';
+
+interface ParametresVexelPartenaire {
+  partenaire?: { code?: string; lien?: string; page?: string; signeLe?: string };
+}
 
 const TEXTES = {
   FR: {
