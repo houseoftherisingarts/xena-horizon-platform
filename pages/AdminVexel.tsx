@@ -221,6 +221,8 @@ const dateCourte = (ts: any, lang: Language): string => {
 
 const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
   const t = useTextes('adminVexel', TEXTES as any, lang) as unknown as (typeof TEXTES)['FR'];
+  const { data: reglagesVexel } = useDocument<ParametresVexelPartenaire>('settings/vexel');
+  const codePartenaireDeja = reglagesVexel?.partenaire?.code ?? null;
   const { data: coffreReel, loading } = useDocument<CoffreScelle>(CHEMIN_COFFRE);
   // Boucle locale sans compte admin : les règles refusent la lecture, `coffreReel` reste vide.
   // On montre alors l'exemple en mémoire pour que la capture rende l'état « déjà déposé ».
