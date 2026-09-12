@@ -5,12 +5,28 @@
 // l'autre ouvre d'abord une carte 16:9 qui explique l'entente (rabais de 10 % pour la personne,
 // commission de 10 % pour Laurie), puis « Oui » ouvre Vexel avec le code de Laurie déjà rempli
 // (lib/vexel.ts).
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BadgeCheck, X } from 'lucide-react';
-import { LIEN_PARRAINAGE_VEXEL } from '../lib/vexel';
+import { CODE_PARTENAIRE_LAURIE } from '../lib/vexel';
+import { useDocument } from '../lib/firestore';
 import { useTextes } from '../lib/textes';
 import type { Language } from '../types';
+
+/** Code venant du panneau « Devenir partenaire Vexel » (Admin › Pour Vexel), s'il a déjà été signé;
+ * sinon le code déjà en place depuis l'affiliation d'origine (lib/vexel.ts). Seul un code de la forme
+ * attendue passe, et l'adresse se reconstruit toujours ici plutôt que d'être lue telle quelle. */
+interface ParametresVexel {
+  partenaire?: { code?: string };
+}
+function useLienParrainage(): string {
+  const { data: reglages } = useDocument<ParametresVexel>('settings/vexel');
+  return useMemo(() => {
+    const c = reglages?.partenaire?.code;
+    const code = typeof c === 'string' && /^[A-Z0-9-]{4,24}$/.test(c) ? c : CODE_PARTENAIRE_LAURIE;
+    return `https://vexelwebstudio.com/compte?parrain=${encodeURIComponent(code)}`;
+  }, [reglages]);
+}
 
 const TEXTES = {
   FR: {
