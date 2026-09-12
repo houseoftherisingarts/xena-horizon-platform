@@ -10,6 +10,8 @@ import { DefilementDoux } from './components/motion';
 import NotFound, { cheminInconnu } from './pages/NotFound';
 import Nav from './components/Nav';
 import AdminSidebar from './components/AdminSidebar';
+import VisiteGuidee, { useVisiteGuidee } from './components/admin/VisiteGuidee';
+import { ETAPES_VISITE, LIBELLES_VISITE } from './components/admin/visite-etapes';
 import Footer from './components/Footer';
 import Editeur from './components/Editeur';
 import { TextesProvider } from './lib/textes';
@@ -172,6 +174,8 @@ const App: React.FC = () => {
   // Le crayon de démonstration n'existe que dans un build lancé avec `--mode verif` (boucle locale), jamais en production.
   const userIsAdmin = isAdmin(user) || (import.meta.env.MODE === 'verif' && import.meta.env.VITE_EDITEUR_DEMO === '1');
   const isAdminView = currentView.startsWith('ADMIN');
+  // La visite guidée de bienvenue s'offre à la première entrée dans l'admin, puis se rouvre par le menu.
+  const visite = useVisiteGuidee(isAdminView && userIsAdmin);
 
   // Guard: if user navigates to an admin view but isn't an admin, bounce to HOME and prompt sign-in
   useEffect(() => {
@@ -270,6 +274,14 @@ const App: React.FC = () => {
             open={menuAdminOuvert}
             onClose={() => setMenuAdminOuvert(false)}
             onReplieChange={setMenuAdminReplie}
+            onVisite={visite.ouvrir}
+          />
+          <VisiteGuidee
+            etapes={ETAPES_VISITE[lang]}
+            libelles={LIBELLES_VISITE[lang]}
+            ouvert={visite.ouvert}
+            onFermer={visite.fermer}
+            onAller={(id) => setCurrentView(id as ViewState)}
           />
           <main className={`flex-1 min-w-0 ${menuAdminReplie ? 'md:ml-16' : 'md:ml-64'} min-h-screen overflow-x-clip transition-[margin] duration-300 md:duration-[220ms] md:ease-maison`}>
             <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-papier/90 backdrop-blur-md border-b border-filet">

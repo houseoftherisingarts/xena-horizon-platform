@@ -20,6 +20,7 @@ import {
   Users,
   X,
   History,
+  GraduationCap,
 } from 'lucide-react';
 import { Dossier, ViewState, Language } from '../types';
 import { useCollection } from '../lib/firestore';
@@ -34,12 +35,14 @@ interface AdminSidebarProps {
   onClose?: () => void;
   /** Notifie le parent d'un repli, pour libérer la largeur au contenu (App.tsx). */
   onReplieChange?: (replie: boolean) => void;
+  /** Rouvre la visite guidée de bienvenue. */
+  onVisite?: () => void;
 }
 
 const CLE_MENU_REPLIE = 'xena.admin.menu';
 
 /** La barre du back-office v2 : papier-2, encre, un filet rose sur l'entrée active. Se replie en rail d'icônes sur desktop. */
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang, open = false, onClose, onReplieChange }) => {
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, onSignOut, lang, open = false, onClose, onReplieChange, onVisite }) => {
   const { data: dossiers } = useCollection<Dossier>('dossiers');
   const nonLusDossiers = dossiers.reduce((n, d) => n + (d.nonLusAdmin || 0), 0);
 
@@ -98,6 +101,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
       sections: 'Sections du site',
       changelog: 'Journal des changements',
       vexel: 'Pour Vexel',
+      visite: 'Visite guidée',
       backToSite: 'Retour au site',
       signOut: 'Fermer la session',
       fermer: 'Fermer le menu',
@@ -124,6 +128,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
       sections: 'Site sections',
       changelog: 'Change log',
       vexel: 'For Vexel',
+      visite: 'Guided tour',
       backToSite: 'Back to site',
       signOut: 'Sign out',
       fermer: 'Close menu',
@@ -208,6 +213,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
                     onChangeView(item.id);
                     onClose?.();
                   }}
+                  data-visite={item.id}
                   onMouseEnter={(e) => montrerInfoBulle(e, item.label)}
                   onMouseLeave={cacherInfoBulle}
                   onFocus={(e) => montrerInfoBulle(e, item.label)}
@@ -246,6 +252,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ currentView, onChangeView, 
             <ChevronLeft className={`w-4 h-4 flex-shrink-0 transition-transform duration-[220ms] ease-maison ${replie ? 'rotate-180' : ''}`} aria-hidden="true" />
             {!replie && <span>{t.replier}</span>}
           </button>
+          {onVisite && (
+            <button type="button" onClick={onVisite} aria-label={replie ? t.visite : undefined} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60 ${replie ? 'md:justify-center md:px-0' : ''}`}>
+              <GraduationCap className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+              <span className={replie ? 'md:sr-only' : ''}>{t.visite}</span>
+            </button>
+          )}
           <button type="button" onClick={() => onChangeView('HOME')} className={`${LIEN} text-gris hover:text-encre hover:bg-papier/60 ${replie ? 'md:justify-center md:px-0' : ''}`}>
             <ChevronLeft className="w-4 h-4 flex-shrink-0 md:hidden" aria-hidden="true" />
             <LogOut className={`w-4 h-4 flex-shrink-0 hidden ${replie ? 'md:hidden' : ''}`} aria-hidden="true" />
