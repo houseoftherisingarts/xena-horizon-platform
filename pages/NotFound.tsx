@@ -16,7 +16,7 @@ const TEXTES = {
     title: "Cette scène\nn'existe pas",
     quote: 'Toutes les scènes ne sont pas encore écrites.',
     ligne1: 'Vous avez suivi un lien rompu, ou une adresse qui a changé depuis votre dernière visite.',
-    ligne2: 'Le reste du site est resté à sa place, à commencer par l’accueil.',
+    ligne2: "Le reste du site est resté à sa place, à commencer par l'accueil.",
     cherche: 'Peut-être cherchiez-vous',
     mots: ['les services', 'les projets', 'le balado', "l'accompagnement"],
     cta: "Retour à l'accueil",
