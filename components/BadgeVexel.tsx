@@ -97,6 +97,7 @@ const Sceau: React.FC<{ className?: string }> = ({ className = '' }) => (
 
 const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, className = '' }) => {
   const t = useTextes('badgeVexel', TEXTES, lang);
+  const lienParrainage = useLienParrainage();
   const principal = useFoil();
   const sceau = useFoil();
   const ouiRef = useRef<HTMLAnchorElement>(null);
@@ -128,7 +129,7 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
       <div className={`inline-flex items-stretch gap-3 ${className}`}>
         <a
           ref={principal.ref}
-          href={LIEN_PARRAINAGE_VEXEL}
+          href={lienParrainage}
           onClick={ouvrir}
           aria-haspopup="dialog"
           aria-expanded={ouverte}
@@ -148,7 +149,7 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
 
         <a
           ref={sceau.ref}
-          href={LIEN_PARRAINAGE_VEXEL}
+          href={lienParrainage}
           onClick={ouvrir}
           aria-haspopup="dialog"
           aria-expanded={ouverte}
@@ -224,7 +225,7 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <a
                     ref={ouiRef}
-                    href={LIEN_PARRAINAGE_VEXEL}
+                    href={lienParrainage}
                     target="_blank"
                     rel="noopener"
                     onClick={() => setOuverte(false)}
