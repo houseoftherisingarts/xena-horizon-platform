@@ -428,7 +428,7 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
             ['--couleur-texte' as any]: 'var(--encre)',
             ['--couleur-muted' as any]: 'var(--gris)',
             ['--couleur-bordure' as any]: 'var(--filet)',
-            ['--couleur-accent' as any]: 'var(--rose)',
+            ['--couleur-accent' as any]: 'var(--accent)',
             ['--rayon-carte' as any]: '6px',
             ['--police-corps' as any]: 'inherit',
             ['--police-titre' as any]: 'inherit',
