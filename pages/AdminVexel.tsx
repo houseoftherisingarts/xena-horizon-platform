@@ -412,6 +412,38 @@ const AdminVexel: React.FC<{ lang: Language }> = ({ lang }) => {
         }
       />
 
+      <Panneau titre={lang === 'FR' ? 'Devenir partenaire Vexel' : 'Become a Vexel partner'}>
+        <p className="text-corps text-encre mesure mb-5">
+          {codePartenaireDeja
+            ? lang === 'FR'
+              ? `Votre code de représentante est actif (${codePartenaireDeja}). Le badge du pied de page le porte déjà.`
+              : `Your representative code is active (${codePartenaireDeja}). The footer badge already carries it.`
+            : lang === 'FR'
+              ? 'Signez l\'entente ci-dessous pour ouvrir votre propre code de représentante Vexel.'
+              : 'Sign the agreement below to open your own Vexel representative code.'}
+        </p>
+        <div
+          style={{
+            ['--couleur-surface' as any]: 'var(--papier)',
+            ['--couleur-texte' as any]: 'var(--encre)',
+            ['--couleur-muted' as any]: 'var(--gris)',
+            ['--couleur-bordure' as any]: 'var(--filet)',
+            ['--couleur-accent' as any]: 'var(--rose)',
+            ['--rayon-carte' as any]: '6px',
+            ['--police-corps' as any]: 'inherit',
+            ['--police-titre' as any]: 'inherit',
+          }}
+        >
+          <PartenaireVexelPanneau
+            slug={SLUG_VEXEL}
+            cle={CLE_VEXEL}
+            onSucces={async (resultat) => {
+              await writeDoc('settings', 'vexel', { partenaire: { code: resultat.code, signeLe: new Date().toISOString() } }, { merge: true });
+            }}
+          />
+        </div>
+      </Panneau>
+
       <Panneau titre={t.pourquoiTitre}>
         <div className="grid gap-6 lg:grid-cols-2">
           <p className="text-corps text-encre mesure">{t.pourquoi1}</p>
