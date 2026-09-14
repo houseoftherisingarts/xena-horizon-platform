@@ -32,6 +32,8 @@ const TEXTES = {
   FR: {
     kicker: 'Site créé par',
     nom: 'Vexel Webstudio',
+    sousTitre: 'un projet du Salon des Inconnus',
+    salon: 'Le Salon des Inconnus',
     libelle: 'Site créé par Vexel Webstudio : en savoir plus sur l\'entente',
     affilie: 'Affilié',
     certifie: 'certifié',
@@ -46,6 +48,8 @@ const TEXTES = {
   EN: {
     kicker: 'Site by',
     nom: 'Vexel Webstudio',
+    sousTitre: 'a project of Le Salon des Inconnus',
+    salon: 'Le Salon des Inconnus',
     libelle: 'Site by Vexel Webstudio: learn about the partnership',
     affilie: 'Certified',
     certifie: 'affiliate',
@@ -58,6 +62,9 @@ const TEXTES = {
     fermer: 'Close',
   },
 };
+
+const SALON_URL = 'https://lesalondesinconnus.com/';
+const LOGO_SALON = '/salon-logo-or.png';
 
 /** Le reflet holographique suit le pointeur (--mx, --my) et incline le sticker (--rx, --ry). */
 function useFoil() {
@@ -171,7 +178,7 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
       <AnimatePresence>
         {ouverte && (
           <motion.div
-            className="fixed inset-0 z-[120] flex items-end justify-center p-4 sm:items-center"
+            className="fixed inset-0 z-[900] flex items-end justify-center p-4 sm:items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -217,12 +224,13 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
                   <Sceau className="h-5 w-5" />
                   <span className="kicker text-rose">{t.affilie} {t.certifie}</span>
                 </div>
+                <p className="mt-1 text-[13px] text-gris">{t.sousTitre}</p>
                 <h2 id="badge-vexel-titre" className="mt-4 font-serif text-h3 leading-tight text-encre">
                   {t.titre}
                 </h2>
                 <p className="mt-4 text-corps text-encre">{t.corps}</p>
                 <p className="mt-3 text-corps font-medium text-encre">{t.question}</p>
-                <div className="mt-6 flex flex-wrap items-center gap-3">
+                <div className="mt-6 flex flex-wrap items-center gap-3 pr-20 sm:pr-24">
                   <a
                     ref={ouiRef}
                     href={lienParrainage}
@@ -241,6 +249,20 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
                     {t.non}
                   </button>
                 </div>
+                {/* Le Salon des Inconnus, en bas à droite de la carte : Vexel est un projet du Salon (Alex, 14 septembre 2026). */}
+                <a
+                  href={SALON_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t.salon}
+                  className="absolute bottom-5 right-5 md:bottom-7 md:right-7"
+                >
+                  <img
+                    src={LOGO_SALON}
+                    alt={t.salon}
+                    className="h-16 w-auto object-contain drop-shadow-[0_2px_6px_rgba(197,160,89,0.35)] md:h-20"
+                  />
+                </a>
               </div>
             </motion.div>
           </motion.div>

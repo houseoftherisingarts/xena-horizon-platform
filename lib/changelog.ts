@@ -23,6 +23,16 @@ export type EntreeJournal = {
 
 export const JOURNAL: EntreeJournal[] = [
   {
+    date: '2026-09-14',
+    titre: 'La carte du collant Vexel dit d\'où vient le studio',
+    intro:
+      "La petite carte qui s'ouvre au clic sur le collant du pied de page a reçu deux ajouts, sans rien changer à ce qu'elle disait déjà sur l'entente d'affiliation.",
+    etapes: [
+      "Sous le nom de Vexel Webstudio, une ligne précise maintenant qu'il s'agit d'un projet du Salon des Inconnus, et le sigle doré du Salon apparaît en bas à droite de la carte, en lien vers son propre site.",
+      "La carte s'ouvre désormais par-dessus tout le reste de la page, assistant et bandeau compris, sur ordinateur comme sur téléphone.",
+    ],
+  },
+  {
     date: '2026-09-10',
     titre: 'Votre nom de domaine quitte Wix',
     intro:
