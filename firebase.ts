@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  browserLocalPersistence,
+  browserPopupRedirectResolver,
+  browserSessionPersistence,
+  inMemoryPersistence,
+  initializeAuth,
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported as analyticsSupported, type Analytics } from 'firebase/analytics';
@@ -17,7 +24,14 @@ const firebaseConfig = {
 if (!firebaseConfig.projectId) throw new Error('Configuration Firebase absente : vérifier le fichier .env');
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// `initializeAuth` plutôt que `getAuth` : ce dernier impose IndexedDB, et une base corrompue chez la
+// visiteuse fait « flasher » la fenêtre Google sans jamais rendre la session. L'ordre des persistances
+// descend vers le stockage local, puis la session, puis la mémoire. Le résolveur de fenêtre doit être
+// passé explicitement, sinon `signInWithPopup` lève `auth/argument-error`.
+export const auth = initializeAuth(app, {
+  persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence],
+  popupRedirectResolver: browserPopupRedirectResolver,
+});
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();

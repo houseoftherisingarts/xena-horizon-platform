@@ -24,10 +24,13 @@ export type EntreeJournal = {
 export const JOURNAL: EntreeJournal[] = [
   {
     date: '2026-09-14',
-    titre: 'La carte du collant Vexel dit d\'où vient le studio',
+    titre: 'Votre bouton Google répond à nouveau',
     intro:
-      "La petite carte qui s'ouvre au clic sur le collant du pied de page a reçu deux ajouts, sans rien changer à ce qu'elle disait déjà sur l'entente d'affiliation.",
+      "Depuis que votre site a pris l'adresse lauriebelhumeur.com, la connexion par Google ouvrait une fenêtre qui se refermait aussitôt, chez vous comme chez les personnes qui viennent ouvrir leur dossier. La cause a été trouvée et corrigée, et la carte du collant Vexel a reçu au passage deux ajouts.",
     etapes: [
+      "Votre nouvelle adresse n'avait jamais été déclarée auprès de Google, qui refusait donc la connexion sans rien expliquer; elle l'est maintenant, avec sa version en www, et le bouton « Continuer avec Google » mène à la vraie page de Google sur les deux adresses de votre site.",
+      "La connexion se souvient de vous dans une mémoire du navigateur plus solide que celle employée jusqu'ici, ce qui évite qu'une session se perde toute seule sur un ordinateur dont la mémoire interne est abîmée.",
+      "Si une connexion échoue malgré tout, le message qui s'affiche est écrit en français et dit quoi faire, au lieu de montrer le code d'erreur du fournisseur.",
       "Sous le nom de Vexel Webstudio, une ligne précise maintenant qu'il s'agit d'un projet du Salon des Inconnus, et le sigle doré du Salon apparaît en bas à droite de la carte, en lien vers son propre site.",
       "La carte s'ouvre désormais par-dessus tout le reste de la page, assistant et bandeau compris, sur ordinateur comme sur téléphone.",
     ],

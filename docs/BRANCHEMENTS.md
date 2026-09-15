@@ -5,6 +5,47 @@ geste précis à poser, et où déposer le résultat. Une section par intégrati
 seul : tant qu'une section n'est pas faite, la fonction correspondante existe dans le code, compile,
 mais reste inactive (projet Firebase `xena-70977` sur le plan Spark : aucune fonction déployée).
 
+## Connexion par Google (état : FAIT, à revérifier après chaque nouveau domaine)
+
+Ce que ça fait : le bouton « Continuer avec Google » de la porte cliente (`components/espace/PorteClient.tsx`)
+et de la fenêtre admin (`components/AuthModal.tsx`). Trois réglages le tiennent, et une porte qui « flashe »
+vient toujours de l'un des trois.
+
+**1. Le fournisseur Google activé.** Vérifié en un appel, sans ouvrir la console :
+
+```
+curl -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+     -H "x-goog-user-project: xena-70977" \
+     "https://identitytoolkit.googleapis.com/admin/v2/projects/xena-70977/defaultSupportedIdpConfigs/google.com"
+```
+
+Un `404 CONFIGURATION_NOT_FOUND` veut dire que Google n'est pas branché du tout, et seule la console
+peut l'activer. Au 14 septembre 2026, la réponse est `enabled: true`.
+
+**2. Chaque domaine du site déclaré dans les domaines autorisés.** C'est la faute qui a cassé la porte
+entre le 10 et le 14 septembre 2026 : `lauriebelhumeur.com` a remplacé l'ancienne adresse sans jamais
+être ajoutée à la liste, et Firebase répondait `auth/unauthorized-domain` en refermant la fenêtre dans
+la seconde. Celle-ci se lit et s'écrit par l'API, aucun geste de console n'est nécessaire :
+
+```
+curl -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+     -H "x-goog-user-project: xena-70977" -H "Content-Type: application/json" \
+     "https://identitytoolkit.googleapis.com/admin/v2/projects/xena-70977/config?updateMask=authorizedDomains" \
+     -d '{"authorizedDomains":["localhost","xena-70977.firebaseapp.com","xena-70977.web.app","xenahorizon.com","www.xenahorizon.com","lauriebelhumeur.com","www.lauriebelhumeur.com"]}'
+```
+
+**Réflexe à tenir : tout nouveau domaine branché sur ce site s'ajoute à cette liste le jour même, avec
+sa version en www.**
+
+**3. La persistance de la session.** `firebase.ts` ouvre l'authentification avec `initializeAuth` et
+`browserLocalPersistence` en tête plutôt que `getAuth`, qui impose IndexedDB : une base corrompue chez
+la visiteuse produit exactement le même flash, alors que Firebase enregistre quand même l'entrée.
+
+L'`authDomain` reste `xena-70977.firebaseapp.com`, enregistré chez Google. Le passer au domaine du site
+demanderait d'ajouter `https://lauriebelhumeur.com/__/auth/handler` aux URI de redirection du client OAuth
+`26573351102-svt4mo5a31csanrsdb5q4eks6jn3ra1n`, ce qu'aucune API ne permet; la fenêtre surgissante n'en a
+pas besoin.
+
 ## Infolettre (envoi réel des lettres composées)
 
 Ce que ça fait : le bouton « Envoyer » du composeur (Admin › Infolettres) part réellement vers les

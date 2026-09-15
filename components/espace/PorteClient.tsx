@@ -5,7 +5,6 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
-  type AuthError,
 } from 'firebase/auth';
 import { AlertCircle, ArrowRight, CheckCircle, Lock, Mail } from 'lucide-react';
 import { auth, googleProvider } from '../../firebase';
@@ -14,6 +13,7 @@ import { Reveal } from '../motion';
 import { EtapeDef, Language } from '../../types';
 import { useTextes } from '../../lib/textes';
 import { intentionRendezVous } from '../../lib/rendezvous';
+import { messageErreur } from '../../lib/erreursAuth';
 
 /** Titre/sous-titre d'une étape selon la langue, avec repli sur le français (catalogue Firestore sans champs anglais). */
 const titreEtape = (etape: EtapeDef, lang: Language): string => {
@@ -80,28 +80,6 @@ const TEXTES = {
 
 const CHAMP = 'w-full bg-papier border border-filet rounded-champ px-4 py-3 text-encre placeholder-gris transition-colors';
 
-const messageErreur = (err: unknown, t: { errInconnue: string }): string => {
-  const code = (err as AuthError)?.code;
-  switch (code) {
-    case 'auth/invalid-email':
-      return 'Ce courriel ne semble pas valide.';
-    case 'auth/user-not-found':
-    case 'auth/wrong-password':
-    case 'auth/invalid-credential':
-      return 'Courriel ou mot de passe incorrect.';
-    case 'auth/email-already-in-use':
-      return 'Un compte existe déjà avec ce courriel. Essaie plutôt de te connecter.';
-    case 'auth/weak-password':
-      return "Choisis un mot de passe d'au moins 8 caractères.";
-    case 'auth/too-many-requests':
-      return 'Trop de tentatives. Réessaie dans quelques minutes.';
-    case 'auth/popup-closed-by-user':
-    case 'auth/cancelled-popup-request':
-      return '';
-    default:
-      return (err as Error)?.message || t.errInconnue;
-  }
-};
 
 const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
   const config = useDossierConfig();
@@ -130,7 +108,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
       }
       // App.tsx écoute onAuthStateChanged : la vue se met à jour toute seule.
     } catch (err) {
-      const m = messageErreur(err, t);
+      const m = messageErreur(err, t.errInconnue, lang);
       if (m) setError(m);
     } finally {
       setBusy(false);
@@ -144,7 +122,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
-      const m = messageErreur(err, t);
+      const m = messageErreur(err, t.errInconnue, lang);
       if (m) setError(m);
     } finally {
       setBusy(false);
@@ -163,7 +141,7 @@ const PorteClient: React.FC<PorteClientProps> = ({ lang }) => {
       await sendPasswordResetEmail(auth, email.trim());
       setAvisReset(t.forgotSent);
     } catch (err) {
-      const m = messageErreur(err, t);
+      const m = messageErreur(err, t.errInconnue, lang);
       if (m) setError(m);
     } finally {
       setBusy(false);

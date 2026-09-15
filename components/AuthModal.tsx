@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 import { isAdmin } from '../lib/admins';
+import { messageErreur } from '../lib/erreursAuth';
 import { Language } from '../types';
 import { Portail } from './motion';
 
@@ -82,7 +83,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onAdminSignIn, lan
           : await signInWithEmailAndPassword(auth, email.trim(), password);
       await handleResult(cred.user);
     } catch (err: any) {
-      setError(err?.message || t.generic);
+      setError(messageErreur(err, t.generic, lang) || null);
     } finally {
       setBusy(false);
     }
@@ -95,7 +96,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onAdminSignIn, lan
       const cred = await signInWithPopup(auth, googleProvider);
       await handleResult(cred.user);
     } catch (err: any) {
-      setError(err?.message || t.generic);
+      setError(messageErreur(err, t.generic, lang) || null);
     } finally {
       setBusy(false);
     }
