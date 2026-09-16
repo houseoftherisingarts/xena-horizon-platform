@@ -48,7 +48,7 @@ const TEXTES = {
   EN: {
     kicker: 'Site by',
     nom: 'Vexel Webstudio',
-    sousTitre: 'a project of Le Salon des Inconnus',
+    sousTitre: 'a creative project of Le Salon des Inconnus',
     salon: 'Le Salon des Inconnus',
     libelle: 'Site by Vexel Webstudio: learn about the partnership',
     affilie: 'Certified',
