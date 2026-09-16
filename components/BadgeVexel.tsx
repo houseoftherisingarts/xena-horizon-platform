@@ -32,7 +32,7 @@ const TEXTES = {
   FR: {
     kicker: 'Site créé par',
     nom: 'Vexel Webstudio',
-    sousTitre: 'un projet du Salon des Inconnus',
+    sousTitre: 'un projet créatif du Salon des Inconnus',
     salon: 'Le Salon des Inconnus',
     libelle: 'Site créé par Vexel Webstudio : en savoir plus sur l\'entente',
     affilie: 'Affilié',
