@@ -23,6 +23,15 @@ export type EntreeJournal = {
 
 export const JOURNAL: EntreeJournal[] = [
   {
+    date: '2026-09-16',
+    titre: 'Une précision sur le collant Vexel',
+    intro:
+      "La carte qui explique l'entente Vexel, au bas de vos pages, dit maintenant plus précisément ce qu'est ce projet.",
+    etapes: [
+      "La ligne sous le nom de Vexel Webstudio dit désormais qu'il s'agit d'un projet créatif du Salon des Inconnus, en français comme en anglais.",
+    ],
+  },
+  {
     date: '2026-09-14',
     titre: 'Votre bouton Google répond à nouveau',
     intro:
