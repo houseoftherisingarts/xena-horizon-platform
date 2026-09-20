@@ -39,9 +39,9 @@ const TEXTES = {
     certifie: 'certifié',
     libelleAffilie: 'Affilié certifié Vexel Webstudio : en savoir plus sur l\'entente',
     titre: 'Un site comme celui-ci, avec un coup de pouce',
-    corps: 'Xena Horizon est affiliée à Vexel Webstudio pour les sites Internet. Si vous ouvrez un dossier chez Vexel à partir d\'ici, vous recevez un rabais de 10 % sur votre forfait et Laurie touche une commission de 10 % sur ce même forfait. Tout le monde y gagne.',
-    question: 'Voulez-vous continuer ?',
-    oui: 'Oui, je continue',
+    corps: "Xena Horizon est affiliée à Vexel Webstudio pour les sites Internet. Si vous ouvrez un dossier chez Vexel à partir d'ici, vous gagnez un rabais sur ce même forfait.",
+    question: '',
+    oui: 'Continuer vers Vexel',
     non: 'Pas maintenant',
     fermer: 'Fermer',
   },
@@ -55,9 +55,9 @@ const TEXTES = {
     certifie: 'affiliate',
     libelleAffilie: 'Certified Vexel Webstudio affiliate: learn about the partnership',
     titre: 'A site like this one, with a helping hand',
-    corps: 'Xena Horizon is affiliated with Vexel Webstudio for websites. If you open a file with Vexel from here, you get 10% off your plan and Laurie earns a 10% commission on that same plan. Everyone wins.',
-    question: 'Would you like to continue?',
-    oui: 'Yes, take me there',
+    corps: 'Xena Horizon is affiliated with Vexel Webstudio for websites. If you open a file with Vexel from here, you earn a discount on that same plan.',
+    question: '',
+    oui: 'Continue to Vexel',
     non: 'Not now',
     fermer: 'Close',
   },
@@ -229,7 +229,7 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
                   {t.titre}
                 </h2>
                 <p className="mt-4 text-corps text-encre">{t.corps}</p>
-                <p className="mt-3 text-corps font-medium text-encre">{t.question}</p>
+                {t.question ? <p className="mt-3 text-corps font-medium text-encre">{t.question}</p> : null}
                 <div className="mt-6 flex flex-wrap items-center gap-3 pr-20 sm:pr-24">
                   <a
                     ref={ouiRef}
