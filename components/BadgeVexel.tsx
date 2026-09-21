@@ -12,20 +12,51 @@ import { CODE_PARTENAIRE_LAURIE } from '../lib/vexel';
 import { useDocument } from '../lib/firestore';
 import { useTextes } from '../lib/textes';
 import type { Language } from '../types';
+import { finiDe, finiPermis, RANG_FORMULE, type FormuleCollant } from './vexel/collants';
+
+/** Le pont public de Vexel donne la finition choisie pour ce nom d'hôte dans l'espace client;
+ * une réponse absente, hors formule ou en erreur laisse `settings/vexel.collant` en place, sans
+ * jamais faire remonter d'erreur au site (voir docs/COLLANT-REGLES.md de _vexel-base). */
+const PONT_COLLANT = 'https://us-central1-vexel-integrations.cloudfunctions.net/collantDuSite';
 
 /** Code venant du panneau « Devenir partenaire Vexel » (Admin › Pour Vexel), s'il a déjà été signé;
  * sinon le code déjà en place depuis l'affiliation d'origine (lib/vexel.ts). Seul un code de la forme
- * attendue passe, et l'adresse se reconstruit toujours ici plutôt que d'être lue telle quelle. */
+ * attendue passe, et l'adresse se reconstruit toujours ici plutôt que d'être lue telle quelle. La
+ * finition (`collant`) suit le même document : `settings/vexel.collant`. */
 interface ParametresVexel {
   partenaire?: { code?: string };
+  collant?: string;
 }
-function useLienParrainage(): string {
+function useParametresVexel(): { lienParrainage: string; collant?: string } {
   const { data: reglages } = useDocument<ParametresVexel>('settings/vexel');
-  return useMemo(() => {
+  const lienParrainage = useMemo(() => {
     const c = reglages?.partenaire?.code;
     const code = typeof c === 'string' && /^[A-Z0-9-]{4,24}$/.test(c) ? c : CODE_PARTENAIRE_LAURIE;
     return `https://vexelwebstudio.com/compte?parrain=${encodeURIComponent(code)}`;
   }, [reglages]);
+  const collant = typeof reglages?.collant === 'string' ? reglages.collant : undefined;
+  return { lienParrainage, collant };
+}
+
+/** La finition du collant : le pont Vexel (collantDuSite) prime quand il nomme une finition que la
+ * formule ouvre; sinon `settings/vexel.collant`; sinon la finition d'origine du badge (l'irisé, déjà
+ * en place dans `.xh-foil`), pour qu'aucun site déjà en ligne ne change d'apparence de lui-même. */
+function useFiniCollant(collant: string | undefined) {
+  const [collantPont, setCollantPont] = useState<string | null>(null);
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetch(`${PONT_COLLANT}?site=${encodeURIComponent(window.location.hostname)}`, { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((r: { collant?: unknown; formule?: unknown } | null) => {
+        if (!r || typeof r.collant !== 'string') return;
+        const formule: FormuleCollant =
+          typeof r.formule === 'string' && Object.prototype.hasOwnProperty.call(RANG_FORMULE, r.formule) ? (r.formule as FormuleCollant) : 'base';
+        if (finiPermis(r.collant, formule)) setCollantPont(r.collant);
+      })
+      .catch(() => {});
+    return () => ctrl.abort();
+  }, []);
+  return finiDe(collantPont ?? collant);
 }
 
 const TEXTES = {
@@ -104,7 +135,9 @@ const Sceau: React.FC<{ className?: string }> = ({ className = '' }) => (
 
 const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, className = '' }) => {
   const t = useTextes('badgeVexel', TEXTES, lang);
-  const lienParrainage = useLienParrainage();
+  const { lienParrainage, collant } = useParametresVexel();
+  const fini = useFiniCollant(collant);
+  const finiStyle = { '--xh-fond': fini.fond, '--xh-encre': fini.encre } as React.CSSProperties;
   const principal = useFoil();
   const sceau = useFoil();
   const ouiRef = useRef<HTMLAnchorElement>(null);
@@ -144,13 +177,14 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
           onPointerMove={principal.suivre}
           onPointerLeave={principal.relacher}
           className="xh-foil group relative inline-flex items-center gap-3 rounded-[15px] px-4 py-3 select-none"
+          style={finiStyle}
         >
-          <span aria-hidden className="xh-foil-sheen" />
+          {fini.reflet ? <span aria-hidden className="xh-foil-sheen" /> : null}
           <span aria-hidden className="xh-foil-grain" />
           <img src="/images/vexel-logo.png" alt="" width={329} height={320} className="relative h-10 w-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
           <span className="relative flex flex-col leading-none">
-            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-white/70">{t.kicker}</span>
-            <span className="mt-1 font-serif text-[1.05rem] text-white">{t.nom}</span>
+            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.22em] opacity-70">{t.kicker}</span>
+            <span className="mt-1 font-serif text-[1.05rem]">{t.nom}</span>
           </span>
         </a>
 
@@ -164,13 +198,14 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
           onPointerMove={sceau.suivre}
           onPointerLeave={sceau.relacher}
           className="xh-foil group relative inline-flex aspect-square flex-col items-center justify-center gap-1 rounded-[15px] px-2 select-none"
+          style={finiStyle}
         >
-          <span aria-hidden className="xh-foil-sheen" />
+          {fini.reflet ? <span aria-hidden className="xh-foil-sheen" /> : null}
           <span aria-hidden className="xh-foil-grain" />
           <Sceau className="relative h-7 w-7 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
           <span className="relative flex flex-col items-center text-center leading-[1.15]">
-            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-white">{t.affilie}</span>
-            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-white/70">{t.certifie}</span>
+            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em]">{t.affilie}</span>
+            <span className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] opacity-70">{t.certifie}</span>
           </span>
         </a>
       </div>
@@ -201,13 +236,13 @@ const BadgeVexel: React.FC<{ lang: Language; className?: string }> = ({ lang, cl
               transition={{ duration: 0.32, ease: [0.16, 0.8, 0.24, 1] }}
             >
               {/* Le volet de gauche reprend la surface foil des stickers, avec le logo complet en grand. */}
-              <div className="xh-foil-plat relative flex min-h-[200px] flex-col items-center justify-center gap-5 p-6 text-center sm:p-8">
-                <span aria-hidden className="xh-foil-sheen" />
+              <div className="xh-foil-plat relative flex min-h-[200px] flex-col items-center justify-center gap-5 p-6 text-center sm:p-8" style={finiStyle}>
+                {fini.reflet ? <span aria-hidden className="xh-foil-sheen" /> : null}
                 <span aria-hidden className="xh-foil-grain" />
                 <img src="/images/vexel-logo.png" alt="" width={329} height={320} className="relative h-28 w-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] sm:h-40" />
                 <span className="relative flex flex-col leading-none">
-                  <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-white/70">{t.kicker}</span>
-                  <span className="mt-1.5 font-serif text-[1.375rem] text-white">{t.nom}</span>
+                  <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] opacity-70">{t.kicker}</span>
+                  <span className="mt-1.5 font-serif text-[1.375rem]">{t.nom}</span>
                 </span>
               </div>
 

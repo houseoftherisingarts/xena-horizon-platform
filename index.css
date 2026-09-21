@@ -271,10 +271,10 @@ button:active, [role='button']:active, a.pilule:active { transform: scale(0.97);
    .xh-foil-plat est la même surface sans liseré ni inclinaison, pour le volet de la carte. */
 .xh-foil, .xh-foil-plat {
   --mx: 30%; --my: 30%; --rx: 0deg; --ry: 0deg;
-  color: #fff;
+  color: var(--xh-encre, #fff);
   background:
     radial-gradient(120% 120% at var(--mx) var(--my), rgb(255 255 255 / 0.18), transparent 55%),
-    linear-gradient(135deg, #1b1b22 0%, #050505 60%, #14141a 100%);
+    var(--xh-fond, linear-gradient(135deg, #1b1b22 0%, #050505 60%, #14141a 100%));
   overflow: hidden;
   isolation: isolate;
 }

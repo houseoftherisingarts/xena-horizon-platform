@@ -60,6 +60,21 @@ service cloud.firestore {
       return v is string && v.size() < 200 && v.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
     }
 
+    // Les finitions du collant Vexel qu'ouvre chaque formule (docs/COLLANT-REGLES.md de _vexel-base,
+    // à tenir identique à components/vexel/collants.ts). Xena Horizon est sur la formule Base.
+    function finitionsDe(formule) {
+      return formule == 'signature'
+        ? ['noir', 'blanc', 'rouge', 'bleu', 'vert', 'violet', 'bronze', 'argent', 'or', 'saphir', 'irise', 'arc-en-ciel']
+        : formule == 'hybride'
+          ? ['noir', 'blanc', 'rouge', 'bleu', 'vert', 'violet', 'bronze', 'argent', 'or', 'saphir']
+          : ['noir', 'blanc', 'rouge', 'bleu', 'vert', 'violet', 'bronze'];
+    }
+
+    function collantOk(formule) {
+      return !('collant' in request.resource.data)
+        || request.resource.data.collant in finitionsDe(formule);
+    }
+
     // Public-write submission endpoints (anti-spam: enforce shape only)
     match /leads/{leadId} {
       allow read: if isAdmin();
@@ -92,7 +107,7 @@ service cloud.firestore {
     }
     // settings/facturation porte l'identité légale de Laurie (NEQ, TPS, TVQ) : admin seulement.
     // Ce que la personne facturée doit voir vit dans le miroir factures_publiques, jamais ici.
-    match /settings/{key} { allow read: if key != 'facturation' || isAdmin(); allow write: if isAdmin(); }
+    match /settings/{key} { allow read: if key != 'facturation' || isAdmin(); allow write: if isAdmin() && (key != 'vexel' || collantOk('base')); }
 
     // Miroir public d'une facture publiée : lisible par jeton (assez long pour être imprévisible),
     // jamais listable, jamais écrit ailleurs que par Laurie (lib/factures.ts, publierFacture).
