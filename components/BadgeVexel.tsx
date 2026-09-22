@@ -32,7 +32,7 @@ function useParametresVexel(): { lienParrainage: string; collant?: string } {
   const lienParrainage = useMemo(() => {
     const c = reglages?.partenaire?.code;
     const code = typeof c === 'string' && /^[A-Z0-9-]{4,24}$/.test(c) ? c : CODE_PARTENAIRE_LAURIE;
-    return `https://vexelwebstudio.com/compte?parrain=${encodeURIComponent(code)}`;
+    return `https://vexelwebstudio.com/?parrain=${encodeURIComponent(code)}`;
   }, [reglages]);
   const collant = typeof reglages?.collant === 'string' ? reglages.collant : undefined;
   return { lienParrainage, collant };
