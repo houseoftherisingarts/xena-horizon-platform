@@ -354,13 +354,7 @@ const AdminPresse: React.FC<{ lang: Language }> = ({ lang }) => {
   const majTexte = (i: number, champs: Partial<TextePresse>) =>
     changer((k) => ({ ...k, textes: k.textes.map((x, j) => (j === i ? { ...x, ...champs } : x)) }));
 
-  const deplacer = <X extends { n: string }>(liste: X[], i: number, pas: number): X[] => {
-    const j = i + pas;
-    if (j < 0 || j >= liste.length) return liste;
-    const copie = [...liste];
-    [copie[i], copie[j]] = [copie[j], copie[i]];
-    return renumeroter(copie);
-  };
+  const deplacer = <X extends { n: string }>(liste: X[], i: number, pas: number): X[] => renumeroter(echanger(liste, i, pas));
 
   return (
     <div className="p-4 md:p-8 space-y-8">
