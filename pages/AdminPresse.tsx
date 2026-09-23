@@ -120,6 +120,15 @@ type Onglet = 'cartes' | 'planches' | 'textes';
 /** Remet les numéros en accord avec l'ordre affiché, pour que « 03 » soit bien le troisième. */
 const renumeroter = <T extends { n: string }>(liste: T[]): T[] => liste.map((x, i) => ({ ...x, n: String(i + 1).padStart(2, '0') }));
 
+/** Échange deux voisins dans une liste; au bout, la liste ne bouge pas. */
+function echanger<T>(liste: T[], i: number, pas: number): T[] {
+  const j = i + pas;
+  if (j < 0 || j >= liste.length) return liste;
+  const copie = [...liste];
+  [copie[i], copie[j]] = [copie[j], copie[i]];
+  return copie;
+}
+
 /**
  * Réduit une photo avant l'envoi : 2400 px de large suffisent à une carte de 1920, et un fichier
  * d'appareil photo de 8 Mo ferait ramer l'aperçu autant que la capture.
