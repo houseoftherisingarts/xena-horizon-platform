@@ -45,6 +45,8 @@ const AdminChangelog = lazy(() => import('./pages/AdminChangelog'));
 const AdminTemoignages = lazy(() => import('./pages/AdminTemoignages'));
 const AdminVideos = lazy(() => import('./pages/AdminVideos'));
 const AdminSections = lazy(() => import('./pages/AdminSections'));
+const AdminPresse = lazy(() => import('./pages/AdminPresse'));
+const PublicPresse = lazy(() => import('./pages/PublicPresse'));
 const EspaceClient = lazy(() => import('./pages/EspaceClient'));
 const FacturePublique = lazy(() => import('./pages/FacturePublique'));
 
@@ -215,6 +217,8 @@ const App: React.FC = () => {
         return <PublicProjets lang={lang} />;
       case 'A_PROPOS':
         return <PublicAPropos lang={lang} />;
+      case 'PRESSE':
+        return <PublicPresse lang={lang} />;
       case 'ESPACE_CLIENT':
         return <EspaceClient user={user} lang={lang} />;
       case 'ADMIN_DOSSIERS':
@@ -227,6 +231,8 @@ const App: React.FC = () => {
         return <AdminVideos lang={lang} />;
       case 'ADMIN_SECTIONS':
         return <AdminSections lang={lang} />;
+      case 'ADMIN_PRESSE':
+        return <AdminPresse lang={lang} />;
       case 'ADMIN_CHANGELOG':
         return <AdminChangelog lang={lang} />;
       case 'ADMIN_DASHBOARD':

@@ -6,6 +6,7 @@ export const VIEW_PATHS: Record<ViewState, string> = {
   SERVICES: '/services',
   PROJETS: '/projets',
   A_PROPOS: '/a-propos',
+  PRESSE: '/presse',
   ESPACE_CLIENT: '/espace',
   ADMIN_DOSSIERS: '/admin/dossiers',
   ADMIN_DASHBOARD: '/admin',
@@ -23,6 +24,7 @@ export const VIEW_PATHS: Record<ViewState, string> = {
   ADMIN_TEMOIGNAGES: '/admin/temoignages',
   ADMIN_VIDEOS: '/admin/capsules',
   ADMIN_SECTIONS: '/admin/sections',
+  ADMIN_PRESSE: '/admin/presse',
   ADMIN_CHANGELOG: '/admin/journal',
 } as Record<ViewState, string>;
 

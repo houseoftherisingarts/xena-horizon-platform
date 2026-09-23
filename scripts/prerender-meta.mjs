@@ -179,6 +179,28 @@ function contenuProjets() {
     ).join('')}`;
 }
 
+function contenuPresse() {
+  // La salle de presse sert aussi de fiche d'identité : ce sont les faits que les rédactions
+  // recopient, alors ils vivent dans le HTML plutôt que derrière un téléchargement. Les mêmes
+  // phrases qu'à l'écran, prises à lib/contenu.ts comme le reste du prérendu.
+  return `
+    <h1>Salle de presse</h1>
+    ${p("Les visuels, les photographies et les textes de Laurie Belhumeur, libres d'usage pour couvrir son travail, ses projets et ses événements.")}
+    <section>
+      <h2>Biographie</h2>
+      ${A_PROPOS.paragraphes.map(p).join('')}
+      ${p(A_PROPOS.mission)}
+    </section>
+    <section>
+      <h2>Ses casquettes</h2>
+      <ul>${A_PROPOS.casquettesFR.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
+    </section>
+    <section>
+      <h2>Pour une entrevue</h2>
+      ${p(`${COORDONNEES.courriel} · ${COORDONNEES.telephone} · ${COORDONNEES.zones}`)}
+    </section>`;
+}
+
 function contenuAPropos() {
   // Le h1 réel de PublicAPropos.tsx est le nom (LAURIE / BELHUMEUR en deux lignes), pas A_PROPOS.titre
   // (qui sert de h2 plus bas, « Brève histoire d'un tout ») : même texte, même ordre qu'à l'écran.
@@ -427,6 +449,7 @@ const PAGES_DESC = {
   projets: 'Le balado En quête de liberté, le livre Je ne suis pas un robot et le projet de modèle et comédienne de Laurie Belhumeur.',
   apropos:
     'Consultante en carrière artistique et en communication depuis quinze ans, Laurie Belhumeur accompagne les artistes pour qu’ils vivent de leur art.',
+  presse: 'Les visuels, les photos et les textes de Laurie Belhumeur, prêts à publier : cartes 1920 × 1080, portraits pleine résolution, biographies.',
   espace: 'L’espace client de Xena Horizon : suivez votre dossier d’accompagnement avec Laurie Belhumeur.',
 };
 
@@ -486,6 +509,16 @@ const PAGES = [
     noindex: false,
     contenu: contenuServicesEN(),
     jsonLdGraph: [serviceNode(false, 'EN'), itemListServicesNode('EN'), breadcrumbNode('Services', '/en/services', 'EN')],
+  },
+  {
+    path: '/presse',
+    dir: 'presse',
+    lang: 'FR',
+    title: 'Salle de presse | Xena Horizon',
+    desc: PAGES_DESC.presse,
+    noindex: false,
+    contenu: contenuPresse(),
+    jsonLdGraph: [breadcrumbNode('Salle de presse', '/presse', 'FR')],
   },
   {
     path: '/projets',

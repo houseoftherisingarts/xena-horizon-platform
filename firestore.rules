@@ -109,6 +109,11 @@ service cloud.firestore {
     // Ce que la personne facturée doit voir vit dans le miroir factures_publiques, jamais ici.
     match /settings/{key} { allow read: if key != 'facturation' || isAdmin(); allow write: if isAdmin() && (key != 'vexel' || collantOk('base')); }
 
+    // Les brouillons de Laurie (la salle de presse, pour l'instant) : elle seule les lit et les
+    // écrit, le temps qu'un texte à moitié récrit ne parte pas chez un journaliste. Ce qui est
+    // publié passe dans settings, lisible par tout le monde.
+    match /brouillons/{cle} { allow read, write: if isAdmin(); }
+
     // Miroir public d'une facture publiée : lisible par jeton (assez long pour être imprévisible),
     // jamais listable, jamais écrit ailleurs que par Laurie (lib/factures.ts, publierFacture).
     // La collection documents (source, avec l'identité de la personne facturée) reste admin seulement.
