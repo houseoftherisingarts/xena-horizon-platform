@@ -23,6 +23,18 @@ export type EntreeJournal = {
 
 export const JOURNAL: EntreeJournal[] = [
   {
+    date: '2026-09-23',
+    titre: "L'offre de représentante Vexel",
+    intro:
+      "Votre back-office porte maintenant l'offre officielle de Vexel Webstudio : une fenêtre s'ouvre à votre prochaine visite pour vous présenter ce que vous touchez en amenant d'autres personnes vers Vexel, et vous choisissez le moment de vous y engager.",
+    etapes: [
+      "La fenêtre explique le programme en une page, avec le bonus de 200 $ au premier client Signature que vous amenez et les 12 % de chaque abonnement qui reviennent tous les mois, tant que le site de ce client reste en ligne.",
+      "Le bouton de la visite ouvre l'accueil de vexelwebstudio.com dans un nouvel onglet, où quatre cartes vous montrent les réalisations, le calcul de votre part et les formules que vos clients verront, avant de vous laisser signer.",
+      "Si le moment ne s'y prête pas, « Plus tard » range l'offre dans une petite bulle au coin de votre écran, qui garde sa pastille et rouvre la fenêtre d'un seul clic.",
+      "L'entente se lit et se signe en ligne avec votre compte Google, et la bulle disparaît d'elle-même une fois l'entente signée.",
+    ],
+  },
+  {
     date: '2026-09-16',
     titre: 'Une précision sur le collant Vexel',
     intro:

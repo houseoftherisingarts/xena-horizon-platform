@@ -12,11 +12,10 @@ import { useTextes } from '../lib/textes';
 import { Bouton, Champ, EnTete, Etiquette, Panneau, Zone } from '../components/admin/ui';
 import { PartenaireVexelPanneau } from '../vexel/PartenaireVexelPanneau';
 import type { Language } from '../types';
+import { SLUG_VEXEL, CLE_VEXEL } from '../lib/vexel';
 
 /** Le slug et la clé de ce site chez Vexel (vexel-integrations, clients/xena) : les mêmes qui
  * serviraient à une boîte /demande/, réutilisés ici pour ouvrir la porte des partenaires. */
-const SLUG_VEXEL = 'xena';
-const CLE_VEXEL = 'jsV84Gj0KONwv-J82NDbcGSR';
 
 interface ParametresVexelPartenaire {
   partenaire?: { code?: string; lien?: string; page?: string; signeLe?: string };

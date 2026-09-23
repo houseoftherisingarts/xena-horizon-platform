@@ -14,6 +14,8 @@ import VisiteGuidee, { useVisiteGuidee } from './components/admin/VisiteGuidee';
 import { ETAPES_VISITE, LIBELLES_VISITE } from './components/admin/visite-etapes';
 import Footer from './components/Footer';
 import Editeur from './components/Editeur';
+import OffrePartenaireVexel from './components/vexel/OffrePartenaireVexel';
+import { SLUG_VEXEL, CLE_VEXEL, COURRIEL_LAURIE } from './lib/vexel';
 import { TextesProvider } from './lib/textes';
 import { CadragesProvider } from './lib/cadrages';
 import AuthModal from './components/AuthModal';
@@ -283,6 +285,7 @@ const App: React.FC = () => {
             onFermer={visite.fermer}
             onAller={(id) => setCurrentView(id as ViewState)}
           />
+          <OffrePartenaireVexel client={SLUG_VEXEL} cle={CLE_VEXEL} destinataire={COURRIEL_LAURIE} courriel={user?.email} enAttente={visite.ouvert} />
           <main className={`flex-1 min-w-0 ${menuAdminReplie ? 'md:ml-16' : 'md:ml-64'} min-h-screen overflow-x-clip transition-[margin] duration-300 md:duration-[220ms] md:ease-maison`}>
             <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-papier/90 backdrop-blur-md border-b border-filet">
               <button
