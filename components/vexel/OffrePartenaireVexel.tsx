@@ -38,6 +38,8 @@ interface Props {
   role?: string;
   /** Le chemin du logo Vexel dans le site du client. */
   logo?: string;
+  /** La salutation qui ouvre la fenêtre, au prénom de la personne (« Yo Laurie ! »). */
+  salut?: string;
   /** Vrai tant qu'une autre couche plein écran occupe l'admin (sa propre visite guidée) : l'offre attend. */
   enAttente?: boolean;
 }
@@ -92,6 +94,7 @@ export default function OffrePartenaireVexel({
   role = 'représentante',
   logo = '/images/vexel-logo.png',
   enAttente = false,
+  salut,
 }: Props) {
   const apercu = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('offreVexel') === 'apercu';
   const pourMoi = apercu || (courriel ?? '').toLowerCase() === destinataire.toLowerCase();
@@ -208,6 +211,7 @@ export default function OffrePartenaireVexel({
 
                     {/* Le volet de l'offre : le titre, l'explication, les trois temps, les gestes. */}
                     <div className="p-7 md:p-10">
+                      {salut && <p className="ovx-irise mb-3 text-[22px] font-semibold leading-tight">{salut}</p>}
                       <p className="text-[13px] uppercase tracking-[0.22em] text-[#8ad4ff]">Une offre de Vexel Webstudio</p>
                       <h2 id="ovx-titre" className="mt-3 text-[clamp(1.9rem,3.4vw,2.6rem)] font-semibold leading-[1.08] tracking-tight">
                         Deviens {role} Vexel
