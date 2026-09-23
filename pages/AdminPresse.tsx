@@ -555,7 +555,8 @@ const AdminPresse: React.FC<{ lang: Language }> = ({ lang }) => {
               key={x.key}
               actions={
                 <>
-                  <Bouton variante="discret" icone={ArrowUp} petit aria-label={t.monter} onClick={() => changer((k) => ({ ...k, textes: deplacer(k.textes.map((y) => ({ ...y, n: '' })), i, -1).map(({ n: _n, ...y }) => y as TextePresse) }))} />
+                  <Bouton variante="discret" icone={ArrowUp} petit aria-label={t.monter} onClick={() => changer((k) => ({ ...k, textes: echanger(k.textes, i, -1) }))} />
+                  <Bouton variante="discret" icone={ArrowDown} petit aria-label={t.descendre} onClick={() => changer((k) => ({ ...k, textes: echanger(k.textes, i, 1) }))} />
                   <Bouton variante="danger" icone={Trash2} petit onClick={() => changer((k) => ({ ...k, textes: k.textes.filter((_, j) => j !== i) }))}>
                     {t.supprimer}
                   </Bouton>
