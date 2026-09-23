@@ -27,6 +27,12 @@ export interface Cadrage {
   focalX?: number;
   focalY?: number;
   zoom?: number;
+  /**
+   * Montre la photo entière dans son panneau plutôt que de la remplir. Sert aux visuels qui
+   * portent leur propre lettrage, comme la pochette du balado : un cadre en portrait tranchait
+   * la première et la dernière lettre du titre imprimé dans l'image.
+   */
+  contenir?: boolean;
 }
 
 export interface CartePresse extends Cadrage {
@@ -44,7 +50,7 @@ export interface CartePresse extends Cadrage {
 }
 
 /** Une photo livrée telle quelle aux médias, dans sa taille d'origine, avec son crédit. */
-export interface PlanchePresse {
+export interface PlanchePresse extends Cadrage {
   key: string;
   n: string;
   photo: string;
@@ -103,9 +109,9 @@ export const KIT_DEFAUT: KitPresse = {
     {
       key: 'portrait',
       n: '01',
-      photo: '/images/laurie-portrait-1-1920.jpg',
+      photo: '/images/laurie-portrait-nb-1920.jpg',
       cote: 'droite',
-      focalY: 40,
+      focalY: 32,
       kicker: { FR: 'Salle de presse · Xena Horizon', EN: 'Press room · Xena Horizon' },
       titre: { FR: 'Laurie Belhumeur', EN: 'Laurie Belhumeur' },
       corps: { FR: A_PROPOS.tagline, EN: A_PROPOS.taglineEn },
@@ -127,7 +133,7 @@ export const KIT_DEFAUT: KitPresse = {
       n: '03',
       photo: '/images/balado-1920.jpg',
       cote: 'droite',
-      focalY: 45,
+      contenir: true,
       kicker: { FR: 'Balado', EN: 'Podcast' },
       titre: { FR: balado!.titre, EN: balado!.titre },
       corps: { FR: balado!.description[0], EN: balado!.descriptionEn[0] },
@@ -149,7 +155,8 @@ export const KIT_DEFAUT: KitPresse = {
       n: '05',
       photo: '/images/laurie-portrait-2-1920.jpg',
       cote: 'droite',
-      focalY: 38,
+      focalX: 30,
+      focalY: 52,
       kicker: { FR: 'Pour les médias', EN: 'For the media' },
       titre: { FR: SIGNATURE.texteFR, EN: SIGNATURE.texteEN },
       corps: {
@@ -161,57 +168,51 @@ export const KIT_DEFAUT: KitPresse = {
   ],
   planches: [
     {
-      key: 'portrait-1',
+      key: 'portrait',
       n: '01',
-      photo: '/images/laurie-portrait-1-1920.jpg',
-      legende: { FR: 'Portrait officiel, en couleur.', EN: 'Official portrait, in colour.' },
-      credit: CREDITS.photographes[0],
-    },
-    {
-      key: 'portrait-2',
-      n: '02',
-      photo: '/images/laurie-portrait-2-1920.jpg',
-      legende: { FR: 'Portrait officiel, seconde pose.', EN: 'Official portrait, second pose.' },
-      credit: CREDITS.photographes[0],
-    },
-    {
-      key: 'portrait-nb',
-      n: '03',
       photo: '/images/laurie-portrait-nb-1920.jpg',
-      legende: { FR: 'Portrait en noir et blanc, pour une une ou une pleine page.', EN: 'Black and white portrait, for a cover or a full page.' },
+      legende: { FR: 'Portrait officiel.', EN: 'Official portrait.' },
       credit: CREDITS.photographes[0],
     },
     {
-      key: 'scene',
-      n: '04',
-      photo: '/images/laurie-scene-1920.jpg',
-      legende: { FR: "Laurie en animation d'événement.", EN: 'Laurie hosting an event.' },
-      credit: CREDITS.photographes[0],
-    },
-    {
-      key: 'apropos',
-      n: '05',
+      key: 'studio',
+      n: '02',
       photo: '/images/laurie-apropos-1920.jpg',
-      legende: { FR: 'Portrait de travail, en atelier.', EN: 'Working portrait, in the studio.' },
+      legende: { FR: 'Portrait en studio.', EN: 'Studio portrait.' },
       credit: CREDITS.photographes[0],
+    },
+    {
+      key: 'evenement',
+      n: '03',
+      photo: '/images/laurie-portrait-1-1920.jpg',
+      legende: { FR: "Scène d'un événement.", EN: 'A scene from an event.' },
+      credit: '',
+    },
+    {
+      key: 'salle',
+      n: '04',
+      photo: '/images/laurie-portrait-2-1920.jpg',
+      legende: { FR: "Salle comble lors d'un événement.", EN: 'A full house at an event.' },
+      credit: '',
     },
     {
       key: 'balado',
-      n: '06',
+      n: '05',
       photo: '/images/balado-1920.jpg',
+      contenir: true,
       legende: { FR: 'Visuel du balado En quête de liberté.', EN: 'Artwork for the podcast En quête de liberté.' },
       credit: 'Xena Horizon',
     },
     {
       key: 'livre',
-      n: '07',
+      n: '06',
       photo: '/images/livre-couverture.jpg',
       legende: { FR: 'Couverture du recueil Je ne suis pas un robot.', EN: 'Cover of the collection Je ne suis pas un robot.' },
       credit: 'Jean-Michel Naud · graphisme Sonia Lapointe',
     },
     {
       key: 'modele',
-      n: '08',
+      n: '07',
       photo: '/images/modele-1920.jpg',
       legende: { FR: 'Séance Over dramatk, où Laurie est modèle.', EN: 'Over dramatk session, with Laurie as the model.' },
       credit: CREDITS.photographes[1],

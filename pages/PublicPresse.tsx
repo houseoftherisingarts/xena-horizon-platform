@@ -125,7 +125,7 @@ const PublicPresse: React.FC<{ lang: Language }> = ({ lang }) => {
       for (const p of kit.planches) {
         pieces.push({ nom: `photos/${p.n}-${nomPhoto(p.photo)}`, data: await octets(urlPhoto(p.photo)) });
       }
-      pieces.push({ nom: 'photos/credits.txt', data: octetsTexte(kit.planches.map((p) => `${p.n} · ${nomPhoto(p.photo)}\n${dit(p.legende, lang)}\n${t.credit} : ${p.credit}\n`).join('\n')) });
+      pieces.push({ nom: 'photos/credits.txt', data: octetsTexte(kit.planches.map((p) => `${p.n} · ${nomPhoto(p.photo)}\n${dit(p.legende, lang)}${p.credit ? `\n${t.credit} : ${p.credit}` : ''}\n`).join('\n')) });
       for (const x of kit.textes) {
         pieces.push({ nom: `textes/${x.key}.txt`, data: octetsTexte(`${dit(x.titre, lang)}\n\n${dit(x.texte, lang)}\n`) });
       }
@@ -216,8 +216,10 @@ const PublicPresse: React.FC<{ lang: Language }> = ({ lang }) => {
           {kit.planches.map((p) => (
             <Reveal key={p.key} as="figure">
               <button type="button" onClick={() => planche(p)} className="group block w-full text-left">
-                <span className="block w-full aspect-[3/4] overflow-hidden bg-papier">
-                  <img src={urlPhoto(p.photo)} alt={dit(p.legende, lang)} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+                {/* Un visuel montré entier est plus court que sa case : il se cale en haut pour que la rangée
+                    garde une ligne franche, et le reste de la case lui sert de passe-partout. */}
+                <span className={`block w-full aspect-[3/4] overflow-hidden ${p.contenir ? 'bg-papier-2' : 'bg-papier'}`}>
+                  <img src={urlPhoto(p.photo)} alt={dit(p.legende, lang)} loading="lazy" className={`h-full w-full transition duration-500 group-hover:scale-[1.03] ${p.contenir ? 'object-contain object-top' : 'object-cover'}`} />
                 </span>
                 <span className="mt-4 flex items-center gap-2 text-sm font-medium text-rose">
                   <ImageIcon size={15} aria-hidden="true" />
@@ -226,9 +228,11 @@ const PublicPresse: React.FC<{ lang: Language }> = ({ lang }) => {
               </button>
               <figcaption className="mt-2 text-sm text-gris">
                 {dit(p.legende, lang)}
-                <span className="block mt-1 text-xs">
-                  {t.credit} : {p.credit}
-                </span>
+                {p.credit && (
+                  <span className="block mt-1 text-xs">
+                    {t.credit} : {p.credit}
+                  </span>
+                )}
               </figcaption>
             </Reveal>
           ))}

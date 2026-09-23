@@ -59,6 +59,7 @@ const T = {
     cadrer: 'Le cadrage',
     cadrerAide: 'Glissez le point sur la photo pour choisir ce qui reste au centre, puis rapprochez avec le zoom.',
     zoom: 'Zoom',
+    contenir: 'Montrer la photo entière (pochette, affiche, couverture)',
     reinit: 'Cadrage de base',
     cote: 'Côté de la photo',
     gauche: 'À gauche',
@@ -96,6 +97,7 @@ const T = {
     cadrer: 'Framing',
     cadrerAide: 'Drag the point on the photo to choose what stays centred, then move closer with the zoom.',
     zoom: 'Zoom',
+    contenir: 'Show the whole picture (cover art, poster, book cover)',
     reinit: 'Default framing',
     cote: 'Photo side',
     gauche: 'On the left',
@@ -231,11 +233,12 @@ const ChoixPhoto: React.FC<{ valeur: string; onChange: (url: string) => void; t:
  */
 const Cadrage: React.FC<{
   photo: string;
-  cadrage: { focalX?: number; focalY?: number; zoom?: number };
+  cadrage: { focalX?: number; focalY?: number; zoom?: number; contenir?: boolean };
   ratio: number;
   onChange: (c: { focalX: number; focalY: number; zoom: number }) => void;
+  onContenir?: (v: boolean) => void;
   t: (typeof T)['FR'];
-}> = ({ photo, cadrage, ratio, onChange, t }) => {
+}> = ({ photo, cadrage, ratio, onChange, onContenir, t }) => {
   const boite = useRef<HTMLDivElement>(null);
   const c = cadrageDe(cadrage);
 
@@ -264,10 +267,10 @@ const Cadrage: React.FC<{
         <img
           src={urlPhoto(photo)}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: `${c.x}% ${c.y}%`, transform: `scale(${c.z})`, transformOrigin: `${c.x}% ${c.y}%` }}
+          className={`absolute inset-0 h-full w-full ${cadrage.contenir ? 'object-contain' : 'object-cover'}`}
+          style={cadrage.contenir ? undefined : { objectPosition: `${c.x}% ${c.y}%`, transform: `scale(${c.z})`, transformOrigin: `${c.x}% ${c.y}%` }}
         />
-        <span className="pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow" style={{ left: `${c.x}%`, top: `${c.y}%`, background: 'rgb(var(--c-rose-vif))' }} />
+        {!cadrage.contenir && <span className="pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow" style={{ left: `${c.x}%`, top: `${c.y}%`, background: 'rgb(var(--c-rose-vif))' }} />}
       </div>
       <div className="mt-3 flex items-center gap-3">
         <label className="text-sm text-gris flex-shrink-0">{t.zoom}</label>
@@ -284,6 +287,13 @@ const Cadrage: React.FC<{
           {t.reinit}
         </Bouton>
       </div>
+      {/* Une pochette porte son titre d'un bord à l'autre : remplir le cadre lui coupe les lettres. */}
+      {onContenir && (
+        <label className="mt-3 flex items-center gap-2 text-sm text-gris">
+          <input type="checkbox" checked={!!cadrage.contenir} onChange={(e) => onContenir(e.target.checked)} className="accent-[rgb(var(--c-rose-vif))]" />
+          {t.contenir}
+        </label>
+      )}
     </div>
   );
 };
@@ -467,6 +477,7 @@ const AdminPresse: React.FC<{ lang: Language }> = ({ lang }) => {
                       cadrage={carte}
                       ratio={(1920 * (carte.largeur ?? 46)) / 100 / 1080}
                       onChange={(c) => majCarte(choisi, c)}
+                      onContenir={(v) => majCarte(choisi, { contenir: v })}
                       t={t}
                     />
                     <div className="flex flex-wrap items-center gap-2">

@@ -32,8 +32,12 @@ const SERIF = "'Playfair Display', Georgia, 'Times New Roman', serif";
 const SANS = "Figtree, 'Avenir Next', Avenir, system-ui, sans-serif";
 const KICKER: React.CSSProperties = { fontFamily: SANS, fontSize: 17, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.24em', color: C.azur };
 
-/** La photo dans son panneau : `object-position` pour le point focal, `scale` pour le zoom. */
-export const PhotoCadree: React.FC<{ src: string; x: number; y: number; z: number }> = ({ src, x, y, z }) => (
+/**
+ * La photo dans son panneau : `object-position` pour le point focal, `scale` pour le zoom.
+ * Avec `contenir`, elle se montre entière au lieu de remplir le cadre, ce qu'il faut aux visuels
+ * qui portent leur propre lettrage, parce qu'un panneau en portrait leur coupait le titre.
+ */
+export const PhotoCadree: React.FC<{ src: string; x: number; y: number; z: number; contenir?: boolean }> = ({ src, x, y, z, contenir }) => (
   <img
     src={src}
     alt=""
@@ -42,9 +46,9 @@ export const PhotoCadree: React.FC<{ src: string; x: number; y: number; z: numbe
       inset: 0,
       width: '100%',
       height: '100%',
-      objectFit: 'cover',
-      objectPosition: `${x}% ${y}%`,
-      transform: `scale(${z})`,
+      objectFit: contenir ? 'contain' : 'cover',
+      objectPosition: contenir ? 'center' : `${x}% ${y}%`,
+      transform: contenir ? undefined : `scale(${z})`,
       transformOrigin: `${x}% ${y}%`,
     }}
   />
@@ -143,7 +147,7 @@ export const VisuelCarte = React.forwardRef<HTMLDivElement, Props>(({ carte, lan
 
       {/* Le panneau photo : coins vifs, aucun texte dessus, aucun voile. */}
       <div style={{ position: 'relative', width: `${large}%`, flexShrink: 0, overflow: 'hidden', background: C.papier2 }}>
-        <PhotoCadree src={urlPhoto(carte.photo)} x={cad.x} y={cad.y} z={cad.z} />
+        <PhotoCadree src={urlPhoto(carte.photo)} x={cad.x} y={cad.y} z={cad.z} contenir={carte.contenir} />
         {qr && (
           <div style={{ position: 'absolute', left: aDroite ? 'auto' : 40, right: aDroite ? 40 : 'auto', bottom: 40, background: C.papier, padding: '16px 16px 10px', textAlign: 'center' }}>
             <img src={QR_PRESSE} alt="" style={{ width: 124, height: 124, display: 'block', imageRendering: 'pixelated' }} />
