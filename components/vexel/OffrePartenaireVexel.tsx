@@ -144,7 +144,10 @@ export default function OffrePartenaireVexel({
 
   if (!pourMoi || !statut || statut === 'signee' || enAttente) return null;
 
-  const lienVisite = `${SITE}/?visite=partenaire&client=${encodeURIComponent(client)}&cle=${encodeURIComponent(cle)}`;
+  // En aperçu, la visite part sans le client ni sa clé : les gestes d'Alex ne se notent pas au dossier.
+  const lienVisite = apercu
+    ? `${SITE}/?visite=partenaire`
+    : `${SITE}/?visite=partenaire&client=${encodeURIComponent(client)}&cle=${encodeURIComponent(cle)}`;
   const lienEntente = `${SITE}/compte/partenaire/contrat`;
   const acceptee = statut === 'acceptee';
 
