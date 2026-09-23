@@ -173,8 +173,11 @@ const PublicPresse: React.FC<{ lang: Language }> = ({ lang }) => {
           <p className="text-gris mt-3">{t.cartesLede}</p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-col gap-y-14">
-          {kit.cartes.map((carte) => (
-            <Reveal key={carte.key} as="article">
+          {kit.cartes.map((carte, i) => (
+            // Un nombre impair de cartes laissait la dernière seule à côté d'une colonne vide. Elle
+            // prend maintenant toute la largeur, ce qui remplit la grille et met en valeur la carte
+            // de contact, celle qu'un journaliste garde sous la main.
+            <Reveal key={carte.key} as="article" className={i === kit.cartes.length - 1 && kit.cartes.length % 2 === 1 ? 'lg:col-span-2' : undefined}>
               <CadreEchelle className="border border-papier-2 shadow-panneau">
                 <VisuelCarte carte={carte} lang={lang} pied={pied} />
               </CadreEchelle>
