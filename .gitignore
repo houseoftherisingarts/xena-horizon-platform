@@ -41,3 +41,4 @@ node_modules/
 # dossiers de vérification des agents
 dist-verif*/
 captures*/
+tmp/

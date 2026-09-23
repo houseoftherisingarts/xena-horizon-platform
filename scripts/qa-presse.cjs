@@ -2,7 +2,7 @@
 //   node scripts/qa-presse.cjs http://localhost:4173 captures-presse
 // Sert à regarder la page en 1440 et en 390 aux hauteurs utiles, et à vérifier qu'une carte
 // téléchargée sort bien à 1920 × 1080. Aucune erreur de page n'est tolérée.
-const { chromium } = require('playwright');
+const { chromium } = require('/Users/lesalondesinconnus/Documents/Websites/FMM 2026/node_modules/playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -23,7 +23,7 @@ const VUES = [
     const page = await ctx.newPage();
     page.on('pageerror', (e) => fautes.push(`${vue.nom} : ${e.message}`));
     page.on('console', (m) => m.type() === 'error' && fautes.push(`${vue.nom} console : ${m.text()}`));
-    await page.goto(`${base}/presse`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/presse`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2500);
     for (const [i, y] of vue.scrolls.entries()) {
       await page.evaluate((t) => window.scrollTo({ top: t, behavior: 'instant' }), y);
@@ -37,7 +37,7 @@ const VUES = [
   const ctx = await navigateur.newContext({ viewport: { width: 1440, height: 900 }, acceptDownloads: true });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => fautes.push(`téléchargement : ${e.message}`));
-  await page.goto(`${base}/presse`, { waitUntil: 'networkidle' });
+  await page.goto(`${base}/presse`, { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(2000);
   const attente = page.waitForEvent('download', { timeout: 60000 });
   await page.getByRole('button', { name: /Télécharger/ }).first().click();

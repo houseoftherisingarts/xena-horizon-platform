@@ -22,6 +22,7 @@ const TEXTES = {
     services: 'Services',
     projets: 'Projets',
     about: 'À propos',
+    presse: 'Salle de presse',
     contact: 'Contact',
     mySpace: 'Mon espace',
     coord: 'Coordonnées',
@@ -36,6 +37,7 @@ const TEXTES = {
     services: 'Services',
     projets: 'Projects',
     about: 'About',
+    presse: 'Press room',
     contact: 'Contact',
     mySpace: 'My space',
     coord: 'Contact',
@@ -71,6 +73,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminLogin, lang, onChangeView }) => 
     { label: t.services, view: 'SERVICES', href: pathFromView('SERVICES', lang) },
     { label: t.projets, view: 'PROJETS', href: pathFromView('PROJETS', lang) },
     { label: t.about, view: 'A_PROPOS', href: pathFromView('A_PROPOS', lang) },
+    { label: t.presse, view: 'PRESSE', href: pathFromView('PRESSE', lang) },
     { label: t.contact, view: 'HOME', sectionId: 'contact', href: `${pathFromView('HOME', lang)}#contact` },
   ];
 

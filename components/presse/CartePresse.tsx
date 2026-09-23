@@ -136,7 +136,8 @@ export const VisuelCarte = React.forwardRef<HTMLDivElement, Props>(({ carte, lan
               {pied.site} · {pied.courriel}
             </p>
           </div>
-          <p style={{ marginLeft: 'auto', fontFamily: SERIF, fontSize: 44, color: C.papier2, lineHeight: 1 }}>{carte.n}</p>
+          {/* Le folio se lit : en bleu plutôt qu'en gris très pâle, un journaliste sait de quelle carte il parle. */}
+          <p style={{ marginLeft: 'auto', fontFamily: SERIF, fontSize: 44, color: C.azur, lineHeight: 1 }}>{carte.n}</p>
         </div>
       </div>
 
